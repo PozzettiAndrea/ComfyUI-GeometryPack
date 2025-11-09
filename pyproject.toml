@@ -1,0 +1,25 @@
+[project]
+name = "comfyui-libigl"
+description = "libigl geometry processing wrapper for ComfyUI - mesh manipulation and analysis nodes"
+version = "0.1.0"
+license = { file = "LICENSE" }
+dependencies = [
+    "libigl>=2.6.1",
+    "numpy>=1.21.0",
+    "scipy>=1.7.0",
+    "matplotlib>=3.5.0",
+    "Pillow>=9.0.0"
+]
+
+[project.urls]
+Repository = "https://github.com/yourusername/ComfyUI-libigl"
+Documentation = "https://github.com/yourusername/ComfyUI-libigl/blob/main/README.md"
+
+[tool.comfy]
+PublisherId = "your-publisher-id"
+DisplayName = "ComfyUI libigl"
+Icon = ""
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"

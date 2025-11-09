@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GeomPack VTK.js Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #2a2a2a;
+            font-family: monospace;
+        }
+        #container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="loading">Ready to load mesh</div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "@kitware/vtk.js/": "https://cdn.skypack.dev/@kitware/vtk.js@29.5.0/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import vtkFullScreenRenderWindow from '@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow';
+        import vtkActor from '@kitware/vtk.js/Rendering/Core/Actor';
+        import vtkMapper from '@kitware/vtk.js/Rendering/Core/Mapper';
+        import vtkSTLReader from '@kitware/vtk.js/IO/Geometry/STLReader';
+        import vtkOBJReader from '@kitware/vtk.js/IO/Misc/OBJReader';
+        import vtkInteractorStyleTrackballCamera from '@kitware/vtk.js/Interaction/Style/InteractorStyleTrackballCamera';
+
+        console.log('[GeomPack VTK Viewer] Initializing...');
+
+        const loading = document.getElementById('loading');
+        const container = document.getElementById('container');
+
+        // Create full screen renderer
+        const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance({
+            background: [0.16, 0.16, 0.16],  // #2a2a2a
+            container: container,
+        });
+
+        const renderer = fullScreenRenderer.getRenderer();
+        const renderWindow = fullScreenRenderer.getRenderWindow();
+        const interactor = renderWindow.getInteractor();
+
+        // Set up trackball camera controls
+        const interactorStyle = vtkInteractorStyleTrackballCamera.newInstance();
+        interactor.setInteractorStyle(interactorStyle);
+
+        // Create actor and mapper for mesh
+        const actor = vtkActor.newInstance();
+        const mapper = vtkMapper.newInstance();
+        actor.setMapper(mapper);
+
+        // Configure appearance
+        actor.getProperty().setEdgeVisibility(false);
+        actor.getProperty().setColor(0.53, 0.67, 0.8);  // Light blue-gray
+        actor.getProperty().setSpecular(0.3);
+        actor.getProperty().setSpecularPower(30);
+
+        // Add actor to scene
+        renderer.addActor(actor);
+
+        // Current reader
+        let currentReader = null;
+
+        // Load mesh function
+        async function loadMesh(filepath) {
+            console.log('[GeomPack VTK Viewer] Loading:', filepath);
+            loading.textContent = 'Loading mesh...';
+            loading.style.display = 'block';
+
+            try {
+                // Determine file type
+                const isSTL = filepath.includes('.stl');
+                const isOBJ = filepath.includes('.obj');
+
+                // Create appropriate reader
+                if (isSTL) {
+                    console.log('[GeomPack VTK Viewer] File type: STL');
+                    currentReader = vtkSTLReader.newInstance();
+                } else if (isOBJ) {
+                    console.log('[GeomPack VTK Viewer] File type: OBJ');
+                    currentReader = vtkOBJReader.newInstance();
+                } else {
+                    throw new Error(`Unsupported file format: ${filepath}`);
+                }
+
+                // Fetch the file
+                const response = await fetch(filepath);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                // Get file data
+                const arrayBuffer = await response.arrayBuffer();
+
+                // Parse with appropriate reader
+                if (isSTL) {
+                    currentReader.parseAsArrayBuffer(arrayBuffer);
+                } else if (isOBJ) {
+                    const text = new TextDecoder().decode(arrayBuffer);
+                    currentReader.parseAsText(text);
+                }
+
+                // Get output data
+                const polydata = currentReader.getOutputData();
+
+                if (!polydata) {
+                    throw new Error('Failed to parse mesh data');
+                }
+
+                console.log('[GeomPack VTK Viewer] Loaded mesh:',
+                    polydata.getNumberOfPoints(), 'points,',
+                    polydata.getNumberOfPolys(), 'polygons');
+
+                // Set mapper input
+                mapper.setInputData(polydata);
+
+                // Reset camera to fit mesh
+                renderer.resetCamera();
+                renderWindow.render();
+
+                loading.style.display = 'none';
+                console.log('[GeomPack VTK Viewer] Mesh loaded successfully');
+
+            } catch (error) {
+                console.error('[GeomPack VTK Viewer] Error loading mesh:', error);
+                loading.textContent = `Error loading mesh: ${error.message}`;
+                loading.style.color = '#ff6b6b';
+            }
+        }
+
+        // Listen for messages from parent window
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'LOAD_MESH') {
+                console.log('[GeomPack VTK Viewer] Received LOAD_MESH message:', event.data.filepath);
+                loadMesh(event.data.filepath);
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            renderWindow.resize();
+        });
+
+        console.log('[GeomPack VTK Viewer] Ready');
+    </script>
+</body>
+</html>
