@@ -392,3 +392,89 @@ def pymeshlab_isotropic_remesh(
         import traceback
         traceback.print_exc()
         return None, f"Error during remeshing: {str(e)}"
+
+
+# ============================================================================
+# Boundary Edge Detection
+# ============================================================================
+
+def mark_boundary_vertices(mesh: trimesh.Trimesh) -> Tuple[Optional[trimesh.Trimesh], str]:
+    """
+    Detect boundary edges and mark boundary vertices with a scalar field.
+
+    A boundary edge is an edge that belongs to only one face (not shared).
+    This function creates a vertex attribute 'boundary_vertex' where:
+    - 1.0 = vertex is on a boundary edge
+    - 0.0 = vertex is interior (not on boundary)
+
+    Args:
+        mesh: Input trimesh object
+
+    Returns:
+        Tuple of (mesh_with_field, error_message)
+    """
+    print(f"[mark_boundary_vertices] ===== Detecting Boundary Edges =====")
+    print(f"[mark_boundary_vertices] Input mesh: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+
+    if not isinstance(mesh, trimesh.Trimesh):
+        return None, "Input must be a trimesh.Trimesh object"
+
+    if len(mesh.vertices) == 0 or len(mesh.faces) == 0:
+        return None, "Mesh is empty"
+
+    try:
+        # Get all edges and their face adjacency
+        # edges_unique: unique edges in the mesh
+        # edges_face: which faces each edge belongs to
+        edges = mesh.edges
+        edges_unique = mesh.edges_unique
+        edges_sorted = mesh.edges_sorted
+
+        print(f"[mark_boundary_vertices] Total edges: {len(edges)}")
+        print(f"[mark_boundary_vertices] Unique edges: {len(edges_unique)}")
+
+        # Find boundary edges (edges that appear only once in edges_sorted)
+        # trimesh stores edges as sorted pairs, so we can use grouping
+        from trimesh.grouping import group_rows
+
+        # Group identical edges and count occurrences
+        # require_count=1 means edges that appear exactly once (boundary edges)
+        boundary_edge_indices = group_rows(edges_sorted, require_count=1)
+
+        print(f"[mark_boundary_vertices] Boundary edge groups: {len(boundary_edge_indices)}")
+
+        # Get the actual boundary edges
+        boundary_edges = edges_sorted[boundary_edge_indices]
+
+        print(f"[mark_boundary_vertices] Boundary edges: {len(boundary_edges)}")
+
+        # Create vertex field: 1.0 for boundary vertices, 0.0 for interior
+        boundary_field = np.zeros(len(mesh.vertices), dtype=np.float32)
+
+        # Mark all vertices that are part of boundary edges
+        boundary_vertices = np.unique(boundary_edges.flatten())
+        boundary_field[boundary_vertices] = 1.0
+
+        num_boundary_verts = np.sum(boundary_field > 0.5)
+        print(f"[mark_boundary_vertices] Boundary vertices: {num_boundary_verts} / {len(mesh.vertices)} ({100.0 * num_boundary_verts / len(mesh.vertices):.1f}%)")
+
+        # Create a copy of the mesh to avoid modifying the original
+        result_mesh = mesh.copy()
+
+        # Add the boundary field as a vertex attribute
+        result_mesh.vertex_attributes['boundary_vertex'] = boundary_field
+
+        # Store metadata
+        result_mesh.metadata['has_boundary_field'] = True
+        result_mesh.metadata['boundary_vertices_count'] = int(num_boundary_verts)
+        result_mesh.metadata['boundary_edges_count'] = len(boundary_edges)
+
+        print(f"[mark_boundary_vertices] ===== Boundary Detection Complete =====")
+        print(f"[mark_boundary_vertices] Added 'boundary_vertex' field to mesh")
+
+        return result_mesh, ""
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return None, f"Error detecting boundary edges: {str(e)}"

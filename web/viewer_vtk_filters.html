@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GeomPack VTK.js Viewer with Filters</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #2a2a2a;
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+        }
+        #viewerContainer {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+        #container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        #controls {
+            background: #1a1a1a;
+            border-top: 1px solid #444;
+            padding: 8px 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #ccc;
+        }
+        #controls label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        #controls select, #controls button, #controls input[type="range"] {
+            background: #333;
+            color: #ccc;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        #controls button {
+            cursor: pointer;
+        }
+        #controls button:hover {
+            background: #444;
+        }
+        #controls input[type="checkbox"] {
+            cursor: pointer;
+        }
+        #controls input[type="range"] {
+            width: 80px;
+            padding: 0;
+        }
+        #controls .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            background: #252525;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        #controls .separator {
+            width: 1px;
+            height: 20px;
+            background: #444;
+            margin: 0 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="viewerContainer">
+        <div id="container"></div>
+        <div id="loading">Ready to load mesh</div>
+    </div>
+    <div id="controls">
+        <!-- View controls -->
+        <label>
+            <input type="checkbox" id="showEdges"> Edges
+        </label>
+        <label>
+            Mode:
+            <select id="representation">
+                <option value="2">Surface</option>
+                <option value="1">Wireframe</option>
+                <option value="0">Points</option>
+            </select>
+        </label>
+
+        <div class="separator"></div>
+
+        <!-- Filter: Smoothing -->
+        <div class="filter-group">
+            <label>
+                <input type="checkbox" id="enableSmooth"> Smooth
+            </label>
+            <label style="display:none;" id="smoothIterLabel">
+                Iter:
+                <input type="range" id="smoothIter" min="1" max="50" value="10" step="1">
+                <span id="smoothIterValue">10</span>
+            </label>
+        </div>
+
+        <!-- Filter: Outline -->
+        <div class="filter-group">
+            <label>
+                <input type="checkbox" id="showOutline"> Outline
+            </label>
+        </div>
+
+        <!-- Filter: Plane cutting -->
+        <div class="filter-group">
+            <label>
+                <input type="checkbox" id="enableCut"> Cut Plane
+            </label>
+            <label style="display:none;" id="cutPosLabel">
+                Pos:
+                <input type="range" id="cutPos" min="0" max="100" value="50" step="1">
+                <span id="cutPosValue">0.5</span>
+            </label>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- Scalar field visualization -->
+        <label id="scalarFieldLabel" style="display:none;">
+            Field:
+            <select id="scalarFieldSelector">
+                <option value="">None</option>
+            </select>
+        </label>
+
+        <div class="separator"></div>
+
+        <button id="resetCamera">Reset Camera</button>
+        <button id="screenshot">Screenshot</button>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "@kitware/vtk.js/": "https://cdn.skypack.dev/@kitware/vtk.js@29.5.0/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        // CRITICAL: Import rendering profile to load WebGL backend
+        import '@kitware/vtk.js/Rendering/Profiles/Geometry';
+
+        import vtkFullScreenRenderWindow from '@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow';
+        import vtkActor from '@kitware/vtk.js/Rendering/Core/Actor';
+        import vtkMapper from '@kitware/vtk.js/Rendering/Core/Mapper';
+        import vtkSTLReader from '@kitware/vtk.js/IO/Geometry/STLReader';
+        import vtkOBJReader from '@kitware/vtk.js/IO/Misc/OBJReader';
+        import vtkXMLPolyDataReader from '@kitware/vtk.js/IO/XML/XMLPolyDataReader';
+        import vtkPolyDataNormals from '@kitware/vtk.js/Filters/Core/PolyDataNormals';
+        import vtkInteractorStyleTrackballCamera from '@kitware/vtk.js/Interaction/Style/InteractorStyleTrackballCamera';
+        import vtkColorTransferFunction from '@kitware/vtk.js/Rendering/Core/ColorTransferFunction';
+        import vtkColorMaps from '@kitware/vtk.js/Rendering/Core/ColorMaps/index';
+
+        // Filter imports
+        import vtkWindowedSincPolyDataFilter from '@kitware/vtk.js/Filters/General/WindowedSincPolyDataFilter';
+        import vtkOutlineFilter from '@kitware/vtk.js/Filters/General/OutlineFilter';
+        import vtkCutter from '@kitware/vtk.js/Filters/Core/Cutter';
+        import vtkPlane from '@kitware/vtk.js/Common/DataModel/Plane';
+
+        console.log('[GeomPack VTK Filters] Initializing...');
+
+        const loading = document.getElementById('loading');
+        const container = document.getElementById('container');
+
+        // Create full screen renderer
+        const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance({
+            background: [0.16, 0.16, 0.16],  // #2a2a2a
+            container: container,
+        });
+
+        const renderer = fullScreenRenderer.getRenderer();
+        const renderWindow = fullScreenRenderer.getRenderWindow();
+        const interactor = renderWindow.getInteractor();
+
+        // Set up trackball camera controls
+        const interactorStyle = vtkInteractorStyleTrackballCamera.newInstance();
+        interactor.setInteractorStyle(interactorStyle);
+
+        // Create main mesh actor and mapper
+        const actor = vtkActor.newInstance();
+        const mapper = vtkMapper.newInstance();
+        actor.setMapper(mapper);
+
+        // Configure appearance with better lighting properties
+        const property = actor.getProperty();
+        property.setEdgeVisibility(false);
+        property.setColor(1.0, 1.0, 1.0);  // Bright white for visibility
+        property.setAmbient(0.4);
+        property.setDiffuse(0.8);
+        property.setSpecular(0.3);
+        property.setSpecularPower(20);
+        property.setRepresentation(2);  // 2 = surface rendering
+
+        // Add actor to scene
+        renderer.addActor(actor);
+
+        // Create outline actor (initially hidden)
+        const outlineActor = vtkActor.newInstance();
+        const outlineMapper = vtkMapper.newInstance();
+        outlineActor.setMapper(outlineMapper);
+        outlineActor.getProperty().setColor(1.0, 1.0, 0.0);  // Yellow outline
+        outlineActor.getProperty().setLineWidth(2);
+        outlineActor.setVisibility(false);
+        renderer.addActor(outlineActor);
+
+        console.log('[GeomPack VTK Filters] Actors configured');
+
+        // Filter instances
+        let smoothFilter = null;
+        let outlineFilter = null;
+        let cutterFilter = null;
+        let cuttingPlane = null;
+        let normalsFilter = null;
+
+        // Current reader and mesh bounds
+        let currentReader = null;
+        let meshBounds = null;
+
+        // Rebuild pipeline based on active filters
+        function rebuildPipeline() {
+            if (!currentReader) return;
+
+            console.log('[GeomPack VTK Filters] Rebuilding pipeline...');
+
+            // Start from reader
+            let currentSource = currentReader;
+
+            // Apply smoothing if enabled
+            const smoothEnabled = document.getElementById('enableSmooth').checked;
+            if (smoothEnabled && smoothFilter) {
+                console.log('[GeomPack VTK Filters] Adding smooth filter to pipeline');
+                smoothFilter.setInputConnection(currentSource.getOutputPort());
+                currentSource = smoothFilter;
+            }
+
+            // Apply cutting if enabled
+            const cutEnabled = document.getElementById('enableCut').checked;
+            if (cutEnabled && cutterFilter && cuttingPlane) {
+                console.log('[GeomPack VTK Filters] Adding cutter to pipeline');
+                cutterFilter.setInputConnection(currentSource.getOutputPort());
+                currentSource = cutterFilter;
+            }
+
+            // Always end with normals filter for proper rendering
+            normalsFilter.setInputConnection(currentSource.getOutputPort());
+
+            // Connect to main mapper
+            mapper.setInputConnection(normalsFilter.getOutputPort());
+
+            // Update outline if enabled
+            const outlineEnabled = document.getElementById('showOutline').checked;
+            if (outlineEnabled && outlineFilter) {
+                console.log('[GeomPack VTK Filters] Updating outline');
+                outlineFilter.setInputConnection(currentReader.getOutputPort());
+                outlineMapper.setInputConnection(outlineFilter.getOutputPort());
+                outlineActor.setVisibility(true);
+            } else {
+                outlineActor.setVisibility(false);
+            }
+
+            // Force update and render
+            mapper.update();
+            renderWindow.render();
+
+            console.log('[GeomPack VTK Filters] Pipeline rebuilt');
+        }
+
+        // Load mesh function
+        async function loadMesh(filepath) {
+            console.log('[GeomPack VTK Filters] Loading:', filepath);
+            loading.textContent = 'Loading mesh...';
+            loading.style.display = 'block';
+
+            try {
+                // Determine file type
+                const isSTL = filepath.includes('.stl');
+                const isOBJ = filepath.includes('.obj');
+                const isVTP = filepath.includes('.vtp');
+
+                console.log('[GeomPack VTK Filters] File type - STL:', isSTL, 'OBJ:', isOBJ, 'VTP:', isVTP);
+
+                // Create appropriate reader
+                if (isVTP) {
+                    console.log('[GeomPack VTK Filters] File type: VTP (with scalar fields)');
+                    currentReader = vtkXMLPolyDataReader.newInstance();
+                } else if (isSTL) {
+                    console.log('[GeomPack VTK Filters] File type: STL');
+                    currentReader = vtkSTLReader.newInstance();
+                } else if (isOBJ) {
+                    console.log('[GeomPack VTK Filters] File type: OBJ');
+                    currentReader = vtkOBJReader.newInstance();
+                } else {
+                    const errorMsg = `Unsupported file format: ${filepath}. VTK viewer supports STL, OBJ, and VTP formats.`;
+                    console.error('[GeomPack VTK Filters]', errorMsg);
+                    throw new Error(errorMsg);
+                }
+
+                // Fetch the file
+                const response = await fetch(filepath);
+                console.log('[GeomPack VTK Filters] Fetch response:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                // Get file data
+                const arrayBuffer = await response.arrayBuffer();
+                console.log('[GeomPack VTK Filters] ArrayBuffer size:', arrayBuffer.byteLength);
+
+                // Parse with appropriate reader
+                if (isVTP) {
+                    console.log('[GeomPack VTK Filters] Parsing VTP...');
+                    currentReader.parseAsArrayBuffer(arrayBuffer);
+                } else if (isSTL) {
+                    console.log('[GeomPack VTK Filters] Parsing STL...');
+                    currentReader.parseAsArrayBuffer(arrayBuffer);
+                } else if (isOBJ) {
+                    console.log('[GeomPack VTK Filters] Parsing OBJ...');
+                    const text = new TextDecoder().decode(arrayBuffer);
+                    currentReader.parseAsText(text);
+                }
+
+                // Get output data
+                const polydata = currentReader.getOutputData();
+                console.log('[GeomPack VTK Filters] Polydata:', polydata);
+
+                if (!polydata) {
+                    throw new Error('Failed to parse mesh data');
+                }
+
+                const numPoints = polydata.getNumberOfPoints();
+                const numPolys = polydata.getNumberOfPolys();
+                console.log('[GeomPack VTK Filters] Loaded mesh:', numPoints, 'points,', numPolys, 'polygons');
+
+                // Store mesh bounds for cutting plane
+                meshBounds = polydata.getBounds();
+                console.log('[GeomPack VTK Filters] Mesh bounds:', meshBounds);
+
+                // Check for scalar fields in point data
+                const pointData = polydata.getPointData();
+                const numArrays = pointData.getNumberOfArrays();
+                console.log('[GeomPack VTK Filters] Point data arrays:', numArrays);
+
+                // Populate scalar field selector
+                const scalarSelector = document.getElementById('scalarFieldSelector');
+                const scalarLabel = document.getElementById('scalarFieldLabel');
+                scalarSelector.innerHTML = '<option value="">None</option>';
+
+                if (numArrays > 0) {
+                    for (let i = 0; i < numArrays; i++) {
+                        const array = pointData.getArray(i);
+                        const arrayName = array.getName();
+                        console.log(`[GeomPack VTK Filters] Found scalar field: ${arrayName}`);
+                        const option = document.createElement('option');
+                        option.value = arrayName;
+                        option.textContent = arrayName;
+                        scalarSelector.appendChild(option);
+                    }
+                    scalarLabel.style.display = 'flex';
+                    console.log('[GeomPack VTK Filters] Scalar field selector populated with', numArrays, 'fields');
+                } else {
+                    scalarLabel.style.display = 'none';
+                    console.log('[GeomPack VTK Filters] No scalar fields found');
+                }
+
+                // Initialize filters
+                console.log('[GeomPack VTK Filters] Initializing filters...');
+
+                // Smooth filter
+                smoothFilter = vtkWindowedSincPolyDataFilter.newInstance();
+                smoothFilter.setNumberOfIterations(parseInt(document.getElementById('smoothIter').value));
+                smoothFilter.setPassBand(0.1);
+
+                // Outline filter
+                outlineFilter = vtkOutlineFilter.newInstance();
+
+                // Cutting plane
+                cuttingPlane = vtkPlane.newInstance();
+                cuttingPlane.setNormal(0, 0, 1);  // Z-axis normal
+                const center = [
+                    (meshBounds[0] + meshBounds[1]) / 2,
+                    (meshBounds[2] + meshBounds[3]) / 2,
+                    (meshBounds[4] + meshBounds[5]) / 2
+                ];
+                cuttingPlane.setOrigin(center[0], center[1], center[2]);
+
+                // Cutter filter
+                cutterFilter = vtkCutter.newInstance();
+                cutterFilter.setCutFunction(cuttingPlane);
+
+                // Normals filter (always used at end of pipeline)
+                normalsFilter = vtkPolyDataNormals.newInstance();
+
+                console.log('[GeomPack VTK Filters] Filters initialized');
+
+                // Build initial pipeline
+                rebuildPipeline();
+
+                // Reset camera to fit mesh
+                renderer.resetCamera();
+
+                // Get camera and adjust view angle
+                const camera = renderer.getActiveCamera();
+                const maxDim = Math.max(
+                    meshBounds[1] - meshBounds[0],
+                    meshBounds[3] - meshBounds[2],
+                    meshBounds[5] - meshBounds[4]
+                );
+
+                // Position camera at an angle for better 3D view
+                const distance = maxDim * 2.5;
+                camera.setPosition(
+                    center[0] + distance,
+                    center[1] + distance,
+                    center[2] + distance
+                );
+                camera.setFocalPoint(center[0], center[1], center[2]);
+                camera.setViewUp(0, 0, 1);
+
+                console.log('[GeomPack VTK Filters] Camera positioned');
+
+                // Render the scene
+                renderWindow.render();
+
+                // Force a resize to ensure proper display in iframe
+                setTimeout(() => {
+                    fullScreenRenderer.resize();
+                    renderWindow.render();
+                    console.log('[GeomPack VTK Filters] Post-load resize and render');
+                }, 100);
+
+                loading.style.display = 'none';
+                console.log('[GeomPack VTK Filters] Mesh loaded successfully');
+
+            } catch (error) {
+                console.error('[GeomPack VTK Filters] Error loading mesh:', error);
+                loading.textContent = `Error loading mesh: ${error.message}`;
+                loading.style.color = '#ff6b6b';
+            }
+        }
+
+        // Listen for messages from parent window
+        window.addEventListener('message', (event) => {
+            console.log('[GeomPack VTK Filters] Received postMessage:', event.data);
+
+            if (event.data.type === 'LOAD_MESH') {
+                console.log('[GeomPack VTK Filters] Received LOAD_MESH message:', event.data.filepath);
+                loadMesh(event.data.filepath);
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            fullScreenRenderer.resize();
+            renderWindow.render();
+        });
+
+        // Control event handlers - View controls
+        document.getElementById('showEdges').addEventListener('change', (e) => {
+            property.setEdgeVisibility(e.target.checked);
+            renderWindow.render();
+        });
+
+        document.getElementById('representation').addEventListener('change', (e) => {
+            property.setRepresentation(parseInt(e.target.value));
+            renderWindow.render();
+        });
+
+        document.getElementById('resetCamera').addEventListener('click', () => {
+            renderer.resetCamera();
+            renderWindow.render();
+        });
+
+        document.getElementById('screenshot').addEventListener('click', () => {
+            const image = renderWindow.captureImages()[0];
+            // Send screenshot back to parent window
+            window.parent.postMessage({
+                type: 'SCREENSHOT',
+                image: image, // base64 PNG data URL
+                timestamp: Date.now()
+            }, '*');
+            console.log('[GeomPack VTK Filters] Screenshot captured and sent to parent');
+        });
+
+        // Filter control handlers
+
+        // Smooth filter toggle
+        document.getElementById('enableSmooth').addEventListener('change', (e) => {
+            document.getElementById('smoothIterLabel').style.display = e.target.checked ? 'flex' : 'none';
+            rebuildPipeline();
+        });
+
+        // Smooth iterations slider
+        document.getElementById('smoothIter').addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            document.getElementById('smoothIterValue').textContent = value;
+            if (smoothFilter) {
+                smoothFilter.setNumberOfIterations(value);
+                rebuildPipeline();
+            }
+        });
+
+        // Outline toggle
+        document.getElementById('showOutline').addEventListener('change', (e) => {
+            rebuildPipeline();
+        });
+
+        // Cut plane toggle
+        document.getElementById('enableCut').addEventListener('change', (e) => {
+            document.getElementById('cutPosLabel').style.display = e.target.checked ? 'flex' : 'none';
+            rebuildPipeline();
+        });
+
+        // Cut plane position slider
+        document.getElementById('cutPos').addEventListener('input', (e) => {
+            const value = parseInt(e.target.value) / 100.0; // 0.0 to 1.0
+            document.getElementById('cutPosValue').textContent = value.toFixed(2);
+
+            if (cuttingPlane && meshBounds) {
+                // Move plane along Z-axis
+                const zMin = meshBounds[4];
+                const zMax = meshBounds[5];
+                const zPos = zMin + (zMax - zMin) * value;
+
+                const center = [
+                    (meshBounds[0] + meshBounds[1]) / 2,
+                    (meshBounds[2] + meshBounds[3]) / 2,
+                    zPos
+                ];
+
+                cuttingPlane.setOrigin(center[0], center[1], center[2]);
+                rebuildPipeline();
+            }
+        });
+
+        // Scalar field selector
+        document.getElementById('scalarFieldSelector').addEventListener('change', (e) => {
+            const fieldName = e.target.value;
+            console.log('[GeomPack VTK Filters] Scalar field selected:', fieldName);
+
+            if (fieldName && currentReader) {
+                // Get the polydata with scalar field
+                const polydata = currentReader.getOutputData();
+                const pointData = polydata.getPointData();
+                const scalarArray = pointData.getArrayByName(fieldName);
+
+                if (scalarArray) {
+                    // Set the scalar array as active scalars
+                    pointData.setActiveScalars(fieldName);
+
+                    // Configure mapper for scalar coloring
+                    mapper.setScalarVisibility(true);
+                    mapper.setScalarModeToUsePointData();
+                    mapper.setScalarRange(scalarArray.getRange());
+
+                    // Create color transfer function (blue to red)
+                    const lookupTable = vtkColorTransferFunction.newInstance();
+                    const preset = vtkColorMaps.getPresetByName('erdc_rainbow_bright'); // Nice colormap
+                    lookupTable.applyColorMap(preset);
+                    lookupTable.setMappingRange(...scalarArray.getRange());
+                    lookupTable.updateRange();
+
+                    mapper.setLookupTable(lookupTable);
+
+                    console.log(`[GeomPack VTK Filters] Scalar field '${fieldName}' activated, range:`, scalarArray.getRange());
+                } else {
+                    console.warn(`[GeomPack VTK Filters] Scalar field '${fieldName}' not found`);
+                }
+            } else {
+                // Disable scalar coloring, use solid color
+                mapper.setScalarVisibility(false);
+                property.setColor(1.0, 1.0, 1.0);
+                console.log('[GeomPack VTK Filters] Scalar visualization disabled');
+            }
+
+            renderWindow.render();
+        });
+
+        console.log('[GeomPack VTK Filters] Ready');
+    </script>
+</body>
+</html>
