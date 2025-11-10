@@ -9,10 +9,17 @@
             overflow: hidden;
             background: #2a2a2a;
             font-family: monospace;
+            display: flex;
+            flex-direction: column;
+        }
+        #viewerContainer {
+            flex: 1;
+            position: relative;
+            min-height: 0;
         }
         #container {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             position: relative;
         }
         #loading {
@@ -26,11 +33,66 @@
             z-index: 1000;
             pointer-events: none;
         }
+        #controls {
+            background: #1a1a1a;
+            border-top: 1px solid #444;
+            padding: 8px 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #ccc;
+        }
+        #controls label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        #controls select, #controls button {
+            background: #333;
+            color: #ccc;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        #controls button {
+            cursor: pointer;
+        }
+        #controls button:hover {
+            background: #444;
+        }
+        #controls input[type="checkbox"] {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div id="container"></div>
-    <div id="loading">Ready to load mesh</div>
+    <div id="viewerContainer">
+        <div id="container"></div>
+        <div id="loading">Ready to load mesh</div>
+    </div>
+    <div id="controls">
+        <label>
+            <input type="checkbox" id="showEdges"> Edges
+        </label>
+        <label>
+            Mode:
+            <select id="representation">
+                <option value="2">Surface</option>
+                <option value="1">Wireframe</option>
+                <option value="0">Points</option>
+            </select>
+        </label>
+        <label id="fieldLabel" style="display:none;">
+            Field:
+            <select id="fieldSelector"></select>
+        </label>
+        <button id="resetCamera">Reset Camera</button>
+        <button id="screenshot">Screenshot</button>
+    </div>
 
     <script type="importmap">
     {
@@ -41,11 +103,15 @@
     </script>
 
     <script type="module">
+        // CRITICAL: Import rendering profile to load WebGL backend
+        import '@kitware/vtk.js/Rendering/Profiles/Geometry';
+
         import vtkFullScreenRenderWindow from '@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow';
         import vtkActor from '@kitware/vtk.js/Rendering/Core/Actor';
         import vtkMapper from '@kitware/vtk.js/Rendering/Core/Mapper';
         import vtkSTLReader from '@kitware/vtk.js/IO/Geometry/STLReader';
         import vtkOBJReader from '@kitware/vtk.js/IO/Misc/OBJReader';
+        import vtkPolyDataNormals from '@kitware/vtk.js/Filters/Core/PolyDataNormals';
         import vtkInteractorStyleTrackballCamera from '@kitware/vtk.js/Interaction/Style/InteractorStyleTrackballCamera';
 
         console.log('[GeomPack VTK Viewer] Initializing...');
@@ -72,14 +138,22 @@
         const mapper = vtkMapper.newInstance();
         actor.setMapper(mapper);
 
-        // Configure appearance
-        actor.getProperty().setEdgeVisibility(false);
-        actor.getProperty().setColor(0.53, 0.67, 0.8);  // Light blue-gray
-        actor.getProperty().setSpecular(0.3);
-        actor.getProperty().setSpecularPower(30);
+        // Configure appearance with better lighting properties
+        const property = actor.getProperty();
+        property.setEdgeVisibility(false);
+        property.setColor(1.0, 1.0, 1.0);  // Bright white for visibility
+        property.setAmbient(0.4);  // Increase ambient
+        property.setDiffuse(0.8);  // Increase diffuse
+        property.setSpecular(0.3);
+        property.setSpecularPower(20);
+        property.setRepresentation(2);  // 2 = surface rendering
 
         // Add actor to scene
         renderer.addActor(actor);
+
+        console.log('[GeomPack VTK Viewer DEBUG] Actor configured with lighting properties');
+        console.log('[GeomPack VTK Viewer DEBUG] Actor visible:', actor.getVisibility());
+        console.log('[GeomPack VTK Viewer DEBUG] Renderer background:', renderer.getBackground());
 
         // Current reader
         let currentReader = null;
@@ -87,6 +161,7 @@
         // Load mesh function
         async function loadMesh(filepath) {
             console.log('[GeomPack VTK Viewer] Loading:', filepath);
+            console.log('[GeomPack VTK Viewer DEBUG] Full filepath URL:', filepath);
             loading.textContent = 'Loading mesh...';
             loading.style.display = 'block';
 
@@ -94,6 +169,9 @@
                 // Determine file type
                 const isSTL = filepath.includes('.stl');
                 const isOBJ = filepath.includes('.obj');
+                const isGLB = filepath.includes('.glb') || filepath.includes('.gltf');
+
+                console.log('[GeomPack VTK Viewer DEBUG] File type detection - STL:', isSTL, 'OBJ:', isOBJ, 'GLB:', isGLB);
 
                 // Create appropriate reader
                 if (isSTL) {
@@ -103,49 +181,124 @@
                     console.log('[GeomPack VTK Viewer] File type: OBJ');
                     currentReader = vtkOBJReader.newInstance();
                 } else {
-                    throw new Error(`Unsupported file format: ${filepath}`);
+                    const errorMsg = `Unsupported file format: ${filepath}. VTK viewer only supports STL and OBJ formats.`;
+                    console.error('[GeomPack VTK Viewer DEBUG]', errorMsg);
+                    throw new Error(errorMsg);
                 }
+
+                console.log('[GeomPack VTK Viewer DEBUG] About to fetch:', filepath);
 
                 // Fetch the file
                 const response = await fetch(filepath);
+                console.log('[GeomPack VTK Viewer DEBUG] Fetch response:', response);
+                console.log('[GeomPack VTK Viewer DEBUG] Response status:', response.status, response.statusText);
+                console.log('[GeomPack VTK Viewer DEBUG] Response OK:', response.ok);
+
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 // Get file data
                 const arrayBuffer = await response.arrayBuffer();
+                console.log('[GeomPack VTK Viewer DEBUG] ArrayBuffer size:', arrayBuffer.byteLength);
 
                 // Parse with appropriate reader
                 if (isSTL) {
+                    console.log('[GeomPack VTK Viewer DEBUG] Parsing STL...');
                     currentReader.parseAsArrayBuffer(arrayBuffer);
                 } else if (isOBJ) {
+                    console.log('[GeomPack VTK Viewer DEBUG] Parsing OBJ...');
                     const text = new TextDecoder().decode(arrayBuffer);
                     currentReader.parseAsText(text);
                 }
 
-                // Get output data
+                // Get output data for logging
                 const polydata = currentReader.getOutputData();
+                console.log('[GeomPack VTK Viewer DEBUG] Polydata:', polydata);
 
                 if (!polydata) {
                     throw new Error('Failed to parse mesh data');
                 }
 
-                console.log('[GeomPack VTK Viewer] Loaded mesh:',
-                    polydata.getNumberOfPoints(), 'points,',
-                    polydata.getNumberOfPolys(), 'polygons');
+                const numPoints = polydata.getNumberOfPoints();
+                const numPolys = polydata.getNumberOfPolys();
+                console.log('[GeomPack VTK Viewer] Loaded mesh:', numPoints, 'points,', numPolys, 'polygons');
 
-                // Set mapper input
-                mapper.setInputData(polydata);
+                // Check mesh bounds
+                const bounds = polydata.getBounds();
+                console.log('[GeomPack VTK Viewer DEBUG] Mesh bounds:', bounds);
 
+                // CRITICAL: Use proper VTK pipeline with normals filter
+                console.log('[GeomPack VTK Viewer DEBUG] Setting up VTK pipeline...');
+
+                // Create normals filter (required for STL rendering)
+                const normalsFilter = vtkPolyDataNormals.newInstance();
+
+                // Connect pipeline: reader -> normals -> mapper
+                normalsFilter.setInputConnection(currentReader.getOutputPort());
+                mapper.setInputConnection(normalsFilter.getOutputPort());
+
+                console.log('[GeomPack VTK Viewer DEBUG] Pipeline connected: reader -> normals -> mapper');
+
+                // Force pipeline update
+                mapper.update();
+                console.log('[GeomPack VTK Viewer DEBUG] Mapper updated');
+                console.log('[GeomPack VTK Viewer DEBUG] Mapper has input:', mapper.getInputData());
+                console.log('[GeomPack VTK Viewer DEBUG] Actor mapper:', actor.getMapper());
+
+                console.log('[GeomPack VTK Viewer DEBUG] Resetting camera...');
                 // Reset camera to fit mesh
                 renderer.resetCamera();
-                renderWindow.render();
 
+                // Get camera and adjust view angle
+                const camera = renderer.getActiveCamera();
+                const center = [
+                    (bounds[0] + bounds[1]) / 2,
+                    (bounds[2] + bounds[3]) / 2,
+                    (bounds[4] + bounds[5]) / 2
+                ];
+                const maxDim = Math.max(
+                    bounds[1] - bounds[0],
+                    bounds[3] - bounds[2],
+                    bounds[5] - bounds[4]
+                );
+
+                // Position camera at an angle for better 3D view
+                const distance = maxDim * 2.5;
+                camera.setPosition(
+                    center[0] + distance,
+                    center[1] + distance,
+                    center[2] + distance
+                );
+                camera.setFocalPoint(center[0], center[1], center[2]);
+                camera.setViewUp(0, 0, 1);
+
+                console.log('[GeomPack VTK Viewer DEBUG] Camera position:', camera.getPosition());
+                console.log('[GeomPack VTK Viewer DEBUG] Camera focal point:', camera.getFocalPoint());
+                console.log('[GeomPack VTK Viewer DEBUG] Mesh center:', center);
+                console.log('[GeomPack VTK Viewer DEBUG] Max dimension:', maxDim);
+                console.log('[GeomPack VTK Viewer DEBUG] Distance:', distance);
+
+                // Render the scene
+                renderWindow.render();
+                console.log('[GeomPack VTK Viewer DEBUG] Initial render called');
+
+                // Force a resize to ensure proper display in iframe
+                setTimeout(() => {
+                    fullScreenRenderer.resize();
+                    renderWindow.render();
+                    console.log('[GeomPack VTK Viewer DEBUG] Post-load resize and render');
+                }, 100);
+
+                console.log('[GeomPack VTK Viewer DEBUG] Rendering complete');
                 loading.style.display = 'none';
                 console.log('[GeomPack VTK Viewer] Mesh loaded successfully');
 
             } catch (error) {
                 console.error('[GeomPack VTK Viewer] Error loading mesh:', error);
+                console.error('[GeomPack VTK Viewer DEBUG] Error type:', error?.constructor?.name);
+                console.error('[GeomPack VTK Viewer DEBUG] Error message:', error?.message);
+                console.error('[GeomPack VTK Viewer DEBUG] Error stack:', error?.stack);
                 loading.textContent = `Error loading mesh: ${error.message}`;
                 loading.style.color = '#ff6b6b';
             }
@@ -153,18 +306,53 @@
 
         // Listen for messages from parent window
         window.addEventListener('message', (event) => {
+            console.log('[GeomPack VTK Viewer DEBUG] Received postMessage:', event.data);
+            console.log('[GeomPack VTK Viewer DEBUG] Message type:', event.data?.type);
+            console.log('[GeomPack VTK Viewer DEBUG] Message filepath:', event.data?.filepath);
+
             if (event.data.type === 'LOAD_MESH') {
                 console.log('[GeomPack VTK Viewer] Received LOAD_MESH message:', event.data.filepath);
                 loadMesh(event.data.filepath);
+            } else {
+                console.warn('[GeomPack VTK Viewer DEBUG] Unknown message type or missing type');
             }
         });
 
         // Handle window resize
         window.addEventListener('resize', () => {
-            renderWindow.resize();
+            fullScreenRenderer.resize();
+            renderWindow.render();
+        });
+
+        // Control event handlers
+        document.getElementById('showEdges').addEventListener('change', (e) => {
+            property.setEdgeVisibility(e.target.checked);
+            renderWindow.render();
+        });
+
+        document.getElementById('representation').addEventListener('change', (e) => {
+            property.setRepresentation(parseInt(e.target.value));
+            renderWindow.render();
+        });
+
+        document.getElementById('resetCamera').addEventListener('click', () => {
+            renderer.resetCamera();
+            renderWindow.render();
+        });
+
+        document.getElementById('screenshot').addEventListener('click', () => {
+            const image = renderWindow.captureImages()[0];
+            // Send screenshot back to parent window
+            window.parent.postMessage({
+                type: 'SCREENSHOT',
+                image: image, // base64 PNG data URL
+                timestamp: Date.now()
+            }, '*');
+            console.log('[GeomPack VTK Viewer] Screenshot captured and sent to parent');
         });
 
         console.log('[GeomPack VTK Viewer] Ready');
+        console.log('[GeomPack VTK Viewer DEBUG] Waiting for LOAD_MESH postMessage...');
     </script>
 </body>
 </html>

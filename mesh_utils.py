@@ -289,19 +289,16 @@ def compute_mesh_info(mesh: trimesh.Trimesh) -> str:
 
 
 # ============================================================================
-# Remeshing via PyMeshLab (TODO: will switch back to CGAL eventually)
+# Remeshing via PyMeshLab
 # ============================================================================
 
-def cgal_isotropic_remesh(
+def pymeshlab_isotropic_remesh(
     mesh: trimesh.Trimesh,
     target_edge_length: float,
     iterations: int = 3
 ) -> Tuple[Optional[trimesh.Trimesh], str]:
     """
-    Apply isotropic remeshing to create uniform triangle sizes.
-
-    Currently uses PyMeshLab. Will switch back to CGAL once CGAL Python bindings
-    issues are resolved.
+    Apply isotropic remeshing to create uniform triangle sizes using PyMeshLab.
 
     Args:
         mesh: Input trimesh object
@@ -311,11 +308,11 @@ def cgal_isotropic_remesh(
     Returns:
         Tuple of (remeshed_mesh, error_message)
     """
-    print(f"[cgal_isotropic_remesh] ===== Starting Isotropic Remeshing (via PyMeshLab) =====")
-    print(f"[cgal_isotropic_remesh] Input mesh: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
-    print(f"[cgal_isotropic_remesh] Parameters:")
-    print(f"[cgal_isotropic_remesh]   target_edge_length: {target_edge_length}")
-    print(f"[cgal_isotropic_remesh]   iterations: {iterations}")
+    print(f"[pymeshlab_isotropic_remesh] ===== Starting Isotropic Remeshing =====")
+    print(f"[pymeshlab_isotropic_remesh] Input mesh: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+    print(f"[pymeshlab_isotropic_remesh] Parameters:")
+    print(f"[pymeshlab_isotropic_remesh]   target_edge_length: {target_edge_length}")
+    print(f"[pymeshlab_isotropic_remesh]   iterations: {iterations}")
 
     if not PYMESHLAB_AVAILABLE:
         return None, "pymeshlab is not installed. Install with: pip install pymeshlab"
@@ -334,7 +331,7 @@ def cgal_isotropic_remesh(
 
     try:
         # Convert trimesh to PyMeshLab
-        print(f"[cgal_isotropic_remesh] Converting to PyMeshLab format...")
+        print(f"[pymeshlab_isotropic_remesh] Converting to PyMeshLab format...")
         ms = pymeshlab.MeshSet()
 
         # Create PyMeshLab mesh from numpy arrays
@@ -344,7 +341,7 @@ def cgal_isotropic_remesh(
         )
         ms.add_mesh(pml_mesh)
 
-        print(f"[cgal_isotropic_remesh] Applying isotropic remeshing...")
+        print(f"[pymeshlab_isotropic_remesh] Applying isotropic remeshing...")
         # PyMeshLab's isotropic remeshing
         # targetlen is specified as PercentageValue (percentage of bounding box diagonal)
         # We need to convert our absolute target_edge_length to a percentage
@@ -358,7 +355,7 @@ def cgal_isotropic_remesh(
         )
 
         # Convert back to trimesh
-        print(f"[cgal_isotropic_remesh] Converting back to trimesh...")
+        print(f"[pymeshlab_isotropic_remesh] Converting back to trimesh...")
         remeshed_pml = ms.current_mesh()
         remeshed_mesh = trimesh.Trimesh(
             vertices=remeshed_pml.vertex_matrix(),
@@ -384,10 +381,10 @@ def cgal_isotropic_remesh(
         vertex_pct = (vertex_change / len(mesh.vertices)) * 100 if len(mesh.vertices) > 0 else 0
         face_pct = (face_change / len(mesh.faces)) * 100 if len(mesh.faces) > 0 else 0
 
-        print(f"[cgal_isotropic_remesh] ===== Remeshing Complete =====")
-        print(f"[cgal_isotropic_remesh] Results:")
-        print(f"[cgal_isotropic_remesh]   Vertices: {len(mesh.vertices)} -> {len(remeshed_mesh.vertices)} ({vertex_change:+d}, {vertex_pct:+.1f}%)")
-        print(f"[cgal_isotropic_remesh]   Faces:    {len(mesh.faces)} -> {len(remeshed_mesh.faces)} ({face_change:+d}, {face_pct:+.1f}%)")
+        print(f"[pymeshlab_isotropic_remesh] ===== Remeshing Complete =====")
+        print(f"[pymeshlab_isotropic_remesh] Results:")
+        print(f"[pymeshlab_isotropic_remesh]   Vertices: {len(mesh.vertices)} -> {len(remeshed_mesh.vertices)} ({vertex_change:+d}, {vertex_pct:+.1f}%)")
+        print(f"[pymeshlab_isotropic_remesh]   Faces:    {len(mesh.faces)} -> {len(remeshed_mesh.faces)} ({face_change:+d}, {face_pct:+.1f}%)")
 
         return remeshed_mesh, ""
 

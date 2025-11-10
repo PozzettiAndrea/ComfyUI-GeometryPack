@@ -18,24 +18,55 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function() {
                 const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
 
+                console.log("[GeomPack DEBUG] this.widgets before:", this.widgets);
+                console.log("[GeomPack DEBUG] nodeData:", nodeData);
                 console.log("[GeomPack] Node created, adding widget");
 
                 // Create iframe for 3D viewer
                 const iframe = document.createElement("iframe");
                 iframe.style.width = "100%";
-                iframe.style.height = "500px";
+                iframe.style.height = "100%";
                 iframe.style.border = "none";
                 iframe.style.backgroundColor = "#2a2a2a";
+                iframe.style.aspectRatio = "1";
 
                 // Point to our HTML viewer (with cache buster)
-                iframe.src = "/extensions/ComfyUI-GeomPack/viewer.html?v=" + Date.now();
+                iframe.src = "/extensions/ComfyUI-GeometryPack/viewer.html?v=" + Date.now();
 
-                // Add widget
-                const widget = this.addDOMWidget("preview", "MESH_PREVIEW", iframe);
-                widget.computeSize = () => [512, 520];
+                // Add widget with required options
+                console.log("[GeomPack DEBUG] About to call addDOMWidget");
+                console.log("[GeomPack DEBUG] typeof this.addDOMWidget:", typeof this.addDOMWidget);
+
+                const widget = this.addDOMWidget("preview", "MESH_PREVIEW", iframe, {
+                    getValue() { return ""; },
+                    setValue(v) { }
+                });
+
+                console.log("[GeomPack DEBUG] Widget created:", widget);
+                console.log("[GeomPack DEBUG] Widget properties:", Object.keys(widget || {}));
+                console.log("[GeomPack DEBUG] Widget.id:", widget?.id);
+                console.log("[GeomPack DEBUG] this.widgets after addDOMWidget:", this.widgets);
+
+                // Set widget size - computeSize returns [width, height]
+                widget.computeSize = function(width) {
+                    console.log("[GeomPack DEBUG] computeSize called with width:", width);
+                    const size = [width || 512, width || 512];
+                    console.log("[GeomPack DEBUG] computeSize returning:", size);
+                    return size;
+                };
+
+                // Also try setting element size directly
+                widget.element = iframe;
+
+                console.log("[GeomPack DEBUG] Widget computeSize set");
+                console.log("[GeomPack DEBUG] Iframe dimensions:", iframe.style.width, iframe.style.height);
 
                 // Store iframe reference
                 this.meshViewerIframe = iframe;
+
+                // Set initial node size to be square
+                this.setSize([512, 512]);
+                console.log("[GeomPack DEBUG] Node size set to [512, 512]");
 
                 // Handle execution
                 const onExecuted = this.onExecuted;

@@ -109,6 +109,7 @@
         // Load mesh function
         function loadMesh(filepath) {
             console.log('[GeomPack Viewer] Loading:', filepath);
+            console.log('[GeomPack Viewer DEBUG] Full filepath URL:', filepath);
             loading.textContent = 'Loading mesh...';
             loading.style.display = 'block';
 
@@ -123,30 +124,46 @@
             const loader = isGLB ? new GLTFLoader() : new OBJLoader();
 
             console.log('[GeomPack Viewer] File type detected:', isGLB ? 'GLB/GLTF' : 'OBJ');
+            console.log('[GeomPack Viewer DEBUG] Using loader:', loader.constructor.name);
+            console.log('[GeomPack Viewer DEBUG] About to call loader.load()...');
 
             loader.load(
                 filepath,
                 (result) => {
+                    console.log('[GeomPack Viewer DEBUG] Loader success callback called');
+                    console.log('[GeomPack Viewer DEBUG] Result:', result);
+
                     currentMesh = isGLB ? result.scene : result;
+                    console.log('[GeomPack Viewer DEBUG] currentMesh:', currentMesh);
 
                     // Center mesh
                     const box = new THREE.Box3().setFromObject(currentMesh);
                     const center = box.getCenter(new THREE.Vector3());
                     currentMesh.position.sub(center);
 
+                    console.log('[GeomPack Viewer DEBUG] Mesh bounds:', box);
+                    console.log('[GeomPack Viewer DEBUG] Mesh center:', center);
+
                     // Add material if needed
+                    let meshCount = 0;
                     currentMesh.traverse((child) => {
-                        if (child.isMesh && !child.material) {
-                            child.material = new THREE.MeshStandardMaterial({
-                                color: 0x88aacc,
-                                metalness: 0.3,
-                                roughness: 0.7
-                            });
+                        if (child.isMesh) {
+                            meshCount++;
+                            if (!child.material) {
+                                child.material = new THREE.MeshStandardMaterial({
+                                    color: 0x88aacc,
+                                    metalness: 0.3,
+                                    roughness: 0.7
+                                });
+                            }
                         }
                     });
 
+                    console.log('[GeomPack Viewer DEBUG] Mesh count in scene:', meshCount);
+
                     // Add to scene
                     scene.add(currentMesh);
+                    console.log('[GeomPack Viewer DEBUG] Mesh added to scene');
 
                     // Adjust camera
                     const size = box.getSize(new THREE.Vector3());
@@ -156,6 +173,8 @@
                     camera.lookAt(0, 0, 0);
                     controls.target.set(0, 0, 0);
                     controls.update();
+
+                    console.log('[GeomPack Viewer DEBUG] Camera adjusted to distance:', distance);
 
                     loading.style.display = 'none';
                     console.log('[GeomPack Viewer] Mesh loaded successfully');
@@ -168,20 +187,31 @@
                 },
                 (error) => {
                     console.error('[GeomPack Viewer] Error loading mesh:', error);
-                    loading.textContent = 'Error loading mesh';
+                    console.error('[GeomPack Viewer DEBUG] Error type:', error?.constructor?.name);
+                    console.error('[GeomPack Viewer DEBUG] Error message:', error?.message);
+                    console.error('[GeomPack Viewer DEBUG] Error stack:', error?.stack);
+                    loading.textContent = 'Error loading mesh - check console';
+                    loading.style.color = '#ff6666';
                 }
             );
         }
 
         // Listen for messages from parent window
         window.addEventListener('message', (event) => {
+            console.log('[GeomPack Viewer DEBUG] Received postMessage:', event.data);
+            console.log('[GeomPack Viewer DEBUG] Message type:', event.data?.type);
+            console.log('[GeomPack Viewer DEBUG] Message filepath:', event.data?.filepath);
+
             if (event.data.type === 'LOAD_MESH') {
                 console.log('[GeomPack Viewer] Received LOAD_MESH message:', event.data.filepath);
                 loadMesh(event.data.filepath);
+            } else {
+                console.warn('[GeomPack Viewer DEBUG] Unknown message type or missing type');
             }
         });
 
         console.log('[GeomPack Viewer] Ready');
+        console.log('[GeomPack Viewer DEBUG] Waiting for LOAD_MESH postMessage...');
     </script>
 </body>
 </html>

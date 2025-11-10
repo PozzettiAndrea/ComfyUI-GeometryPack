@@ -374,11 +374,11 @@ class CreatePrimitive:
         return (mesh,)
 
 
-class CGALRemeshNode:
+class PyMeshLabRemeshNode:
     """
-    CGAL Isotropic Remeshing - Create uniform triangle meshes.
+    PyMeshLab Isotropic Remeshing - Create uniform triangle meshes.
 
-    Implements the algorithm from Botsch & Kobbelt (2004).
+    Uses PyMeshLab's implementation of isotropic remeshing.
     This remeshing technique creates triangles with target edge length,
     resulting in more uniform mesh quality.
     """
@@ -407,11 +407,11 @@ class CGALRemeshNode:
     RETURN_TYPES = ("MESH",)
     RETURN_NAMES = ("remeshed_mesh",)
     FUNCTION = "remesh"
-    CATEGORY = "geompack/cgal"
+    CATEGORY = "geompack/pymeshlab"
 
     def remesh(self, mesh, target_edge_length, iterations):
         """
-        Apply CGAL isotropic remeshing.
+        Apply PyMeshLab isotropic remeshing.
 
         Args:
             mesh: Input trimesh.Trimesh object
@@ -421,10 +421,10 @@ class CGALRemeshNode:
         Returns:
             tuple: (remeshed_trimesh.Trimesh,)
         """
-        print(f"[CGALRemesh] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
-        print(f"[CGALRemesh] Target edge length: {target_edge_length}, Iterations: {iterations}")
+        print(f"[PyMeshLabRemesh] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[PyMeshLabRemesh] Target edge length: {target_edge_length}, Iterations: {iterations}")
 
-        remeshed_mesh, error = mesh_utils.cgal_isotropic_remesh(
+        remeshed_mesh, error = mesh_utils.pymeshlab_isotropic_remesh(
             mesh,
             target_edge_length,
             iterations
@@ -433,7 +433,7 @@ class CGALRemeshNode:
         if remeshed_mesh is None:
             raise ValueError(f"Remeshing failed: {error}")
 
-        print(f"[CGALRemesh] Output: {len(remeshed_mesh.vertices)} vertices, {len(remeshed_mesh.faces)} faces")
+        print(f"[PyMeshLabRemesh] Output: {len(remeshed_mesh.vertices)} vertices, {len(remeshed_mesh.faces)} faces")
 
         return (remeshed_mesh,)
 
@@ -841,18 +841,49 @@ class PreviewMeshVTKNode:
         extents = mesh.extents
         max_extent = max(extents)
 
+        # Check if mesh is watertight
+        is_watertight = mesh.is_watertight
+
+        # Calculate volume and area (only if watertight)
+        volume = None
+        area = None
+        try:
+            if is_watertight:
+                volume = float(mesh.volume)
+            area = float(mesh.area)
+        except Exception as e:
+            print(f"[PreviewMeshVTK] Could not calculate volume/area: {e}")
+
+        # Get field names (vertex/face data arrays)
+        field_names = []
+        if hasattr(mesh, 'vertex_attributes') and mesh.vertex_attributes:
+            field_names.extend([f"vertex.{k}" for k in mesh.vertex_attributes.keys()])
+        if hasattr(mesh, 'face_attributes') and mesh.face_attributes:
+            field_names.extend([f"face.{k}" for k in mesh.face_attributes.keys()])
+
         # Return metadata for frontend widget
-        return {
-            "ui": {
-                "mesh_file": [filename],
-                "vertex_count": [len(mesh.vertices)],
-                "face_count": [len(mesh.faces)],
-                "bounds_min": [bounds[0].tolist()],
-                "bounds_max": [bounds[1].tolist()],
-                "extents": [extents.tolist()],
-                "max_extent": [float(max_extent)],
-            }
+        ui_data = {
+            "mesh_file": [filename],
+            "vertex_count": [len(mesh.vertices)],
+            "face_count": [len(mesh.faces)],
+            "bounds_min": [bounds[0].tolist()],
+            "bounds_max": [bounds[1].tolist()],
+            "extents": [extents.tolist()],
+            "max_extent": [float(max_extent)],
+            "is_watertight": [bool(is_watertight)],
         }
+
+        # Add optional fields if available
+        if volume is not None:
+            ui_data["volume"] = [volume]
+        if area is not None:
+            ui_data["area"] = [area]
+        if field_names:
+            ui_data["field_names"] = [field_names]
+
+        print(f"[PreviewMeshVTK] Mesh info: watertight={is_watertight}, volume={volume}, area={area}, fields={len(field_names)}")
+
+        return {"ui": ui_data}
 
 
 class CenterMeshNode:
@@ -1048,6 +1079,847 @@ bpy.ops.wm.obj_export(
                 os.unlink(output_path)
 
 
+class HausdorffDistanceNode:
+    """
+    Compute Hausdorff distance between two meshes or point clouds.
+
+    Hausdorff distance measures the maximum distance from any point in one set
+    to its nearest point in the other set. Useful for measuring worst-case
+    deviation between meshes.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh_a": ("MESH",),
+                "mesh_b": ("MESH",),
+                "sample_count": ("INT", {
+                    "default": 10000,
+                    "min": 1000,
+                    "max": 1000000,
+                    "step": 1000
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("FLOAT", "STRING")
+    RETURN_NAMES = ("hausdorff_distance", "details")
+    FUNCTION = "compute_distance"
+    CATEGORY = "geompack/analysis/distance"
+
+    def compute_distance(self, mesh_a, mesh_b, sample_count):
+        """
+        Compute Hausdorff distance between two meshes.
+
+        Args:
+            mesh_a: First trimesh.Trimesh object
+            mesh_b: Second trimesh.Trimesh object
+            sample_count: Number of points to sample from each mesh
+
+        Returns:
+            tuple: (hausdorff_distance, details_string)
+        """
+        try:
+            import point_cloud_utils as pcu
+        except ImportError:
+            raise ImportError(
+                "point-cloud-utils not installed. Install with: pip install point-cloud-utils"
+            )
+
+        print(f"[HausdorffDistance] Comparing meshes with {sample_count} samples each")
+
+        # Sample point clouds from meshes
+        points_a = mesh_a.sample(sample_count)
+        points_b = mesh_b.sample(sample_count)
+
+        # Compute Hausdorff distance (symmetric)
+        hd = pcu.hausdorff_distance(points_a, points_b)
+
+        # Compute one-sided distances
+        hd_a_to_b = pcu.one_sided_hausdorff_distance(points_a, points_b)
+        hd_b_to_a = pcu.one_sided_hausdorff_distance(points_b, points_a)
+
+        details = f"""Hausdorff Distance Analysis:
+Total (symmetric): {hd:.6f}
+A → B (one-sided): {hd_a_to_b:.6f}
+B → A (one-sided): {hd_b_to_a:.6f}
+
+Sampled {sample_count:,} points from each mesh.
+Mesh A: {len(mesh_a.vertices):,} vertices, {len(mesh_a.faces):,} faces
+Mesh B: {len(mesh_b.vertices):,} vertices, {len(mesh_b.faces):,} faces
+"""
+
+        print(f"[HausdorffDistance] Result: {hd:.6f}")
+
+        return (float(hd), details)
+
+
+class ChamferDistanceNode:
+    """
+    Compute Chamfer distance between two meshes or point clouds.
+
+    Chamfer distance is the average of squared distances from each point
+    to its nearest neighbor in the other set. More sensitive to overall
+    shape similarity than Hausdorff distance.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh_a": ("MESH",),
+                "mesh_b": ("MESH",),
+                "sample_count": ("INT", {
+                    "default": 10000,
+                    "min": 1000,
+                    "max": 1000000,
+                    "step": 1000
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("FLOAT", "STRING")
+    RETURN_NAMES = ("chamfer_distance", "info")
+    FUNCTION = "compute_distance"
+    CATEGORY = "geompack/analysis/distance"
+
+    def compute_distance(self, mesh_a, mesh_b, sample_count):
+        """
+        Compute Chamfer distance between two meshes.
+
+        Args:
+            mesh_a: First trimesh.Trimesh object
+            mesh_b: Second trimesh.Trimesh object
+            sample_count: Number of points to sample from each mesh
+
+        Returns:
+            tuple: (chamfer_distance, info_string)
+        """
+        try:
+            import point_cloud_utils as pcu
+        except ImportError:
+            raise ImportError(
+                "point-cloud-utils not installed. Install with: pip install point-cloud-utils"
+            )
+
+        print(f"[ChamferDistance] Comparing meshes with {sample_count} samples each")
+
+        # Sample point clouds from meshes
+        points_a = mesh_a.sample(sample_count)
+        points_b = mesh_b.sample(sample_count)
+
+        # Compute Chamfer distance
+        cd = pcu.chamfer_distance(points_a, points_b)
+
+        info = f"""Chamfer Distance: {cd:.6f}
+
+Sampled {sample_count:,} points from each mesh.
+Mesh A: {len(mesh_a.vertices):,} vertices, {len(mesh_a.faces):,} faces
+Mesh B: {len(mesh_b.vertices):,} vertices, {len(mesh_b.faces):,} faces
+
+Note: Chamfer distance is more sensitive to overall shape
+similarity compared to Hausdorff distance.
+"""
+
+        print(f"[ChamferDistance] Result: {cd:.6f}")
+
+        return (float(cd), info)
+
+
+class ComputeSDFNode:
+    """
+    Compute Signed Distance Field (SDF) for a mesh.
+
+    The SDF represents the distance from any point in 3D space to the
+    nearest surface, with negative values inside the mesh and positive
+    values outside. Useful for occupancy queries and implicit surface
+    representations.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh": ("MESH",),
+                "resolution": ("INT", {
+                    "default": 64,
+                    "min": 16,
+                    "max": 256,
+                    "step": 16
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("SDF_VOLUME", "STRING")
+    RETURN_NAMES = ("sdf_volume", "info")
+    FUNCTION = "compute_sdf"
+    CATEGORY = "geompack/analysis/distance"
+
+    def compute_sdf(self, mesh, resolution):
+        """
+        Compute signed distance field voxel grid for mesh.
+
+        Args:
+            mesh: Input trimesh.Trimesh object
+            resolution: Grid resolution (N x N x N voxels)
+
+        Returns:
+            tuple: (sdf_data_dict, info_string)
+        """
+        try:
+            import mesh_to_sdf
+        except ImportError:
+            raise ImportError(
+                "mesh-to-sdf not installed. Install with: pip install mesh-to-sdf"
+            )
+
+        print(f"[ComputeSDF] Computing {resolution}³ SDF for mesh with {len(mesh.vertices):,} vertices")
+
+        # Compute SDF voxel grid
+        voxels = mesh_to_sdf.mesh_to_voxels(mesh, resolution)
+
+        info = f"""Signed Distance Field:
+Resolution: {resolution}³ = {resolution**3:,} voxels
+Value range: [{voxels.min():.3f}, {voxels.max():.3f}]
+
+Mesh bounds: {mesh.bounds.tolist()}
+Mesh extents: {mesh.extents.tolist()}
+
+Negative values = inside mesh
+Positive values = outside mesh
+Zero = on surface
+"""
+
+        # Package SDF data
+        sdf_data = {
+            'voxels': voxels,
+            'resolution': resolution,
+            'bounds': mesh.bounds.copy(),
+            'extents': mesh.extents.copy(),
+        }
+
+        print(f"[ComputeSDF] Complete - range: [{voxels.min():.3f}, {voxels.max():.3f}]")
+
+        return (sdf_data, info)
+
+
+class MeshToPointCloudNode:
+    """
+    Convert mesh to point cloud by sampling surface points.
+
+    Samples points from the mesh surface using various sampling methods.
+    Can optionally include normals and colors.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh": ("MESH",),
+                "sample_count": ("INT", {
+                    "default": 10000,
+                    "min": 100,
+                    "max": 10000000,
+                    "step": 100
+                }),
+                "sampling_method": (["uniform", "even", "face_weighted"], {
+                    "default": "uniform"
+                }),
+            },
+            "optional": {
+                "include_normals": (["true", "false"], {
+                    "default": "true"
+                }),
+            }
+        }
+
+    RETURN_TYPES = ("POINT_CLOUD",)
+    RETURN_NAMES = ("point_cloud",)
+    FUNCTION = "mesh_to_pointcloud"
+    CATEGORY = "geompack/conversion"
+
+    def mesh_to_pointcloud(self, mesh, sample_count, sampling_method, include_normals="true"):
+        """
+        Sample points from mesh surface.
+
+        Args:
+            mesh: Input trimesh.Trimesh object
+            sample_count: Number of points to sample
+            sampling_method: Sampling strategy
+            include_normals: Whether to compute surface normals
+
+        Returns:
+            tuple: (point_cloud_dict,)
+        """
+        print(f"[MeshToPointCloud] Sampling {sample_count:,} points using {sampling_method} method")
+
+        if sampling_method == "uniform":
+            # Uniform random sampling
+            points, face_indices = mesh.sample(sample_count, return_index=True)
+
+        elif sampling_method == "even":
+            # Approximately even spacing (rejection sampling)
+            # Calculate radius based on surface area and desired point count
+            radius = np.sqrt(mesh.area / sample_count) * 2.0
+            points, face_indices = trimesh.sample.sample_surface_even(
+                mesh, sample_count, radius=radius
+            )
+            print(f"[MeshToPointCloud] Even sampling produced {len(points):,} points (target: {sample_count:,})")
+
+        elif sampling_method == "face_weighted":
+            # Weight by face area (default behavior)
+            points, face_indices = mesh.sample(
+                sample_count,
+                return_index=True,
+                face_weight=mesh.area_faces
+            )
+
+        # Optional: compute normals at sample points
+        normals = None
+        if include_normals == "true":
+            # Get face normals for each sampled point
+            normals = mesh.face_normals[face_indices]
+
+        # Create point cloud data structure
+        pointcloud = {
+            'points': points,
+            'normals': normals,
+            'face_indices': face_indices,
+            'source_mesh_vertices': len(mesh.vertices),
+            'source_mesh_faces': len(mesh.faces),
+            'sample_count': len(points),
+            'sampling_method': sampling_method,
+        }
+
+        print(f"[MeshToPointCloud] Generated point cloud with {len(points):,} points")
+
+        return (pointcloud,)
+
+
+class XAtlasUVUnwrapNode:
+    """
+    UV Unwrap mesh using xatlas library.
+
+    Fast, automatic UV unwrapping optimized for lightmaps and texture atlasing.
+    No Blender dependency required. Uses the same algorithm as Blender 3.6+
+    for UV packing.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh": ("MESH",),
+            },
+        }
+
+    RETURN_TYPES = ("MESH",)
+    RETURN_NAMES = ("unwrapped_mesh",)
+    FUNCTION = "uv_unwrap"
+    CATEGORY = "geompack/uv"
+
+    def uv_unwrap(self, mesh):
+        """
+        UV unwrap mesh using xatlas.
+
+        Args:
+            mesh: Input trimesh.Trimesh object
+
+        Returns:
+            tuple: (unwrapped_trimesh.Trimesh,)
+        """
+        try:
+            import xatlas
+        except ImportError:
+            raise ImportError(
+                "xatlas not installed. Install with: pip install xatlas\n"
+                "This is required for fast UV unwrapping without Blender."
+            )
+
+        print(f"[XAtlasUVUnwrap] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+
+        # Parametrize with xatlas
+        vmapping, indices, uvs = xatlas.parametrize(
+            mesh.vertices,
+            mesh.faces
+        )
+
+        # Create new mesh with UV-split vertices
+        new_vertices = mesh.vertices[vmapping]
+
+        # Create trimesh with UV coordinates
+        unwrapped = trimesh.Trimesh(
+            vertices=new_vertices,
+            faces=indices,
+            process=False
+        )
+
+        # Store UV coordinates in visual
+        from trimesh.visual import TextureVisuals
+        unwrapped.visual = TextureVisuals(uv=uvs)
+
+        # Preserve metadata
+        unwrapped.metadata = mesh.metadata.copy()
+        unwrapped.metadata['uv_unwrap'] = {
+            'algorithm': 'xatlas',
+            'original_vertices': len(mesh.vertices),
+            'unwrapped_vertices': len(new_vertices),
+            'vertex_duplication_ratio': len(new_vertices) / len(mesh.vertices)
+        }
+
+        print(f"[XAtlasUVUnwrap] Output: {len(unwrapped.vertices)} vertices, {len(unwrapped.faces)} faces")
+        print(f"[XAtlasUVUnwrap] Vertex duplication: {len(new_vertices)/len(mesh.vertices):.2f}x")
+
+        return (unwrapped,)
+
+
+class BlenderCubeProjectionNode:
+    """
+    UV Cube Projection using Blender.
+
+    Projects mesh onto 6 faces of a cube. Perfect for box-like geometry.
+    Creates 6 overlapping UV islands that can be separated.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh": ("MESH",),
+                "cube_size": ("FLOAT", {
+                    "default": 1.0,
+                    "min": 0.1,
+                    "max": 10.0,
+                    "step": 0.1
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("MESH",)
+    RETURN_NAMES = ("unwrapped_mesh",)
+    FUNCTION = "uv_unwrap"
+    CATEGORY = "geompack/uv"
+
+    def uv_unwrap(self, mesh, cube_size):
+        """
+        UV cube projection using Blender.
+
+        Args:
+            mesh: Input trimesh.Trimesh object
+            cube_size: Size of the projection cube
+
+        Returns:
+            tuple: (unwrapped_trimesh.Trimesh,)
+        """
+        print(f"[BlenderCubeProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderCubeProjection] Cube size: {cube_size}")
+
+        # Find Blender
+        blender_path = _find_blender()
+
+        # Create temp files
+        with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
+            input_path = f_in.name
+            mesh.export(input_path)
+
+        with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
+            output_path = f_out.name
+
+        try:
+            # Blender script for cube projection
+            script = f"""
+import bpy
+
+# Clear scene
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete()
+
+# Import mesh
+bpy.ops.wm.obj_import(filepath='{input_path}')
+
+# Get imported object
+obj = bpy.context.selected_objects[0]
+bpy.context.view_layer.objects.active = obj
+
+# Switch to edit mode and apply cube projection
+bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.uv.cube_project(
+    cube_size={cube_size},
+    correct_aspect=True,
+    clip_to_bounds=False,
+    scale_to_bounds=False
+)
+bpy.ops.object.mode_set(mode='OBJECT')
+
+# Export with UVs
+bpy.ops.wm.obj_export(
+    filepath='{output_path}',
+    export_selected_objects=True,
+    export_uv=True,
+    export_materials=False
+)
+"""
+
+            print(f"[BlenderCubeProjection] Running Blender...")
+            result = subprocess.run(
+                [blender_path, '--background', '--python-expr', script],
+                capture_output=True,
+                text=True,
+                timeout=300
+            )
+
+            if result.returncode != 0:
+                raise RuntimeError(f"Blender failed: {result.stderr}")
+
+            # Load the unwrapped mesh
+            unwrapped = trimesh.load(output_path, process=False)
+
+            if isinstance(unwrapped, trimesh.Scene):
+                unwrapped = unwrapped.dump(concatenate=True)
+
+            # Preserve metadata
+            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata['uv_unwrap'] = {
+                'algorithm': 'blender_cube_projection',
+                'cube_size': cube_size
+            }
+
+            print(f"[BlenderCubeProjection] Complete")
+
+            return (unwrapped,)
+
+        finally:
+            # Cleanup
+            if os.path.exists(input_path):
+                os.unlink(input_path)
+            if os.path.exists(output_path):
+                os.unlink(output_path)
+
+
+class BlenderCylinderProjectionNode:
+    """
+    UV Cylinder Projection using Blender.
+
+    Projects mesh onto a cylinder surface. Perfect for cylindrical objects
+    like bottles, columns, pipes, etc.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh": ("MESH",),
+                "radius": ("FLOAT", {
+                    "default": 1.0,
+                    "min": 0.1,
+                    "max": 10.0,
+                    "step": 0.1
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("MESH",)
+    RETURN_NAMES = ("unwrapped_mesh",)
+    FUNCTION = "uv_unwrap"
+    CATEGORY = "geompack/uv"
+
+    def uv_unwrap(self, mesh, radius):
+        """
+        UV cylinder projection using Blender.
+
+        Args:
+            mesh: Input trimesh.Trimesh object
+            radius: Cylinder radius
+
+        Returns:
+            tuple: (unwrapped_trimesh.Trimesh,)
+        """
+        print(f"[BlenderCylinderProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderCylinderProjection] Radius: {radius}")
+
+        # Find Blender
+        blender_path = _find_blender()
+
+        # Create temp files
+        with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
+            input_path = f_in.name
+            mesh.export(input_path)
+
+        with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
+            output_path = f_out.name
+
+        try:
+            # Blender script for cylinder projection
+            script = f"""
+import bpy
+
+# Clear scene
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete()
+
+# Import mesh
+bpy.ops.wm.obj_import(filepath='{input_path}')
+
+# Get imported object
+obj = bpy.context.selected_objects[0]
+bpy.context.view_layer.objects.active = obj
+
+# Switch to edit mode and apply cylinder projection
+bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.uv.cylinder_project(
+    direction='VIEW_ON_EQUATOR',
+    align='POLAR_ZX',
+    radius={radius},
+    correct_aspect=True,
+    scale_to_bounds=False
+)
+bpy.ops.object.mode_set(mode='OBJECT')
+
+# Export with UVs
+bpy.ops.wm.obj_export(
+    filepath='{output_path}',
+    export_selected_objects=True,
+    export_uv=True,
+    export_materials=False
+)
+"""
+
+            print(f"[BlenderCylinderProjection] Running Blender...")
+            result = subprocess.run(
+                [blender_path, '--background', '--python-expr', script],
+                capture_output=True,
+                text=True,
+                timeout=300
+            )
+
+            if result.returncode != 0:
+                raise RuntimeError(f"Blender failed: {result.stderr}")
+
+            # Load the unwrapped mesh
+            unwrapped = trimesh.load(output_path, process=False)
+
+            if isinstance(unwrapped, trimesh.Scene):
+                unwrapped = unwrapped.dump(concatenate=True)
+
+            # Preserve metadata
+            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata['uv_unwrap'] = {
+                'algorithm': 'blender_cylinder_projection',
+                'radius': radius
+            }
+
+            print(f"[BlenderCylinderProjection] Complete")
+
+            return (unwrapped,)
+
+        finally:
+            # Cleanup
+            if os.path.exists(input_path):
+                os.unlink(input_path)
+            if os.path.exists(output_path):
+                os.unlink(output_path)
+
+
+class BlenderSphereProjectionNode:
+    """
+    UV Sphere Projection using Blender.
+
+    Projects mesh onto a sphere surface. Perfect for spherical objects
+    like planets, balls, eyes, etc. Creates equirectangular projection.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh": ("MESH",),
+            },
+        }
+
+    RETURN_TYPES = ("MESH",)
+    RETURN_NAMES = ("unwrapped_mesh",)
+    FUNCTION = "uv_unwrap"
+    CATEGORY = "geompack/uv"
+
+    def uv_unwrap(self, mesh):
+        """
+        UV sphere projection using Blender.
+
+        Args:
+            mesh: Input trimesh.Trimesh object
+
+        Returns:
+            tuple: (unwrapped_trimesh.Trimesh,)
+        """
+        print(f"[BlenderSphereProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+
+        # Find Blender
+        blender_path = _find_blender()
+
+        # Create temp files
+        with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
+            input_path = f_in.name
+            mesh.export(input_path)
+
+        with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
+            output_path = f_out.name
+
+        try:
+            # Blender script for sphere projection
+            script = f"""
+import bpy
+
+# Clear scene
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete()
+
+# Import mesh
+bpy.ops.wm.obj_import(filepath='{input_path}')
+
+# Get imported object
+obj = bpy.context.selected_objects[0]
+bpy.context.view_layer.objects.active = obj
+
+# Switch to edit mode and apply sphere projection
+bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.uv.sphere_project(
+    direction='VIEW_ON_EQUATOR',
+    align='POLAR_ZX',
+    correct_aspect=True,
+    scale_to_bounds=False
+)
+bpy.ops.object.mode_set(mode='OBJECT')
+
+# Export with UVs
+bpy.ops.wm.obj_export(
+    filepath='{output_path}',
+    export_selected_objects=True,
+    export_uv=True,
+    export_materials=False
+)
+"""
+
+            print(f"[BlenderSphereProjection] Running Blender...")
+            result = subprocess.run(
+                [blender_path, '--background', '--python-expr', script],
+                capture_output=True,
+                text=True,
+                timeout=300
+            )
+
+            if result.returncode != 0:
+                raise RuntimeError(f"Blender failed: {result.stderr}")
+
+            # Load the unwrapped mesh
+            unwrapped = trimesh.load(output_path, process=False)
+
+            if isinstance(unwrapped, trimesh.Scene):
+                unwrapped = unwrapped.dump(concatenate=True)
+
+            # Preserve metadata
+            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata['uv_unwrap'] = {
+                'algorithm': 'blender_sphere_projection',
+            }
+
+            print(f"[BlenderSphereProjection] Complete")
+
+            return (unwrapped,)
+
+        finally:
+            # Cleanup
+            if os.path.exists(input_path):
+                os.unlink(input_path)
+            if os.path.exists(output_path):
+                os.unlink(output_path)
+
+
+class LibiglLSCMNode:
+    """
+    LSCM UV Parameterization using libigl.
+
+    Least Squares Conformal Maps - minimizes angle distortion.
+    Fast, conformal mapping suitable for texturing organic shapes.
+    No Blender dependency required.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mesh": ("MESH",),
+            },
+        }
+
+    RETURN_TYPES = ("MESH",)
+    RETURN_NAMES = ("unwrapped_mesh",)
+    FUNCTION = "uv_unwrap"
+    CATEGORY = "geompack/uv"
+
+    def uv_unwrap(self, mesh):
+        """
+        LSCM UV parameterization using libigl.
+
+        Args:
+            mesh: Input trimesh.Trimesh object
+
+        Returns:
+            tuple: (unwrapped_trimesh.Trimesh,)
+        """
+        try:
+            import igl
+        except ImportError:
+            raise ImportError("libigl not installed (should be in requirements.txt)")
+
+        print(f"[LibiglLSCM] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+
+        # LSCM requires fixing 2 vertices for unique solution
+        # Choose first and last vertex
+        v_fixed = np.array([0, len(mesh.vertices)-1], dtype=np.int32)
+        uv_fixed = np.array([[0.0, 0.0], [1.0, 0.0]], dtype=np.float64)
+
+        # Compute LSCM parameterization
+        uv = igl.lscm(
+            mesh.vertices.astype(np.float64),
+            mesh.faces.astype(np.int32),
+            v_fixed,
+            uv_fixed
+        )
+
+        # Normalize UVs to [0, 1] range
+        uv_min = uv.min(axis=0)
+        uv_max = uv.max(axis=0)
+        uv_range = uv_max - uv_min
+
+        # Avoid division by zero
+        uv_range[uv_range < 1e-10] = 1.0
+
+        uv_normalized = (uv - uv_min) / uv_range
+
+        # Create unwrapped mesh (copy original)
+        unwrapped = mesh.copy()
+
+        # Store UV coordinates in visual
+        from trimesh.visual import TextureVisuals
+        unwrapped.visual = TextureVisuals(uv=uv_normalized)
+
+        # Add metadata
+        unwrapped.metadata['uv_unwrap'] = {
+            'algorithm': 'libigl_lscm',
+            'conformal': True,
+            'angle_preserving': True,
+            'fixed_vertices': v_fixed.tolist()
+        }
+
+        print(f"[LibiglLSCM] Complete - conformal (angle-preserving) mapping")
+
+        return (unwrapped,)
+
+
 # Node class mappings - this dictionary maps internal node names to classes
 NODE_CLASS_MAPPINGS = {
     "GeomPackExampleNode": ExampleLibiglNode,
@@ -1055,13 +1927,25 @@ NODE_CLASS_MAPPINGS = {
     "GeomPackLoadMesh": LoadMesh,
     "GeomPackSaveMesh": SaveMesh,
     "GeomPackCreatePrimitive": CreatePrimitive,
-    "GeomPackCGALRemesh": CGALRemeshNode,
+    "GeomPackPyMeshLabRemesh": PyMeshLabRemeshNode,
     "GeomPackCenterMesh": CenterMeshNode,
     "GeomPackPreviewMesh": PreviewMeshNode,
     "GeomPackPreviewMeshVTK": PreviewMeshVTKNode,
     "GeomPackBlenderUVUnwrap": BlenderUVUnwrapNode,
     "GeomPackBlenderVoxelRemesh": BlenderVoxelRemeshNode,
     "GeomPackBlenderQuadriflowRemesh": BlenderQuadriflowRemeshNode,
+    # Distance metrics
+    "GeomPackHausdorffDistance": HausdorffDistanceNode,
+    "GeomPackChamferDistance": ChamferDistanceNode,
+    "GeomPackComputeSDF": ComputeSDFNode,
+    # Conversion
+    "GeomPackMeshToPointCloud": MeshToPointCloudNode,
+    # UV Mapping
+    "GeomPackXAtlasUVUnwrap": XAtlasUVUnwrapNode,
+    "GeomPackBlenderCubeProjection": BlenderCubeProjectionNode,
+    "GeomPackBlenderCylinderProjection": BlenderCylinderProjectionNode,
+    "GeomPackBlenderSphereProjection": BlenderSphereProjectionNode,
+    "GeomPackLibiglLSCM": LibiglLSCMNode,
 }
 
 # Display name mappings - these are the names shown in ComfyUI's node browser
@@ -1071,11 +1955,23 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "GeomPackLoadMesh": "Load Mesh",
     "GeomPackSaveMesh": "Save Mesh",
     "GeomPackCreatePrimitive": "Create Primitive",
-    "GeomPackCGALRemesh": "CGAL Remesh (Isotropic)",
+    "GeomPackPyMeshLabRemesh": "PyMeshLab Remesh (Isotropic)",
     "GeomPackCenterMesh": "Center Mesh",
     "GeomPackPreviewMesh": "Preview Mesh (3D)",
     "GeomPackPreviewMeshVTK": "Preview Mesh (VTK)",
     "GeomPackBlenderUVUnwrap": "Blender UV Unwrap",
     "GeomPackBlenderVoxelRemesh": "Blender Voxel Remesh",
     "GeomPackBlenderQuadriflowRemesh": "Blender Quadriflow Remesh",
+    # Distance metrics
+    "GeomPackHausdorffDistance": "Hausdorff Distance",
+    "GeomPackChamferDistance": "Chamfer Distance",
+    "GeomPackComputeSDF": "Compute SDF",
+    # Conversion
+    "GeomPackMeshToPointCloud": "Mesh to Point Cloud",
+    # UV Mapping
+    "GeomPackXAtlasUVUnwrap": "xAtlas UV Unwrap",
+    "GeomPackBlenderCubeProjection": "Blender Cube Projection",
+    "GeomPackBlenderCylinderProjection": "Blender Cylinder Projection",
+    "GeomPackBlenderSphereProjection": "Blender Sphere Projection",
+    "GeomPackLibiglLSCM": "libigl LSCM Unwrap",
 }

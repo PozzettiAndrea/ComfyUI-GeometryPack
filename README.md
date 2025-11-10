@@ -74,19 +74,43 @@ Create Primitive (cube) → Mesh Info → CGAL Remesh → Mesh Info → Save Mes
   - Bounding box and extents
   - Metadata
 
+### geompack/analysis/distance
+- **Hausdorff Distance**: Compute Hausdorff distance between two meshes
+  - Measures maximum distance between point sets
+  - Returns symmetric and one-sided distances
+  - Configurable sample count
+  - Useful for measuring worst-case deviation
+- **Chamfer Distance**: Compute Chamfer distance between two meshes
+  - Average of squared nearest neighbor distances
+  - More sensitive to overall shape similarity
+  - Configurable sample count
+  - Useful for shape matching
+- **Compute SDF**: Generate Signed Distance Field for a mesh
+  - Voxel-based representation
+  - Negative values = inside, positive = outside
+  - Configurable resolution (16-256³)
+  - Useful for occupancy queries
+
+### geompack/conversion
+- **Mesh to Point Cloud**: Sample points from mesh surface
+  - Multiple sampling methods (uniform, even, face_weighted)
+  - Optional normal computation
+  - Configurable sample count
+  - Returns POINT_CLOUD data type
+
 ### geompack/primitives
 - **Create Primitive**: Generate geometric primitives
   - Cube (8 vertices, 12 faces)
   - Sphere (icosphere with subdivision levels)
   - Plane (subdivided grid)
 
-### geompack/cgal
-- **CGAL Remesh (Isotropic)**: Advanced remeshing algorithm
+### geompack/pymeshlab
+- **PyMeshLab Remesh (Isotropic)**: Isotropic remeshing algorithm
   - Creates uniform triangle sizes
   - Target edge length control
   - Iteration count parameter
   - Preserves volume
-  - Based on Botsch & Kobbelt (2004) algorithm
+  - Fast, no Blender dependency
 
 ### geompack/transforms
 - **Center Mesh**: Center mesh at origin (0, 0, 0)
@@ -106,11 +130,35 @@ Create Primitive (cube) → Mesh Info → CGAL Remesh → Mesh Info → Save Mes
   - Better for scientific visualization and analysis
   - Excellent for large meshes and datasets
 
-### geompack/blender
+### geompack/uv
+- **xAtlas UV Unwrap**: Fast UV unwrapping using xatlas
+  - No Blender dependency
+  - Optimized for lightmaps and texture atlasing
+  - Same algorithm as Blender 3.6+
+  - Production-ready quality
+- **libigl LSCM Unwrap**: Conformal UV mapping
+  - Least Squares Conformal Maps
+  - Angle-preserving parameterization
+  - Fast, direct solution
+  - No Blender dependency
+- **Blender Cube Projection**: Cube projection UV mapping
+  - Perfect for box-like geometry
+  - Projects onto 6 cube faces
+  - Configurable cube size
+- **Blender Cylinder Projection**: Cylinder projection UV mapping
+  - Perfect for cylindrical objects (bottles, pipes)
+  - Configurable radius
+  - Equirectangular projection
+- **Blender Sphere Projection**: Sphere projection UV mapping
+  - Perfect for spherical objects (planets, eyes)
+  - Equirectangular projection
+  - Single seam
 - **Blender UV Unwrap**: Smart UV unwrapping using Blender
   - Angle-based seam detection
   - Configurable island margin
   - Exports mesh with UV coordinates
+
+### geompack/blender
 - **Blender Voxel Remesh**: Voxel-based remeshing
   - Creates uniform, watertight meshes
   - Configurable voxel size
@@ -182,18 +230,22 @@ Create Primitive (sphere, subdivisions=3)
 
 ### Recently Completed
 - ✅ Migrated from dict-based meshes to trimesh.Trimesh objects
-- ✅ Integrated CGAL for advanced remeshing (currently using PyMeshLab)
 - ✅ Load Mesh (with fallback to libigl)
 - ✅ Save Mesh (all trimesh-supported formats)
 - ✅ Create Primitive (cube, sphere, plane)
 - ✅ Mesh Info (enhanced with volume, watertight detection)
-- ✅ CGAL Isotropic Remeshing (via PyMeshLab, will return to CGAL eventually)
+- ✅ PyMeshLab Isotropic Remeshing
 - ✅ Blender UV Unwrapping (Smart UV Project)
 - ✅ Blender Voxel Remeshing
 - ✅ Blender Quadriflow Remeshing
 - ✅ Center Mesh (transform to origin)
 - ✅ Preview Mesh (3D) - Interactive Three.js viewer widget!
-- ✅ Preview Mesh (VTK) - Scientific visualization with VTK.js!
+- ✅ Preview Mesh (VTK) - Scientific visualization with VTK.js with controls and mesh info panel!
+- ✅ Distance Metrics - Hausdorff, Chamfer, and SDF computation
+- ✅ Mesh to Point Cloud conversion with multiple sampling methods
+- ✅ xAtlas UV Unwrap - Fast, production-ready UV unwrapping
+- ✅ Blender UV Projections - Cube, Cylinder, and Sphere projections
+- ✅ libigl LSCM - Conformal UV mapping
 
 ### Coming Soon (Future Phases)
 - [ ] Mesh Decimation
@@ -211,14 +263,17 @@ See [MVP_PLAN.md](MVP_PLAN.md) for the complete roadmap.
 
 - Python 3.8+
 - ComfyUI
-- **trimesh** 3.15.0+
-- **pymeshlab** 2022.2+ (currently used for remeshing)
-- **Blender** (optional, for UV unwrapping and Blender remeshing nodes)
-- libigl 2.6.1+ (fallback for some I/O operations)
-- numpy 1.21.0+
-- scipy 1.7.0+
-- matplotlib 3.5.0+
-- Pillow 9.0.0+
+- **trimesh** 3.15.0+ (core mesh handling)
+- **pymeshlab** 2022.2+ (isotropic remeshing)
+- **libigl** 2.6.1+ (LSCM UV unwrapping)
+- **numpy** 1.21.0+
+- **scipy** 1.7.0+
+- **matplotlib** 3.5.0+
+- **Pillow** 9.0.0+
+- **point-cloud-utils** 0.30.0+ (distance metrics)
+- **mesh-to-sdf** 0.0.14+ (SDF computation)
+- **xatlas** 0.0.11+ (fast UV unwrapping)
+- **Blender** (optional, for Blender-based UV and remeshing nodes)
 
 ## Technical Details
 
@@ -406,6 +461,41 @@ class MyCustomNode:
         # ...
         return (processed_mesh,)
 ```
+
+## Planned Features
+
+The following features are planned for future releases:
+
+### Point Cloud Visualization
+- **plas.io Integration**: Advanced point cloud viewer for LAS/LAZ files
+  - Support for massive point cloud datasets
+  - Intensity and RGB visualization
+  - Fast WebGL-based rendering
+  - Interactive classification tools
+
+### VTK Viewer Enhancements
+- **Interactive Controls** (✅ Implemented)
+  - Toggle edges on/off
+  - Switch between surface/wireframe/points rendering modes
+  - Screenshot capture and save
+  - Reset camera view
+- **Mesh Information Panel** (✅ Implemented)
+  - Display vertex and face counts
+  - Show bounding box and extents
+  - Report watertight status
+  - Calculate volume and surface area
+  - List scalar field names
+- **Scalar Field Visualization** (In Progress)
+  - Dropdown selector for different fields
+  - Color mapping based on field values
+  - Adjustable color transfer functions
+  - Scalar bar legend
+
+### Additional 3D Viewers
+- **Gaussian Splatting**: GaussianSplats3D for neural radiance field visualization
+- **model-viewer**: glTF/GLB viewer with AR support
+
+See the [Development Status](#development-status) section for the complete roadmap.
 
 ## License
 
