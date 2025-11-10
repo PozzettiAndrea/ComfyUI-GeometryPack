@@ -11,6 +11,7 @@
             font-family: monospace;
             display: flex;
             flex-direction: column;
+            height: 100vh;
         }
         #viewerContainer {
             flex: 1;
@@ -340,8 +341,8 @@
             renderWindow.render();
         });
 
-        document.getElementById('screenshot').addEventListener('click', () => {
-            const image = renderWindow.captureImages()[0];
+        document.getElementById('screenshot').addEventListener('click', async () => {
+            const image = await renderWindow.captureImages()[0];
             // Send screenshot back to parent window
             window.parent.postMessage({
                 type: 'SCREENSHOT',

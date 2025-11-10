@@ -29,14 +29,15 @@ app.registerExtension({
                 container.style.display = "flex";
                 container.style.flexDirection = "column";
                 container.style.backgroundColor = "#2a2a2a";
+                container.style.overflow = "hidden";
 
                 // Create iframe for VTK.js viewer
                 const iframe = document.createElement("iframe");
                 iframe.style.width = "100%";
-                iframe.style.flex = "1";
+                iframe.style.flex = "1 1 0";
+                iframe.style.minHeight = "0";
                 iframe.style.border = "none";
                 iframe.style.backgroundColor = "#2a2a2a";
-                iframe.style.aspectRatio = "1";
 
                 // Point to VTK.js HTML viewer (with cache buster)
                 iframe.src = "/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=" + Date.now();
@@ -45,11 +46,13 @@ app.registerExtension({
                 const infoPanel = document.createElement("div");
                 infoPanel.style.backgroundColor = "#1a1a1a";
                 infoPanel.style.borderTop = "1px solid #444";
-                infoPanel.style.padding = "8px 12px";
-                infoPanel.style.fontSize = "11px";
+                infoPanel.style.padding = "6px 12px";
+                infoPanel.style.fontSize = "10px";
                 infoPanel.style.fontFamily = "monospace";
                 infoPanel.style.color = "#ccc";
-                infoPanel.style.lineHeight = "1.4";
+                infoPanel.style.lineHeight = "1.3";
+                infoPanel.style.flexShrink = "0";
+                infoPanel.style.overflow = "hidden";
                 infoPanel.innerHTML = '<span style="color: #888;">Mesh info will appear here after execution</span>';
 
                 // Add iframe and info panel to container
@@ -70,7 +73,7 @@ app.registerExtension({
                 console.log("[GeomPack VTK DEBUG] Widget.id:", widget?.id);
                 console.log("[GeomPack VTK DEBUG] this.widgets after addDOMWidget:", this.widgets);
 
-                widget.computeSize = () => [512, 560];  // Increased height for info panel
+                widget.computeSize = () => [512, 640];  // Increased height for viewer + info panel
 
                 // Store iframe and info panel references
                 this.meshViewerIframeVTK = iframe;
@@ -83,9 +86,57 @@ app.registerExtension({
                     iframeLoaded = true;
                 });
 
+                // Listen for screenshot messages from iframe
+                window.addEventListener('message', async (event) => {
+                    if (event.data.type === 'SCREENSHOT' && event.data.image) {
+                        console.log('[GeomPack VTK] Received screenshot from iframe');
+
+                        try {
+                            // Convert base64 data URL to blob
+                            const base64Data = event.data.image.split(',')[1];
+                            const byteString = atob(base64Data);
+                            const arrayBuffer = new ArrayBuffer(byteString.length);
+                            const uint8Array = new Uint8Array(arrayBuffer);
+
+                            for (let i = 0; i < byteString.length; i++) {
+                                uint8Array[i] = byteString.charCodeAt(i);
+                            }
+
+                            const blob = new Blob([uint8Array], { type: 'image/png' });
+
+                            // Generate filename with timestamp
+                            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                            const filename = `vtk-screenshot-${timestamp}.png`;
+
+                            // Create FormData for upload
+                            const formData = new FormData();
+                            formData.append('image', blob, filename);
+                            formData.append('type', 'output');  // Save to output directory
+                            formData.append('subfolder', '');   // Root of output folder
+
+                            // Upload to ComfyUI backend
+                            console.log('[GeomPack VTK] Uploading screenshot to server...');
+                            const response = await fetch('/upload/image', {
+                                method: 'POST',
+                                body: formData
+                            });
+
+                            if (response.ok) {
+                                const result = await response.json();
+                                console.log('[GeomPack VTK] Screenshot saved to outputs folder:', result.name);
+                            } else {
+                                throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+                            }
+
+                        } catch (error) {
+                            console.error('[GeomPack VTK] Error saving screenshot:', error);
+                        }
+                    }
+                });
+
                 // Set initial node size (increased for info panel)
-                this.setSize([512, 560]);
-                console.log("[GeomPack VTK DEBUG] Node size set to [512, 560]");
+                this.setSize([512, 640]);
+                console.log("[GeomPack VTK DEBUG] Node size set to [512, 640]");
 
                 // Handle execution
                 const onExecuted = this.onExecuted;
@@ -119,7 +170,7 @@ app.registerExtension({
 
                         // Build info HTML
                         let infoHTML = `
-                            <div style="display: grid; grid-template-columns: auto 1fr; gap: 4px 8px;">
+                            <div style="display: grid; grid-template-columns: auto 1fr; gap: 2px 8px;">
                                 <span style="color: #888;">Vertices:</span>
                                 <span>${vertices.toLocaleString()}</span>
 
@@ -127,7 +178,7 @@ app.registerExtension({
                                 <span>${faces.toLocaleString()}</span>
 
                                 <span style="color: #888;">Bounds:</span>
-                                <span style="font-size: 10px;">${boundsStr}</span>
+                                <span style="font-size: 9px;">${boundsStr}</span>
 
                                 <span style="color: #888;">Extents:</span>
                                 <span>${extentsStr}</span>
@@ -147,7 +198,7 @@ app.registerExtension({
                             const fields = message.field_names[0].join(', ');
                             infoHTML += `
                                 <span style="color: #888;">Fields:</span>
-                                <span style="font-size: 10px;">${fields}</span>
+                                <span style="font-size: 9px;">${fields}</span>
                             `;
                         }
 
