@@ -21,7 +21,8 @@ except ImportError:
 try:
     from CGAL import CGAL_Polygon_mesh_processing
     from CGAL.CGAL_Polyhedron_3 import Polyhedron_3
-    from CGAL.CGAL_Kernel import Point_3, Point_3_Vector, Int_Vector, Polygon_Vector
+    from CGAL.CGAL_Kernel import Point_3
+    from CGAL.CGAL_Polygon_mesh_processing import Point_3_Vector, Polygon_Vector, Int_Vector
     CGAL_AVAILABLE = True
 except ImportError:
     CGAL_AVAILABLE = False
@@ -537,18 +538,21 @@ def cgal_isotropic_remesh(
         print(f"[cgal_isotropic_remesh] Converting to CGAL format...")
 
         # Create Point_3_Vector for vertices
-        points = Point_3_Vector()
+        # Use fully qualified module paths to avoid namespace issues
+        points = CGAL_Polygon_mesh_processing.Point_3_Vector()
         points.reserve(len(mesh.vertices))
         for v in mesh.vertices:
             points.append(Point_3(float(v[0]), float(v[1]), float(v[2])))
 
         # Create Polygon_Vector for faces
-        polygons = Polygon_Vector()
+        # Use fully qualified module path to avoid namespace issues
+        polygons = CGAL_Polygon_mesh_processing.Polygon_Vector()
         for face in mesh.faces:
-            polygon = Int_Vector()
+            polygon = CGAL_Polygon_mesh_processing.Int_Vector()
             polygon.reserve(3)
-            for idx in face:
-                polygon.append(int(idx))
+            polygon.append(int(face[0]))
+            polygon.append(int(face[1]))
+            polygon.append(int(face[2]))
             polygons.append(polygon)
 
         # Create polyhedron from polygon soup
