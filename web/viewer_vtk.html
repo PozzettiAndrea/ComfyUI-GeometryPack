@@ -98,7 +98,7 @@
     <script type="importmap">
     {
         "imports": {
-            "@kitware/vtk.js/": "https://cdn.skypack.dev/@kitware/vtk.js@29.5.0/"
+            "@kitware/vtk.js/": "https://cdn.jsdelivr.net/npm/@kitware/vtk.js@29.5.0/"
         }
     }
     </script>
@@ -112,6 +112,7 @@
         import vtkMapper from '@kitware/vtk.js/Rendering/Core/Mapper';
         import vtkSTLReader from '@kitware/vtk.js/IO/Geometry/STLReader';
         import vtkOBJReader from '@kitware/vtk.js/IO/Misc/OBJReader';
+        import vtkXMLPolyDataReader from '@kitware/vtk.js/IO/XML/XMLPolyDataReader';
         import vtkPolyDataNormals from '@kitware/vtk.js/Filters/Core/PolyDataNormals';
         import vtkInteractorStyleTrackballCamera from '@kitware/vtk.js/Interaction/Style/InteractorStyleTrackballCamera';
 
@@ -170,9 +171,10 @@
                 // Determine file type
                 const isSTL = filepath.includes('.stl');
                 const isOBJ = filepath.includes('.obj');
+                const isVTP = filepath.includes('.vtp');
                 const isGLB = filepath.includes('.glb') || filepath.includes('.gltf');
 
-                console.log('[GeomPack VTK Viewer DEBUG] File type detection - STL:', isSTL, 'OBJ:', isOBJ, 'GLB:', isGLB);
+                console.log('[GeomPack VTK Viewer DEBUG] File type detection - STL:', isSTL, 'OBJ:', isOBJ, 'VTP:', isVTP, 'GLB:', isGLB);
 
                 // Create appropriate reader
                 if (isSTL) {
@@ -181,8 +183,11 @@
                 } else if (isOBJ) {
                     console.log('[GeomPack VTK Viewer] File type: OBJ');
                     currentReader = vtkOBJReader.newInstance();
+                } else if (isVTP) {
+                    console.log('[GeomPack VTK Viewer] File type: VTP (XML PolyData)');
+                    currentReader = vtkXMLPolyDataReader.newInstance();
                 } else {
-                    const errorMsg = `Unsupported file format: ${filepath}. VTK viewer only supports STL and OBJ formats.`;
+                    const errorMsg = `Unsupported file format: ${filepath}. VTK viewer supports STL, OBJ, and VTP formats.`;
                     console.error('[GeomPack VTK Viewer DEBUG]', errorMsg);
                     throw new Error(errorMsg);
                 }
@@ -211,6 +216,9 @@
                     console.log('[GeomPack VTK Viewer DEBUG] Parsing OBJ...');
                     const text = new TextDecoder().decode(arrayBuffer);
                     currentReader.parseAsText(text);
+                } else if (isVTP) {
+                    console.log('[GeomPack VTK Viewer DEBUG] Parsing VTP (XML PolyData)...');
+                    currentReader.parseAsArrayBuffer(arrayBuffer);
                 }
 
                 // Get output data for logging
