@@ -98,7 +98,7 @@
     <script type="importmap">
     {
         "imports": {
-            "@kitware/vtk.js/": "https://unpkg.com/@kitware/vtk.js@29.5.0/"
+            "@kitware/vtk.js/": "https://cdn.skypack.dev/@kitware/vtk.js@29.5.0/"
         }
     }
     </script>
@@ -310,6 +310,14 @@
                 console.error('[GeomPack VTK Viewer DEBUG] Error stack:', error?.stack);
                 loading.textContent = `Error loading mesh: ${error.message}`;
                 loading.style.color = '#ff6b6b';
+
+                // Send error message to parent window
+                if (window.parent) {
+                    window.parent.postMessage({
+                        type: 'MESH_ERROR',
+                        error: error.message
+                    }, '*');
+                }
             }
         }
 

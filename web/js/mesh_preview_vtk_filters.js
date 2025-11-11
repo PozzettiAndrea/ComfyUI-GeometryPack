@@ -83,6 +83,16 @@ app.registerExtension({
                     iframeLoaded = true;
                 });
 
+                // Listen for error messages from iframe
+                window.addEventListener('message', (event) => {
+                    if (event.data.type === 'MESH_ERROR' && event.data.error) {
+                        console.error('[GeomPack VTK Filters] Error from viewer:', event.data.error);
+                        if (infoPanel) {
+                            infoPanel.innerHTML = `<div style="color: #ff6b6b; padding: 8px;">Error: ${event.data.error}</div>`;
+                        }
+                    }
+                });
+
                 // Set initial node size (increased for info panel)
                 this.setSize([512, 560]);
                 console.log("[GeomPack VTK Filters DEBUG] Node size set to [512, 560]");

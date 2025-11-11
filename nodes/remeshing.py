@@ -3,7 +3,7 @@ Remeshing Nodes - Mesh remeshing and optimization algorithms
 """
 
 import numpy as np
-import trimesh
+import trimesh as trimesh_module
 import os
 import subprocess
 import tempfile
@@ -55,7 +55,7 @@ class PyMeshLabRemeshNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "target_edge_length": ("FLOAT", {
                     "default": 0.1,
                     "min": 0.001,
@@ -72,28 +72,28 @@ class PyMeshLabRemeshNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("remeshed_mesh",)
     FUNCTION = "remesh"
     CATEGORY = "geompack/pymeshlab"
 
-    def remesh(self, mesh, target_edge_length, iterations):
+    def remesh(self, trimesh, target_edge_length, iterations):
         """
         Apply PyMeshLab isotropic remeshing.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             target_edge_length: Target edge length for remeshed triangles
             iterations: Number of remeshing iterations
 
         Returns:
             tuple: (remeshed_trimesh.Trimesh,)
         """
-        print(f"[PyMeshLabRemesh] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[PyMeshLabRemesh] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[PyMeshLabRemesh] Target edge length: {target_edge_length}, Iterations: {iterations}")
 
         remeshed_mesh, error = mesh_utils.pymeshlab_isotropic_remesh(
-            mesh,
+            trimesh,
             target_edge_length,
             iterations
         )
@@ -121,7 +121,7 @@ class CGALIsotropicRemeshNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "target_edge_length": ("FLOAT", {
                     "default": 0.1,
                     "min": 0.001,
@@ -141,17 +141,17 @@ class CGALIsotropicRemeshNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("remeshed_mesh",)
     FUNCTION = "remesh"
     CATEGORY = "geompack/cgal"
 
-    def remesh(self, mesh, target_edge_length, iterations, protect_boundaries="true"):
+    def remesh(self, trimesh, target_edge_length, iterations, protect_boundaries="true"):
         """
         Apply CGAL isotropic remeshing.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             target_edge_length: Target edge length for remeshed triangles
             iterations: Number of remeshing iterations (1-20)
             protect_boundaries: Whether to preserve boundary edges ("true" or "false")
@@ -159,14 +159,14 @@ class CGALIsotropicRemeshNode:
         Returns:
             tuple: (remeshed_trimesh.Trimesh,)
         """
-        print(f"[CGALRemesh] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[CGALRemesh] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[CGALRemesh] Target edge length: {target_edge_length}, Iterations: {iterations}")
         print(f"[CGALRemesh] Protect boundaries: {protect_boundaries}")
 
         protect = (protect_boundaries == "true")
 
         remeshed_mesh, error = mesh_utils.cgal_isotropic_remesh(
-            mesh,
+            trimesh,
             target_edge_length,
             iterations,
             protect
@@ -192,7 +192,7 @@ class BlenderVoxelRemeshNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "voxel_size": ("FLOAT", {
                     "default": 0.05,
                     "min": 0.001,
@@ -203,23 +203,23 @@ class BlenderVoxelRemeshNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("remeshed_mesh",)
     FUNCTION = "voxel_remesh"
     CATEGORY = "geompack/blender"
 
-    def voxel_remesh(self, mesh, voxel_size):
+    def voxel_remesh(self, trimesh,voxel_size):
         """
         Apply voxel remeshing using Blender.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             voxel_size: Voxel size for remeshing (smaller = higher resolution)
 
         Returns:
             tuple: (remeshed_trimesh.Trimesh,)
         """
-        print(f"[BlenderVoxelRemesh] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderVoxelRemesh] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[BlenderVoxelRemesh] Voxel size: {voxel_size}")
 
         # Find Blender
@@ -228,7 +228,7 @@ class BlenderVoxelRemeshNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            mesh.export(input_path)
+            trimesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -274,30 +274,30 @@ bpy.ops.wm.obj_export(
                 raise RuntimeError(f"Blender failed: {result.stderr}")
 
             # Load the remeshed mesh
-            print(f"[BlenderVoxelRemesh] Loading remeshed mesh...")
-            remeshed = trimesh.load(output_path, process=False)
+            print(f"[BlenderVoxelRemesh] Loading remeshed trimesh...")
+            remeshed = trimesh_module.load(output_path, process=False)
 
             # If it's a scene, dump to single mesh
-            if isinstance(remeshed, trimesh.Scene):
+            if isinstance(remeshed, trimesh_module.Scene):
                 remeshed = remeshed.dump(concatenate=True)
 
             # Preserve metadata
-            remeshed.metadata = mesh.metadata.copy()
+            remeshed.metadata = trimesh.metadata.copy()
             remeshed.metadata['remeshing'] = {
                 'algorithm': 'blender_voxel',
                 'voxel_size': voxel_size,
-                'original_vertices': len(mesh.vertices),
-                'original_faces': len(mesh.faces),
+                'original_vertices': len(trimesh.vertices),
+                'original_faces': len(trimesh.faces),
                 'remeshed_vertices': len(remeshed.vertices),
                 'remeshed_faces': len(remeshed.faces)
             }
 
-            vertex_change = len(remeshed.vertices) - len(mesh.vertices)
-            face_change = len(remeshed.faces) - len(mesh.faces)
+            vertex_change = len(remeshed.vertices) - len(trimesh.vertices)
+            face_change = len(remeshed.faces) - len(trimesh.faces)
 
             print(f"[BlenderVoxelRemesh] ✓ Complete:")
-            print(f"[BlenderVoxelRemesh]   Vertices: {len(mesh.vertices)} -> {len(remeshed.vertices)} ({vertex_change:+d})")
-            print(f"[BlenderVoxelRemesh]   Faces:    {len(mesh.faces)} -> {len(remeshed.faces)} ({face_change:+d})")
+            print(f"[BlenderVoxelRemesh]   Vertices: {len(trimesh.vertices)} -> {len(remeshed.vertices)} ({vertex_change:+d})")
+            print(f"[BlenderVoxelRemesh]   Faces:    {len(trimesh.faces)} -> {len(remeshed.faces)} ({face_change:+d})")
 
             return (remeshed,)
 
@@ -321,7 +321,7 @@ class BlenderQuadriflowRemeshNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "target_face_count": ("INT", {
                     "default": 5000,
                     "min": 100,
@@ -331,23 +331,23 @@ class BlenderQuadriflowRemeshNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("remeshed_mesh",)
     FUNCTION = "quadriflow_remesh"
     CATEGORY = "geompack/blender"
 
-    def quadriflow_remesh(self, mesh, target_face_count):
+    def quadriflow_remesh(self, trimesh,target_face_count):
         """
         Apply Quadriflow remeshing using Blender.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             target_face_count: Target number of faces in output mesh
 
         Returns:
             tuple: (remeshed_trimesh.Trimesh,)
         """
-        print(f"[BlenderQuadriflow] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderQuadriflow] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[BlenderQuadriflow] Target face count: {target_face_count}")
 
         # Find Blender
@@ -356,7 +356,7 @@ class BlenderQuadriflowRemeshNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            mesh.export(input_path)
+            trimesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -411,31 +411,31 @@ bpy.ops.wm.obj_export(
                 raise RuntimeError(f"Blender failed: {result.stderr}")
 
             # Load the remeshed mesh
-            print(f"[BlenderQuadriflow] Loading remeshed mesh...")
-            remeshed = trimesh.load(output_path, process=False)
+            print(f"[BlenderQuadriflow] Loading remeshed trimesh...")
+            remeshed = trimesh_module.load(output_path, process=False)
 
             # If it's a scene, dump to single mesh
-            if isinstance(remeshed, trimesh.Scene):
+            if isinstance(remeshed, trimesh_module.Scene):
                 remeshed = remeshed.dump(concatenate=True)
 
             # Quadriflow produces quads, but trimesh will triangulate them
             # Preserve metadata
-            remeshed.metadata = mesh.metadata.copy()
+            remeshed.metadata = trimesh.metadata.copy()
             remeshed.metadata['remeshing'] = {
                 'algorithm': 'blender_quadriflow',
                 'target_face_count': target_face_count,
-                'original_vertices': len(mesh.vertices),
-                'original_faces': len(mesh.faces),
+                'original_vertices': len(trimesh.vertices),
+                'original_faces': len(trimesh.faces),
                 'remeshed_vertices': len(remeshed.vertices),
                 'remeshed_faces': len(remeshed.faces)
             }
 
-            vertex_change = len(remeshed.vertices) - len(mesh.vertices)
-            face_change = len(remeshed.faces) - len(mesh.faces)
+            vertex_change = len(remeshed.vertices) - len(trimesh.vertices)
+            face_change = len(remeshed.faces) - len(trimesh.faces)
 
             print(f"[BlenderQuadriflow] ✓ Complete:")
-            print(f"[BlenderQuadriflow]   Vertices: {len(mesh.vertices)} -> {len(remeshed.vertices)} ({vertex_change:+d})")
-            print(f"[BlenderQuadriflow]   Faces:    {len(mesh.faces)} -> {len(remeshed.faces)} ({face_change:+d})")
+            print(f"[BlenderQuadriflow]   Vertices: {len(trimesh.vertices)} -> {len(remeshed.vertices)} ({vertex_change:+d})")
+            print(f"[BlenderQuadriflow]   Faces:    {len(trimesh.faces)} -> {len(remeshed.faces)} ({face_change:+d})")
 
             return (remeshed,)
 
@@ -460,7 +460,7 @@ class MeshDecimationNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "target_face_count": ("INT", {
                     "default": 1000,
                     "min": 4,
@@ -480,27 +480,27 @@ class MeshDecimationNode:
     FUNCTION = "decimate"
     CATEGORY = "geompack/remeshing"
 
-    def decimate(self, mesh, target_face_count, method="trimesh"):
+    def decimate(self, trimesh,target_face_count, method="trimesh"):
         """
         Decimate mesh to target face count.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             target_face_count: Target number of faces
             method: Algorithm to use ("trimesh" or "pymeshlab")
 
         Returns:
             tuple: (decimated_mesh, info_string)
         """
-        print(f"[MeshDecimation] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[MeshDecimation] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[MeshDecimation] Target: {target_face_count} faces using {method}")
 
-        initial_vertices = len(mesh.vertices)
-        initial_faces = len(mesh.faces)
+        initial_vertices = len(trimesh.vertices)
+        initial_faces = len(trimesh.faces)
 
         if method == "trimesh":
             # Use trimesh's built-in decimation
-            decimated = mesh.simplify_quadric_decimation(target_face_count)
+            decimated = trimesh.simplify_quadric_decimation(target_face_count)
 
         elif method == "pymeshlab":
             # Use PyMeshLab's decimation
@@ -511,8 +511,8 @@ class MeshDecimationNode:
 
             ms = pymeshlab.MeshSet()
             pml_mesh = pymeshlab.Mesh(
-                vertex_matrix=mesh.vertices,
-                face_matrix=mesh.faces
+                vertex_matrix=trimesh.vertices,
+                face_matrix=trimesh.faces
             )
             ms.add_mesh(pml_mesh)
 
@@ -526,7 +526,7 @@ class MeshDecimationNode:
 
             # Convert back to trimesh
             decimated_pml = ms.current_mesh()
-            decimated = trimesh.Trimesh(
+            decimated = trimesh_module.Trimesh(
                 vertices=decimated_pml.vertex_matrix(),
                 faces=decimated_pml.face_matrix()
             )
@@ -535,7 +535,7 @@ class MeshDecimationNode:
             raise ValueError(f"Unknown method: {method}")
 
         # Preserve metadata
-        decimated.metadata = mesh.metadata.copy()
+        decimated.metadata = trimesh.metadata.copy()
         decimated.metadata['decimation'] = {
             'method': method,
             'target_face_count': target_face_count,
@@ -576,14 +576,14 @@ class MeshSubdivisionNode:
     Increase mesh resolution through subdivision.
 
     Subdivides each triangle into smaller triangles, creating a smoother,
-    higher-resolution mesh. Uses Loop subdivision for smooth surfaces.
+    higher-resolution trimesh. Uses Loop subdivision for smooth surfaces.
     """
 
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "iterations": ("INT", {
                     "default": 1,
                     "min": 1,
@@ -603,26 +603,26 @@ class MeshSubdivisionNode:
     FUNCTION = "subdivide"
     CATEGORY = "geompack/remeshing"
 
-    def subdivide(self, mesh, iterations, method="loop"):
+    def subdivide(self, trimesh,iterations, method="loop"):
         """
         Subdivide mesh to increase resolution.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             iterations: Number of subdivision iterations
             method: Subdivision method ("loop" or "midpoint")
 
         Returns:
             tuple: (subdivided_mesh, info_string)
         """
-        print(f"[MeshSubdivision] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[MeshSubdivision] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[MeshSubdivision] Method: {method}, Iterations: {iterations}")
 
-        initial_vertices = len(mesh.vertices)
-        initial_faces = len(mesh.faces)
+        initial_vertices = len(trimesh.vertices)
+        initial_faces = len(trimesh.faces)
 
         # Create copy
-        subdivided = mesh.copy()
+        subdivided = trimesh.copy()
 
         for i in range(iterations):
             if method == "loop":
@@ -637,7 +637,7 @@ class MeshSubdivisionNode:
             print(f"[MeshSubdivision] Iteration {i+1}/{iterations}: {len(subdivided.vertices)} vertices, {len(subdivided.faces)} faces")
 
         # Preserve metadata
-        subdivided.metadata = mesh.metadata.copy()
+        subdivided.metadata = trimesh.metadata.copy()
         subdivided.metadata['subdivision'] = {
             'method': method,
             'iterations': iterations,
@@ -685,7 +685,7 @@ class InstantMeshesRemeshNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "target_vertex_count": ("INT", {
                     "default": 5000,
                     "min": 100,
@@ -711,12 +711,12 @@ class InstantMeshesRemeshNode:
     FUNCTION = "remesh"
     CATEGORY = "geompack/remeshing"
 
-    def remesh(self, mesh, target_vertex_count, deterministic="true", crease_angle=0.0):
+    def remesh(self, trimesh,target_vertex_count, deterministic="true", crease_angle=0.0):
         """
         Apply Instant Meshes remeshing.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             target_vertex_count: Target number of vertices
             deterministic: Use deterministic mode for reproducible results
             crease_angle: Angle threshold for feature detection (degrees)
@@ -731,15 +731,15 @@ class InstantMeshesRemeshNode:
                 "PyNanoInstantMeshes not installed. Install with: pip install PyNanoInstantMeshes"
             )
 
-        print(f"[InstantMeshes] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[InstantMeshes] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[InstantMeshes] Target vertex count: {target_vertex_count}")
 
-        initial_vertices = len(mesh.vertices)
-        initial_faces = len(mesh.faces)
+        initial_vertices = len(trimesh.vertices)
+        initial_faces = len(trimesh.faces)
 
         # Instant Meshes expects vertices and faces as numpy arrays
-        V = mesh.vertices.astype(np.float64)
-        F = mesh.faces.astype(np.int32)
+        V = trimesh.vertices.astype(np.float64)
+        F = trimesh.faces.astype(np.int32)
 
         # Run Instant Meshes
         V_out, F_out = pynano.instant_meshes(
@@ -750,14 +750,14 @@ class InstantMeshesRemeshNode:
         )
 
         # Create remeshed mesh (Instant Meshes outputs quads, trimesh will triangulate)
-        remeshed = trimesh.Trimesh(
+        remeshed = trimesh_module.Trimesh(
             vertices=V_out,
             faces=F_out,
             process=False
         )
 
         # Preserve metadata
-        remeshed.metadata = mesh.metadata.copy()
+        remeshed.metadata = trimesh.metadata.copy()
         remeshed.metadata['remeshing'] = {
             'algorithm': 'instant_meshes',
             'target_vertex_count': target_vertex_count,
@@ -809,7 +809,7 @@ class LaplacianSmoothingNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "iterations": ("INT", {
                     "default": 5,
                     "min": 1,
@@ -825,38 +825,38 @@ class LaplacianSmoothingNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("smoothed_mesh",)
     FUNCTION = "smooth"
     CATEGORY = "geompack/remeshing"
 
-    def smooth(self, mesh, iterations, lambda_factor):
+    def smooth(self, trimesh,iterations, lambda_factor):
         """
-        Apply Laplacian smoothing to mesh.
+        Apply Laplacian smoothing to trimesh.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             iterations: Number of smoothing iterations
             lambda_factor: Smoothing strength (0-1)
 
         Returns:
             tuple: (smoothed_mesh,)
         """
-        print(f"[LaplacianSmoothing] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[LaplacianSmoothing] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[LaplacianSmoothing] Iterations: {iterations}, Lambda: {lambda_factor}")
 
         # Create copy
-        smoothed = mesh.copy()
+        smoothed = trimesh.copy()
 
         # Apply Laplacian smoothing
-        smoothed = trimesh.smoothing.filter_laplacian(
+        smoothed = trimesh_module.smoothing.filter_laplacian(
             smoothed,
             lamb=lambda_factor,
             iterations=iterations
         )
 
         # Preserve metadata
-        smoothed.metadata = mesh.metadata.copy()
+        smoothed.metadata = trimesh.metadata.copy()
         smoothed.metadata['smoothing'] = {
             'algorithm': 'laplacian',
             'iterations': iterations,

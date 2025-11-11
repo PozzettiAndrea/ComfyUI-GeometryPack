@@ -3,7 +3,7 @@ UV Mapping Nodes - UV unwrapping and parameterization
 """
 
 import numpy as np
-import trimesh
+import trimesh as trimesh_module
 import os
 import subprocess
 import tempfile
@@ -53,11 +53,11 @@ class XAtlasUVUnwrapNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
@@ -67,10 +67,10 @@ class XAtlasUVUnwrapNode:
         UV unwrap mesh using xatlas.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
         try:
             import xatlas
@@ -80,39 +80,39 @@ class XAtlasUVUnwrapNode:
                 "This is required for fast UV unwrapping without Blender."
             )
 
-        print(f"[XAtlasUVUnwrap] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[XAtlasUVUnwrap] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Parametrize with xatlas
         vmapping, indices, uvs = xatlas.parametrize(
-            mesh.vertices,
-            mesh.faces
+            trimesh.vertices,
+            trimesh.faces
         )
 
         # Create new mesh with UV-split vertices
-        new_vertices = mesh.vertices[vmapping]
+        new_vertices = trimesh.vertices[vmapping]
 
         # Create trimesh with UV coordinates
-        unwrapped = trimesh.Trimesh(
+        unwrapped = trimesh_module.Trimesh(
             vertices=new_vertices,
             faces=indices,
             process=False
         )
 
         # Store UV coordinates in visual
-        from trimesh.visual import TextureVisuals
+        from trimesh_module.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uvs)
 
         # Preserve metadata
-        unwrapped.metadata = mesh.metadata.copy()
+        unwrapped.metadata = trimesh.metadata.copy()
         unwrapped.metadata['uv_unwrap'] = {
             'algorithm': 'xatlas',
-            'original_vertices': len(mesh.vertices),
+            'original_vertices': len(trimesh.vertices),
             'unwrapped_vertices': len(new_vertices),
-            'vertex_duplication_ratio': len(new_vertices) / len(mesh.vertices)
+            'vertex_duplication_ratio': len(new_vertices) / len(trimesh.vertices)
         }
 
         print(f"[XAtlasUVUnwrap] Output: {len(unwrapped.vertices)} vertices, {len(unwrapped.faces)} faces")
-        print(f"[XAtlasUVUnwrap] Vertex duplication: {len(new_vertices)/len(mesh.vertices):.2f}x")
+        print(f"[XAtlasUVUnwrap] Vertex duplication: {len(new_vertices)/len(trimesh.vertices):.2f}x")
 
         return (unwrapped,)
 
@@ -130,11 +130,11 @@ class LibiglLSCMNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
@@ -144,27 +144,27 @@ class LibiglLSCMNode:
         LSCM UV parameterization using libigl.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
         try:
             import igl
         except ImportError:
             raise ImportError("libigl not installed (should be in requirements.txt)")
 
-        print(f"[LibiglLSCM] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[LibiglLSCM] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # LSCM requires fixing 2 vertices for unique solution
         # Choose first and last vertex
-        v_fixed = np.array([0, len(mesh.vertices)-1], dtype=np.int32)
+        v_fixed = np.array([0, len(trimesh.vertices)-1], dtype=np.int32)
         uv_fixed = np.array([[0.0, 0.0], [1.0, 0.0]], dtype=np.float64)
 
         # Compute LSCM parameterization
         uv = igl.lscm(
-            mesh.vertices.astype(np.float64),
-            mesh.faces.astype(np.int32),
+            trimesh.vertices.astype(np.float64),
+            trimesh.faces.astype(np.int32),
             v_fixed,
             uv_fixed
         )
@@ -180,10 +180,10 @@ class LibiglLSCMNode:
         uv_normalized = (uv - uv_min) / uv_range
 
         # Create unwrapped mesh (copy original)
-        unwrapped = mesh.copy()
+        unwrapped = trimesh.copy()
 
         # Store UV coordinates in visual
-        from trimesh.visual import TextureVisuals
+        from trimesh_module.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uv_normalized)
 
         # Add metadata
@@ -211,7 +211,7 @@ class BlenderUVUnwrapNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "angle_limit": ("FLOAT", {
                     "default": 66.0,
                     "min": 1.0,
@@ -229,24 +229,24 @@ class BlenderUVUnwrapNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/blender"
 
-    def uv_unwrap(self, mesh, angle_limit, island_margin):
+    def uv_unwrap(self, trimesh,angle_limit, island_margin):
         """
         UV unwrap mesh using Blender's Smart UV Project.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
             angle_limit: Angle threshold for creating seams (degrees)
             island_margin: Spacing between UV islands (0-1)
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
-        print(f"[BlenderUVUnwrap] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderUVUnwrap] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[BlenderUVUnwrap] Parameters: angle_limit={angle_limit}°, island_margin={island_margin}")
 
         # Find Blender
@@ -255,7 +255,7 @@ class BlenderUVUnwrapNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            mesh.export(input_path)
+            trimesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -279,7 +279,7 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and unwrap
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.trimesh.select_all(action='SELECT')
 bpy.ops.uv.smart_project(
     angle_limit={np.radians(angle_limit)},
     island_margin={island_margin},
@@ -310,15 +310,15 @@ bpy.ops.wm.obj_export(
                 raise RuntimeError(f"Blender failed: {result.stderr}")
 
             # Load the unwrapped mesh
-            print(f"[BlenderUVUnwrap] Loading unwrapped mesh...")
-            unwrapped = trimesh.load(output_path, process=False)
+            print(f"[BlenderUVUnwrap] Loading unwrapped trimesh...")
+            unwrapped = trimesh_module.load(output_path, process=False)
 
             # If it's a scene, dump to single mesh
-            if isinstance(unwrapped, trimesh.Scene):
+            if isinstance(unwrapped, trimesh_module.Scene):
                 unwrapped = unwrapped.dump(concatenate=True)
 
             # Preserve metadata
-            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata = trimesh.metadata.copy()
             unwrapped.metadata['uv_unwrap'] = {
                 'algorithm': 'blender_smart_uv',
                 'angle_limit': angle_limit,
@@ -349,7 +349,7 @@ class BlenderCubeProjectionNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "cube_size": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.1,
@@ -359,23 +359,23 @@ class BlenderCubeProjectionNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
 
-    def uv_unwrap(self, mesh, cube_size):
+    def uv_unwrap(self, trimesh,cube_size):
         """
         UV cube projection using Blender.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
             cube_size: Size of the projection cube
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
-        print(f"[BlenderCubeProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderCubeProjection] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[BlenderCubeProjection] Cube size: {cube_size}")
 
         # Find Blender
@@ -384,7 +384,7 @@ class BlenderCubeProjectionNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            mesh.export(input_path)
+            trimesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -407,7 +407,7 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and apply cube projection
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.trimesh.select_all(action='SELECT')
 bpy.ops.uv.cube_project(
     cube_size={cube_size},
     correct_aspect=True,
@@ -437,13 +437,13 @@ bpy.ops.wm.obj_export(
                 raise RuntimeError(f"Blender failed: {result.stderr}")
 
             # Load the unwrapped mesh
-            unwrapped = trimesh.load(output_path, process=False)
+            unwrapped = trimesh_module.load(output_path, process=False)
 
-            if isinstance(unwrapped, trimesh.Scene):
+            if isinstance(unwrapped, trimesh_module.Scene):
                 unwrapped = unwrapped.dump(concatenate=True)
 
             # Preserve metadata
-            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata = trimesh.metadata.copy()
             unwrapped.metadata['uv_unwrap'] = {
                 'algorithm': 'blender_cube_projection',
                 'cube_size': cube_size
@@ -473,7 +473,7 @@ class BlenderCylinderProjectionNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "radius": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.1,
@@ -483,23 +483,23 @@ class BlenderCylinderProjectionNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
 
-    def uv_unwrap(self, mesh, radius):
+    def uv_unwrap(self, trimesh,radius):
         """
         UV cylinder projection using Blender.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
             radius: Cylinder radius
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
-        print(f"[BlenderCylinderProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderCylinderProjection] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[BlenderCylinderProjection] Radius: {radius}")
 
         # Find Blender
@@ -508,7 +508,7 @@ class BlenderCylinderProjectionNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            mesh.export(input_path)
+            trimesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -531,7 +531,7 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and apply cylinder projection
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.trimesh.select_all(action='SELECT')
 bpy.ops.uv.cylinder_project(
     direction='VIEW_ON_EQUATOR',
     align='POLAR_ZX',
@@ -562,13 +562,13 @@ bpy.ops.wm.obj_export(
                 raise RuntimeError(f"Blender failed: {result.stderr}")
 
             # Load the unwrapped mesh
-            unwrapped = trimesh.load(output_path, process=False)
+            unwrapped = trimesh_module.load(output_path, process=False)
 
-            if isinstance(unwrapped, trimesh.Scene):
+            if isinstance(unwrapped, trimesh_module.Scene):
                 unwrapped = unwrapped.dump(concatenate=True)
 
             # Preserve metadata
-            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata = trimesh.metadata.copy()
             unwrapped.metadata['uv_unwrap'] = {
                 'algorithm': 'blender_cylinder_projection',
                 'radius': radius
@@ -598,11 +598,11 @@ class BlenderSphereProjectionNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
@@ -612,12 +612,12 @@ class BlenderSphereProjectionNode:
         UV sphere projection using Blender.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
-        print(f"[BlenderSphereProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderSphereProjection] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Find Blender
         blender_path = _find_blender()
@@ -625,7 +625,7 @@ class BlenderSphereProjectionNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            mesh.export(input_path)
+            trimesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -648,7 +648,7 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and apply sphere projection
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.trimesh.select_all(action='SELECT')
 bpy.ops.uv.sphere_project(
     direction='VIEW_ON_EQUATOR',
     align='POLAR_ZX',
@@ -678,13 +678,13 @@ bpy.ops.wm.obj_export(
                 raise RuntimeError(f"Blender failed: {result.stderr}")
 
             # Load the unwrapped mesh
-            unwrapped = trimesh.load(output_path, process=False)
+            unwrapped = trimesh_module.load(output_path, process=False)
 
-            if isinstance(unwrapped, trimesh.Scene):
+            if isinstance(unwrapped, trimesh_module.Scene):
                 unwrapped = unwrapped.dump(concatenate=True)
 
             # Preserve metadata
-            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata = trimesh.metadata.copy()
             unwrapped.metadata['uv_unwrap'] = {
                 'algorithm': 'blender_sphere_projection',
             }
@@ -714,11 +714,11 @@ class LibiglHarmonicNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
@@ -728,21 +728,21 @@ class LibiglHarmonicNode:
         Harmonic UV parameterization using libigl.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
         try:
             import igl
         except ImportError:
             raise ImportError("libigl not installed (should be in requirements.txt)")
 
-        print(f"[LibiglHarmonic] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[LibiglHarmonic] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Harmonic requires fixing boundary vertices
         # Find boundary loop
-        boundary_loop = igl.boundary_loop(mesh.faces.astype(np.int32))
+        boundary_loop = igl.boundary_loop(trimesh.faces.astype(np.int32))
 
         if len(boundary_loop) == 0:
             raise ValueError("Mesh has no boundary - harmonic parameterization requires an open mesh")
@@ -757,18 +757,18 @@ class LibiglHarmonicNode:
 
         # Compute harmonic parameterization
         uv = igl.harmonic(
-            mesh.vertices.astype(np.float64),
-            mesh.faces.astype(np.int32),
+            trimesh.vertices.astype(np.float64),
+            trimesh.faces.astype(np.int32),
             boundary_loop.astype(np.int32),
             bnd_uv.astype(np.float64),
             1  # Laplacian type
         )
 
         # Create unwrapped mesh (copy original)
-        unwrapped = mesh.copy()
+        unwrapped = trimesh.copy()
 
         # Store UV coordinates in visual
-        from trimesh.visual import TextureVisuals
+        from trimesh_module.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uv)
 
         # Add metadata
@@ -796,7 +796,7 @@ class LibiglARAPNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "iterations": ("INT", {
                     "default": 10,
                     "min": 1,
@@ -806,21 +806,21 @@ class LibiglARAPNode:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("unwrapped_mesh",)
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
 
-    def uv_unwrap(self, mesh, iterations):
+    def uv_unwrap(self, trimesh,iterations):
         """
         ARAP UV parameterization using libigl.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
             iterations: Number of ARAP iterations
 
         Returns:
-            tuple: (unwrapped_trimesh.Trimesh,)
+            tuple: (unwrapped_trimesh_module.Trimesh,)
         """
         try:
             import igl
@@ -828,11 +828,11 @@ class LibiglARAPNode:
         except ImportError:
             raise ImportError("libigl and scipy not installed")
 
-        print(f"[LibiglARAP] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[LibiglARAP] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[LibiglARAP] Iterations: {iterations}")
 
         # Start with harmonic initialization
-        boundary_loop = igl.boundary_loop(mesh.faces.astype(np.int32))
+        boundary_loop = igl.boundary_loop(trimesh.faces.astype(np.int32))
 
         if len(boundary_loop) == 0:
             raise ValueError("Mesh has no boundary - ARAP parameterization requires an open mesh")
@@ -846,8 +846,8 @@ class LibiglARAPNode:
 
         # Initial harmonic solution
         uv_init = igl.harmonic(
-            mesh.vertices.astype(np.float64),
-            mesh.faces.astype(np.int32),
+            trimesh.vertices.astype(np.float64),
+            trimesh.faces.astype(np.int32),
             boundary_loop.astype(np.int32),
             bnd_uv.astype(np.float64),
             1
@@ -869,8 +869,8 @@ class LibiglARAPNode:
                 # Recompute with current UV as guidance
                 # This is a simplified version - full ARAP is more complex
                 uv = igl.harmonic(
-                    mesh.vertices.astype(np.float64),
-                    mesh.faces.astype(np.int32),
+                    trimesh.vertices.astype(np.float64),
+                    trimesh.faces.astype(np.int32),
                     boundary_loop.astype(np.int32),
                     bnd_uv.astype(np.float64),
                     2  # Use biharmonic (k=2) for smoother result
@@ -882,8 +882,8 @@ class LibiglARAPNode:
             print(f"[LibiglARAP] Note: Using biharmonic approximation of ARAP")
             # Fall back to biharmonic
             uv = igl.harmonic(
-                mesh.vertices.astype(np.float64),
-                mesh.faces.astype(np.int32),
+                trimesh.vertices.astype(np.float64),
+                trimesh.faces.astype(np.int32),
                 boundary_loop.astype(np.int32),
                 bnd_uv.astype(np.float64),
                 2  # biharmonic
@@ -897,10 +897,10 @@ class LibiglARAPNode:
         uv = (uv - uv_min) / uv_range
 
         # Create unwrapped mesh (copy original)
-        unwrapped = mesh.copy()
+        unwrapped = trimesh.copy()
 
         # Store UV coordinates in visual
-        from trimesh.visual import TextureVisuals
+        from trimesh_module.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uv)
 
         # Add metadata

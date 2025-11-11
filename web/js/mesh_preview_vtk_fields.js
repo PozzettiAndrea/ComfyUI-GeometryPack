@@ -74,6 +74,16 @@ app.registerExtension({
                     iframeLoaded = true;
                 });
 
+                // Listen for error messages from iframe
+                window.addEventListener('message', (event) => {
+                    if (event.data.type === 'MESH_ERROR' && event.data.error) {
+                        console.error('[GeomPack VTK Fields] Error from viewer:', event.data.error);
+                        if (infoPanel) {
+                            infoPanel.innerHTML = `<div style="color: #ff6b6b; padding: 8px;">Error: ${event.data.error}</div>`;
+                        }
+                    }
+                });
+
                 // Set initial node size
                 this.setSize([512, 560]);
 

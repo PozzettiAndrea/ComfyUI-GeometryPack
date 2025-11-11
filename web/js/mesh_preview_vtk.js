@@ -86,8 +86,9 @@ app.registerExtension({
                     iframeLoaded = true;
                 });
 
-                // Listen for screenshot messages from iframe
+                // Listen for messages from iframe
                 window.addEventListener('message', async (event) => {
+                    // Handle screenshot messages
                     if (event.data.type === 'SCREENSHOT' && event.data.image) {
                         console.log('[GeomPack VTK] Received screenshot from iframe');
 
@@ -130,6 +131,13 @@ app.registerExtension({
 
                         } catch (error) {
                             console.error('[GeomPack VTK] Error saving screenshot:', error);
+                        }
+                    }
+                    // Handle error messages from iframe
+                    else if (event.data.type === 'MESH_ERROR' && event.data.error) {
+                        console.error('[GeomPack VTK] Error from viewer:', event.data.error);
+                        if (infoPanel) {
+                            infoPanel.innerHTML = `<div style="color: #ff6b6b; padding: 8px;">Error: ${event.data.error}</div>`;
                         }
                     }
                 });

@@ -18,8 +18,8 @@ class HausdorffDistanceNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh_a": ("MESH",),
-                "mesh_b": ("MESH",),
+                "trimesh_a": ("TRIMESH",),
+                "trimesh_b": ("TRIMESH",),
                 "sample_count": ("INT", {
                     "default": 10000,
                     "min": 1000,
@@ -34,13 +34,13 @@ class HausdorffDistanceNode:
     FUNCTION = "compute_distance"
     CATEGORY = "geompack/analysis/distance"
 
-    def compute_distance(self, mesh_a, mesh_b, sample_count):
+    def compute_distance(self, trimesh_a, trimesh_b, sample_count):
         """
         Compute Hausdorff distance between two meshes.
 
         Args:
-            mesh_a: First trimesh.Trimesh object
-            mesh_b: Second trimesh.Trimesh object
+            trimesh_a: First trimesh.Trimesh object
+            trimesh_b: Second trimesh.Trimesh object
             sample_count: Number of points to sample from each mesh
 
         Returns:
@@ -56,8 +56,8 @@ class HausdorffDistanceNode:
         print(f"[HausdorffDistance] Comparing meshes with {sample_count} samples each")
 
         # Sample point clouds from meshes
-        points_a = mesh_a.sample(sample_count)
-        points_b = mesh_b.sample(sample_count)
+        points_a = trimesh_a.sample(sample_count)
+        points_b = trimesh_b.sample(sample_count)
 
         # Compute Hausdorff distance (symmetric)
         hd = pcu.hausdorff_distance(points_a, points_b)
@@ -71,9 +71,9 @@ Total (symmetric): {hd:.6f}
 A → B (one-sided): {hd_a_to_b:.6f}
 B → A (one-sided): {hd_b_to_a:.6f}
 
-Sampled {sample_count:,} points from each mesh.
-Mesh A: {len(mesh_a.vertices):,} vertices, {len(mesh_a.faces):,} faces
-Mesh B: {len(mesh_b.vertices):,} vertices, {len(mesh_b.faces):,} faces
+Sampled {sample_count:,} points from each trimesh.
+Mesh A: {len(trimesh_a.vertices):,} vertices, {len(trimesh_a.faces):,} faces
+Mesh B: {len(trimesh_b.vertices):,} vertices, {len(trimesh_b.faces):,} faces
 """
 
         print(f"[HausdorffDistance] Result: {hd:.6f}")
@@ -94,8 +94,8 @@ class ChamferDistanceNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh_a": ("MESH",),
-                "mesh_b": ("MESH",),
+                "trimesh_a": ("TRIMESH",),
+                "trimesh_b": ("TRIMESH",),
                 "sample_count": ("INT", {
                     "default": 10000,
                     "min": 1000,
@@ -110,13 +110,13 @@ class ChamferDistanceNode:
     FUNCTION = "compute_distance"
     CATEGORY = "geompack/analysis/distance"
 
-    def compute_distance(self, mesh_a, mesh_b, sample_count):
+    def compute_distance(self, trimesh_a, trimesh_b, sample_count):
         """
         Compute Chamfer distance between two meshes.
 
         Args:
-            mesh_a: First trimesh.Trimesh object
-            mesh_b: Second trimesh.Trimesh object
+            trimesh_a: First trimesh.Trimesh object
+            trimesh_b: Second trimesh.Trimesh object
             sample_count: Number of points to sample from each mesh
 
         Returns:
@@ -132,17 +132,17 @@ class ChamferDistanceNode:
         print(f"[ChamferDistance] Comparing meshes with {sample_count} samples each")
 
         # Sample point clouds from meshes
-        points_a = mesh_a.sample(sample_count)
-        points_b = mesh_b.sample(sample_count)
+        points_a = trimesh_a.sample(sample_count)
+        points_b = trimesh_b.sample(sample_count)
 
         # Compute Chamfer distance
         cd = pcu.chamfer_distance(points_a, points_b)
 
         info = f"""Chamfer Distance: {cd:.6f}
 
-Sampled {sample_count:,} points from each mesh.
-Mesh A: {len(mesh_a.vertices):,} vertices, {len(mesh_a.faces):,} faces
-Mesh B: {len(mesh_b.vertices):,} vertices, {len(mesh_b.faces):,} faces
+Sampled {sample_count:,} points from each trimesh.
+Mesh A: {len(trimesh_a.vertices):,} vertices, {len(trimesh_a.faces):,} faces
+Mesh B: {len(trimesh_b.vertices):,} vertices, {len(trimesh_b.faces):,} faces
 
 Note: Chamfer distance is more sensitive to overall shape
 similarity compared to Hausdorff distance.
@@ -155,7 +155,7 @@ similarity compared to Hausdorff distance.
 
 class ComputeSDFNode:
     """
-    Compute Signed Distance Field (SDF) for a mesh.
+    Compute Signed Distance Field (SDF) for a trimesh.
 
     The SDF represents the distance from any point in 3D space to the
     nearest surface, with negative values inside the mesh and positive
@@ -167,7 +167,7 @@ class ComputeSDFNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "resolution": ("INT", {
                     "default": 64,
                     "min": 16,
@@ -182,12 +182,12 @@ class ComputeSDFNode:
     FUNCTION = "compute_sdf"
     CATEGORY = "geompack/analysis/distance"
 
-    def compute_sdf(self, mesh, resolution):
+    def compute_sdf(self, trimesh, resolution):
         """
-        Compute signed distance field voxel grid for mesh.
+        Compute signed distance field voxel grid for trimesh.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             resolution: Grid resolution (N x N x N voxels)
 
         Returns:
@@ -200,17 +200,17 @@ class ComputeSDFNode:
                 "mesh-to-sdf not installed. Install with: pip install mesh-to-sdf"
             )
 
-        print(f"[ComputeSDF] Computing {resolution}³ SDF for mesh with {len(mesh.vertices):,} vertices")
+        print(f"[ComputeSDF] Computing {resolution}³ SDF for mesh with {len(trimesh.vertices):,} vertices")
 
         # Compute SDF voxel grid
-        voxels = mesh_to_sdf.mesh_to_voxels(mesh, resolution)
+        voxels = mesh_to_sdf.mesh_to_voxels(trimesh, resolution)
 
         info = f"""Signed Distance Field:
 Resolution: {resolution}³ = {resolution**3:,} voxels
 Value range: [{voxels.min():.3f}, {voxels.max():.3f}]
 
-Mesh bounds: {mesh.bounds.tolist()}
-Mesh extents: {mesh.extents.tolist()}
+Mesh bounds: {trimesh.bounds.tolist()}
+Mesh extents: {trimesh.extents.tolist()}
 
 Negative values = inside mesh
 Positive values = outside mesh
@@ -221,8 +221,8 @@ Zero = on surface
         sdf_data = {
             'voxels': voxels,
             'resolution': resolution,
-            'bounds': mesh.bounds.copy(),
-            'extents': mesh.extents.copy(),
+            'bounds': trimesh.bounds.copy(),
+            'extents': trimesh.extents.copy(),
         }
 
         print(f"[ComputeSDF] Complete - range: [{voxels.min():.3f}, {voxels.max():.3f}]")

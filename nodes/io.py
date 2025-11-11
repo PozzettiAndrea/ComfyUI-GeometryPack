@@ -34,7 +34,7 @@ class LoadMesh:
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("mesh",)
     FUNCTION = "load_mesh"
     CATEGORY = "geompack/io"
@@ -82,14 +82,14 @@ class LoadMesh:
                     raise ValueError(f"File not found: {file_path}")
 
         # Load the mesh
-        mesh, error = mesh_utils.load_mesh_file(full_path)
+        loaded_mesh, error = mesh_utils.load_mesh_file(full_path)
 
-        if mesh is None:
+        if loaded_mesh is None:
             raise ValueError(f"Failed to load mesh: {error}")
 
-        print(f"[LoadMesh] Loaded: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[LoadMesh] Loaded: {len(loaded_mesh.vertices)} vertices, {len(loaded_mesh.faces)} faces")
 
-        return (mesh,)
+        return (loaded_mesh,)
 
 
 class SaveMesh:
@@ -102,7 +102,7 @@ class SaveMesh:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "file_path": ("STRING", {
                     "default": "output.obj",
                     "multiline": False
@@ -116,14 +116,14 @@ class SaveMesh:
     CATEGORY = "geompack/io"
     OUTPUT_NODE = True
 
-    def save_mesh(self, mesh, file_path):
+    def save_mesh(self, trimesh, file_path):
         """
         Save mesh to file.
 
         Saves to ComfyUI's output folder if path is relative, otherwise uses absolute path.
 
         Args:
-            mesh: trimesh.Trimesh object
+            trimesh: trimesh.Trimesh object
             file_path: Output file path (relative to output folder or absolute)
 
         Returns:
@@ -143,14 +143,14 @@ class SaveMesh:
             print(f"[SaveMesh] Saving to: {file_path}")
 
         # Save the mesh
-        success, error = mesh_utils.save_mesh_file(mesh, full_path)
+        success, error = mesh_utils.save_mesh_file(trimesh, full_path)
 
         if not success:
-            raise ValueError(f"Failed to save mesh: {error}")
+            raise ValueError(f"Failed to save trimesh: {error}")
 
         status = f"Successfully saved mesh to: {full_path}\n"
-        status += f"  Vertices: {len(mesh.vertices)}\n"
-        status += f"  Faces: {len(mesh.faces)}"
+        status += f"  Vertices: {len(trimesh.vertices)}\n"
+        status += f"  Faces: {len(trimesh.faces)}"
 
         print(f"[SaveMesh] {status}")
 

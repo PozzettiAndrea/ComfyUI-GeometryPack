@@ -35,7 +35,7 @@ class CreatePrimitive:
             }
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("mesh",)
     FUNCTION = "create_primitive"
     CATEGORY = "geompack/primitives"

@@ -2,7 +2,7 @@
 Visualization Nodes - 3D mesh preview and visualization
 """
 
-import trimesh
+import trimesh as trimesh_module
 import os
 import tempfile
 import uuid
@@ -16,7 +16,7 @@ except:
     COMFYUI_OUTPUT_FOLDER = None
 
 
-def _export_mesh_with_scalars_vtp(mesh: trimesh.Trimesh, filepath: str):
+def _export_mesh_with_scalars_vtp(trimesh: trimesh_module.Trimesh, filepath: str):
     """
     Export trimesh to VTK PolyData XML format (.vtp) with vertex scalar attributes.
 
@@ -24,7 +24,7 @@ def _export_mesh_with_scalars_vtp(mesh: trimesh.Trimesh, filepath: str):
     in VTK.js with color mapping.
 
     Args:
-        mesh: Trimesh object with optional vertex_attributes
+        trimesh: Trimesh object with optional vertex_attributes
         filepath: Output .vtp file path
     """
     import xml.etree.ElementTree as ET
@@ -35,8 +35,8 @@ def _export_mesh_with_scalars_vtp(mesh: trimesh.Trimesh, filepath: str):
     vtk_file = ET.Element('VTKFile', type='PolyData', version='1.0', byte_order='LittleEndian')
     poly_data = ET.SubElement(vtk_file, 'PolyData')
 
-    num_verts = len(mesh.vertices)
-    num_faces = len(mesh.faces)
+    num_verts = len(trimesh.vertices)
+    num_faces = len(trimesh.faces)
 
     piece = ET.SubElement(poly_data, 'Piece', NumberOfPoints=str(num_verts), NumberOfPolys=str(num_faces))
 
@@ -47,15 +47,15 @@ def _export_mesh_with_scalars_vtp(mesh: trimesh.Trimesh, filepath: str):
                                        NumberOfComponents='3',
                                        format='ascii')
     # Flatten vertices to space-separated string
-    verts_flat = mesh.vertices.flatten()
+    verts_flat = trimesh.vertices.flatten()
     points_data_array.text = ' '.join(map(str, verts_flat))
 
     # PointData section (scalar fields)
     point_data = ET.SubElement(piece, 'PointData')
 
     # Add vertex attributes as scalar arrays
-    if hasattr(mesh, 'vertex_attributes') and mesh.vertex_attributes:
-        for attr_name, attr_values in mesh.vertex_attributes.items():
+    if hasattr(trimesh, 'vertex_attributes') and trimesh.vertex_attributes:
+        for attr_name, attr_values in trimesh.vertex_attributes.items():
             print(f"[_export_mesh_with_scalars_vtp]   Adding scalar field: {attr_name}")
             scalar_array = ET.SubElement(point_data, 'DataArray',
                                           type='Float32',
@@ -71,7 +71,7 @@ def _export_mesh_with_scalars_vtp(mesh: trimesh.Trimesh, filepath: str):
                                    type='Int32',
                                    Name='connectivity',
                                    format='ascii')
-    faces_flat = mesh.faces.flatten()
+    faces_flat = trimesh.faces.flatten()
     connectivity.text = ' '.join(map(str, faces_flat))
 
     # Offsets: cumulative count of indices (each triangle has 3 vertices)
@@ -102,7 +102,7 @@ class PreviewMeshNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -111,17 +111,17 @@ class PreviewMeshNode:
     FUNCTION = "preview_mesh"
     CATEGORY = "geompack/visualization"
 
-    def preview_mesh(self, mesh):
+    def preview_mesh(self, trimesh):
         """
         Export mesh to GLB and prepare for 3D preview.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
             dict: UI data for frontend widget
         """
-        print(f"[PreviewMesh] Preparing preview: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[PreviewMesh] Preparing preview: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Generate unique filename
         filename = f"preview_{uuid.uuid4().hex[:8]}.glb"
@@ -134,27 +134,27 @@ class PreviewMeshNode:
 
         # Export to GLB (best format for Three.js)
         try:
-            mesh.export(filepath, file_type='glb')
+            trimesh.export(filepath, file_type='glb')
             print(f"[PreviewMesh] Exported to: {filepath}")
         except Exception as e:
             print(f"[PreviewMesh] Export failed: {e}")
             # Fallback to OBJ
             filename = filename.replace('.glb', '.obj')
             filepath = filepath.replace('.glb', '.obj')
-            mesh.export(filepath, file_type='obj')
+            trimesh.export(filepath, file_type='obj')
             print(f"[PreviewMesh] Exported to OBJ: {filepath}")
 
         # Calculate bounding box info for camera setup
-        bounds = mesh.bounds
-        extents = mesh.extents
+        bounds = trimesh.bounds
+        extents = trimesh.extents
         max_extent = max(extents)
 
         # Return metadata for frontend widget
         return {
             "ui": {
                 "mesh_file": [filename],
-                "vertex_count": [len(mesh.vertices)],
-                "face_count": [len(mesh.faces)],
+                "vertex_count": [len(trimesh.vertices)],
+                "face_count": [len(trimesh.faces)],
                 "bounds_min": [bounds[0].tolist()],
                 "bounds_max": [bounds[1].tolist()],
                 "extents": [extents.tolist()],
@@ -175,7 +175,7 @@ class PreviewMeshVTKNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -184,17 +184,17 @@ class PreviewMeshVTKNode:
     FUNCTION = "preview_mesh_vtk"
     CATEGORY = "geompack/visualization"
 
-    def preview_mesh_vtk(self, mesh):
+    def preview_mesh_vtk(self, trimesh):
         """
         Export mesh to STL and prepare for VTK.js preview.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
             dict: UI data for frontend widget
         """
-        print(f"[PreviewMeshVTK] Preparing preview: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[PreviewMeshVTK] Preparing preview: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Generate unique filename
         filename = f"preview_vtk_{uuid.uuid4().hex[:8]}.stl"
@@ -207,46 +207,46 @@ class PreviewMeshVTKNode:
 
         # Export to STL (native format for VTK.js)
         try:
-            mesh.export(filepath, file_type='stl')
+            trimesh.export(filepath, file_type='stl')
             print(f"[PreviewMeshVTK] Exported to: {filepath}")
         except Exception as e:
             print(f"[PreviewMeshVTK] Export failed: {e}")
             # Fallback to OBJ
             filename = filename.replace('.stl', '.obj')
             filepath = filepath.replace('.stl', '.obj')
-            mesh.export(filepath, file_type='obj')
+            trimesh.export(filepath, file_type='obj')
             print(f"[PreviewMeshVTK] Exported to OBJ: {filepath}")
 
         # Calculate bounding box info for camera setup
-        bounds = mesh.bounds
-        extents = mesh.extents
+        bounds = trimesh.bounds
+        extents = trimesh.extents
         max_extent = max(extents)
 
         # Check if mesh is watertight
-        is_watertight = mesh.is_watertight
+        is_watertight = trimesh.is_watertight
 
         # Calculate volume and area (only if watertight)
         volume = None
         area = None
         try:
             if is_watertight:
-                volume = float(mesh.volume)
-            area = float(mesh.area)
+                volume = float(trimesh.volume)
+            area = float(trimesh.area)
         except Exception as e:
             print(f"[PreviewMeshVTK] Could not calculate volume/area: {e}")
 
         # Get field names (vertex/face data arrays)
         field_names = []
-        if hasattr(mesh, 'vertex_attributes') and mesh.vertex_attributes:
-            field_names.extend([f"vertex.{k}" for k in mesh.vertex_attributes.keys()])
-        if hasattr(mesh, 'face_attributes') and mesh.face_attributes:
-            field_names.extend([f"face.{k}" for k in mesh.face_attributes.keys()])
+        if hasattr(trimesh, 'vertex_attributes') and trimesh.vertex_attributes:
+            field_names.extend([f"vertex.{k}" for k in trimesh.vertex_attributes.keys()])
+        if hasattr(trimesh, 'face_attributes') and trimesh.face_attributes:
+            field_names.extend([f"face.{k}" for k in trimesh.face_attributes.keys()])
 
         # Return metadata for frontend widget
         ui_data = {
             "mesh_file": [filename],
-            "vertex_count": [len(mesh.vertices)],
-            "face_count": [len(mesh.faces)],
+            "vertex_count": [len(trimesh.vertices)],
+            "face_count": [len(trimesh.faces)],
             "bounds_min": [bounds[0].tolist()],
             "bounds_max": [bounds[1].tolist()],
             "extents": [extents.tolist()],
@@ -280,7 +280,7 @@ class PreviewMeshVTKFiltersNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -289,25 +289,25 @@ class PreviewMeshVTKFiltersNode:
     FUNCTION = "preview_mesh_vtk_filters"
     CATEGORY = "geompack/visualization"
 
-    def preview_mesh_vtk_filters(self, mesh):
+    def preview_mesh_vtk_filters(self, trimesh):
         """
         Export mesh to STL and prepare for VTK.js preview with filters.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
             dict: UI data for frontend widget
         """
-        print(f"[PreviewMeshVTKFilters] Preparing preview: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[PreviewMeshVTKFilters] Preparing preview: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Check if mesh has vertex attributes (scalar fields)
-        has_vertex_attrs = hasattr(mesh, 'vertex_attributes') and len(mesh.vertex_attributes) > 0
+        has_vertex_attrs = hasattr(trimesh, 'vertex_attributes') and len(trimesh.vertex_attributes) > 0
 
-        print(f"[PreviewMeshVTKFilters] hasattr(mesh, 'vertex_attributes'): {hasattr(mesh, 'vertex_attributes')}")
-        if hasattr(mesh, 'vertex_attributes'):
-            print(f"[PreviewMeshVTKFilters] mesh.vertex_attributes: {mesh.vertex_attributes.keys()}")
-            print(f"[PreviewMeshVTKFilters] Number of vertex attributes: {len(mesh.vertex_attributes)}")
+        print(f"[PreviewMeshVTKFilters] hasattr(trimesh, 'vertex_attributes'): {hasattr(trimesh, 'vertex_attributes')}")
+        if hasattr(trimesh, 'vertex_attributes'):
+            print(f"[PreviewMeshVTKFilters] trimesh.vertex_attributes: {trimesh.vertex_attributes.keys()}")
+            print(f"[PreviewMeshVTKFilters] Number of vertex attributes: {len(trimesh.vertex_attributes)}")
 
         # Generate unique filename
         # Use VTP format if we have vertex attributes, otherwise STL
@@ -330,50 +330,50 @@ class PreviewMeshVTKFiltersNode:
         try:
             if file_format == 'vtp':
                 # Export to VTK PolyData format (XML) which preserves vertex attributes
-                _export_mesh_with_scalars_vtp(mesh, filepath)
-                print(f"[PreviewMeshVTKFilters] Exported VTP with {len(mesh.vertex_attributes)} scalar fields to: {filepath}")
+                _export_mesh_with_scalars_vtp(trimesh, filepath)
+                print(f"[PreviewMeshVTKFilters] Exported VTP with {len(trimesh.vertex_attributes)} scalar fields to: {filepath}")
             else:
                 # Export to STL (no scalar data)
-                mesh.export(filepath, file_type='stl')
+                trimesh.export(filepath, file_type='stl')
                 print(f"[PreviewMeshVTKFilters] Exported to STL: {filepath}")
         except Exception as e:
             print(f"[PreviewMeshVTKFilters] Export failed: {e}")
             # Fallback to OBJ
             filename = filename.replace('.vtp', '.obj').replace('.stl', '.obj')
             filepath = filepath.replace('.vtp', '.obj').replace('.stl', '.obj')
-            mesh.export(filepath, file_type='obj')
+            trimesh.export(filepath, file_type='obj')
             print(f"[PreviewMeshVTKFilters] Exported to OBJ: {filepath}")
 
         # Calculate bounding box info for camera setup
-        bounds = mesh.bounds
-        extents = mesh.extents
+        bounds = trimesh.bounds
+        extents = trimesh.extents
         max_extent = max(extents)
 
         # Check if mesh is watertight
-        is_watertight = mesh.is_watertight
+        is_watertight = trimesh.is_watertight
 
         # Calculate volume and area (only if watertight)
         volume = None
         area = None
         try:
             if is_watertight:
-                volume = float(mesh.volume)
-            area = float(mesh.area)
+                volume = float(trimesh.volume)
+            area = float(trimesh.area)
         except Exception as e:
             print(f"[PreviewMeshVTKFilters] Could not calculate volume/area: {e}")
 
         # Get field names (vertex/face data arrays)
         field_names = []
-        if hasattr(mesh, 'vertex_attributes') and mesh.vertex_attributes:
-            field_names.extend([f"vertex.{k}" for k in mesh.vertex_attributes.keys()])
-        if hasattr(mesh, 'face_attributes') and mesh.face_attributes:
-            field_names.extend([f"face.{k}" for k in mesh.face_attributes.keys()])
+        if hasattr(trimesh, 'vertex_attributes') and trimesh.vertex_attributes:
+            field_names.extend([f"vertex.{k}" for k in trimesh.vertex_attributes.keys()])
+        if hasattr(trimesh, 'face_attributes') and trimesh.face_attributes:
+            field_names.extend([f"face.{k}" for k in trimesh.face_attributes.keys()])
 
         # Return metadata for frontend widget
         ui_data = {
             "mesh_file": [filename],
-            "vertex_count": [len(mesh.vertices)],
-            "face_count": [len(mesh.faces)],
+            "vertex_count": [len(trimesh.vertices)],
+            "face_count": [len(trimesh.faces)],
             "bounds_min": [bounds[0].tolist()],
             "bounds_max": [bounds[1].tolist()],
             "extents": [extents.tolist()],
@@ -407,7 +407,7 @@ class PreviewMeshVTKFieldsNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -416,24 +416,24 @@ class PreviewMeshVTKFieldsNode:
     FUNCTION = "preview_mesh_vtk_fields"
     CATEGORY = "geompack/visualization"
 
-    def preview_mesh_vtk_fields(self, mesh):
+    def preview_mesh_vtk_fields(self, trimesh):
         """
         Export mesh with scalar fields to VTP and prepare for VTK.js preview.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh_module.Trimesh object
 
         Returns:
             dict: UI data for frontend widget
         """
-        print(f"[PreviewMeshVTKFields] Preparing preview: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[PreviewMeshVTKFields] Preparing preview: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Check if mesh has vertex attributes (scalar fields)
-        has_vertex_attrs = hasattr(mesh, 'vertex_attributes') and len(mesh.vertex_attributes) > 0
+        has_vertex_attrs = hasattr(trimesh, 'vertex_attributes') and len(trimesh.vertex_attributes) > 0
 
-        if hasattr(mesh, 'vertex_attributes'):
-            print(f"[PreviewMeshVTKFields] mesh.vertex_attributes: {mesh.vertex_attributes.keys()}")
-            print(f"[PreviewMeshVTKFields] Number of vertex attributes: {len(mesh.vertex_attributes)}")
+        if hasattr(trimesh, 'vertex_attributes'):
+            print(f"[PreviewMeshVTKFields] trimesh.vertex_attributes: {trimesh.vertex_attributes.keys()}")
+            print(f"[PreviewMeshVTKFields] Number of vertex attributes: {len(trimesh.vertex_attributes)}")
 
         if not has_vertex_attrs:
             print(f"[PreviewMeshVTKFields] WARNING: No vertex attributes found. This node is for scalar field visualization.")
@@ -449,8 +449,8 @@ class PreviewMeshVTKFieldsNode:
 
         # Export mesh with vertex attributes as VTP
         try:
-            _export_mesh_with_scalars_vtp(mesh, filepath)
-            num_fields = len(mesh.vertex_attributes) if has_vertex_attrs else 0
+            _export_mesh_with_scalars_vtp(trimesh, filepath)
+            num_fields = len(trimesh.vertex_attributes) if has_vertex_attrs else 0
             print(f"[PreviewMeshVTKFields] Exported VTP with {num_fields} scalar fields to: {filepath}")
         except Exception as e:
             print(f"[PreviewMeshVTKFields] Export failed: {e}")
@@ -459,25 +459,25 @@ class PreviewMeshVTKFieldsNode:
             raise RuntimeError(f"Failed to export mesh with scalar fields: {e}")
 
         # Calculate bounding box info for camera setup
-        bounds = mesh.bounds
-        extents = mesh.extents
+        bounds = trimesh.bounds
+        extents = trimesh.extents
         max_extent = max(extents)
 
         # Check if mesh is watertight
-        is_watertight = mesh.is_watertight
+        is_watertight = trimesh.is_watertight
 
         # Get field names (vertex/face data arrays)
         field_names = []
-        if hasattr(mesh, 'vertex_attributes') and mesh.vertex_attributes:
-            field_names.extend(list(mesh.vertex_attributes.keys()))
-        if hasattr(mesh, 'face_attributes') and mesh.face_attributes:
-            field_names.extend([f"face.{k}" for k in mesh.face_attributes.keys()])
+        if hasattr(trimesh, 'vertex_attributes') and trimesh.vertex_attributes:
+            field_names.extend(list(trimesh.vertex_attributes.keys()))
+        if hasattr(trimesh, 'face_attributes') and trimesh.face_attributes:
+            field_names.extend([f"face.{k}" for k in trimesh.face_attributes.keys()])
 
         # Return metadata for frontend widget
         ui_data = {
             "mesh_file": [filename],
-            "vertex_count": [len(mesh.vertices)],
-            "face_count": [len(mesh.faces)],
+            "vertex_count": [len(trimesh.vertices)],
+            "face_count": [len(trimesh.faces)],
             "bounds_min": [bounds[0].tolist()],
             "bounds_max": [bounds[1].tolist()],
             "extents": [extents.tolist()],

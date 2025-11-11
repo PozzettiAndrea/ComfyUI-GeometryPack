@@ -11,7 +11,7 @@ class FixNormalsNode:
     Fix inconsistent normal orientations.
 
     Ensures all face normals point consistently (all outward or all inward).
-    Uses graph traversal to propagate consistent orientation across the mesh.
+    Uses graph traversal to propagate consistent orientation across the trimesh.
     Essential for proper rendering and boolean operations.
     """
 
@@ -19,7 +19,7 @@ class FixNormalsNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -28,44 +28,44 @@ class FixNormalsNode:
     FUNCTION = "fix_normals"
     CATEGORY = "geompack/repair"
 
-    def fix_normals(self, mesh):
+    def fix_normals(self, trimesh):
         """
         Fix inconsistent face normal orientations.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
 
         Returns:
-            tuple: (fixed_mesh, info_string)
+            tuple: (fixed_trimesh, info_string)
         """
-        print(f"[FixNormals] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[FixNormals] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Create a copy to avoid modifying the original
-        fixed_mesh = mesh.copy()
+        fixed_mesh = trimesh.copy()
 
         # Check initial winding consistency
-        was_consistent = fixed_mesh.is_winding_consistent
+        was_consistent = fixed_trimesh.is_winding_consistent
 
         # Fix normals - this reorients faces for consistent winding
-        fixed_mesh.fix_normals()
+        fixed_trimesh.fix_normals()
 
         # Check if it's now consistent
-        is_consistent = fixed_mesh.is_winding_consistent
+        is_consistent = fixed_trimesh.is_winding_consistent
 
         info = f"""Normal Orientation Fix:
 
 Before: {'Consistent' if was_consistent else 'Inconsistent'}
 After:  {'Consistent' if is_consistent else 'Inconsistent'}
 
-Vertices: {len(fixed_mesh.vertices):,}
-Faces: {len(fixed_mesh.faces):,}
+Vertices: {len(fixed_trimesh.vertices):,}
+Faces: {len(fixed_trimesh.faces):,}
 
 {'✓ Normals are now consistently oriented!' if is_consistent else '⚠ Some inconsistencies may remain (check mesh topology)'}
 """
 
         print(f"[FixNormals] {'✓' if is_consistent else '⚠'} Normal orientation: {was_consistent} -> {is_consistent}")
 
-        return (fixed_mesh, info)
+        return (fixed_trimesh, info)
 
 
 class CheckNormalsNode:
@@ -80,7 +80,7 @@ class CheckNormalsNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -89,27 +89,27 @@ class CheckNormalsNode:
     FUNCTION = "check_normals"
     CATEGORY = "geompack/repair"
 
-    def check_normals(self, mesh):
+    def check_normals(self, trimesh):
         """
         Analyze mesh normal consistency.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
 
         Returns:
             tuple: (report_string,)
         """
-        print(f"[CheckNormals] Analyzing mesh with {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[CheckNormals] Analyzing mesh with {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Check winding consistency
-        is_winding_consistent = mesh.is_winding_consistent
+        is_winding_consistent = trimesh.is_winding_consistent
 
         # Check if watertight (implies consistent normals typically)
-        is_watertight = mesh.is_watertight
+        is_watertight = trimesh.is_watertight
 
         # Get face normals and check for degenerate triangles
-        face_normals = mesh.face_normals
-        face_areas = mesh.area_faces
+        face_normals = trimesh.face_normals
+        face_areas = trimesh.area_faces
 
         # Find degenerate faces (zero or near-zero area)
         degenerate_faces = np.sum(face_areas < 1e-10)
@@ -124,16 +124,16 @@ class CheckNormalsNode:
         report = f"""=== Normal Consistency Analysis ===
 
 Mesh Statistics:
-  Vertices: {len(mesh.vertices):,}
-  Faces: {len(mesh.faces):,}
-  Edges: {len(mesh.edges_unique):,}
+  Vertices: {len(trimesh.vertices):,}
+  Faces: {len(trimesh.faces):,}
+  Edges: {len(trimesh.edges_unique):,}
 
 Topology:
   Winding Consistent: {'✓ Yes' if is_winding_consistent else '✗ No (normals may point in mixed directions)'}
   Watertight: {'✓ Yes' if is_watertight else '✗ No (has boundary edges/holes)'}
 
 Face Quality:
-  Degenerate Faces: {degenerate_faces:,} ({100.0 * degenerate_faces / len(mesh.faces):.2f}%)
+  Degenerate Faces: {degenerate_faces:,} ({100.0 * degenerate_faces / len(trimesh.faces):.2f}%)
   NaN Normals: {nan_normals:,}
   Avg Normal Length: {avg_normal_length:.6f} (should be ~1.0)
 
@@ -173,7 +173,7 @@ class FillHolesNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -182,33 +182,33 @@ class FillHolesNode:
     FUNCTION = "fill_holes"
     CATEGORY = "geompack/repair"
 
-    def fill_holes(self, mesh):
+    def fill_holes(self, trimesh):
         """
-        Fill holes in the mesh.
+        Fill holes in the trimesh.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
 
         Returns:
-            tuple: (filled_mesh, info_string)
+            tuple: (filled_trimesh, info_string)
         """
-        print(f"[FillHoles] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[FillHoles] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Check initial state
-        was_watertight = mesh.is_watertight
-        initial_vertices = len(mesh.vertices)
-        initial_faces = len(mesh.faces)
+        was_watertight = trimesh.is_watertight
+        initial_vertices = len(trimesh.vertices)
+        initial_faces = len(trimesh.faces)
 
         # Create a copy
-        filled_mesh = mesh.copy()
+        filled_mesh = trimesh.copy()
 
         # Fill holes
-        filled_mesh.fill_holes()
+        filled_trimesh.fill_holes()
 
         # Check result
-        is_watertight = filled_mesh.is_watertight
-        final_vertices = len(filled_mesh.vertices)
-        final_faces = len(filled_mesh.faces)
+        is_watertight = filled_trimesh.is_watertight
+        final_vertices = len(filled_trimesh.vertices)
+        final_faces = len(filled_trimesh.faces)
 
         added_vertices = final_vertices - initial_vertices
         added_faces = final_faces - initial_faces
@@ -232,7 +232,7 @@ After Filling:
 
         print(f"[FillHoles] Added {added_faces} faces, Watertight: {was_watertight} -> {is_watertight}")
 
-        return (filled_mesh, info)
+        return (filled_trimesh, info)
 
 
 class ComputeNormalsNode:
@@ -247,44 +247,44 @@ class ComputeNormalsNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
                 "smooth_vertex_normals": (["true", "false"], {
                     "default": "true"
                 }),
             },
         }
 
-    RETURN_TYPES = ("MESH",)
+    RETURN_TYPES = ("TRIMESH",)
     RETURN_NAMES = ("mesh_with_normals",)
     FUNCTION = "compute_normals"
     CATEGORY = "geompack/repair"
 
-    def compute_normals(self, mesh, smooth_vertex_normals="true"):
+    def compute_normals(self, trimesh, smooth_vertex_normals="true"):
         """
         Recompute mesh normals.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
             smooth_vertex_normals: Whether to smooth vertex normals
 
         Returns:
             tuple: (mesh_with_normals,)
         """
-        print(f"[ComputeNormals] Processing mesh with {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[ComputeNormals] Processing mesh with {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Create a copy
-        result_mesh = mesh.copy()
+        result_mesh = trimesh.copy()
 
         # Face normals are always recomputed automatically by trimesh
         # But we can force a cache clear and recomputation
-        result_mesh._cache.clear()
+        result_trimesh._cache.clear()
 
         if smooth_vertex_normals == "false":
             # Use face normals directly (faceted appearance)
             # This creates sharp edges by not averaging normals across faces
-            vertex_normals = np.zeros_like(result_mesh.vertices)
-            for i, face in enumerate(result_mesh.faces):
-                face_normal = result_mesh.face_normals[i]
+            vertex_normals = np.zeros_like(result_trimesh.vertices)
+            for i, face in enumerate(result_trimesh.faces):
+                face_normal = result_trimesh.face_normals[i]
                 vertex_normals[face] += face_normal
             # Normalize
             norms = np.linalg.norm(vertex_normals, axis=1, keepdims=True)
@@ -293,16 +293,16 @@ class ComputeNormalsNode:
 
             # Store in mesh (note: trimesh will override this with smoothed normals)
             # So we need to mark it in metadata
-            result_mesh.metadata['normals_smoothed'] = False
+            result_trimesh.metadata['normals_smoothed'] = False
             print(f"[ComputeNormals] Computed faceted (non-smooth) normals")
         else:
             # Trimesh automatically computes smooth vertex normals
             # Just access them to ensure they're computed
-            _ = result_mesh.vertex_normals
-            result_mesh.metadata['normals_smoothed'] = True
+            _ = result_trimesh.vertex_normals
+            result_trimesh.metadata['normals_smoothed'] = True
             print(f"[ComputeNormals] Computed smooth vertex normals")
 
-        return (result_mesh,)
+        return (result_trimesh,)
 
 
 class VisualizNormalFieldNode:
@@ -318,7 +318,7 @@ class VisualizNormalFieldNode:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "mesh": ("MESH",),
+                "trimesh": ("TRIMESH",),
             },
         }
 
@@ -327,32 +327,32 @@ class VisualizNormalFieldNode:
     FUNCTION = "visualize_normals"
     CATEGORY = "geompack/repair"
 
-    def visualize_normals(self, mesh):
+    def visualize_normals(self, trimesh):
         """
         Add normal components as vertex scalar fields.
 
         Args:
-            mesh: Input trimesh.Trimesh object
+            trimesh: Input trimesh.Trimesh object
 
         Returns:
             tuple: (mesh_with_normal_fields, info_string)
         """
-        print(f"[VisualizeNormals] Processing mesh with {len(mesh.vertices)} vertices")
+        print(f"[VisualizeNormals] Processing mesh with {len(trimesh.vertices)} vertices")
 
         # Create a copy
-        result_mesh = mesh.copy()
+        result_mesh = trimesh.copy()
 
         # Get vertex normals
-        normals = result_mesh.vertex_normals
+        normals = result_trimesh.vertex_normals
 
         # Add each component as a scalar field
-        result_mesh.vertex_attributes['normal_x'] = normals[:, 0].astype(np.float32)
-        result_mesh.vertex_attributes['normal_y'] = normals[:, 1].astype(np.float32)
-        result_mesh.vertex_attributes['normal_z'] = normals[:, 2].astype(np.float32)
+        result_trimesh.vertex_attributes['normal_x'] = normals[:, 0].astype(np.float32)
+        result_trimesh.vertex_attributes['normal_y'] = normals[:, 1].astype(np.float32)
+        result_trimesh.vertex_attributes['normal_z'] = normals[:, 2].astype(np.float32)
 
         # Also add normal magnitude (should be ~1.0 for unit normals)
         normal_magnitude = np.linalg.norm(normals, axis=1).astype(np.float32)
-        result_mesh.vertex_attributes['normal_magnitude'] = normal_magnitude
+        result_trimesh.vertex_attributes['normal_magnitude'] = normal_magnitude
 
         info = f"""Normal Field Visualization:
 
@@ -372,7 +372,7 @@ Expected Values:
 
         print(f"[VisualizeNormals] Added 4 scalar fields to mesh")
 
-        return (result_mesh, info)
+        return (result_trimesh, info)
 
 
 # Node mappings
