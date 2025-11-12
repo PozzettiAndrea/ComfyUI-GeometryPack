@@ -69,12 +69,11 @@ def test_chamfer_distance_different(cube_mesh, sphere_mesh):
     assert distance > 0
 
 
-@pytest.mark.optional
-@pytest.mark.slow
+@pytest.mark.unit
 @pytest.mark.parametrize("resolution", [32, 64])
 def test_compute_sdf(sphere_mesh, resolution):
-    """Test SDF computation."""
-    pytest.importorskip("mesh_to_sdf")
+    """Test SDF computation using libigl."""
+    pytest.importorskip("igl")
 
     node = ComputeSDFNode()
     sdf_volume, info = node.compute_sdf(
@@ -86,4 +85,4 @@ def test_compute_sdf(sphere_mesh, resolution):
     assert "voxels" in sdf_volume
     assert "resolution" in sdf_volume
     assert sdf_volume["resolution"] == resolution
-    assert "sdf" in info.lower()
+    assert "distance" in info.lower()  # Check for "distance" instead of "sdf"

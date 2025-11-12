@@ -788,9 +788,10 @@ class LibiglHarmonicNode:
         ])
 
         # Compute harmonic parameterization
+        # Convert TrackedArray to pure numpy for igl compatibility
         uv = igl.harmonic(
-            mesh.vertices.astype(np.float64),
-            mesh.faces.astype(np.int32),
+            np.asarray(mesh.vertices, dtype=np.float64),
+            np.asarray(mesh.faces, dtype=np.int32),
             boundary_loop.astype(np.int32),
             bnd_uv.astype(np.float64),
             1  # Laplacian type
@@ -878,9 +879,10 @@ class LibiglARAPNode:
         ])
 
         # Initial harmonic solution
+        # Convert TrackedArray to pure numpy for igl compatibility
         uv_init = igl.harmonic(
-            trimesh.vertices.astype(np.float64),
-            trimesh.faces.astype(np.int32),
+            np.asarray(trimesh.vertices, dtype=np.float64),
+            np.asarray(trimesh.faces, dtype=np.int32),
             boundary_loop.astype(np.int32),
             bnd_uv.astype(np.float64),
             1
@@ -902,8 +904,8 @@ class LibiglARAPNode:
                 # Recompute with current UV as guidance
                 # This is a simplified version - full ARAP is more complex
                 uv = igl.harmonic(
-                    trimesh.vertices.astype(np.float64),
-                    trimesh.faces.astype(np.int32),
+                    np.asarray(trimesh.vertices, dtype=np.float64),
+                    np.asarray(trimesh.faces, dtype=np.int32),
                     boundary_loop.astype(np.int32),
                     bnd_uv.astype(np.float64),
                     2  # Use biharmonic (k=2) for smoother result
@@ -915,8 +917,8 @@ class LibiglARAPNode:
             print(f"[LibiglARAP] Note: Using biharmonic approximation of ARAP")
             # Fall back to biharmonic
             uv = igl.harmonic(
-                trimesh.vertices.astype(np.float64),
-                trimesh.faces.astype(np.int32),
+                np.asarray(trimesh.vertices, dtype=np.float64),
+                np.asarray(trimesh.faces, dtype=np.int32),
                 boundary_loop.astype(np.int32),
                 bnd_uv.astype(np.float64),
                 2  # biharmonic

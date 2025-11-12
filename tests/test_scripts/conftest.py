@@ -104,9 +104,24 @@ def sphere_mesh():
 @pytest.fixture
 def open_mesh():
     """Create an open mesh (cylinder without caps) for UV unwrapping tests."""
-    # Create a cylinder without endcaps (open mesh)
+    # Create a cylinder and remove the caps to make it open
     cylinder = trimesh.creation.cylinder(radius=1.0, height=2.0, sections=16)
-    return cylinder
+
+    # Identify and remove cap faces (faces at top/bottom with normals pointing up/down)
+    face_normals = cylinder.face_normals
+    # Cap faces have normals nearly vertical (pointing up or down)
+    is_cap = np.abs(face_normals[:, 2]) > 0.9  # Z component dominates
+
+    # Keep only side faces
+    side_faces = cylinder.faces[~is_cap]
+
+    # Create open mesh with only side faces and clean it up
+    open_cylinder = trimesh.Trimesh(vertices=cylinder.vertices, faces=side_faces, process=True)
+
+    # Remove unreferenced vertices
+    open_cylinder.remove_unreferenced_vertices()
+
+    return open_cylinder
 
 
 def render_mesh_to_png(mesh, output_path, resolution=(800, 800)):

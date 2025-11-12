@@ -159,12 +159,19 @@ similarity compared to Hausdorff distance.
 
 class ComputeSDFNode:
     """
-    Compute Signed Distance Field (SDF) for a trimesh.
+    Compute Signed Distance Field (SDF) for a trimesh using libigl.
 
     The SDF represents the distance from any point in 3D space to the
     nearest surface, with negative values inside the mesh and positive
     values outside. Useful for occupancy queries and implicit surface
     representations.
+
+    Uses libigl's signed_distance with multiple computation methods:
+    - default: Fast and robust for most meshes
+    - winding_number: Accurate, handles non-watertight meshes
+    - fast_winding_number: Faster version of winding number
+    - pseudonormal: Legacy method using pseudo-normals
+    - unsigned: Compute unsigned distance only
     """
 
     @classmethod
@@ -178,6 +185,9 @@ class ComputeSDFNode:
                     "max": 256,
                     "step": 16
                 }),
+                "sign_type": (["default", "winding_number", "fast_winding_number", "pseudonormal", "unsigned"], {
+                    "default": "default"
+                }),
             },
         }
 
@@ -186,30 +196,62 @@ class ComputeSDFNode:
     FUNCTION = "compute_sdf"
     CATEGORY = "geompack/analysis/distance"
 
-    def compute_sdf(self, trimesh, resolution):
+    def compute_sdf(self, trimesh, resolution, sign_type="default"):
         """
-        Compute signed distance field voxel grid for trimesh.
+        Compute signed distance field voxel grid for trimesh using libigl.
 
         Args:
             trimesh: Input trimesh.Trimesh object
             resolution: Grid resolution (N x N x N voxels)
+            sign_type: Distance computation method
 
         Returns:
             tuple: (sdf_data_dict, info_string)
         """
         try:
-            import mesh_to_sdf
+            import igl
         except ImportError:
             raise ImportError(
-                "mesh-to-sdf not installed. Install with: pip install mesh-to-sdf"
+                "libigl not installed. Install with: pip install igl"
             )
 
         print(f"[ComputeSDF] Computing {resolution}³ SDF for mesh with {len(trimesh.vertices):,} vertices")
+        print(f"[ComputeSDF] Method: {sign_type}")
 
-        # Compute SDF voxel grid
-        voxels = mesh_to_sdf.mesh_to_voxels(trimesh, resolution)
+        # Map sign_type string to igl constant
+        sign_type_map = {
+            "default": igl.SIGNED_DISTANCE_TYPE_DEFAULT,
+            "winding_number": igl.SIGNED_DISTANCE_TYPE_WINDING_NUMBER,
+            "fast_winding_number": igl.SIGNED_DISTANCE_TYPE_FAST_WINDING_NUMBER,
+            "pseudonormal": igl.SIGNED_DISTANCE_TYPE_PSEUDONORMAL,
+            "unsigned": igl.SIGNED_DISTANCE_TYPE_UNSIGNED,
+        }
+        igl_sign_type = sign_type_map[sign_type]
 
-        info = f"""Signed Distance Field:
+        # Generate 3D grid of query points
+        bounds = trimesh.bounds
+        grid_x = np.linspace(bounds[0, 0], bounds[1, 0], resolution)
+        grid_y = np.linspace(bounds[0, 1], bounds[1, 1], resolution)
+        grid_z = np.linspace(bounds[0, 2], bounds[1, 2], resolution)
+        xx, yy, zz = np.meshgrid(grid_x, grid_y, grid_z, indexing='ij')
+        query_points = np.stack([xx.ravel(), yy.ravel(), zz.ravel()], axis=1)
+
+        print(f"[ComputeSDF] Query points: {query_points.shape[0]:,}")
+
+        # Compute signed distance using libigl
+        # Returns: (distances, face_indices, closest_points, normals)
+        S, I, C, N = igl.signed_distance(
+            query_points,
+            np.asarray(trimesh.vertices, dtype=np.float64),
+            np.asarray(trimesh.faces, dtype=np.int64),
+            sign_type=igl_sign_type
+        )
+
+        # Reshape distance array to 3D voxel grid
+        voxels = S.reshape(resolution, resolution, resolution)
+
+        info = f"""Signed Distance Field (libigl):
+Method: {sign_type}
 Resolution: {resolution}³ = {resolution**3:,} voxels
 Value range: [{voxels.min():.3f}, {voxels.max():.3f}]
 
@@ -227,6 +269,7 @@ Zero = on surface
             'resolution': resolution,
             'bounds': trimesh.bounds.copy(),
             'extents': trimesh.extents.copy(),
+            'sign_type': sign_type,
         }
 
         print(f"[ComputeSDF] Complete - range: [{voxels.min():.3f}, {voxels.max():.3f}]")
