@@ -6,7 +6,24 @@ import trimesh as trimesh_module
 import os
 import tempfile
 import uuid
+import sys
+from pathlib import Path
 
+# Import create_bbox_visualization from Hunyuan3D-Part
+# Add parent directory to path to allow cross-custom-node imports
+custom_nodes_dir = Path(__file__).parent.parent.parent
+hunyuan_utils_path = custom_nodes_dir / "ComfyUI-Hunyuan3D-Part" / "node_utils"
+if str(hunyuan_utils_path) not in sys.path:
+    sys.path.insert(0, str(hunyuan_utils_path))
+
+try:
+    from mesh_utils import create_bbox_visualization, export_scene_to_vtp
+    BBOX_VIZ_AVAILABLE = True
+except ImportError:
+    print("[GeomPack] WARNING: Could not import bbox functions from Hunyuan3D-Part")
+    print("[GeomPack] The Preview Bounding Boxes node will not be available")
+    BBOX_VIZ_AVAILABLE = False
+    export_scene_to_vtp = None
 
 # ComfyUI folder paths
 try:
@@ -491,12 +508,128 @@ class PreviewMeshVTKFieldsNode:
         return {"ui": ui_data}
 
 
+class PreviewBoundingBoxesVTKNode:
+    """
+    Preview mesh with bounding boxes using VTK.js viewer.
+
+    Displays the original mesh with wireframe bounding boxes overlaid,
+    showing the segmentation results from P3-SAM or other bbox-generating nodes.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "trimesh": ("TRIMESH",),
+                "bboxes": ("BBOXES_3D",),
+                "line_width": ("FLOAT", {
+                    "default": 2.0,
+                    "min": 0.5,
+                    "max": 10.0,
+                    "step": 0.5,
+                    "display": "slider",
+                    "tooltip": "Thickness of bounding box wireframe lines in pixels. Rendered by VTK.js."
+                }),
+            },
+        }
+
+    RETURN_TYPES = ()
+    OUTPUT_NODE = True
+    FUNCTION = "preview_bboxes_vtk"
+    CATEGORY = "geompack/visualization"
+
+    def preview_bboxes_vtk(self, trimesh, bboxes, line_width):
+        """
+        Export mesh with bounding boxes to VTP and prepare for VTK.js preview.
+
+        Args:
+            trimesh: Input trimesh_module.Trimesh object
+            bboxes: BBOXES_3D dict with 'bboxes' (array [N, 2, 3]) and 'num_parts'
+            line_width: Thickness of wireframe lines in pixels (for VTK.js rendering)
+
+        Returns:
+            dict: UI data for frontend widget
+        """
+        if not BBOX_VIZ_AVAILABLE:
+            raise RuntimeError(
+                "create_bbox_visualization not available. "
+                "Make sure ComfyUI-Hunyuan3D-Part is installed."
+            )
+
+        # Extract bboxes array from BBOXES_3D dictionary
+        if isinstance(bboxes, dict):
+            bboxes_array = bboxes['bboxes']
+            num_parts = bboxes.get('num_parts', len(bboxes_array))
+        else:
+            # Fallback for raw array
+            bboxes_array = bboxes
+            num_parts = len(bboxes_array)
+
+        print(f"[PreviewBoundingBoxesVTK] Preparing preview with {num_parts} bounding boxes")
+        print(f"[PreviewBoundingBoxesVTK] Mesh: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
+        print(f"[PreviewBoundingBoxesVTK] Line width: {line_width}px")
+
+        # Create scene with mesh and bounding boxes
+        # Use Path3D wireframes (rendered as lines in VTK.js)
+        scene = create_bbox_visualization(trimesh, bboxes_array, use_tubes=False)
+
+        # Generate unique filename - use VTP which supports wireframes
+        filename = f"preview_bboxes_vtk_{uuid.uuid4().hex[:8]}.vtp"
+
+        # Use ComfyUI's output directory
+        if COMFYUI_OUTPUT_FOLDER:
+            filepath = os.path.join(COMFYUI_OUTPUT_FOLDER, filename)
+        else:
+            filepath = os.path.join(tempfile.gettempdir(), filename)
+
+        # Export scene to VTP (preserves wireframes)
+        try:
+            # Use custom VTP exporter that preserves both mesh and wireframe lines
+            export_scene_to_vtp(scene, filepath)
+            print(f"[PreviewBoundingBoxesVTK] Exported scene with {num_parts} bounding boxes to: {filepath}")
+        except Exception as e:
+            print(f"[PreviewBoundingBoxesVTK] VTP export failed: {e}")
+            import traceback
+            traceback.print_exc()
+            # Fallback to STL with tubes
+            print(f"[PreviewBoundingBoxesVTK] Falling back to STL with tube meshes")
+            scene = create_bbox_visualization(trimesh, bboxes_array, use_tubes=True)
+            filename = filename.replace('.vtp', '.stl')
+            filepath = filepath.replace('.vtp', '.stl')
+            scene.export(filepath, file_type='stl')
+            print(f"[PreviewBoundingBoxesVTK] Exported to: {filepath}")
+
+        # Calculate bounding box info for camera setup
+        # Use the original mesh bounds for camera positioning
+        bounds = trimesh.bounds
+        extents = trimesh.extents
+        max_extent = max(extents)
+
+        # Return metadata for frontend widget
+        ui_data = {
+            "mesh_file": [filename],
+            "vertex_count": [len(trimesh.vertices)],
+            "face_count": [len(trimesh.faces)],
+            "bounds_min": [bounds[0].tolist()],
+            "bounds_max": [bounds[1].tolist()],
+            "extents": [extents.tolist()],
+            "max_extent": [float(max_extent)],
+            "num_bboxes": [num_parts],
+            "line_width": [float(line_width)],
+        }
+
+        print(f"[PreviewBoundingBoxesVTK] Created visualization with {num_parts} bounding boxes")
+
+        return {"ui": ui_data}
+
+
 # Node mappings
 NODE_CLASS_MAPPINGS = {
     "GeomPackPreviewMesh": PreviewMeshNode,
     "GeomPackPreviewMeshVTK": PreviewMeshVTKNode,
     "GeomPackPreviewMeshVTKFilters": PreviewMeshVTKFiltersNode,
     "GeomPackPreviewMeshVTKFields": PreviewMeshVTKFieldsNode,
+    "GeomPackPreviewBoundingBoxesVTK": PreviewBoundingBoxesVTKNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -504,4 +637,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "GeomPackPreviewMeshVTK": "Preview Mesh (VTK)",
     "GeomPackPreviewMeshVTKFilters": "Preview Mesh (VTK with Filters)",
     "GeomPackPreviewMeshVTKFields": "Preview Mesh (VTK with Fields)",
+    "GeomPackPreviewBoundingBoxesVTK": "Preview Bounding Boxes (VTK)",
 }

@@ -343,9 +343,10 @@
         let meshBounds = null;  // Store mesh bounds for camera positioning
 
         // Load mesh function
-        async function loadMesh(filepath) {
+        async function loadMesh(filepath, lineWidth = 1.0) {
             console.log('[GeomPack VTK Viewer] Loading:', filepath);
             console.log('[GeomPack VTK Viewer DEBUG] Full filepath URL:', filepath);
+            console.log('[GeomPack VTK Viewer DEBUG] Line width:', lineWidth);
             loading.textContent = 'Loading mesh...';
             loading.style.display = 'block';
 
@@ -442,6 +443,10 @@
                 console.log('[GeomPack VTK Viewer DEBUG] Mapper has input:', mapper.getInputData());
                 console.log('[GeomPack VTK Viewer DEBUG] Actor mapper:', actor.getMapper());
 
+                // Apply line width to wireframe edges
+                property.setLineWidth(lineWidth);
+                console.log('[GeomPack VTK Viewer DEBUG] Line width set to:', lineWidth);
+
                 console.log('[GeomPack VTK Viewer DEBUG] Resetting camera...');
                 // Reset camera to fit mesh
                 renderer.resetCamera();
@@ -515,8 +520,9 @@
             console.log('[GeomPack VTK Viewer DEBUG] Message filepath:', event.data?.filepath);
 
             if (event.data.type === 'LOAD_MESH') {
-                console.log('[GeomPack VTK Viewer] Received LOAD_MESH message:', event.data.filepath);
-                loadMesh(event.data.filepath);
+                const lineWidth = event.data.lineWidth || 1.0;
+                console.log('[GeomPack VTK Viewer] Received LOAD_MESH message:', event.data.filepath, 'lineWidth:', lineWidth);
+                loadMesh(event.data.filepath, lineWidth);
             } else {
                 console.warn('[GeomPack VTK Viewer DEBUG] Unknown message type or missing type');
             }

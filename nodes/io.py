@@ -28,7 +28,7 @@ class LoadMesh:
         return {
             "required": {
                 "file_path": ("STRING", {
-                    "default": "",
+                    "default": "Stanford_Bunny.stl",
                     "multiline": False
                 }),
             },
