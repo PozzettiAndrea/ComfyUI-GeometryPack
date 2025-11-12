@@ -12,21 +12,21 @@ import trimesh
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-# Mock ComfyUI modules before importing nodes
-sys.modules["folder_paths"] = MagicMock()
-sys.modules["folder_paths"].get_input_directory = MagicMock(
-    return_value=str(Path(__file__).parent / "assets")
-)
-sys.modules["folder_paths"].get_output_directory = MagicMock(
-    return_value=str(Path(__file__).parent / "outputs" / "meshes")
-)
-
 # Set up paths
 TEST_DIR = Path(__file__).parent.parent  # Go up to tests/ directory
 ASSETS_DIR = TEST_DIR / "assets"
 OUTPUT_DIR = TEST_DIR / "outputs"
 MESHES_DIR = OUTPUT_DIR / "meshes"
 RENDERS_DIR = OUTPUT_DIR / "renders"
+
+# Mock ComfyUI modules before importing nodes
+sys.modules["folder_paths"] = MagicMock()
+sys.modules["folder_paths"].get_input_directory = MagicMock(
+    return_value=str(ASSETS_DIR)
+)
+sys.modules["folder_paths"].get_output_directory = MagicMock(
+    return_value=str(MESHES_DIR)
+)
 
 
 def pytest_configure(config):
