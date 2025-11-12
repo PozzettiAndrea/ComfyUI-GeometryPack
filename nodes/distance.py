@@ -61,10 +61,14 @@ class HausdorffDistanceNode:
 
         # Compute Hausdorff distance (symmetric)
         hd = pcu.hausdorff_distance(points_a, points_b)
+        # Handle potential tuple return (some versions return tuple)
+        hd = hd[0] if isinstance(hd, tuple) else hd
 
         # Compute one-sided distances
         hd_a_to_b = pcu.one_sided_hausdorff_distance(points_a, points_b)
+        hd_a_to_b = hd_a_to_b[0] if isinstance(hd_a_to_b, tuple) else hd_a_to_b
         hd_b_to_a = pcu.one_sided_hausdorff_distance(points_b, points_a)
+        hd_b_to_a = hd_b_to_a[0] if isinstance(hd_b_to_a, tuple) else hd_b_to_a
 
         details = f"""Hausdorff Distance Analysis:
 Total (symmetric): {hd:.6f}

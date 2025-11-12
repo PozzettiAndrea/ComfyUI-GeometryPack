@@ -40,10 +40,17 @@ cd ComfyUI-GeometryPack
 pip install -r requirements.txt
 ```
 
+**Automatic Blender Installation (Recommended):**
+```bash
+python install.py
+```
+
+This will automatically download and install a portable version of Blender for UV unwrapping and remeshing nodes. No admin rights required!
+
 Restart ComfyUI. Nodes appear in the `geompack/` category.
 
 **Optional Dependencies:**
-- **Blender**: Install for UV unwrapping and remeshing nodes
+- **Blender**: Auto-installed via `install.py`, or install manually from [blender.org](https://www.blender.org/download/)
 - **CGAL**: Build tools for CGAL remeshing (see `cgal_tools/README.md`)
 
 ## Quick Start

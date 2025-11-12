@@ -62,10 +62,14 @@ def test_output_dir(request):
 
 @pytest.fixture
 def meshes_output_dir(test_output_dir):
-    """Return path to test-specific meshes directory."""
-    mesh_dir = test_output_dir / "meshes"
-    mesh_dir.mkdir(exist_ok=True)
-    return mesh_dir
+    """Return path to test-specific meshes directory.
+
+    For I/O tests, this returns the mocked ComfyUI output directory
+    where SaveMesh actually saves files.
+    """
+    # Return the mocked output directory that SaveMesh uses
+    # This is where files are actually saved via folder_paths.get_output_directory()
+    return Path(sys.modules["folder_paths"].get_output_directory())
 
 
 @pytest.fixture

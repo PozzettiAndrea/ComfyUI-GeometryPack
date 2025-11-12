@@ -44,28 +44,28 @@ class FixNormalsNode:
         fixed_mesh = trimesh.copy()
 
         # Check initial winding consistency
-        was_consistent = fixed_trimesh.is_winding_consistent
+        was_consistent = fixed_mesh.is_winding_consistent
 
         # Fix normals - this reorients faces for consistent winding
-        fixed_trimesh.fix_normals()
+        fixed_mesh.fix_normals()
 
         # Check if it's now consistent
-        is_consistent = fixed_trimesh.is_winding_consistent
+        is_consistent = fixed_mesh.is_winding_consistent
 
         info = f"""Normal Orientation Fix:
 
 Before: {'Consistent' if was_consistent else 'Inconsistent'}
 After:  {'Consistent' if is_consistent else 'Inconsistent'}
 
-Vertices: {len(fixed_trimesh.vertices):,}
-Faces: {len(fixed_trimesh.faces):,}
+Vertices: {len(fixed_mesh.vertices):,}
+Faces: {len(fixed_mesh.faces):,}
 
 {'✓ Normals are now consistently oriented!' if is_consistent else '⚠ Some inconsistencies may remain (check mesh topology)'}
 """
 
         print(f"[FixNormals] {'✓' if is_consistent else '⚠'} Normal orientation: {was_consistent} -> {is_consistent}")
 
-        return (fixed_trimesh, info)
+        return (fixed_mesh, info)
 
 
 class CheckNormalsNode:
@@ -203,12 +203,12 @@ class FillHolesNode:
         filled_mesh = trimesh.copy()
 
         # Fill holes
-        filled_trimesh.fill_holes()
+        filled_mesh.fill_holes()
 
         # Check result
-        is_watertight = filled_trimesh.is_watertight
-        final_vertices = len(filled_trimesh.vertices)
-        final_faces = len(filled_trimesh.faces)
+        is_watertight = filled_mesh.is_watertight
+        final_vertices = len(filled_mesh.vertices)
+        final_faces = len(filled_mesh.faces)
 
         added_vertices = final_vertices - initial_vertices
         added_faces = final_faces - initial_faces
@@ -232,7 +232,7 @@ After Filling:
 
         print(f"[FillHoles] Added {added_faces} faces, Watertight: {was_watertight} -> {is_watertight}")
 
-        return (filled_trimesh, info)
+        return (filled_mesh, info)
 
 
 class ComputeNormalsNode:
@@ -277,14 +277,14 @@ class ComputeNormalsNode:
 
         # Face normals are always recomputed automatically by trimesh
         # But we can force a cache clear and recomputation
-        result_trimesh._cache.clear()
+        result_mesh._cache.clear()
 
         if smooth_vertex_normals == "false":
             # Use face normals directly (faceted appearance)
             # This creates sharp edges by not averaging normals across faces
-            vertex_normals = np.zeros_like(result_trimesh.vertices)
-            for i, face in enumerate(result_trimesh.faces):
-                face_normal = result_trimesh.face_normals[i]
+            vertex_normals = np.zeros_like(result_mesh.vertices)
+            for i, face in enumerate(result_mesh.faces):
+                face_normal = result_mesh.face_normals[i]
                 vertex_normals[face] += face_normal
             # Normalize
             norms = np.linalg.norm(vertex_normals, axis=1, keepdims=True)
@@ -293,16 +293,16 @@ class ComputeNormalsNode:
 
             # Store in mesh (note: trimesh will override this with smoothed normals)
             # So we need to mark it in metadata
-            result_trimesh.metadata['normals_smoothed'] = False
+            result_mesh.metadata['normals_smoothed'] = False
             print(f"[ComputeNormals] Computed faceted (non-smooth) normals")
         else:
             # Trimesh automatically computes smooth vertex normals
             # Just access them to ensure they're computed
-            _ = result_trimesh.vertex_normals
-            result_trimesh.metadata['normals_smoothed'] = True
+            _ = result_mesh.vertex_normals
+            result_mesh.metadata['normals_smoothed'] = True
             print(f"[ComputeNormals] Computed smooth vertex normals")
 
-        return (result_trimesh,)
+        return (result_mesh,)
 
 
 class VisualizNormalFieldNode:
@@ -343,16 +343,16 @@ class VisualizNormalFieldNode:
         result_mesh = trimesh.copy()
 
         # Get vertex normals
-        normals = result_trimesh.vertex_normals
+        normals = result_mesh.vertex_normals
 
         # Add each component as a scalar field
-        result_trimesh.vertex_attributes['normal_x'] = normals[:, 0].astype(np.float32)
-        result_trimesh.vertex_attributes['normal_y'] = normals[:, 1].astype(np.float32)
-        result_trimesh.vertex_attributes['normal_z'] = normals[:, 2].astype(np.float32)
+        result_mesh.vertex_attributes['normal_x'] = normals[:, 0].astype(np.float32)
+        result_mesh.vertex_attributes['normal_y'] = normals[:, 1].astype(np.float32)
+        result_mesh.vertex_attributes['normal_z'] = normals[:, 2].astype(np.float32)
 
         # Also add normal magnitude (should be ~1.0 for unit normals)
         normal_magnitude = np.linalg.norm(normals, axis=1).astype(np.float32)
-        result_trimesh.vertex_attributes['normal_magnitude'] = normal_magnitude
+        result_mesh.vertex_attributes['normal_magnitude'] = normal_magnitude
 
         info = f"""Normal Field Visualization:
 
@@ -372,7 +372,7 @@ Expected Values:
 
         print(f"[VisualizeNormals] Added 4 scalar fields to mesh")
 
-        return (result_trimesh, info)
+        return (result_mesh, info)
 
 
 # Node mappings

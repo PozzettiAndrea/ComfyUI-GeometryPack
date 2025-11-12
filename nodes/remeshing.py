@@ -8,6 +8,7 @@ import os
 import subprocess
 import tempfile
 import shutil
+from pathlib import Path
 
 from . import mesh_utils
 
@@ -16,13 +17,40 @@ def _find_blender():
     """
     Find Blender executable on the system.
 
+    Checks in order:
+    1. Local installation in _blender/ (downloaded by install.py)
+    2. System installation (PATH or common locations)
+
     Returns:
         str: Path to Blender executable
 
     Raises:
         RuntimeError: If Blender not found
     """
-    # Try common locations
+    # Get the directory containing this file
+    current_dir = Path(__file__).parent.parent  # Go up from nodes/ to package root
+    local_blender_dir = current_dir / "_blender"
+
+    # First, check for local Blender installation
+    if local_blender_dir.exists():
+        # Search for blender executable in _blender/
+        blender_executables = []
+
+        # Windows
+        blender_executables.extend(list(local_blender_dir.rglob("blender.exe")))
+
+        # Linux/macOS
+        blender_executables.extend([
+            p for p in local_blender_dir.rglob("blender")
+            if p.is_file() and os.access(p, os.X_OK)
+        ])
+
+        if blender_executables:
+            blender_path = str(blender_executables[0])
+            print(f"[Blender] Using local Blender: {blender_path}")
+            return blender_path
+
+    # Fall back to system installation
     common_paths = [
         'blender',  # In PATH
         '/Applications/Blender.app/Contents/MacOS/Blender',  # macOS
@@ -33,12 +61,12 @@ def _find_blender():
 
     for path in common_paths:
         if shutil.which(path) or os.path.exists(path):
-            print(f"[Blender] Found Blender at: {path}")
+            print(f"[Blender] Found system Blender: {path}")
             return path
 
     raise RuntimeError(
-        "Blender not found. Please install Blender and ensure it's in your PATH.\n"
-        "Download from: https://www.blender.org/download/"
+        "Blender not found. Please run 'python install.py' to download Blender automatically,\n"
+        "or install it manually from: https://www.blender.org/download/"
     )
 
 
@@ -499,8 +527,8 @@ class MeshDecimationNode:
         initial_faces = len(trimesh.faces)
 
         if method == "trimesh":
-            # Use trimesh's built-in decimation
-            decimated = trimesh.simplify_quadric_decimation(target_face_count)
+            # Use trimesh's built-in decimation (wrapper around fast_simplification)
+            decimated = trimesh.simplify_quadric_decimation(face_count=target_face_count)
 
         elif method == "pymeshlab":
             # Use PyMeshLab's decimation

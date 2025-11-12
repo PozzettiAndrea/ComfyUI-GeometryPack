@@ -8,11 +8,16 @@ import os
 import subprocess
 import tempfile
 import shutil
+from pathlib import Path
 
 
 def _find_blender():
     """
     Find Blender executable on the system.
+
+    Checks in order:
+    1. Local installation in _blender/ (downloaded by install.py)
+    2. System installation (PATH or common locations)
 
     Returns:
         str: Path to Blender executable
@@ -20,7 +25,30 @@ def _find_blender():
     Raises:
         RuntimeError: If Blender not found
     """
-    # Try common locations
+    # Get the directory containing this file
+    current_dir = Path(__file__).parent.parent  # Go up from nodes/ to package root
+    local_blender_dir = current_dir / "_blender"
+
+    # First, check for local Blender installation
+    if local_blender_dir.exists():
+        # Search for blender executable in _blender/
+        blender_executables = []
+
+        # Windows
+        blender_executables.extend(list(local_blender_dir.rglob("blender.exe")))
+
+        # Linux/macOS
+        blender_executables.extend([
+            p for p in local_blender_dir.rglob("blender")
+            if p.is_file() and os.access(p, os.X_OK)
+        ])
+
+        if blender_executables:
+            blender_path = str(blender_executables[0])
+            print(f"[Blender] Using local Blender: {blender_path}")
+            return blender_path
+
+    # Fall back to system installation
     common_paths = [
         'blender',  # In PATH
         '/Applications/Blender.app/Contents/MacOS/Blender',  # macOS
@@ -31,12 +59,12 @@ def _find_blender():
 
     for path in common_paths:
         if shutil.which(path) or os.path.exists(path):
-            print(f"[Blender] Found Blender at: {path}")
+            print(f"[Blender] Found system Blender: {path}")
             return path
 
     raise RuntimeError(
-        "Blender not found. Please install Blender and ensure it's in your PATH.\n"
-        "Download from: https://www.blender.org/download/"
+        "Blender not found. Please run 'python install.py' to download Blender automatically,\n"
+        "or install it manually from: https://www.blender.org/download/"
     )
 
 
@@ -99,7 +127,7 @@ class XAtlasUVUnwrapNode:
         )
 
         # Store UV coordinates in visual
-        from trimesh_module.visual import TextureVisuals
+        from trimesh.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uvs)
 
         # Preserve metadata
@@ -162,12 +190,15 @@ class LibiglLSCMNode:
         uv_fixed = np.array([[0.0, 0.0], [1.0, 0.0]], dtype=np.float64)
 
         # Compute LSCM parameterization
-        uv = igl.lscm(
-            mesh.vertices.astype(np.float64),
-            mesh.faces.astype(np.int32),
+        # Convert TrackedArray to pure numpy array for igl compatibility
+        uv_result = igl.lscm(
+            np.asarray(mesh.vertices, dtype=np.float64),
+            np.asarray(mesh.faces, dtype=np.int32),
             v_fixed,
             uv_fixed
         )
+        # igl.lscm returns a tuple (uv_coords, sparse_matrix)
+        uv = uv_result[0] if isinstance(uv_result, tuple) else uv_result
 
         # Normalize UVs to [0, 1] range
         uv_min = uv.min(axis=0)
@@ -183,7 +214,7 @@ class LibiglLSCMNode:
         unwrapped = mesh.copy()
 
         # Store UV coordinates in visual
-        from trimesh_module.visual import TextureVisuals
+        from trimesh.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uv_normalized)
 
         # Add metadata
@@ -684,7 +715,7 @@ bpy.ops.wm.obj_export(
                 unwrapped = unwrapped.dump(concatenate=True)
 
             # Preserve metadata
-            unwrapped.metadata = trimesh.metadata.copy()
+            unwrapped.metadata = mesh.metadata.copy()
             unwrapped.metadata['uv_unwrap'] = {
                 'algorithm': 'blender_sphere_projection',
             }
@@ -742,7 +773,8 @@ class LibiglHarmonicNode:
 
         # Harmonic requires fixing boundary vertices
         # Find boundary loop
-        boundary_loop = igl.boundary_loop(mesh.faces.astype(np.int32))
+        # Convert TrackedArray to pure numpy array for igl compatibility
+        boundary_loop = igl.boundary_loop(np.asarray(mesh.faces, dtype=np.int32))
 
         if len(boundary_loop) == 0:
             raise ValueError("Mesh has no boundary - harmonic parameterization requires an open mesh")
@@ -768,7 +800,7 @@ class LibiglHarmonicNode:
         unwrapped = mesh.copy()
 
         # Store UV coordinates in visual
-        from trimesh_module.visual import TextureVisuals
+        from trimesh.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uv)
 
         # Add metadata
@@ -832,7 +864,8 @@ class LibiglARAPNode:
         print(f"[LibiglARAP] Iterations: {iterations}")
 
         # Start with harmonic initialization
-        boundary_loop = igl.boundary_loop(trimesh.faces.astype(np.int32))
+        # Convert TrackedArray to pure numpy array for igl compatibility
+        boundary_loop = igl.boundary_loop(np.asarray(trimesh.faces, dtype=np.int32))
 
         if len(boundary_loop) == 0:
             raise ValueError("Mesh has no boundary - ARAP parameterization requires an open mesh")
@@ -900,7 +933,7 @@ class LibiglARAPNode:
         unwrapped = trimesh.copy()
 
         # Store UV coordinates in visual
-        from trimesh_module.visual import TextureVisuals
+        from trimesh.visual import TextureVisuals
         unwrapped.visual = TextureVisuals(uv=uv)
 
         # Add metadata

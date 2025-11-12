@@ -359,11 +359,27 @@ def pymeshlab_isotropic_remesh(
         bbox_diag = np.linalg.norm(mesh.bounds[1] - mesh.bounds[0])
         target_pct = (target_edge_length / bbox_diag) * 100.0
 
-        ms.meshing_isotropic_explicit_remeshing(
-            targetlen=pymeshlab.PercentageValue(target_pct),
-            iterations=iterations,
-            adaptive=False
-        )
+        # Try new API name (v2022.2+), fall back to old name for backward compatibility
+        try:
+            ms.meshing_isotropic_explicit_remeshing(
+                targetlen=pymeshlab.PercentageValue(target_pct),
+                iterations=iterations,
+                adaptive=False
+            )
+        except AttributeError:
+            # Older PyMeshLab versions use 'remeshing_' prefix
+            try:
+                ms.remeshing_isotropic_explicit_remeshing(
+                    targetlen=pymeshlab.PercentageValue(target_pct),
+                    iterations=iterations,
+                    adaptive=False
+                )
+            except AttributeError as e:
+                return None, (
+                    "PyMeshLab meshing filter not available. "
+                    "This usually means the libfilter_meshing.so plugin failed to load. "
+                    "On Linux, install OpenGL libraries: sudo apt-get install libgl1-mesa-glx libglu1-mesa"
+                )
 
         # Convert back to trimesh
         print(f"[pymeshlab_isotropic_remesh] Converting back to trimesh...")
