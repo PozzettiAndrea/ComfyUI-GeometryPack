@@ -324,6 +324,14 @@
 
         console.log('[GeomPack VTK Filters] Initializing...');
 
+        // Helper function to convert RGB values (0-1 range) to RGB string
+        function createRGBStringFromRGBValues(r, g, b) {
+            const r255 = Math.round(r * 255);
+            const g255 = Math.round(g * 255);
+            const b255 = Math.round(b * 255);
+            return `rgb(${r255}, ${g255}, ${b255})`;
+        }
+
         const loading = document.getElementById('loading');
         const container = document.getElementById('container');
 
