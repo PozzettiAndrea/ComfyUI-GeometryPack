@@ -11,7 +11,7 @@ from nodes.visualization import (
 
 
 @pytest.mark.unit
-def test_preview_mesh_threejs(sphere_mesh, test_output_dir):
+def test_preview_mesh_threejs(sphere_mesh, meshes_output_dir):
     """Test Three.js mesh preview (GLB export)."""
     node = PreviewMeshNode()
     result = node.preview_mesh(trimesh=sphere_mesh)
@@ -21,13 +21,13 @@ def test_preview_mesh_threejs(sphere_mesh, test_output_dir):
     assert "ui" in result
     assert "mesh_file" in result["ui"]
 
-    # Verify GLB file was created
-    glb_files = list(test_output_dir.rglob("*.glb"))
+    # Verify GLB file was created in the ComfyUI output folder
+    glb_files = list(meshes_output_dir.rglob("*.glb"))
     assert len(glb_files) > 0
 
 
 @pytest.mark.unit
-def test_preview_mesh_vtk(sphere_mesh, test_output_dir):
+def test_preview_mesh_vtk(sphere_mesh, meshes_output_dir):
     """Test VTK.js mesh preview (STL export)."""
     node = PreviewMeshVTKNode()
     result = node.preview_mesh_vtk(trimesh=sphere_mesh)
@@ -35,8 +35,8 @@ def test_preview_mesh_vtk(sphere_mesh, test_output_dir):
     assert result is not None
     assert "ui" in result
 
-    # Verify STL file was created
-    stl_files = list(test_output_dir.rglob("*.stl"))
+    # Verify STL file was created in the ComfyUI output folder
+    stl_files = list(meshes_output_dir.rglob("*.stl"))
     assert len(stl_files) > 0
 
 
@@ -51,7 +51,7 @@ def test_preview_mesh_vtk_filters(sphere_mesh, test_output_dir):
 
 
 @pytest.mark.unit
-def test_preview_mesh_vtk_fields(sphere_mesh, test_output_dir):
+def test_preview_mesh_vtk_fields(sphere_mesh, meshes_output_dir):
     """Test VTK.js preview with scalar fields."""
     # Add a simple scalar field
     if not hasattr(sphere_mesh, 'vertex_attributes'):
@@ -64,6 +64,6 @@ def test_preview_mesh_vtk_fields(sphere_mesh, test_output_dir):
     assert result is not None
     assert "ui" in result
 
-    # Verify VTP file was created (supports fields)
-    vtp_files = list(test_output_dir.rglob("*.vtp"))
+    # Verify VTP file was created (supports fields) in the ComfyUI output folder
+    vtp_files = list(meshes_output_dir.rglob("*.vtp"))
     assert len(vtp_files) > 0

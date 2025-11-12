@@ -24,11 +24,17 @@ def test_pymeshlab_remesh(sphere_mesh, save_mesh_helper, render_helper):
     render_helper(sphere_mesh, "00_original")
 
     node = PyMeshLabRemeshNode()
-    remeshed = node.remesh(
-        trimesh=sphere_mesh,
-        target_edge_length=0.1,
-        iterations=10
-    )[0]
+
+    try:
+        remeshed = node.remesh(
+            trimesh=sphere_mesh,
+            target_edge_length=0.1,
+            iterations=10
+        )[0]
+    except ValueError as e:
+        if "PyMeshLab meshing filter not available" in str(e):
+            pytest.skip("PyMeshLab meshing filter not available (missing OpenGL libraries)")
+        raise
 
     assert remeshed is not None
     assert remeshed.faces.shape[0] > 0
