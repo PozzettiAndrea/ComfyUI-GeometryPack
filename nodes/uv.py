@@ -80,16 +80,16 @@ class XAtlasUVUnwrapNode:
                 "This is required for fast UV unwrapping without Blender."
             )
 
-        print(f"[XAtlasUVUnwrap] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
+        print(f"[XAtlasUVUnwrap] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
 
         # Parametrize with xatlas
         vmapping, indices, uvs = xatlas.parametrize(
-            trimesh.vertices,
-            trimesh.faces
+            mesh.vertices,
+            mesh.faces
         )
 
         # Create new mesh with UV-split vertices
-        new_vertices = trimesh.vertices[vmapping]
+        new_vertices = mesh.vertices[vmapping]
 
         # Create trimesh with UV coordinates
         unwrapped = trimesh_module.Trimesh(
@@ -103,16 +103,16 @@ class XAtlasUVUnwrapNode:
         unwrapped.visual = TextureVisuals(uv=uvs)
 
         # Preserve metadata
-        unwrapped.metadata = trimesh.metadata.copy()
+        unwrapped.metadata = mesh.metadata.copy()
         unwrapped.metadata['uv_unwrap'] = {
             'algorithm': 'xatlas',
-            'original_vertices': len(trimesh.vertices),
+            'original_vertices': len(mesh.vertices),
             'unwrapped_vertices': len(new_vertices),
-            'vertex_duplication_ratio': len(new_vertices) / len(trimesh.vertices)
+            'vertex_duplication_ratio': len(new_vertices) / len(mesh.vertices)
         }
 
         print(f"[XAtlasUVUnwrap] Output: {len(unwrapped.vertices)} vertices, {len(unwrapped.faces)} faces")
-        print(f"[XAtlasUVUnwrap] Vertex duplication: {len(new_vertices)/len(trimesh.vertices):.2f}x")
+        print(f"[XAtlasUVUnwrap] Vertex duplication: {len(new_vertices)/len(mesh.vertices):.2f}x")
 
         return (unwrapped,)
 
@@ -154,17 +154,17 @@ class LibiglLSCMNode:
         except ImportError:
             raise ImportError("libigl not installed (should be in requirements.txt)")
 
-        print(f"[LibiglLSCM] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
+        print(f"[LibiglLSCM] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
 
         # LSCM requires fixing 2 vertices for unique solution
         # Choose first and last vertex
-        v_fixed = np.array([0, len(trimesh.vertices)-1], dtype=np.int32)
+        v_fixed = np.array([0, len(mesh.vertices)-1], dtype=np.int32)
         uv_fixed = np.array([[0.0, 0.0], [1.0, 0.0]], dtype=np.float64)
 
         # Compute LSCM parameterization
         uv = igl.lscm(
-            trimesh.vertices.astype(np.float64),
-            trimesh.faces.astype(np.int32),
+            mesh.vertices.astype(np.float64),
+            mesh.faces.astype(np.int32),
             v_fixed,
             uv_fixed
         )
@@ -180,7 +180,7 @@ class LibiglLSCMNode:
         uv_normalized = (uv - uv_min) / uv_range
 
         # Create unwrapped mesh (copy original)
-        unwrapped = trimesh.copy()
+        unwrapped = mesh.copy()
 
         # Store UV coordinates in visual
         from trimesh_module.visual import TextureVisuals
@@ -617,7 +617,7 @@ class BlenderSphereProjectionNode:
         Returns:
             tuple: (unwrapped_trimesh_module.Trimesh,)
         """
-        print(f"[BlenderSphereProjection] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
+        print(f"[BlenderSphereProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
 
         # Find Blender
         blender_path = _find_blender()
@@ -625,7 +625,7 @@ class BlenderSphereProjectionNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            trimesh.export(input_path)
+            mesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -738,11 +738,11 @@ class LibiglHarmonicNode:
         except ImportError:
             raise ImportError("libigl not installed (should be in requirements.txt)")
 
-        print(f"[LibiglHarmonic] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
+        print(f"[LibiglHarmonic] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
 
         # Harmonic requires fixing boundary vertices
         # Find boundary loop
-        boundary_loop = igl.boundary_loop(trimesh.faces.astype(np.int32))
+        boundary_loop = igl.boundary_loop(mesh.faces.astype(np.int32))
 
         if len(boundary_loop) == 0:
             raise ValueError("Mesh has no boundary - harmonic parameterization requires an open mesh")
@@ -757,15 +757,15 @@ class LibiglHarmonicNode:
 
         # Compute harmonic parameterization
         uv = igl.harmonic(
-            trimesh.vertices.astype(np.float64),
-            trimesh.faces.astype(np.int32),
+            mesh.vertices.astype(np.float64),
+            mesh.faces.astype(np.int32),
             boundary_loop.astype(np.int32),
             bnd_uv.astype(np.float64),
             1  # Laplacian type
         )
 
         # Create unwrapped mesh (copy original)
-        unwrapped = trimesh.copy()
+        unwrapped = mesh.copy()
 
         # Store UV coordinates in visual
         from trimesh_module.visual import TextureVisuals

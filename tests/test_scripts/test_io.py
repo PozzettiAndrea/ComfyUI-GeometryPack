@@ -26,7 +26,7 @@ def test_load_mesh_stl(bunny_mesh, render_helper, save_mesh_helper):
 def test_save_mesh_obj(cube_mesh, meshes_output_dir):
     """Test saving mesh to OBJ format."""
     node = SaveMesh()
-    status = node.save_mesh(mesh=cube_mesh, file_path="test_cube.obj")[0]
+    status = node.save_mesh(trimesh=cube_mesh, file_path="test_cube.obj")[0]
 
     assert "successfully" in status.lower()
     assert (meshes_output_dir / "test_cube.obj").exists()
@@ -36,7 +36,7 @@ def test_save_mesh_obj(cube_mesh, meshes_output_dir):
 def test_save_mesh_ply(sphere_mesh, meshes_output_dir):
     """Test saving mesh to PLY format."""
     node = SaveMesh()
-    status = node.save_mesh(mesh=sphere_mesh, file_path="test_sphere.ply")[0]
+    status = node.save_mesh(trimesh=sphere_mesh, file_path="test_sphere.ply")[0]
 
     assert "successfully" in status.lower()
     assert (meshes_output_dir / "test_sphere.ply").exists()
@@ -51,7 +51,7 @@ def test_save_load_cycle(cube_mesh, meshes_output_dir, format):
 
     filename = f"cycle_test.{format}"
     # Save to output directory
-    save_node.save_mesh(mesh=cube_mesh, file_path=filename)
+    save_node.save_mesh(trimesh=cube_mesh, file_path=filename)
 
     # Load from output directory (files are saved there)
     from pathlib import Path

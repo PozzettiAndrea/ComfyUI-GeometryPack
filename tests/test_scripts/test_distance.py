@@ -10,9 +10,9 @@ def test_hausdorff_distance_identical(sphere_mesh):
     pytest.importorskip("point_cloud_utils")
 
     node = HausdorffDistanceNode()
-    distance, details = node.compute_hausdorff(
-        mesh_a=sphere_mesh,
-        mesh_b=sphere_mesh,
+    distance, details = node.compute_distance(
+        trimesh_a=sphere_mesh,
+        trimesh_b=sphere_mesh,
         sample_count=1000
     )
 
@@ -26,9 +26,9 @@ def test_hausdorff_distance_different(cube_mesh, sphere_mesh):
     pytest.importorskip("point_cloud_utils")
 
     node = HausdorffDistanceNode()
-    distance, details = node.compute_hausdorff(
-        mesh_a=cube_mesh,
-        mesh_b=sphere_mesh,
+    distance, details = node.compute_distance(
+        trimesh_a=cube_mesh,
+        trimesh_b=sphere_mesh,
         sample_count=1000
     )
 
@@ -42,9 +42,9 @@ def test_chamfer_distance_identical(sphere_mesh):
     pytest.importorskip("point_cloud_utils")
 
     node = ChamferDistanceNode()
-    distance, info = node.compute_chamfer(
-        mesh_a=sphere_mesh,
-        mesh_b=sphere_mesh,
+    distance, info = node.compute_distance(
+        trimesh_a=sphere_mesh,
+        trimesh_b=sphere_mesh,
         sample_count=1000
     )
 
@@ -58,9 +58,9 @@ def test_chamfer_distance_different(cube_mesh, sphere_mesh):
     pytest.importorskip("point_cloud_utils")
 
     node = ChamferDistanceNode()
-    distance, info = node.compute_chamfer(
-        mesh_a=cube_mesh,
-        mesh_b=sphere_mesh,
+    distance, info = node.compute_distance(
+        trimesh_a=cube_mesh,
+        trimesh_b=sphere_mesh,
         sample_count=1000
     )
 
@@ -76,7 +76,7 @@ def test_compute_sdf(sphere_mesh, resolution):
 
     node = ComputeSDFNode()
     sdf_volume, info = node.compute_sdf(
-        mesh=sphere_mesh,
+        trimesh=sphere_mesh,
         resolution=resolution
     )
 

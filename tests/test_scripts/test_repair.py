@@ -19,7 +19,7 @@ def test_fix_normals(cube_mesh, save_mesh_helper, render_helper):
     render_helper(cube_mesh, "00_original")
 
     node = FixNormalsNode()
-    fixed_mesh, info = node.fix_normals(mesh=cube_mesh)
+    fixed_mesh, info = node.fix_normals(trimesh=cube_mesh)
 
     assert fixed_mesh is not None
     assert "normal" in info.lower()
@@ -33,7 +33,7 @@ def test_fix_normals(cube_mesh, save_mesh_helper, render_helper):
 def test_check_normals(sphere_mesh):
     """Test checking normal consistency."""
     node = CheckNormalsNode()
-    report = node.check_normals(mesh=sphere_mesh)[0]
+    report = node.check_normals(trimesh=sphere_mesh)[0]
 
     assert report is not None
     assert "normal" in report.lower()
@@ -47,7 +47,7 @@ def test_fill_holes(open_mesh, save_mesh_helper, render_helper):
     render_helper(open_mesh, "00_original_open")
 
     node = FillHolesNode()
-    filled_mesh, info = node.fill_holes(mesh=open_mesh)
+    filled_mesh, info = node.fill_holes(trimesh=open_mesh)
 
     assert filled_mesh is not None
     assert "hole" in info.lower()
@@ -66,7 +66,7 @@ def test_compute_normals_faceted(cube_mesh, save_mesh_helper, render_helper):
 
     node = ComputeNormalsNode()
     mesh_with_normals = node.compute_normals(
-        mesh=cube_mesh,
+        trimesh=cube_mesh,
         smooth_vertex_normals="false"
     )[0]
 
@@ -87,7 +87,7 @@ def test_compute_normals_smooth(sphere_mesh, save_mesh_helper, render_helper):
 
     node = ComputeNormalsNode()
     mesh_with_normals = node.compute_normals(
-        mesh=sphere_mesh,
+        trimesh=sphere_mesh,
         smooth_vertex_normals="true"
     )[0]
 
@@ -106,7 +106,7 @@ def test_visualize_normal_field(sphere_mesh, save_mesh_helper, render_helper):
     render_helper(sphere_mesh, "00_original")
 
     node = VisualizNormalFieldNode()
-    mesh_with_fields, info = node.visualize_normals(mesh=sphere_mesh)
+    mesh_with_fields, info = node.visualize_normals(trimesh=sphere_mesh)
 
     assert mesh_with_fields is not None
     assert "normal" in info.lower()

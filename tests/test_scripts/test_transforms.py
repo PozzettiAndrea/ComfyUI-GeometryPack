@@ -12,7 +12,7 @@ def test_center_mesh(cube_mesh, save_mesh_helper, render_helper):
     cube_mesh.vertices += [5.0, 3.0, -2.0]
 
     node = CenterMeshNode()
-    centered = node.center_mesh(mesh=cube_mesh)[0]
+    centered = node.center_mesh(trimesh=cube_mesh)[0]
 
     # Check that centroid is at origin
     centroid = centered.vertices.mean(axis=0)
@@ -28,7 +28,7 @@ def test_center_mesh_preserves_shape(sphere_mesh):
     original_bounds_extent = sphere_mesh.bounds[1] - sphere_mesh.bounds[0]
 
     node = CenterMeshNode()
-    centered = node.center_mesh(mesh=sphere_mesh)[0]
+    centered = node.center_mesh(trimesh=sphere_mesh)[0]
 
     centered_extent = centered.bounds[1] - centered.bounds[0]
     assert np.allclose(original_bounds_extent, centered_extent, atol=1e-6)

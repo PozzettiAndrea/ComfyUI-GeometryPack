@@ -14,7 +14,7 @@ from nodes.visualization import (
 def test_preview_mesh_threejs(sphere_mesh, test_output_dir):
     """Test Three.js mesh preview (GLB export)."""
     node = PreviewMeshNode()
-    result = node.preview_mesh(mesh=sphere_mesh)
+    result = node.preview_mesh(trimesh=sphere_mesh)
 
     # Check that result contains UI data
     assert result is not None
@@ -30,7 +30,7 @@ def test_preview_mesh_threejs(sphere_mesh, test_output_dir):
 def test_preview_mesh_vtk(sphere_mesh, test_output_dir):
     """Test VTK.js mesh preview (STL export)."""
     node = PreviewMeshVTKNode()
-    result = node.preview_mesh_vtk(mesh=sphere_mesh)
+    result = node.preview_mesh_vtk(trimesh=sphere_mesh)
 
     assert result is not None
     assert "ui" in result
@@ -44,7 +44,7 @@ def test_preview_mesh_vtk(sphere_mesh, test_output_dir):
 def test_preview_mesh_vtk_filters(sphere_mesh, test_output_dir):
     """Test VTK.js preview with filters."""
     node = PreviewMeshVTKFiltersNode()
-    result = node.preview_mesh_vtk_filters(mesh=sphere_mesh)
+    result = node.preview_mesh_vtk_filters(trimesh=sphere_mesh)
 
     assert result is not None
     assert "ui" in result
@@ -59,7 +59,7 @@ def test_preview_mesh_vtk_fields(sphere_mesh, test_output_dir):
     sphere_mesh.vertex_attributes['test_field'] = sphere_mesh.vertices[:, 2]
 
     node = PreviewMeshVTKFieldsNode()
-    result = node.preview_mesh_vtk_fields(mesh=sphere_mesh)
+    result = node.preview_mesh_vtk_fields(trimesh=sphere_mesh)
 
     assert result is not None
     assert "ui" in result

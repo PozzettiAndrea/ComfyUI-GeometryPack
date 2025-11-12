@@ -19,7 +19,7 @@ def test_pipeline_create_analyze_save(save_mesh_helper, render_helper):
 
     # Analyze
     info_node = MeshInfoNode()
-    info = info_node.get_mesh_info(mesh=mesh)[0]
+    info = info_node.get_mesh_info(trimesh=mesh)[0]
     assert "vertices" in info.lower()
 
     # Save
@@ -36,13 +36,13 @@ def test_pipeline_load_remesh_save(bunny_mesh, save_mesh_helper, render_helper):
     # Decimate
     decimate_node = MeshDecimationNode()
     decimated, info = decimate_node.decimate(
-        mesh=bunny_mesh,
+        trimesh=bunny_mesh,
         target_face_count=500
     )
 
     # Center
     center_node = CenterMeshNode()
-    centered = center_node.center_mesh(mesh=decimated)[0]
+    centered = center_node.center_mesh(trimesh=decimated)[0]
 
     # Save
     save_mesh_helper(centered, "pipeline_load_remesh_save", "obj")
@@ -57,7 +57,7 @@ def test_pipeline_create_subdivide_smooth(cube_mesh, save_mesh_helper, render_he
     # Subdivide
     subdivide_node = MeshSubdivisionNode()
     subdivided, _ = subdivide_node.subdivide(
-        mesh=cube_mesh,
+        trimesh=cube_mesh,
         iterations=2,
         method="loop"
     )
@@ -65,7 +65,7 @@ def test_pipeline_create_subdivide_smooth(cube_mesh, save_mesh_helper, render_he
     # Smooth
     smooth_node = LaplacianSmoothingNode()
     smoothed = smooth_node.smooth(
-        mesh=subdivided,
+        trimesh=subdivided,
         iterations=10,
         lambda_factor=0.5
     )[0]
@@ -79,11 +79,11 @@ def test_pipeline_repair_analyze(sphere_mesh, save_mesh_helper):
     """Test: Repair → Analyze pipeline."""
     # Fix normals
     fix_node = FixNormalsNode()
-    fixed, _ = fix_node.fix_normals(mesh=sphere_mesh)
+    fixed, _ = fix_node.fix_normals(trimesh=sphere_mesh)
 
     # Analyze
     info_node = MeshInfoNode()
-    info = info_node.get_mesh_info(mesh=fixed)[0]
+    info = info_node.get_mesh_info(trimesh=fixed)[0]
     assert "vertices" in info.lower()
 
     save_mesh_helper(fixed, "pipeline_repair_analyze", "obj")
@@ -95,7 +95,7 @@ def test_pipeline_mesh_to_pointcloud(sphere_mesh):
     # Convert to point cloud
     pc_node = MeshToPointCloudNode()
     pc = pc_node.mesh_to_pointcloud(
-        mesh=sphere_mesh,
+        trimesh=sphere_mesh,
         sample_count=1000,
         sampling_method="uniform",
         include_normals="true"
@@ -111,12 +111,12 @@ def test_pipeline_boundary_detection_visualization(cube_mesh, save_mesh_helper):
     from nodes.analysis import MarkBoundaryEdgesNode
     # Mark boundaries
     boundary_node = MarkBoundaryEdgesNode()
-    mesh_with_field, info = boundary_node.mark_boundary(mesh=cube_mesh)
+    mesh_with_field, info = boundary_node.mark_boundary(trimesh=cube_mesh)
 
     # Compute normals
     normals_node = ComputeNormalsNode()
     with_normals = normals_node.compute_normals(
-        mesh=mesh_with_field,
+        trimesh=mesh_with_field,
         smooth_vertex_normals="true"
     )[0]
 
@@ -128,12 +128,12 @@ def test_pipeline_full_processing(cube_mesh, save_mesh_helper, render_helper):
     """Test: Full processing pipeline."""
     # Center
     center_node = CenterMeshNode()
-    centered = center_node.center_mesh(mesh=cube_mesh)[0]
+    centered = center_node.center_mesh(trimesh=cube_mesh)[0]
 
     # Subdivide
     subdivide_node = MeshSubdivisionNode()
     subdivided, _ = subdivide_node.subdivide(
-        mesh=centered,
+        trimesh=centered,
         iterations=2,
         method="loop"
     )
@@ -141,13 +141,13 @@ def test_pipeline_full_processing(cube_mesh, save_mesh_helper, render_helper):
     # Compute normals
     normals_node = ComputeNormalsNode()
     final = normals_node.compute_normals(
-        mesh=subdivided,
+        trimesh=subdivided,
         smooth_vertex_normals="true"
     )[0]
 
     # Analyze
     info_node = MeshInfoNode()
-    info = info_node.get_mesh_info(mesh=final)[0]
+    info = info_node.get_mesh_info(trimesh=final)[0]
     assert "vertices" in info.lower()
 
     save_mesh_helper(final, "pipeline_full_processing", "obj")
