@@ -35,6 +35,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "optional: Tests requiring optional dependencies")
     config.addinivalue_line("markers", "blender: Tests requiring Blender")
     config.addinivalue_line("markers", "slow: Slow tests (heavy processing)")
+    config.addinivalue_line("markers", "browser: Browser automation tests (require Selenium + browser + ComfyUI running)")
 
 
 @pytest.fixture(scope="session", autouse=True)
