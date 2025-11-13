@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GeomPack VTK.js Viewer (Hidable Menu)</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #2a2a2a;
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #viewerContainer {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+        #container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        /* Toggle button for menu */
+        #menuToggle {
+            background: #1a1a1a;
+            border-top: 1px solid #444;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            color: #ccc;
+            user-select: none;
+        }
+        #menuToggle:hover {
+            background: #252525;
+        }
+        #menuToggle .arrow {
+            margin-left: 6px;
+            font-size: 10px;
+        }
+        #controls {
+            background: #1a1a1a;
+            border-top: 1px solid #444;
+            padding: 8px 12px;
+            display: none; /* Hidden by default */
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #ccc;
+        }
+        #controls.visible {
+            display: flex;
+        }
+        #controls label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        #controls select, #controls button {
+            background: #333;
+            color: #ccc;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        #controls button {
+            cursor: pointer;
+        }
+        #controls button:hover {
+            background: #444;
+        }
+        #controls input[type="checkbox"] {
+            cursor: pointer;
+        }
+        /* Settings panel */
+        #settingsPanel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            border: 1px solid #555;
+            border-radius: 6px;
+            padding: 16px;
+            z-index: 2000;
+            display: none;
+            min-width: 280px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        #settingsPanel.visible {
+            display: block;
+        }
+        #settingsPanel h3 {
+            margin: 0 0 12px 0;
+            color: #ccc;
+            font-size: 14px;
+            font-weight: normal;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+        #settingsPanel .setting-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        #settingsPanel .setting-row label {
+            flex: 0 0 100px;
+            color: #ccc;
+            font-size: 12px;
+        }
+        #settingsPanel .setting-row input[type="color"] {
+            flex: 1;
+            height: 32px;
+            border: 1px solid #555;
+            background: #333;
+            cursor: pointer;
+        }
+        #settingsPanel .setting-row input[type="number"] {
+            flex: 1;
+            background: #333;
+            color: #ccc;
+            border: 1px solid #555;
+            padding: 6px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        #settingsPanel .button-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #333;
+        }
+        #settingsPanel .button-row button {
+            flex: 1;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        #settingsOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            display: none;
+        }
+        #settingsOverlay.visible {
+            display: block;
+        }
+        #settingsButton {
+            background: #333;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="viewerContainer">
+        <div id="container"></div>
+        <div id="loading">Ready to load mesh</div>
+
+        <!-- Settings overlay and panel -->
+        <div id="settingsOverlay"></div>
+        <div id="settingsPanel">
+            <h3>Appearance Settings</h3>
+            <div class="setting-row">
+                <label>Mesh Color:</label>
+                <input type="color" id="meshColor" value="#ffffff">
+            </div>
+            <div class="setting-row">
+                <label>Edge Width:</label>
+                <input type="number" id="edgeWidth" min="1" max="10" step="1" value="1">
+            </div>
+            <div class="setting-row">
+                <label>Render Mode:</label>
+                <select id="representationSettings">
+                    <option value="2">Surface</option>
+                    <option value="1">Wireframe</option>
+                    <option value="0">Points</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <label>
+                    <input type="checkbox" id="parallelProjection"> Parallel Projection
+                </label>
+            </div>
+            <div class="setting-row">
+                <label>
+                    <input type="checkbox" id="showAxisIndicator"> Show Axis Indicator
+                </label>
+            </div>
+            <div class="button-row">
+                <button id="applySettings">Apply</button>
+                <button id="cancelSettings">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle button for menu -->
+    <div id="menuToggle">
+        <span id="menuToggleText">Options</span>
+        <span class="arrow" id="menuArrow">▼</span>
+    </div>
+
+    <!-- Collapsible controls -->
+    <div id="controls">
+        <!-- Settings button -->
+        <button id="settingsButton" title="Appearance Settings">⚙</button>
+
+        <label style="width: 1px; height: 20px; background: #444; margin: 0 8px;"></label>
+
+        <label>
+            <input type="checkbox" id="showEdges"> Edges
+        </label>
+
+        <label style="width: 1px; height: 20px; background: #444; margin: 0 8px;"></label>
+
+        <!-- Camera view buttons -->
+        <button id="viewPosX">+X</button>
+        <button id="viewNegX">-X</button>
+        <button id="viewPosY">+Y</button>
+        <button id="viewNegY">-Y</button>
+        <button id="viewPosZ">+Z</button>
+        <button id="viewNegZ">-Z</button>
+
+        <label style="width: 1px; height: 20px; background: #444; margin: 0 8px;"></label>
+
+        <label id="fieldLabel" style="display:none;">
+            Field:
+            <select id="fieldSelector"></select>
+        </label>
+        <button id="screenshot">Screenshot</button>
+        <button id="saveMesh" style="background: #2a5a2a;">Save Mesh</button>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "@kitware/vtk.js/": "https://cdn.skypack.dev/@kitware/vtk.js@29.5.0/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        // CRITICAL: Import rendering profile to load WebGL backend
+        import '@kitware/vtk.js/Rendering/Profiles/Geometry';
+
+        import vtkFullScreenRenderWindow from '@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow';
+        import vtkActor from '@kitware/vtk.js/Rendering/Core/Actor';
+        import vtkMapper from '@kitware/vtk.js/Rendering/Core/Mapper';
+        import vtkSTLReader from '@kitware/vtk.js/IO/Geometry/STLReader';
+        import vtkOBJReader from '@kitware/vtk.js/IO/Misc/OBJReader';
+        import vtkXMLPolyDataReader from '@kitware/vtk.js/IO/XML/XMLPolyDataReader';
+        import vtkPolyDataNormals from '@kitware/vtk.js/Filters/Core/PolyDataNormals';
+        import vtkInteractorStyleTrackballCamera from '@kitware/vtk.js/Interaction/Style/InteractorStyleTrackballCamera';
+
+        // Axis orientation widget imports
+        import vtkOrientationMarkerWidget from '@kitware/vtk.js/Interaction/Widgets/OrientationMarkerWidget';
+        import vtkAnnotatedCubeActor from '@kitware/vtk.js/Rendering/Core/AnnotatedCubeActor';
+
+        console.log('[GeomPack VTK Viewer - Hidable Menu] Initializing...');
+
+        // Helper function to convert RGB values (0-1 range) to RGB string
+        function createRGBStringFromRGBValues(r, g, b) {
+            const r255 = Math.round(r * 255);
+            const g255 = Math.round(g * 255);
+            const b255 = Math.round(b * 255);
+            return `rgb(${r255}, ${g255}, ${b255})`;
+        }
+
+        const loading = document.getElementById('loading');
+        const container = document.getElementById('container');
+
+        // Create full screen renderer
+        const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance({
+            background: [0.16, 0.16, 0.16],  // #2a2a2a
+            container: container,
+        });
+
+        const renderer = fullScreenRenderer.getRenderer();
+        const renderWindow = fullScreenRenderer.getRenderWindow();
+        const interactor = renderWindow.getInteractor();
+
+        // Set up trackball camera controls
+        const interactorStyle = vtkInteractorStyleTrackballCamera.newInstance();
+        interactor.setInteractorStyle(interactorStyle);
+
+        // Create actor and mapper for mesh
+        const actor = vtkActor.newInstance();
+        const mapper = vtkMapper.newInstance();
+        actor.setMapper(mapper);
+
+        // Configure appearance with better lighting properties
+        const property = actor.getProperty();
+        property.setEdgeVisibility(false);
+        property.setColor(1.0, 1.0, 1.0);  // Bright white for visibility
+        property.setAmbient(0.4);  // Increase ambient
+        property.setDiffuse(0.8);  // Increase diffuse
+        property.setSpecular(0.3);
+        property.setSpecularPower(20);
+        property.setRepresentation(2);  // 2 = surface rendering
+
+        // Add actor to scene
+        renderer.addActor(actor);
+
+        // Create axis orientation widget
+        const axes = vtkAnnotatedCubeActor.newInstance();
+        axes.setDefaultStyle({
+            text: '+X',
+            fontStyle: 'bold',
+            fontFamily: 'Arial',
+            fontColor: 'white',
+            fontSizeScale: (res) => res / 2,
+            faceColor: createRGBStringFromRGBValues(0.5, 0.5, 0.5),
+            faceRotation: 0,
+            edgeThickness: 0.1,
+            edgeColor: 'white',
+            resolution: 400,
+        });
+
+        // Customize each face
+        axes.setXPlusFaceProperty({ text: '+X', faceColor: '#ff5555' });
+        axes.setXMinusFaceProperty({ text: '-X', faceColor: '#ff5555' });
+        axes.setYPlusFaceProperty({ text: '+Y', faceColor: '#55ff55' });
+        axes.setYMinusFaceProperty({ text: '-Y', faceColor: '#55ff55' });
+        axes.setZPlusFaceProperty({ text: '+Z', faceColor: '#5555ff' });
+        axes.setZMinusFaceProperty({ text: '-Z', faceColor: '#5555ff' });
+
+        const orientationWidget = vtkOrientationMarkerWidget.newInstance({
+            actor: axes,
+            interactor: renderWindow.getInteractor(),
+        });
+        orientationWidget.setEnabled(false); // Disabled by default
+        orientationWidget.setViewportCorner(vtkOrientationMarkerWidget.Corners.BOTTOM_LEFT);
+        orientationWidget.setViewportSize(0.15);
+        orientationWidget.setMinPixelSize(100);
+        orientationWidget.setMaxPixelSize(300);
+
+        console.log('[GeomPack VTK Viewer DEBUG] Actor configured with lighting properties');
+        console.log('[GeomPack VTK Viewer DEBUG] Actor visible:', actor.getVisibility());
+        console.log('[GeomPack VTK Viewer DEBUG] Renderer background:', renderer.getBackground());
+
+        // Current reader and mesh bounds
+        let currentReader = null;
+        let currentFilename = null;  // Store current mesh filename for saving
+        let meshBounds = null;  // Store mesh bounds for camera positioning
+
+        // Menu toggle handler
+        const menuToggle = document.getElementById('menuToggle');
+        const controls = document.getElementById('controls');
+        const menuArrow = document.getElementById('menuArrow');
+
+        menuToggle.addEventListener('click', () => {
+            const isVisible = controls.classList.contains('visible');
+
+            if (isVisible) {
+                // Hide controls
+                controls.classList.remove('visible');
+                menuArrow.textContent = '▼';
+            } else {
+                // Show controls
+                controls.classList.add('visible');
+                menuArrow.textContent = '▲';
+            }
+
+            console.log('[GeomPack VTK Viewer - Hidable Menu] Menu toggled:', !isVisible ? 'visible' : 'hidden');
+        });
+
+        // Load mesh function
+        async function loadMesh(filepath, lineWidth = 1.0) {
+            console.log('[GeomPack VTK Viewer - Hidable Menu] Loading:', filepath);
+            console.log('[GeomPack VTK Viewer DEBUG] Full filepath URL:', filepath);
+            console.log('[GeomPack VTK Viewer DEBUG] Line width:', lineWidth);
+            loading.textContent = 'Loading mesh...';
+            loading.style.display = 'block';
+
+            // Extract filename from query parameter
+            const urlParams = new URLSearchParams(filepath.split('?')[1] || '');
+            currentFilename = urlParams.get('filename') || filepath.split('/').pop().split('?')[0];
+            console.log('[GeomPack VTK Viewer] Current filename:', currentFilename);
+
+            try {
+                // Determine file type
+                const isSTL = filepath.includes('.stl');
+                const isOBJ = filepath.includes('.obj');
+                const isVTP = filepath.includes('.vtp');
+                const isGLB = filepath.includes('.glb') || filepath.includes('.gltf');
+
+                console.log('[GeomPack VTK Viewer DEBUG] File type detection - STL:', isSTL, 'OBJ:', isOBJ, 'VTP:', isVTP, 'GLB:', isGLB);
+
+                // Create appropriate reader
+                if (isSTL) {
+                    console.log('[GeomPack VTK Viewer] File type: STL');
+                    currentReader = vtkSTLReader.newInstance();
+                } else if (isOBJ) {
+                    console.log('[GeomPack VTK Viewer] File type: OBJ');
+                    currentReader = vtkOBJReader.newInstance();
+                } else if (isVTP) {
+                    console.log('[GeomPack VTK Viewer] File type: VTP (XML PolyData)');
+                    currentReader = vtkXMLPolyDataReader.newInstance();
+                } else {
+                    const errorMsg = `Unsupported file format: ${filepath}. VTK viewer supports STL, OBJ, and VTP formats.`;
+                    console.error('[GeomPack VTK Viewer DEBUG]', errorMsg);
+                    throw new Error(errorMsg);
+                }
+
+                console.log('[GeomPack VTK Viewer DEBUG] About to fetch:', filepath);
+
+                // Fetch the file
+                const response = await fetch(filepath);
+                console.log('[GeomPack VTK Viewer DEBUG] Fetch response:', response);
+                console.log('[GeomPack VTK Viewer DEBUG] Response status:', response.status, response.statusText);
+                console.log('[GeomPack VTK Viewer DEBUG] Response OK:', response.ok);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                // Get file data
+                const arrayBuffer = await response.arrayBuffer();
+                console.log('[GeomPack VTK Viewer DEBUG] ArrayBuffer size:', arrayBuffer.byteLength);
+
+                // Parse with appropriate reader
+                if (isSTL) {
+                    console.log('[GeomPack VTK Viewer DEBUG] Parsing STL...');
+                    currentReader.parseAsArrayBuffer(arrayBuffer);
+                } else if (isOBJ) {
+                    console.log('[GeomPack VTK Viewer DEBUG] Parsing OBJ...');
+                    const text = new TextDecoder().decode(arrayBuffer);
+                    currentReader.parseAsText(text);
+                } else if (isVTP) {
+                    console.log('[GeomPack VTK Viewer DEBUG] Parsing VTP (XML PolyData)...');
+                    currentReader.parseAsArrayBuffer(arrayBuffer);
+                }
+
+                // Get output data for logging
+                const polydata = currentReader.getOutputData();
+                console.log('[GeomPack VTK Viewer DEBUG] Polydata:', polydata);
+
+                if (!polydata) {
+                    throw new Error('Failed to parse mesh data');
+                }
+
+                const numPoints = polydata.getNumberOfPoints();
+                const numPolys = polydata.getNumberOfPolys();
+                console.log('[GeomPack VTK Viewer] Loaded mesh:', numPoints, 'points,', numPolys, 'polygons');
+
+                // Check mesh bounds and store for camera positioning
+                meshBounds = polydata.getBounds();
+                console.log('[GeomPack VTK Viewer DEBUG] Mesh bounds:', meshBounds);
+
+                // CRITICAL: Use proper VTK pipeline with normals filter
+                console.log('[GeomPack VTK Viewer DEBUG] Setting up VTK pipeline...');
+
+                // Create normals filter (required for STL rendering)
+                const normalsFilter = vtkPolyDataNormals.newInstance();
+
+                // Connect pipeline: reader -> normals -> mapper
+                normalsFilter.setInputConnection(currentReader.getOutputPort());
+                mapper.setInputConnection(normalsFilter.getOutputPort());
+
+                console.log('[GeomPack VTK Viewer DEBUG] Pipeline connected: reader -> normals -> mapper');
+
+                // Force pipeline update
+                mapper.update();
+                console.log('[GeomPack VTK Viewer DEBUG] Mapper updated');
+                console.log('[GeomPack VTK Viewer DEBUG] Mapper has input:', mapper.getInputData());
+                console.log('[GeomPack VTK Viewer DEBUG] Actor mapper:', actor.getMapper());
+
+                // Apply line width to wireframe edges
+                property.setLineWidth(lineWidth);
+                console.log('[GeomPack VTK Viewer DEBUG] Line width set to:', lineWidth);
+
+                console.log('[GeomPack VTK Viewer DEBUG] Resetting camera...');
+                // Reset camera to fit mesh
+                renderer.resetCamera();
+
+                // Get camera and adjust view angle
+                const camera = renderer.getActiveCamera();
+                const center = [
+                    (meshBounds[0] + meshBounds[1]) / 2,
+                    (meshBounds[2] + meshBounds[3]) / 2,
+                    (meshBounds[4] + meshBounds[5]) / 2
+                ];
+                const maxDim = Math.max(
+                    meshBounds[1] - meshBounds[0],
+                    meshBounds[3] - meshBounds[2],
+                    meshBounds[5] - meshBounds[4]
+                );
+
+                // Position camera at an angle for better 3D view
+                const distance = maxDim * 2.5;
+                camera.setPosition(
+                    center[0] + distance,
+                    center[1] + distance,
+                    center[2] + distance
+                );
+                camera.setFocalPoint(center[0], center[1], center[2]);
+                camera.setViewUp(0, 0, 1);
+
+                console.log('[GeomPack VTK Viewer DEBUG] Camera position:', camera.getPosition());
+                console.log('[GeomPack VTK Viewer DEBUG] Camera focal point:', camera.getFocalPoint());
+                console.log('[GeomPack VTK Viewer DEBUG] Mesh center:', center);
+                console.log('[GeomPack VTK Viewer DEBUG] Max dimension:', maxDim);
+                console.log('[GeomPack VTK Viewer DEBUG] Distance:', distance);
+
+                // Render the scene
+                renderWindow.render();
+                console.log('[GeomPack VTK Viewer DEBUG] Initial render called');
+
+                // Force a resize to ensure proper display in iframe
+                setTimeout(() => {
+                    fullScreenRenderer.resize();
+                    renderWindow.render();
+                    console.log('[GeomPack VTK Viewer DEBUG] Post-load resize and render');
+                }, 100);
+
+                console.log('[GeomPack VTK Viewer DEBUG] Rendering complete');
+                loading.style.display = 'none';
+                console.log('[GeomPack VTK Viewer - Hidable Menu] Mesh loaded successfully');
+
+            } catch (error) {
+                console.error('[GeomPack VTK Viewer] Error loading mesh:', error);
+                console.error('[GeomPack VTK Viewer DEBUG] Error type:', error?.constructor?.name);
+                console.error('[GeomPack VTK Viewer DEBUG] Error message:', error?.message);
+                console.error('[GeomPack VTK Viewer DEBUG] Error stack:', error?.stack);
+                loading.textContent = `Error loading mesh: ${error.message}`;
+                loading.style.color = '#ff6b6b';
+
+                // Send error message to parent window
+                if (window.parent) {
+                    window.parent.postMessage({
+                        type: 'MESH_ERROR',
+                        error: error.message
+                    }, '*');
+                }
+            }
+        }
+
+        // Listen for messages from parent window
+        window.addEventListener('message', (event) => {
+            console.log('[GeomPack VTK Viewer DEBUG] Received postMessage:', event.data);
+            console.log('[GeomPack VTK Viewer DEBUG] Message type:', event.data?.type);
+            console.log('[GeomPack VTK Viewer DEBUG] Message filepath:', event.data?.filepath);
+
+            if (event.data.type === 'LOAD_MESH') {
+                const lineWidth = event.data.lineWidth || 1.0;
+                console.log('[GeomPack VTK Viewer] Received LOAD_MESH message:', event.data.filepath, 'lineWidth:', lineWidth);
+                loadMesh(event.data.filepath, lineWidth);
+            } else {
+                console.warn('[GeomPack VTK Viewer DEBUG] Unknown message type or missing type');
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            fullScreenRenderer.resize();
+            renderWindow.render();
+        });
+
+        // Settings panel handlers
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        const meshColorInput = document.getElementById('meshColor');
+        const edgeWidthInput = document.getElementById('edgeWidth');
+        const representationSettings = document.getElementById('representationSettings');
+        const parallelProjectionInput = document.getElementById('parallelProjection');
+        const showAxisIndicatorInput = document.getElementById('showAxisIndicator');
+        const applySettingsButton = document.getElementById('applySettings');
+        const cancelSettingsButton = document.getElementById('cancelSettings');
+
+        // Store current settings
+        let currentMeshColor = '#ffffff';
+        let currentEdgeWidth = 1;
+        let currentRepresentation = 2; // 2 = Surface
+        let currentParallelProjection = false;
+        let currentShowAxisIndicator = false;
+
+        // Open settings panel
+        settingsButton.addEventListener('click', () => {
+            // Update inputs with current values
+            meshColorInput.value = currentMeshColor;
+            edgeWidthInput.value = currentEdgeWidth;
+            representationSettings.value = currentRepresentation.toString();
+            parallelProjectionInput.checked = currentParallelProjection;
+            showAxisIndicatorInput.checked = currentShowAxisIndicator;
+
+            settingsPanel.classList.add('visible');
+            settingsOverlay.classList.add('visible');
+        });
+
+        // Close settings panel
+        function closeSettingsPanel() {
+            settingsPanel.classList.remove('visible');
+            settingsOverlay.classList.remove('visible');
+        }
+
+        // Close on overlay click
+        settingsOverlay.addEventListener('click', closeSettingsPanel);
+
+        // Cancel button
+        cancelSettingsButton.addEventListener('click', closeSettingsPanel);
+
+        // Apply settings
+        applySettingsButton.addEventListener('click', () => {
+            const newColor = meshColorInput.value;
+            const newEdgeWidth = parseFloat(edgeWidthInput.value);
+            const newRepresentation = parseInt(representationSettings.value);
+            const newParallelProjection = parallelProjectionInput.checked;
+            const newShowAxisIndicator = showAxisIndicatorInput.checked;
+
+            console.log('[GeomPack VTK Viewer] Applying settings - Color:', newColor, 'Edge Width:', newEdgeWidth, 'Representation:', newRepresentation, 'Parallel:', newParallelProjection, 'Axis:', newShowAxisIndicator);
+
+            // Convert hex color to RGB (0-1 range)
+            const r = parseInt(newColor.substr(1, 2), 16) / 255;
+            const g = parseInt(newColor.substr(3, 2), 16) / 255;
+            const b = parseInt(newColor.substr(5, 2), 16) / 255;
+
+            // IMPORTANT: Disable scalar visualization to allow custom color
+            mapper.setScalarVisibility(false);
+
+            // Apply color to mesh
+            property.setColor(r, g, b);
+
+            // Apply edge width (only visible when edges are enabled)
+            property.setLineWidth(newEdgeWidth);
+
+            // Apply representation mode (0=Points, 1=Wireframe, 2=Surface)
+            property.setRepresentation(newRepresentation);
+
+            // Apply parallel projection
+            const camera = renderer.getActiveCamera();
+            camera.setParallelProjection(newParallelProjection);
+
+            // Apply axis indicator visibility
+            orientationWidget.setEnabled(newShowAxisIndicator);
+
+            // Update stored settings
+            currentMeshColor = newColor;
+            currentEdgeWidth = newEdgeWidth;
+            currentRepresentation = newRepresentation;
+            currentParallelProjection = newParallelProjection;
+            currentShowAxisIndicator = newShowAxisIndicator;
+
+            // Render the changes
+            renderWindow.render();
+
+            console.log('[GeomPack VTK Viewer] Settings applied - RGB:', [r, g, b], 'Line Width:', newEdgeWidth, 'Representation:', newRepresentation, 'Parallel:', newParallelProjection, 'Axis:', newShowAxisIndicator);
+
+            // Close panel
+            closeSettingsPanel();
+        });
+
+        // Control event handlers
+        document.getElementById('showEdges').addEventListener('change', (e) => {
+            property.setEdgeVisibility(e.target.checked);
+            renderWindow.render();
+        });
+
+        // Camera view buttons - position camera along each axis
+        function setCameraView(direction) {
+            if (!meshBounds) return;
+
+            const camera = renderer.getActiveCamera();
+            const center = [
+                (meshBounds[0] + meshBounds[1]) / 2,
+                (meshBounds[2] + meshBounds[3]) / 2,
+                (meshBounds[4] + meshBounds[5]) / 2
+            ];
+            const maxDim = Math.max(
+                meshBounds[1] - meshBounds[0],
+                meshBounds[3] - meshBounds[2],
+                meshBounds[5] - meshBounds[4]
+            );
+            const distance = maxDim * 2.5;
+
+            let position, viewUp;
+
+            switch(direction) {
+                case '+X':
+                    position = [center[0] + distance, center[1], center[2]];
+                    viewUp = [0, 0, 1];
+                    break;
+                case '-X':
+                    position = [center[0] - distance, center[1], center[2]];
+                    viewUp = [0, 0, 1];
+                    break;
+                case '+Y':
+                    position = [center[0], center[1] + distance, center[2]];
+                    viewUp = [0, 0, 1];
+                    break;
+                case '-Y':
+                    position = [center[0], center[1] - distance, center[2]];
+                    viewUp = [0, 0, 1];
+                    break;
+                case '+Z':
+                    position = [center[0], center[1], center[2] + distance];
+                    viewUp = [0, 1, 0];
+                    break;
+                case '-Z':
+                    position = [center[0], center[1], center[2] - distance];
+                    viewUp = [0, 1, 0];
+                    break;
+            }
+
+            camera.setPosition(...position);
+            camera.setFocalPoint(...center);
+            camera.setViewUp(...viewUp);
+            renderer.resetCamera();
+            renderWindow.render();
+        }
+
+        document.getElementById('viewPosX').addEventListener('click', () => setCameraView('+X'));
+        document.getElementById('viewNegX').addEventListener('click', () => setCameraView('-X'));
+        document.getElementById('viewPosY').addEventListener('click', () => setCameraView('+Y'));
+        document.getElementById('viewNegY').addEventListener('click', () => setCameraView('-Y'));
+        document.getElementById('viewPosZ').addEventListener('click', () => setCameraView('+Z'));
+        document.getElementById('viewNegZ').addEventListener('click', () => setCameraView('-Z'));
+
+        document.getElementById('screenshot').addEventListener('click', async () => {
+            const image = await renderWindow.captureImages()[0];
+            // Send screenshot back to parent window
+            window.parent.postMessage({
+                type: 'SCREENSHOT',
+                image: image, // base64 PNG data URL
+                timestamp: Date.now()
+            }, '*');
+            console.log('[GeomPack VTK Viewer] Screenshot captured and sent to parent');
+        });
+
+        // Save mesh button handler
+        document.getElementById('saveMesh').addEventListener('click', async () => {
+            if (!currentFilename) {
+                console.error('[GeomPack VTK Viewer] No mesh loaded to save');
+                alert('No mesh loaded. Please load a mesh first.');
+                return;
+            }
+
+            const saveButton = document.getElementById('saveMesh');
+            const originalText = saveButton.textContent;
+            const originalBg = saveButton.style.background;
+
+            try {
+                // Disable button and show loading state
+                saveButton.disabled = true;
+                saveButton.textContent = 'Saving...';
+                saveButton.style.background = '#555';
+
+                console.log('[GeomPack VTK Viewer] Saving mesh:', currentFilename);
+
+                // Call backend API to save the mesh
+                const response = await fetch('/geometrypack/save_preview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        temp_filename: currentFilename
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log('[GeomPack VTK Viewer] Mesh saved successfully:', result.saved_filename);
+
+                    // Show success feedback
+                    saveButton.textContent = '✓ Saved!';
+                    saveButton.style.background = '#2a7a2a';
+
+                    // Show alert with saved filename
+                    alert(`Mesh saved successfully!\n\nFilename: ${result.saved_filename}\n\nLocation: ComfyUI/output/`);
+
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                        saveButton.textContent = originalText;
+                        saveButton.style.background = originalBg;
+                        saveButton.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error(result.error || 'Unknown error');
+                }
+
+            } catch (error) {
+                console.error('[GeomPack VTK Viewer] Error saving mesh:', error);
+
+                // Show error feedback
+                saveButton.textContent = '✗ Error';
+                saveButton.style.background = '#7a2a2a';
+                alert(`Error saving mesh:\n\n${error.message}`);
+
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    saveButton.textContent = originalText;
+                    saveButton.style.background = originalBg;
+                    saveButton.disabled = false;
+                }, 2000);
+            }
+        });
+
+        console.log('[GeomPack VTK Viewer - Hidable Menu] Ready');
+        console.log('[GeomPack VTK Viewer DEBUG] Waiting for LOAD_MESH postMessage...');
+    </script>
+</body>
+</html>

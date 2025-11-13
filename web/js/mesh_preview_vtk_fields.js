@@ -36,9 +36,9 @@ app.registerExtension({
                 iframe.style.backgroundColor = "#2a2a2a";
                 iframe.style.aspectRatio = "1";
 
-                // Point to VTK.js HTML viewer with filters (with cache buster)
-                // Use viewer_vtk_filters.html which has full scalar field visualization support
-                iframe.src = "/extensions/ComfyUI-GeometryPack/viewer_vtk_filters.html?v=" + Date.now();
+                // Point to VTK.js HTML viewer with scalar fields (with cache buster)
+                // Use viewer_vtk_fields.html which has scalar field visualization support
+                iframe.src = "/extensions/ComfyUI-GeometryPack/viewer_vtk_fields.html?v=" + Date.now();
 
                 // Create mesh info panel
                 const infoPanel = document.createElement("div");

@@ -360,6 +360,64 @@ def extract_archive(archive_path, extract_to):
         return False
 
 
+def install_system_dependencies():
+    """Install required system dependencies (Linux only)."""
+    plat, _ = get_platform_info()
+
+    if plat != "linux":
+        return True
+
+    print("\n" + "="*60)
+    print("ComfyUI-GeometryPack: System Dependencies")
+    print("="*60 + "\n")
+
+    print("[Install] Checking for required OpenGL libraries...")
+    print("[Install] These are needed for PyMeshLab remeshing to work properly.")
+
+    # Check if running as root or with sudo
+    is_root = os.geteuid() == 0 if hasattr(os, 'geteuid') else False
+
+    try:
+        # Try to install OpenGL libraries
+        # Note: Package names changed in Ubuntu 24.04+
+        # Old: libgl1-mesa-glx (pre-24.04)
+        # New: libgl1, libglx-mesa0 (24.04+)
+        packages = ["libgl1", "libglu1-mesa", "libglx-mesa0", "libosmesa6"]
+
+        if is_root:
+            print(f"[Install] Installing OpenGL libraries: {', '.join(packages)}")
+            result = subprocess.run(
+                ['apt-get', 'install', '-y'] + packages,
+                capture_output=True,
+                text=True,
+                timeout=300
+            )
+
+            if result.returncode == 0:
+                print("[Install] ✓ OpenGL libraries installed successfully!")
+                return True
+            else:
+                print(f"[Install] Warning: Failed to install OpenGL libraries")
+                print(f"[Install] Error: {result.stderr}")
+                print(f"[Install] You may need to run manually:")
+                print(f"[Install]   sudo apt-get install {' '.join(packages)}")
+                return True  # Don't fail installation, just warn
+        else:
+            print("[Install] Need sudo privileges to install system packages.")
+            print(f"[Install] Please run:")
+            print(f"[Install]   sudo apt-get install {' '.join(packages)}")
+            print("[Install] Or run this installer with sudo:")
+            print(f"[Install]   sudo python {__file__}")
+            print("[Install] Continuing without installing system dependencies...")
+            return True  # Don't fail installation
+
+    except Exception as e:
+        print(f"[Install] Warning: Could not install system dependencies: {e}")
+        print(f"[Install] PyMeshLab remeshing may not work without OpenGL libraries.")
+        print(f"[Install] To fix, run: sudo apt-get install libgl1 libglu1-mesa libglx-mesa0 libosmesa6")
+        return True  # Don't fail installation, just warn
+
+
 def install_blender():
     """Main installation function."""
     print("\n" + "="*60)
@@ -435,6 +493,10 @@ def install_blender():
 
 def main():
     """Entry point."""
+    # First, install system dependencies (Linux only)
+    install_system_dependencies()
+
+    # Then install Blender
     success = install_blender()
 
     if success:

@@ -61,7 +61,7 @@ class MarkBoundaryEdgesNode:
             },
         }
 
-    RETURN_TYPES = ("MESH", "STRING")
+    RETURN_TYPES = ("TRIMESH", "STRING")
     RETURN_NAMES = ("mesh_with_field", "info")
     FUNCTION = "mark_boundary"
     CATEGORY = "geompack/analysis"

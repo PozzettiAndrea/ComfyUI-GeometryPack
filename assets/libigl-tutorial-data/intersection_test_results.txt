@@ -1,0 +1,60 @@
+Self-Intersection Test Results
+================================================================================
+
+KEEP (Self-Intersecting):
+  camel_b.obj - 23 pairs, 20 faces
+  camelhead.off - 5 pairs, 6 faces
+  cow.off - 83 pairs, 81 faces
+  truck.obj - 424 pairs, 417 faces
+
+DELETE (Clean):
+  2triangles.off
+  3holes.off
+  arm.obj
+  armadillo.obj
+  beetle.off
+  bump-domain.obj
+  bumpy-cube.obj
+  bumpy.off
+  bunny.off
+  cheburashka.off
+  circle.obj
+  cube.obj
+  cube.off
+  cube_40k.obj
+  cylinder.obj
+  decimated-knight.off
+  decimated-max.obj
+  elephant.obj
+  face.obj
+  fandisk.off
+  fertility.off
+  grid.off
+  halftunnel.off
+  horse_quad.obj
+  inspired_mesh.obj
+  intersection_quads.off
+  lilium.obj
+  lion.off
+  planexy.off
+  screwdriver.off
+  snail.obj
+  sphere.obj
+  xcylinder.obj
+  ycylinder.obj
+  zcylinder.obj
+
+ERRORS:
+  big-sigcat.mesh: Load error: file_type 'mesh' not supported
+  bunny.mesh: Load error: file_type 'mesh' not supported
+  hand.mesh: Load error: file_type 'mesh' not supported
+  inspired_mesh_quads_Conjugate.off: Detection error: remesh_self_intersections(): incompatible function arguments. The following argument types are supported:
+    1. remesh_self_intersections(V: numpy.ndarray[dtype=float64, shape=(*, *), writable=False], F: numpy.ndarray[dtype=int64, shape=(*, *), writable=False], detect_only: bool = False, first_only: bool = False, stitch_all: bool = False, slow_and_more_precise_rounding: bool = False, cutoff: int = 1000) -> tuple[numpy.ndarray[dtype=float64, shape=(*, *), order='C'], numpy.ndarray[dtype=int64, shape=(*, *), order='C'], numpy.ndarray[dtype=int64, shape=(*, *), order='C'], numpy.ndarray[dtype=int64, shape=(*), order='C'], numpy.ndarray[dtype=int64, shape=(*), order='C']]
+
+Invoked with types: ndarray, ndarray, kwargs = { detect_only: bool, first_only: bool, stitch_all: bool }
+  inspired_mesh_quads_Smooth.off: Detection error: remesh_self_intersections(): incompatible function arguments. The following argument types are supported:
+    1. remesh_self_intersections(V: numpy.ndarray[dtype=float64, shape=(*, *), writable=False], F: numpy.ndarray[dtype=int64, shape=(*, *), writable=False], detect_only: bool = False, first_only: bool = False, stitch_all: bool = False, slow_and_more_precise_rounding: bool = False, cutoff: int = 1000) -> tuple[numpy.ndarray[dtype=float64, shape=(*, *), order='C'], numpy.ndarray[dtype=int64, shape=(*, *), order='C'], numpy.ndarray[dtype=int64, shape=(*, *), order='C'], numpy.ndarray[dtype=int64, shape=(*), order='C'], numpy.ndarray[dtype=int64, shape=(*), order='C']]
+
+Invoked with types: ndarray, ndarray, kwargs = { detect_only: bool, first_only: bool, stitch_all: bool }
+  octopus-high.mesh: Load error: file_type 'mesh' not supported
+  octopus-low.mesh: Load error: file_type 'mesh' not supported

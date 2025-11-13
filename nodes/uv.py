@@ -90,7 +90,7 @@ class XAtlasUVUnwrapNode:
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
 
-    def uv_unwrap(self, mesh):
+    def uv_unwrap(self, trimesh):
         """
         UV unwrap mesh using xatlas.
 
@@ -108,16 +108,16 @@ class XAtlasUVUnwrapNode:
                 "This is required for fast UV unwrapping without Blender."
             )
 
-        print(f"[XAtlasUVUnwrap] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[XAtlasUVUnwrap] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Parametrize with xatlas
         vmapping, indices, uvs = xatlas.parametrize(
-            mesh.vertices,
-            mesh.faces
+            trimesh.vertices,
+            trimesh.faces
         )
 
         # Create new mesh with UV-split vertices
-        new_vertices = mesh.vertices[vmapping]
+        new_vertices = trimesh.vertices[vmapping]
 
         # Create trimesh with UV coordinates
         unwrapped = trimesh_module.Trimesh(
@@ -131,16 +131,16 @@ class XAtlasUVUnwrapNode:
         unwrapped.visual = TextureVisuals(uv=uvs)
 
         # Preserve metadata
-        unwrapped.metadata = mesh.metadata.copy()
+        unwrapped.metadata = trimesh.metadata.copy()
         unwrapped.metadata['uv_unwrap'] = {
             'algorithm': 'xatlas',
-            'original_vertices': len(mesh.vertices),
+            'original_vertices': len(trimesh.vertices),
             'unwrapped_vertices': len(new_vertices),
-            'vertex_duplication_ratio': len(new_vertices) / len(mesh.vertices)
+            'vertex_duplication_ratio': len(new_vertices) / len(trimesh.vertices)
         }
 
         print(f"[XAtlasUVUnwrap] Output: {len(unwrapped.vertices)} vertices, {len(unwrapped.faces)} faces")
-        print(f"[XAtlasUVUnwrap] Vertex duplication: {len(new_vertices)/len(mesh.vertices):.2f}x")
+        print(f"[XAtlasUVUnwrap] Vertex duplication: {len(new_vertices)/len(trimesh.vertices):.2f}x")
 
         return (unwrapped,)
 
@@ -167,7 +167,7 @@ class LibiglLSCMNode:
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
 
-    def uv_unwrap(self, mesh):
+    def uv_unwrap(self, trimesh):
         """
         LSCM UV parameterization using libigl.
 
@@ -182,18 +182,18 @@ class LibiglLSCMNode:
         except ImportError:
             raise ImportError("libigl not installed (should be in requirements.txt)")
 
-        print(f"[LibiglLSCM] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[LibiglLSCM] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # LSCM requires fixing 2 vertices for unique solution
         # Choose first and last vertex
-        v_fixed = np.array([0, len(mesh.vertices)-1], dtype=np.int32)
+        v_fixed = np.array([0, len(trimesh.vertices)-1], dtype=np.int32)
         uv_fixed = np.array([[0.0, 0.0], [1.0, 0.0]], dtype=np.float64)
 
         # Compute LSCM parameterization
         # Convert TrackedArray to pure numpy array for igl compatibility
         uv_result = igl.lscm(
-            np.asarray(mesh.vertices, dtype=np.float64),
-            np.asarray(mesh.faces, dtype=np.int32),
+            np.asarray(trimesh.vertices, dtype=np.float64),
+            np.asarray(trimesh.faces, dtype=np.int32),
             v_fixed,
             uv_fixed
         )
@@ -211,7 +211,7 @@ class LibiglLSCMNode:
         uv_normalized = (uv - uv_min) / uv_range
 
         # Create unwrapped mesh (copy original)
-        unwrapped = mesh.copy()
+        unwrapped = trimesh.copy()
 
         # Store UV coordinates in visual
         from trimesh.visual import TextureVisuals
@@ -283,6 +283,10 @@ class BlenderUVUnwrapNode:
         # Find Blender
         blender_path = _find_blender()
 
+        # Pre-compute angle limit in radians
+        import math
+        angle_limit_rad = math.radians(angle_limit)
+
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
@@ -295,7 +299,6 @@ class BlenderUVUnwrapNode:
             # Blender script for UV unwrapping
             script = f"""
 import bpy
-import math
 
 # Clear scene
 bpy.ops.object.select_all(action='SELECT')
@@ -310,9 +313,9 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and unwrap
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.trimesh.select_all(action='SELECT')
+bpy.ops.mesh.select_all(action='SELECT')
 bpy.ops.uv.smart_project(
-    angle_limit={np.radians(angle_limit)},
+    angle_limit={angle_limit_rad},
     island_margin={island_margin},
     area_weight=0.0,
     correct_aspect=True,
@@ -438,7 +441,7 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and apply cube projection
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.trimesh.select_all(action='SELECT')
+bpy.ops.mesh.select_all(action='SELECT')
 bpy.ops.uv.cube_project(
     cube_size={cube_size},
     correct_aspect=True,
@@ -562,7 +565,7 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and apply cylinder projection
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.trimesh.select_all(action='SELECT')
+bpy.ops.mesh.select_all(action='SELECT')
 bpy.ops.uv.cylinder_project(
     direction='VIEW_ON_EQUATOR',
     align='POLAR_ZX',
@@ -638,7 +641,7 @@ class BlenderSphereProjectionNode:
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
 
-    def uv_unwrap(self, mesh):
+    def uv_unwrap(self, trimesh):
         """
         UV sphere projection using Blender.
 
@@ -648,7 +651,7 @@ class BlenderSphereProjectionNode:
         Returns:
             tuple: (unwrapped_trimesh_module.Trimesh,)
         """
-        print(f"[BlenderSphereProjection] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[BlenderSphereProjection] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Find Blender
         blender_path = _find_blender()
@@ -656,7 +659,7 @@ class BlenderSphereProjectionNode:
         # Create temp files
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_in:
             input_path = f_in.name
-            mesh.export(input_path)
+            trimesh.export(input_path)
 
         with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
             output_path = f_out.name
@@ -679,7 +682,7 @@ bpy.context.view_layer.objects.active = obj
 
 # Switch to edit mode and apply sphere projection
 bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.trimesh.select_all(action='SELECT')
+bpy.ops.mesh.select_all(action='SELECT')
 bpy.ops.uv.sphere_project(
     direction='VIEW_ON_EQUATOR',
     align='POLAR_ZX',
@@ -715,7 +718,7 @@ bpy.ops.wm.obj_export(
                 unwrapped = unwrapped.dump(concatenate=True)
 
             # Preserve metadata
-            unwrapped.metadata = mesh.metadata.copy()
+            unwrapped.metadata = trimesh.metadata.copy()
             unwrapped.metadata['uv_unwrap'] = {
                 'algorithm': 'blender_sphere_projection',
             }
@@ -754,7 +757,7 @@ class LibiglHarmonicNode:
     FUNCTION = "uv_unwrap"
     CATEGORY = "geompack/uv"
 
-    def uv_unwrap(self, mesh):
+    def uv_unwrap(self, trimesh):
         """
         Harmonic UV parameterization using libigl.
 
@@ -769,12 +772,12 @@ class LibiglHarmonicNode:
         except ImportError:
             raise ImportError("libigl not installed (should be in requirements.txt)")
 
-        print(f"[LibiglHarmonic] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[LibiglHarmonic] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
 
         # Harmonic requires fixing boundary vertices
         # Find boundary loop
         # Convert TrackedArray to pure numpy array for igl compatibility
-        boundary_loop = igl.boundary_loop(np.asarray(mesh.faces, dtype=np.int32))
+        boundary_loop = igl.boundary_loop(np.asarray(trimesh.faces, dtype=np.int32))
 
         if len(boundary_loop) == 0:
             raise ValueError("Mesh has no boundary - harmonic parameterization requires an open mesh")
@@ -790,15 +793,15 @@ class LibiglHarmonicNode:
         # Compute harmonic parameterization
         # Convert TrackedArray to pure numpy for igl compatibility
         uv = igl.harmonic(
-            np.asarray(mesh.vertices, dtype=np.float64),
-            np.asarray(mesh.faces, dtype=np.int32),
+            np.asarray(trimesh.vertices, dtype=np.float64),
+            np.asarray(trimesh.faces, dtype=np.int32),
             boundary_loop.astype(np.int32),
             bnd_uv.astype(np.float64),
             1  # Laplacian type
         )
 
         # Create unwrapped mesh (copy original)
-        unwrapped = mesh.copy()
+        unwrapped = trimesh.copy()
 
         # Store UV coordinates in visual
         from trimesh.visual import TextureVisuals
