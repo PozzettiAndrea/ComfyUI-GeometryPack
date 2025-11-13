@@ -12,7 +12,22 @@ import json
 import tarfile
 import zipfile
 import shutil
+import subprocess
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Try to import optimized libraries, fallback to basic if not available
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    HAS_REQUESTS = False
+
+try:
+    from tqdm import tqdm
+    HAS_TQDM = True
+except ImportError:
+    HAS_TQDM = False
 
 
 def get_platform_info():
@@ -38,6 +53,28 @@ def get_platform_info():
         arch = None
 
     return plat, arch
+
+
+def check_tool_available(tool_name):
+    """Check if a system tool is available in PATH."""
+    try:
+        result = subprocess.run(
+            ['which', tool_name] if os.name != 'nt' else ['where', tool_name],
+            capture_output=True,
+            text=True,
+            timeout=2
+        )
+        return result.returncode == 0
+    except Exception:
+        return False
+
+
+def get_cpu_count():
+    """Get number of CPU cores for parallel processing."""
+    try:
+        return os.cpu_count() or 4
+    except Exception:
+        return 4
 
 
 def get_blender_download_url(platform_name, architecture):
@@ -87,8 +124,54 @@ def get_blender_download_url(platform_name, architecture):
     return None, None, None
 
 
+def download_file_optimized(url, dest_path):
+    """Download file with requests and tqdm for better performance and progress."""
+    print(f"[Install] Downloading: {url}")
+    print(f"[Install] Destination: {dest_path}")
+
+    try:
+        # Stream download with requests
+        response = requests.get(url, stream=True, timeout=30)
+        response.raise_for_status()
+
+        total_size = int(response.headers.get('content-length', 0))
+        block_size = 8192  # 8KB chunks
+
+        if HAS_TQDM:
+            # Use tqdm progress bar
+            with tqdm(total=total_size, unit='B', unit_scale=True, unit_divisor=1024) as pbar:
+                with open(dest_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=block_size):
+                        if chunk:
+                            f.write(chunk)
+                            pbar.update(len(chunk))
+        else:
+            # Fallback to basic progress
+            downloaded = 0
+            with open(dest_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=block_size):
+                    if chunk:
+                        f.write(chunk)
+                        downloaded += len(chunk)
+                        if total_size > 0:
+                            percent = int(downloaded * 100 / total_size)
+                            sys.stdout.write(f"\r[Install] Progress: {percent}%")
+                            sys.stdout.flush()
+            sys.stdout.write("\n")
+
+        print("[Install] Download complete!")
+        return True
+    except Exception as e:
+        print(f"\n[Install] Error downloading: {e}")
+        return False
+
+
 def download_file(url, dest_path):
-    """Download file with progress."""
+    """Download file with progress (uses optimized version if available)."""
+    if HAS_REQUESTS:
+        return download_file_optimized(url, dest_path)
+
+    # Fallback to urllib
     print(f"[Install] Downloading: {url}")
     print(f"[Install] Destination: {dest_path}")
 
@@ -107,17 +190,122 @@ def download_file(url, dest_path):
         return False
 
 
+def extract_tar_xz_optimized(archive_path, extract_to):
+    """Extract .tar.xz using pixz for multi-threaded decompression."""
+    cpu_cores = get_cpu_count()
+
+    # Check if pixz is available
+    has_pixz = check_tool_available('pixz')
+
+    if has_pixz:
+        print(f"[Install] Using pixz with {cpu_cores} cores for fast extraction...")
+        try:
+            # Use pixz to decompress, then tar to extract
+            # pixz -d -p <cores> archive.tar.xz extracts to archive.tar
+            tar_path = archive_path.replace('.tar.xz', '.tar')
+
+            # Decompress with pixz
+            result = subprocess.run(
+                ['pixz', '-d', '-p', str(cpu_cores), archive_path],
+                capture_output=True,
+                text=True,
+                timeout=600  # 10 minute timeout
+            )
+
+            if result.returncode != 0:
+                print(f"[Install] pixz failed: {result.stderr}")
+                return False
+
+            # Extract the tar file
+            with tarfile.open(tar_path, 'r:') as tar:
+                # Use filter for Python 3.14+ compatibility
+                if hasattr(tarfile, 'data_filter'):
+                    tar.extractall(extract_to, filter='data')
+                else:
+                    tar.extractall(extract_to)
+
+            # Clean up the intermediate .tar file
+            if os.path.exists(tar_path):
+                os.remove(tar_path)
+
+            return True
+        except Exception as e:
+            print(f"[Install] Error with pixz extraction: {e}")
+            return False
+    else:
+        # Fallback to standard tarfile
+        print("[Install] pixz not found, using standard extraction (slower)...")
+        try:
+            with tarfile.open(archive_path, 'r:*') as tar:
+                # Use filter for Python 3.14+ compatibility
+                if hasattr(tarfile, 'data_filter'):
+                    tar.extractall(extract_to, filter='data')
+                else:
+                    tar.extractall(extract_to)
+            return True
+        except Exception as e:
+            print(f"[Install] Error with standard extraction: {e}")
+            return False
+
+
+def extract_zip_parallel(archive_path, extract_to):
+    """Extract .zip using parallel extraction for better performance."""
+    try:
+        with zipfile.ZipFile(archive_path, 'r') as zip_ref:
+            members = zip_ref.namelist()
+
+            # For small archives, parallel extraction overhead isn't worth it
+            if len(members) < 10:
+                zip_ref.extractall(extract_to)
+                return True
+
+            print(f"[Install] Extracting {len(members)} files in parallel...")
+
+            # Extract files in parallel
+            def extract_member(member):
+                try:
+                    zip_ref.extract(member, extract_to)
+                    return True
+                except Exception as e:
+                    print(f"[Install] Error extracting {member}: {e}")
+                    return False
+
+            cpu_cores = get_cpu_count()
+            with ThreadPoolExecutor(max_workers=min(cpu_cores, 8)) as executor:
+                results = list(executor.map(extract_member, members))
+
+            # Check if all extractions succeeded
+            if not all(results):
+                print("[Install] Some files failed to extract")
+                return False
+
+            return True
+    except Exception as e:
+        print(f"[Install] Error with parallel zip extraction: {e}")
+        return False
+
+
 def extract_archive(archive_path, extract_to):
-    """Extract tar.gz, tar.xz, zip, or handle DMG (macOS)."""
+    """Extract tar.gz, tar.xz, zip, or handle DMG (macOS) with optimizations."""
     print(f"[Install] Extracting: {archive_path}")
 
     try:
-        if archive_path.endswith(('.tar.gz', '.tar.xz', '.tar.bz2')):
+        if archive_path.endswith('.tar.xz'):
+            # Use optimized extraction for .tar.xz
+            if not extract_tar_xz_optimized(archive_path, extract_to):
+                return False
+        elif archive_path.endswith(('.tar.gz', '.tar.bz2')):
+            # Standard extraction for other tar formats
             with tarfile.open(archive_path, 'r:*') as tar:
-                tar.extractall(extract_to)
+                # Use filter for Python 3.14+ compatibility
+                if hasattr(tarfile, 'data_filter'):
+                    tar.extractall(extract_to, filter='data')
+                else:
+                    tar.extractall(extract_to)
         elif archive_path.endswith('.zip'):
-            with zipfile.ZipFile(archive_path, 'r') as zip_ref:
-                zip_ref.extractall(extract_to)
+            # Use parallel extraction for .zip
+            if not extract_zip_parallel(archive_path, extract_to):
+                return False
         elif archive_path.endswith('.dmg'):
             # macOS DMG - mount and copy Blender.app
             print("[Install] DMG detected - mounting disk image...")
