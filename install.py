@@ -418,6 +418,80 @@ def install_system_dependencies():
         return True  # Don't fail installation, just warn
 
 
+def install_python_dependencies():
+    """Install Python dependencies from requirements.txt."""
+    print("\n" + "="*60)
+    print("ComfyUI-GeometryPack: Python Dependencies Installation")
+    print("="*60 + "\n")
+
+    script_dir = Path(__file__).parent.absolute()
+    requirements_file = script_dir / "requirements.txt"
+
+    if not requirements_file.exists():
+        print(f"[Install] Warning: requirements.txt not found at {requirements_file}")
+        print("[Install] Skipping Python dependencies installation.")
+        return True
+
+    print(f"[Install] Installing core Python dependencies...")
+    print(f"[Install] This may take a few minutes...\n")
+
+    # First, try installing all dependencies
+    try:
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "install", "-r", str(requirements_file)],
+            capture_output=True,
+            text=True,
+            timeout=600  # 10 minute timeout
+        )
+
+        if result.returncode == 0:
+            print("\n[Install] ✓ All Python dependencies installed successfully!")
+            return True
+        else:
+            # If full install fails, try installing without optional packages
+            print(f"\n[Install] Warning: Some packages failed to install")
+            print("[Install] Attempting to install core dependencies without optional packages...")
+
+            # Try installing without cgal (optional, only for isotropic remesh)
+            result_without_optional = subprocess.run(
+                [sys.executable, "-m", "pip", "install",
+                 "requests>=2.25.0", "tqdm>=4.60.0",
+                 "numpy>=1.21.0", "scipy>=1.7.0",
+                 "trimesh>=3.15.0", "pymeshlab>=2022.2",
+                 "matplotlib>=3.5.0", "Pillow>=9.0.0",
+                 "point-cloud-utils>=0.30.0",
+                 "fast-simplification>=0.1.5",
+                 "xatlas>=0.0.11",
+                 "skeletor>=1.2.0"],
+                capture_output=True,
+                text=True,
+                timeout=600
+            )
+
+            if result_without_optional.returncode == 0:
+                print("\n[Install] ✓ Core Python dependencies installed successfully!")
+                print("[Install] Note: Some optional packages (like cgal) may not be available")
+                print("[Install] You can install them manually later if needed")
+                return True
+            else:
+                print(f"\n[Install] Error installing Python dependencies:")
+                print(result_without_optional.stderr)
+                print("\n[Install] You can try installing manually with:")
+                print(f"[Install]   pip install -r {requirements_file}")
+                return False
+
+    except subprocess.TimeoutExpired:
+        print("\n[Install] Error: Installation timed out after 10 minutes")
+        print("[Install] You can try installing manually with:")
+        print(f"[Install]   pip install -r {requirements_file}")
+        return False
+    except Exception as e:
+        print(f"\n[Install] Error installing Python dependencies: {e}")
+        print("[Install] You can try installing manually with:")
+        print(f"[Install]   pip install -r {requirements_file}")
+        return False
+
+
 def install_blender():
     """Main installation function."""
     print("\n" + "="*60)
@@ -493,24 +567,59 @@ def install_blender():
 
 def main():
     """Entry point."""
-    # First, install system dependencies (Linux only)
-    install_system_dependencies()
+    print("\n" + "="*60)
+    print("ComfyUI-GeometryPack: Complete Installation")
+    print("="*60 + "\n")
+    print("This installer will set up:")
+    print("  1. System dependencies (OpenGL libraries on Linux)")
+    print("  2. Python dependencies (trimesh, pymeshlab, cgal, etc.)")
+    print("  3. Blender 4.2.3 LTS (for UV unwrapping and remeshing)")
+    print("")
 
-    # Then install Blender
-    success = install_blender()
+    # Track installation results
+    results = {
+        'system_deps': False,
+        'python_deps': False,
+        'blender': False
+    }
 
-    if success:
-        print("\n" + "="*60)
-        print("Installation completed successfully!")
-        print("="*60 + "\n")
+    # Step 1: Install system dependencies (Linux only)
+    results['system_deps'] = install_system_dependencies()
+
+    # Step 2: Install Python dependencies
+    results['python_deps'] = install_python_dependencies()
+
+    # Step 3: Install Blender
+    results['blender'] = install_blender()
+
+    # Display final results
+    print("\n" + "="*60)
+    print("Installation Summary")
+    print("="*60)
+    print(f"  System Dependencies: {'✓ Success' if results['system_deps'] else '✗ Failed'}")
+    print(f"  Python Dependencies: {'✓ Success' if results['python_deps'] else '✗ Failed'}")
+    print(f"  Blender:             {'✓ Success' if results['blender'] else '✗ Failed'}")
+    print("="*60 + "\n")
+
+    # Determine overall success
+    # System deps are optional (not all platforms need them)
+    critical_success = results['python_deps'] and results['blender']
+
+    if critical_success:
+        print("✓ Installation completed successfully!")
+        print("You can now use ComfyUI-GeometryPack nodes in ComfyUI.\n")
         sys.exit(0)
     else:
-        print("\n" + "="*60)
-        print("Installation failed.")
-        print("You can:")
-        print("  1. Install Blender manually: https://www.blender.org/download/")
-        print("  2. Try running this script again: python install.py")
-        print("="*60 + "\n")
+        print("⚠ Installation completed with issues.")
+        if not results['python_deps']:
+            print("\nPython dependencies failed to install. You can:")
+            print("  1. Try running: pip install -r requirements.txt")
+            print("  2. Check your Python environment and permissions")
+        if not results['blender']:
+            print("\nBlender installation failed. You can:")
+            print("  1. Install Blender manually: https://www.blender.org/download/")
+            print("  2. Try running this script again: python install.py")
+        print("")
         sys.exit(1)
 
 
