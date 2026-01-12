@@ -55,17 +55,20 @@ def _verify_cumesh_import():
 def _install_wheel(cuda_version, torch_version, python_version):
     """Try to install cumesh from pre-built wheel."""
     # Format versions for wheel URL
-    # CUDA: "12.8" -> "128", Torch: "2.8.0" -> "280"
+    # CUDA: "12.8" -> "128", Torch: "2.8.0+cu128" -> "280", "28" (major.minor)
     cuda_short = cuda_version.replace(".", "")[:3] if cuda_version else None
-    torch_short = torch_version.split("+")[0].replace(".", "")[:3] if torch_version else None
+    torch_clean = torch_version.split("+")[0] if torch_version else None
+    torch_short = torch_clean.replace(".", "")[:3] if torch_clean else None
+    torch_mm = "".join(torch_clean.split(".")[:2]) if torch_clean else None  # "2.8.0" -> "28"
 
     if not cuda_short or not torch_short:
         print("[CuMesh] Cannot determine CUDA/PyTorch versions for wheel selection")
         return False
 
-    # Construct wheel URL
+    # Construct wheel URL - filename includes build tag like +cu128torch28
     wheel_tag = f"cu{cuda_short}-torch{torch_short}"
-    wheel_name = f"cumesh-0.0.1-cp{python_version}-cp{python_version}-linux_x86_64.whl"
+    build_tag = f"cu{cuda_short}torch{torch_mm}"  # cu128torch28
+    wheel_name = f"cumesh-0.0.1%2B{build_tag}-cp{python_version}-cp{python_version}-linux_x86_64.whl"
     wheel_url = f"{WHEEL_REPO_BASE}/{wheel_tag}/{wheel_name}"
 
     print(f"[CuMesh] Trying wheel: {wheel_tag}/{wheel_name}")

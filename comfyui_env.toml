@@ -1,0 +1,15 @@
+# ComfyUI-GeometryPack environment configuration
+# Uses comfyui-envmanager for CUDA wheel resolution
+
+[env]
+name = "geometrypack"
+cuda = "auto"  # Auto-detect from PyTorch
+
+[packages]
+# CUDA packages installed via wheel resolution (no compilation needed)
+no_deps = [
+    "cumesh==0.0.1",
+]
+
+# Regular pip packages (already handled by install_scripts/python_deps.py)
+# requirements = []
