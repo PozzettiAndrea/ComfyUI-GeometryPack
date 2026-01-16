@@ -4,35 +4,54 @@
 """
 Direct bpy (Blender as Python module) bridge using comfy-env isolation.
 
-This module provides isolated functions for Blender operations using the
-comfy-env @isolated decorator. Operations run in a separate Python 3.11
-environment with bpy installed, avoiding subprocess overhead and temp file I/O.
+This module provides functions for Blender operations that run in an isolated
+Python 3.11 environment with bpy installed. Functions are called via comfy-env's
+VenvWorker.call_module() mechanism.
 
-All functions accept numpy arrays and return numpy arrays directly via IPC.
+Data is passed via IPC (serialized as lists), so functions accept lists and
+return lists/dicts with list values.
+
+Usage from host environment:
+    from comfy_env import VenvWorker
+    worker = VenvWorker(python='_env_geometrypack/bin/python', sys_path=[...])
+    result = worker.call_module('bpy_bridge', 'bpy_smart_uv_project', **kwargs)
 """
 
-from comfy_env import isolated
 import numpy as np
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
+def _to_list(arr):
+    """Convert numpy array or list to nested list for IPC serialization."""
+    if hasattr(arr, 'tolist'):
+        return arr.tolist()
+    return arr
+
+
+def _to_numpy(data, dtype=np.float32):
+    """Convert list to numpy array."""
+    return np.array(data, dtype=dtype)
+
+
 def bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_bounds):
     """
     Direct bpy Smart UV Project.
 
     Args:
-        vertices: numpy array of shape (N, 3) with vertex positions
-        faces: numpy array of shape (M, 3) with face indices
+        vertices: list of [x,y,z] vertex positions
+        faces: list of [i,j,k] face indices
         angle_limit: Angle limit in radians for island creation
         island_margin: Margin between UV islands (0.0 to 1.0)
         scale_to_bounds: Whether to scale UVs to fill [0,1] bounds
 
     Returns:
-        dict with 'vertices', 'faces', 'uvs' as numpy arrays
+        dict with 'vertices', 'faces', 'uvs' as lists
     """
     import bpy
     import bmesh
-    import numpy as np
+
+    # Convert inputs
+    vertices = _to_numpy(vertices, np.float32)
+    faces = _to_numpy(faces, np.int32)
 
     # Create new mesh and object
     mesh = bpy.data.meshes.new("UVMesh")
@@ -43,7 +62,7 @@ def bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_b
     bpy.context.view_layer.objects.active = obj
     obj.select_set(True)
 
-    # Create mesh from numpy arrays
+    # Create mesh from arrays
     mesh.from_pydata(vertices.tolist(), [], faces.tolist())
     mesh.update()
 
@@ -72,18 +91,15 @@ def bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_b
     result_vertices = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
     result_faces = np.array([p.vertices[:] for p in mesh.polygons], dtype=np.int32)
 
-    # Extract UVs
+    # Extract UVs - handle vertex splitting at seams
     uv_layer = mesh.uv_layers.active
     if uv_layer:
-        # UVs are per-loop, need to reorganize per-vertex
-        # For simplicity, we'll duplicate vertices at UV seams (like the OBJ export does)
         loop_uvs = np.array([uv_layer.data[i].uv[:] for i in range(len(uv_layer.data))], dtype=np.float32)
 
-        # Build per-face-vertex UVs
-        uvs_per_loop = []
         new_vertices = []
         new_faces = []
-        vertex_map = {}  # (original_vertex_idx, uv_tuple) -> new_vertex_idx
+        uvs_per_loop = []
+        vertex_map = {}
 
         for poly in mesh.polygons:
             new_face = []
@@ -94,17 +110,19 @@ def bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_b
 
                 if key not in vertex_map:
                     vertex_map[key] = len(new_vertices)
-                    new_vertices.append(result_vertices[orig_vert_idx])
-                    uvs_per_loop.append(uv)
+                    new_vertices.append(result_vertices[orig_vert_idx].tolist())
+                    uvs_per_loop.append(list(uv))
 
                 new_face.append(vertex_map[key])
             new_faces.append(new_face)
 
-        result_vertices = np.array(new_vertices, dtype=np.float32)
-        result_faces = np.array(new_faces, dtype=np.int32)
-        result_uvs = np.array(uvs_per_loop, dtype=np.float32)
+        result_vertices = new_vertices
+        result_faces = new_faces
+        result_uvs = uvs_per_loop
     else:
-        result_uvs = np.zeros((len(result_vertices), 2), dtype=np.float32)
+        result_vertices = _to_list(result_vertices)
+        result_faces = _to_list(result_faces)
+        result_uvs = [[0.0, 0.0]] * len(result_vertices)
 
     # Cleanup
     bpy.data.objects.remove(obj, do_unlink=True)
@@ -117,23 +135,13 @@ def bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_b
     }
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_cube_uv_project(vertices, faces, cube_size, scale_to_bounds):
-    """
-    Direct bpy Cube UV Project.
-
-    Args:
-        vertices: numpy array of shape (N, 3) with vertex positions
-        faces: numpy array of shape (M, 3) with face indices
-        cube_size: Size of the projection cube
-        scale_to_bounds: Whether to scale UVs to fill [0,1] bounds
-
-    Returns:
-        dict with 'vertices', 'faces', 'uvs' as numpy arrays
-    """
+    """Direct bpy Cube UV Project."""
     import bpy
     import bmesh
-    import numpy as np
+
+    vertices = _to_numpy(vertices, np.float32)
+    faces = _to_numpy(faces, np.int32)
 
     mesh = bpy.data.meshes.new("UVMesh")
     obj = bpy.data.objects.new("UVObject", mesh)
@@ -160,9 +168,7 @@ def bpy_cube_uv_project(vertices, faces, cube_size, scale_to_bounds):
     uv_layer = mesh.uv_layers.active
     if uv_layer:
         loop_uvs = np.array([uv_layer.data[i].uv[:] for i in range(len(uv_layer.data))], dtype=np.float32)
-        new_vertices = []
-        new_faces = []
-        uvs_per_loop = []
+        new_vertices, new_faces, uvs_per_loop = [], [], []
         vertex_map = {}
 
         for poly in mesh.polygons:
@@ -173,16 +179,16 @@ def bpy_cube_uv_project(vertices, faces, cube_size, scale_to_bounds):
                 key = (orig_vert_idx, uv)
                 if key not in vertex_map:
                     vertex_map[key] = len(new_vertices)
-                    new_vertices.append(result_vertices[orig_vert_idx])
-                    uvs_per_loop.append(uv)
+                    new_vertices.append(result_vertices[orig_vert_idx].tolist())
+                    uvs_per_loop.append(list(uv))
                 new_face.append(vertex_map[key])
             new_faces.append(new_face)
 
-        result_vertices = np.array(new_vertices, dtype=np.float32)
-        result_faces = np.array(new_faces, dtype=np.int32)
-        result_uvs = np.array(uvs_per_loop, dtype=np.float32)
+        result_vertices, result_faces, result_uvs = new_vertices, new_faces, uvs_per_loop
     else:
-        result_uvs = np.zeros((len(result_vertices), 2), dtype=np.float32)
+        result_vertices = _to_list(result_vertices)
+        result_faces = _to_list(result_faces)
+        result_uvs = [[0.0, 0.0]] * len(result_vertices)
 
     bpy.data.objects.remove(obj, do_unlink=True)
     bpy.data.meshes.remove(mesh)
@@ -190,23 +196,13 @@ def bpy_cube_uv_project(vertices, faces, cube_size, scale_to_bounds):
     return {'vertices': result_vertices, 'faces': result_faces, 'uvs': result_uvs}
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_cylinder_uv_project(vertices, faces, radius, scale_to_bounds):
-    """
-    Direct bpy Cylinder UV Project.
-
-    Args:
-        vertices: numpy array of shape (N, 3) with vertex positions
-        faces: numpy array of shape (M, 3) with face indices
-        radius: Cylinder radius for projection
-        scale_to_bounds: Whether to scale UVs to fill [0,1] bounds
-
-    Returns:
-        dict with 'vertices', 'faces', 'uvs' as numpy arrays
-    """
+    """Direct bpy Cylinder UV Project."""
     import bpy
     import bmesh
-    import numpy as np
+
+    vertices = _to_numpy(vertices, np.float32)
+    faces = _to_numpy(faces, np.int32)
 
     mesh = bpy.data.meshes.new("UVMesh")
     obj = bpy.data.objects.new("UVObject", mesh)
@@ -233,9 +229,7 @@ def bpy_cylinder_uv_project(vertices, faces, radius, scale_to_bounds):
     uv_layer = mesh.uv_layers.active
     if uv_layer:
         loop_uvs = np.array([uv_layer.data[i].uv[:] for i in range(len(uv_layer.data))], dtype=np.float32)
-        new_vertices = []
-        new_faces = []
-        uvs_per_loop = []
+        new_vertices, new_faces, uvs_per_loop = [], [], []
         vertex_map = {}
 
         for poly in mesh.polygons:
@@ -246,16 +240,16 @@ def bpy_cylinder_uv_project(vertices, faces, radius, scale_to_bounds):
                 key = (orig_vert_idx, uv)
                 if key not in vertex_map:
                     vertex_map[key] = len(new_vertices)
-                    new_vertices.append(result_vertices[orig_vert_idx])
-                    uvs_per_loop.append(uv)
+                    new_vertices.append(result_vertices[orig_vert_idx].tolist())
+                    uvs_per_loop.append(list(uv))
                 new_face.append(vertex_map[key])
             new_faces.append(new_face)
 
-        result_vertices = np.array(new_vertices, dtype=np.float32)
-        result_faces = np.array(new_faces, dtype=np.int32)
-        result_uvs = np.array(uvs_per_loop, dtype=np.float32)
+        result_vertices, result_faces, result_uvs = new_vertices, new_faces, uvs_per_loop
     else:
-        result_uvs = np.zeros((len(result_vertices), 2), dtype=np.float32)
+        result_vertices = _to_list(result_vertices)
+        result_faces = _to_list(result_faces)
+        result_uvs = [[0.0, 0.0]] * len(result_vertices)
 
     bpy.data.objects.remove(obj, do_unlink=True)
     bpy.data.meshes.remove(mesh)
@@ -263,22 +257,13 @@ def bpy_cylinder_uv_project(vertices, faces, radius, scale_to_bounds):
     return {'vertices': result_vertices, 'faces': result_faces, 'uvs': result_uvs}
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_sphere_uv_project(vertices, faces, scale_to_bounds):
-    """
-    Direct bpy Sphere UV Project.
-
-    Args:
-        vertices: numpy array of shape (N, 3) with vertex positions
-        faces: numpy array of shape (M, 3) with face indices
-        scale_to_bounds: Whether to scale UVs to fill [0,1] bounds
-
-    Returns:
-        dict with 'vertices', 'faces', 'uvs' as numpy arrays
-    """
+    """Direct bpy Sphere UV Project."""
     import bpy
     import bmesh
-    import numpy as np
+
+    vertices = _to_numpy(vertices, np.float32)
+    faces = _to_numpy(faces, np.int32)
 
     mesh = bpy.data.meshes.new("UVMesh")
     obj = bpy.data.objects.new("UVObject", mesh)
@@ -305,9 +290,7 @@ def bpy_sphere_uv_project(vertices, faces, scale_to_bounds):
     uv_layer = mesh.uv_layers.active
     if uv_layer:
         loop_uvs = np.array([uv_layer.data[i].uv[:] for i in range(len(uv_layer.data))], dtype=np.float32)
-        new_vertices = []
-        new_faces = []
-        uvs_per_loop = []
+        new_vertices, new_faces, uvs_per_loop = [], [], []
         vertex_map = {}
 
         for poly in mesh.polygons:
@@ -318,16 +301,16 @@ def bpy_sphere_uv_project(vertices, faces, scale_to_bounds):
                 key = (orig_vert_idx, uv)
                 if key not in vertex_map:
                     vertex_map[key] = len(new_vertices)
-                    new_vertices.append(result_vertices[orig_vert_idx])
-                    uvs_per_loop.append(uv)
+                    new_vertices.append(result_vertices[orig_vert_idx].tolist())
+                    uvs_per_loop.append(list(uv))
                 new_face.append(vertex_map[key])
             new_faces.append(new_face)
 
-        result_vertices = np.array(new_vertices, dtype=np.float32)
-        result_faces = np.array(new_faces, dtype=np.int32)
-        result_uvs = np.array(uvs_per_loop, dtype=np.float32)
+        result_vertices, result_faces, result_uvs = new_vertices, new_faces, uvs_per_loop
     else:
-        result_uvs = np.zeros((len(result_vertices), 2), dtype=np.float32)
+        result_vertices = _to_list(result_vertices)
+        result_faces = _to_list(result_faces)
+        result_uvs = [[0.0, 0.0]] * len(result_vertices)
 
     bpy.data.objects.remove(obj, do_unlink=True)
     bpy.data.meshes.remove(mesh)
@@ -335,21 +318,12 @@ def bpy_sphere_uv_project(vertices, faces, scale_to_bounds):
     return {'vertices': result_vertices, 'faces': result_faces, 'uvs': result_uvs}
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_voxel_remesh(vertices, faces, voxel_size):
-    """
-    Direct bpy voxel remesh.
-
-    Args:
-        vertices: numpy array of shape (N, 3) with vertex positions
-        faces: numpy array of shape (M, 3) with face indices
-        voxel_size: Voxel size for remeshing
-
-    Returns:
-        dict with 'vertices', 'faces' as numpy arrays
-    """
+    """Direct bpy voxel remesh."""
     import bpy
-    import numpy as np
+
+    vertices = _to_numpy(vertices, np.float32)
+    faces = _to_numpy(faces, np.int32)
 
     mesh = bpy.data.meshes.new("RemeshMesh")
     obj = bpy.data.objects.new("RemeshObject", mesh)
@@ -360,15 +334,12 @@ def bpy_voxel_remesh(vertices, faces, voxel_size):
     mesh.from_pydata(vertices.tolist(), [], faces.tolist())
     mesh.update()
 
-    # Apply voxel remesh
     obj.data.remesh_voxel_size = voxel_size
     bpy.ops.object.voxel_remesh()
 
-    # Get updated mesh reference after remesh
     mesh = obj.data
-
-    result_vertices = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
-    result_faces = np.array([p.vertices[:] for p in mesh.polygons], dtype=np.int32)
+    result_vertices = [list(v.co) for v in mesh.vertices]
+    result_faces = [list(p.vertices) for p in mesh.polygons]
 
     bpy.data.objects.remove(obj, do_unlink=True)
     bpy.data.meshes.remove(mesh)
@@ -376,21 +347,12 @@ def bpy_voxel_remesh(vertices, faces, voxel_size):
     return {'vertices': result_vertices, 'faces': result_faces}
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_quadriflow_remesh(vertices, faces, target_face_count):
-    """
-    Direct bpy Quadriflow remesh.
-
-    Args:
-        vertices: numpy array of shape (N, 3) with vertex positions
-        faces: numpy array of shape (M, 3) with face indices
-        target_face_count: Target number of faces
-
-    Returns:
-        dict with 'vertices', 'faces' as numpy arrays
-    """
+    """Direct bpy Quadriflow remesh."""
     import bpy
-    import numpy as np
+
+    vertices = _to_numpy(vertices, np.float32)
+    faces = _to_numpy(faces, np.int32)
 
     mesh = bpy.data.meshes.new("RemeshMesh")
     obj = bpy.data.objects.new("RemeshObject", mesh)
@@ -401,7 +363,6 @@ def bpy_quadriflow_remesh(vertices, faces, target_face_count):
     mesh.from_pydata(vertices.tolist(), [], faces.tolist())
     mesh.update()
 
-    # Apply Quadriflow remesh
     bpy.ops.object.quadriflow_remesh(
         use_mesh_symmetry=False,
         use_preserve_sharp=False,
@@ -412,11 +373,9 @@ def bpy_quadriflow_remesh(vertices, faces, target_face_count):
         seed=0
     )
 
-    # Get updated mesh reference after remesh
     mesh = obj.data
-
-    result_vertices = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
-    result_faces = np.array([p.vertices[:] for p in mesh.polygons], dtype=np.int32)
+    result_vertices = [list(v.co) for v in mesh.vertices]
+    result_faces = [list(p.vertices) for p in mesh.polygons]
 
     bpy.data.objects.remove(obj, do_unlink=True)
     bpy.data.meshes.remove(mesh)
@@ -424,23 +383,24 @@ def bpy_quadriflow_remesh(vertices, faces, target_face_count):
     return {'vertices': result_vertices, 'faces': result_faces}
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_boolean_operation(vertices_a, faces_a, vertices_b, faces_b, operation):
     """
     Direct bpy boolean operation with EXACT solver.
 
     Args:
-        vertices_a: numpy array of shape (N, 3) - mesh A vertices
-        faces_a: numpy array of shape (M, 3) - mesh A faces
-        vertices_b: numpy array of shape (P, 3) - mesh B vertices
-        faces_b: numpy array of shape (Q, 3) - mesh B faces
+        vertices_a, faces_a: Mesh A data
+        vertices_b, faces_b: Mesh B data
         operation: One of 'UNION', 'DIFFERENCE', 'INTERSECT'
 
     Returns:
-        dict with 'vertices', 'faces' as numpy arrays
+        dict with 'vertices', 'faces' as lists
     """
     import bpy
-    import numpy as np
+
+    vertices_a = _to_numpy(vertices_a, np.float32)
+    faces_a = _to_numpy(faces_a, np.int32)
+    vertices_b = _to_numpy(vertices_b, np.float32)
+    faces_b = _to_numpy(faces_b, np.int32)
 
     # Create mesh A
     mesh_a = bpy.data.meshes.new("MeshA")
@@ -470,10 +430,9 @@ def bpy_boolean_operation(vertices_a, faces_a, vertices_b, faces_b, operation):
     # Apply modifier
     bpy.ops.object.modifier_apply(modifier="Boolean")
 
-    # Get result from mesh A (which now has the boolean result)
     mesh_a = obj_a.data
-    result_vertices = np.array([v.co[:] for v in mesh_a.vertices], dtype=np.float32)
-    result_faces = np.array([p.vertices[:] for p in mesh_a.polygons], dtype=np.int32)
+    result_vertices = [list(v.co) for v in mesh_a.vertices]
+    result_faces = [list(p.vertices) for p in mesh_a.polygons]
 
     # Cleanup
     bpy.data.objects.remove(obj_b, do_unlink=True)
@@ -484,7 +443,6 @@ def bpy_boolean_operation(vertices_a, faces_a, vertices_b, faces_b, operation):
     return {'vertices': result_vertices, 'faces': result_faces}
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_import_blend(blend_path):
     """
     Import .blend file and extract mesh data.
@@ -493,67 +451,57 @@ def bpy_import_blend(blend_path):
         blend_path: Path to .blend file
 
     Returns:
-        dict with 'vertices', 'faces' as numpy arrays, 'name' as string
+        dict with 'vertices', 'faces' as lists, 'name' as string
     """
     import bpy
-    import numpy as np
 
-    # Load the blend file
     bpy.ops.wm.open_mainfile(filepath=blend_path)
 
-    # Find mesh objects
     mesh_objects = [obj for obj in bpy.data.objects if obj.type == 'MESH']
 
     if not mesh_objects:
-        return {'vertices': np.array([], dtype=np.float32).reshape(0, 3),
-                'faces': np.array([], dtype=np.int32).reshape(0, 3),
-                'name': 'empty'}
+        return {'vertices': [], 'faces': [], 'name': 'empty'}
 
-    # Combine all meshes
     all_vertices = []
     all_faces = []
     vertex_offset = 0
 
     for obj in mesh_objects:
-        # Get evaluated mesh (with modifiers applied)
         depsgraph = bpy.context.evaluated_depsgraph_get()
         obj_eval = obj.evaluated_get(depsgraph)
         mesh = obj_eval.to_mesh()
-
-        # Apply object transform
         mesh.transform(obj.matrix_world)
 
-        verts = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
-        faces = np.array([p.vertices[:] for p in mesh.polygons if len(p.vertices) == 3], dtype=np.int32)
+        verts = [list(v.co) for v in mesh.vertices]
 
-        # Triangulate non-triangle faces
         for poly in mesh.polygons:
-            if len(poly.vertices) > 3:
-                # Simple fan triangulation
+            if len(poly.vertices) == 3:
+                all_faces.append([
+                    poly.vertices[0] + vertex_offset,
+                    poly.vertices[1] + vertex_offset,
+                    poly.vertices[2] + vertex_offset
+                ])
+            elif len(poly.vertices) > 3:
+                # Fan triangulation
                 v0 = poly.vertices[0]
                 for i in range(1, len(poly.vertices) - 1):
-                    all_faces.append([v0 + vertex_offset,
-                                      poly.vertices[i] + vertex_offset,
-                                      poly.vertices[i+1] + vertex_offset])
+                    all_faces.append([
+                        v0 + vertex_offset,
+                        poly.vertices[i] + vertex_offset,
+                        poly.vertices[i+1] + vertex_offset
+                    ])
 
-        all_vertices.append(verts)
-        if len(faces) > 0:
-            all_faces.extend((faces + vertex_offset).tolist())
-
+        all_vertices.extend(verts)
         vertex_offset += len(verts)
         obj_eval.to_mesh_clear()
 
-    result_vertices = np.vstack(all_vertices) if all_vertices else np.array([], dtype=np.float32).reshape(0, 3)
-    result_faces = np.array(all_faces, dtype=np.int32) if all_faces else np.array([], dtype=np.int32).reshape(0, 3)
-
     return {
-        'vertices': result_vertices,
-        'faces': result_faces,
+        'vertices': all_vertices,
+        'faces': all_faces,
         'name': mesh_objects[0].name if mesh_objects else 'combined'
     }
 
 
-@isolated(env="geometrypack", import_paths=[".", ".."])
 def bpy_import_fbx(fbx_path):
     """
     Import .fbx file and extract mesh data.
@@ -562,26 +510,18 @@ def bpy_import_fbx(fbx_path):
         fbx_path: Path to .fbx file
 
     Returns:
-        dict with 'vertices', 'faces' as numpy arrays, 'name' as string
+        dict with 'vertices', 'faces' as lists, 'name' as string
     """
     import bpy
-    import numpy as np
 
-    # Clear scene
     bpy.ops.wm.read_factory_settings(use_empty=True)
-
-    # Import FBX
     bpy.ops.import_scene.fbx(filepath=fbx_path)
 
-    # Find mesh objects
     mesh_objects = [obj for obj in bpy.data.objects if obj.type == 'MESH']
 
     if not mesh_objects:
-        return {'vertices': np.array([], dtype=np.float32).reshape(0, 3),
-                'faces': np.array([], dtype=np.int32).reshape(0, 3),
-                'name': 'empty'}
+        return {'vertices': [], 'faces': [], 'name': 'empty'}
 
-    # Combine all meshes
     all_vertices = []
     all_faces = []
     vertex_offset = 0
@@ -592,29 +532,30 @@ def bpy_import_fbx(fbx_path):
         mesh = obj_eval.to_mesh()
         mesh.transform(obj.matrix_world)
 
-        verts = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
-        faces = np.array([p.vertices[:] for p in mesh.polygons if len(p.vertices) == 3], dtype=np.int32)
+        verts = [list(v.co) for v in mesh.vertices]
 
         for poly in mesh.polygons:
-            if len(poly.vertices) > 3:
+            if len(poly.vertices) == 3:
+                all_faces.append([
+                    poly.vertices[0] + vertex_offset,
+                    poly.vertices[1] + vertex_offset,
+                    poly.vertices[2] + vertex_offset
+                ])
+            elif len(poly.vertices) > 3:
                 v0 = poly.vertices[0]
                 for i in range(1, len(poly.vertices) - 1):
-                    all_faces.append([v0 + vertex_offset,
-                                      poly.vertices[i] + vertex_offset,
-                                      poly.vertices[i+1] + vertex_offset])
+                    all_faces.append([
+                        v0 + vertex_offset,
+                        poly.vertices[i] + vertex_offset,
+                        poly.vertices[i+1] + vertex_offset
+                    ])
 
-        all_vertices.append(verts)
-        if len(faces) > 0:
-            all_faces.extend((faces + vertex_offset).tolist())
-
+        all_vertices.extend(verts)
         vertex_offset += len(verts)
         obj_eval.to_mesh_clear()
 
-    result_vertices = np.vstack(all_vertices) if all_vertices else np.array([], dtype=np.float32).reshape(0, 3)
-    result_faces = np.array(all_faces, dtype=np.int32) if all_faces else np.array([], dtype=np.int32).reshape(0, 3)
-
     return {
-        'vertices': result_vertices,
-        'faces': result_faces,
+        'vertices': all_vertices,
+        'faces': all_faces,
         'name': mesh_objects[0].name if mesh_objects else 'combined'
     }

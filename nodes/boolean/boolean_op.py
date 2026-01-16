@@ -145,7 +145,7 @@ Watertight: {result.is_watertight}
     def _try_blender(self, mesh_a, mesh_b, operation):
         """Try boolean operation using Blender via direct bpy (comfy-env isolation)."""
         try:
-            from .._utils.bpy_bridge import bpy_boolean_operation
+            from .._utils.bpy_worker import call_bpy
 
             print(f"[Boolean] Attempting Blender backend (bpy isolated)...")
 
@@ -156,7 +156,7 @@ Watertight: {result.is_watertight}
                 "intersection": "INTERSECT"
             }[operation]
 
-            result_data = bpy_boolean_operation(
+            result_data = call_bpy('bpy_boolean_operation',
                 vertices_a=np.asarray(mesh_a.vertices, dtype=np.float32),
                 faces_a=np.asarray(mesh_a.faces, dtype=np.int32),
                 vertices_b=np.asarray(mesh_b.vertices, dtype=np.float32),
@@ -165,8 +165,8 @@ Watertight: {result.is_watertight}
             )
 
             result = trimesh_module.Trimesh(
-                vertices=result_data['vertices'],
-                faces=result_data['faces'],
+                vertices=np.array(result_data['vertices'], dtype=np.float32),
+                faces=np.array(result_data['faces'], dtype=np.int32),
                 process=False
             )
 

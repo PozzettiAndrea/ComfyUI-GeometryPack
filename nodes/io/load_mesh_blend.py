@@ -94,7 +94,7 @@ class LoadMeshBlend:
         Returns:
             tuple: (trimesh.Trimesh, info_string)
         """
-        from .._utils.bpy_bridge import bpy_import_blend
+        from .._utils.bpy_worker import call_bpy
 
         if not file_path or file_path.strip() == "":
             raise ValueError("File path cannot be empty")
@@ -132,19 +132,20 @@ class LoadMeshBlend:
                     error_msg += f"\n  - {path}"
                 raise ValueError(error_msg)
 
-        # Load .blend file using bpy_bridge
+        # Load .blend file using bpy_worker
         print(f"[LoadMeshBlend] Loading via bpy isolated: {full_path}")
         try:
-            result = bpy_import_blend(full_path)
+            result = call_bpy('bpy_import_blend', blend_path=full_path)
         except Exception as e:
             raise ValueError(f"Failed to load .blend file: {e}")
 
         if len(result['vertices']) == 0:
             raise ValueError(f"No mesh data found in .blend file: {full_path}")
 
+        import numpy as np
         loaded_mesh = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 

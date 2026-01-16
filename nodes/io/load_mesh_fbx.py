@@ -94,7 +94,7 @@ class LoadMeshFBX:
         Returns:
             tuple: (trimesh.Trimesh, info_string)
         """
-        from .._utils.bpy_bridge import bpy_import_fbx
+        from .._utils.bpy_worker import call_bpy
 
         if not file_path or file_path.strip() == "":
             raise ValueError("File path cannot be empty")
@@ -132,19 +132,20 @@ class LoadMeshFBX:
                     error_msg += f"\n  - {path}"
                 raise ValueError(error_msg)
 
-        # Load FBX file using bpy_bridge
+        # Load FBX file using bpy_worker
         print(f"[LoadMeshFBX] Loading via bpy isolated: {full_path}")
         try:
-            result = bpy_import_fbx(full_path)
+            result = call_bpy('bpy_import_fbx', fbx_path=full_path)
         except Exception as e:
             raise ValueError(f"Failed to load FBX file: {e}")
 
         if len(result['vertices']) == 0:
             raise ValueError(f"No mesh data found in FBX file: {full_path}")
 
+        import numpy as np
         loaded_mesh = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 

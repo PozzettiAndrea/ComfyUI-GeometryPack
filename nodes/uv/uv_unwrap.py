@@ -521,12 +521,12 @@ Better preservation of angles and shapes.
     def _blender_smart(self, trimesh, angle_limit, island_margin, scale_to_bounds):
         """Blender Smart UV Project using direct bpy via comfy-env isolation."""
         import math
-        from .._utils.bpy_bridge import bpy_smart_uv_project
+        from .._utils.bpy_worker import call_bpy
 
         angle_limit_rad = math.radians(angle_limit)
 
         print(f"[UVUnwrap] Running Blender Smart UV Project (bpy isolated)...")
-        result = bpy_smart_uv_project(
+        result = call_bpy('bpy_smart_uv_project',
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             angle_limit=angle_limit_rad,
@@ -535,13 +535,13 @@ Better preservation of angles and shapes.
         )
 
         unwrapped = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 
         from trimesh.visual import TextureVisuals
-        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+        unwrapped.visual = TextureVisuals(uv=np.array(result['uvs'], dtype=np.float32))
 
         # Preserve metadata
         unwrapped.metadata = trimesh.metadata.copy()
@@ -573,10 +573,10 @@ Automatic seam-based unwrapping with intelligent island creation.
 
     def _blender_cube(self, trimesh, cube_size, scale_to_bounds):
         """Blender Cube Projection using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_bridge import bpy_cube_uv_project
+        from .._utils.bpy_worker import call_bpy
 
         print(f"[UVUnwrap] Running Blender Cube Projection (bpy isolated)...")
-        result = bpy_cube_uv_project(
+        result = call_bpy('bpy_cube_uv_project',
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             cube_size=cube_size,
@@ -584,13 +584,13 @@ Automatic seam-based unwrapping with intelligent island creation.
         )
 
         unwrapped = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 
         from trimesh.visual import TextureVisuals
-        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+        unwrapped.visual = TextureVisuals(uv=np.array(result['uvs'], dtype=np.float32))
 
         # Preserve metadata
         unwrapped.metadata = trimesh.metadata.copy()
@@ -616,10 +616,10 @@ Best for box-like objects.
 
     def _blender_cylinder(self, trimesh, cylinder_radius, scale_to_bounds):
         """Blender Cylinder Projection using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_bridge import bpy_cylinder_uv_project
+        from .._utils.bpy_worker import call_bpy
 
         print(f"[UVUnwrap] Running Blender Cylinder Projection (bpy isolated)...")
-        result = bpy_cylinder_uv_project(
+        result = call_bpy('bpy_cylinder_uv_project',
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             radius=cylinder_radius,
@@ -627,13 +627,13 @@ Best for box-like objects.
         )
 
         unwrapped = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 
         from trimesh.visual import TextureVisuals
-        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+        unwrapped.visual = TextureVisuals(uv=np.array(result['uvs'], dtype=np.float32))
 
         # Preserve metadata
         unwrapped.metadata = trimesh.metadata.copy()
@@ -659,23 +659,23 @@ Best for cylindrical objects.
 
     def _blender_sphere(self, trimesh, scale_to_bounds):
         """Blender Sphere Projection using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_bridge import bpy_sphere_uv_project
+        from .._utils.bpy_worker import call_bpy
 
         print(f"[UVUnwrap] Running Blender Sphere Projection (bpy isolated)...")
-        result = bpy_sphere_uv_project(
+        result = call_bpy('bpy_sphere_uv_project',
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             scale_to_bounds=(scale_to_bounds == 'true')
         )
 
         unwrapped = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 
         from trimesh.visual import TextureVisuals
-        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+        unwrapped.visual = TextureVisuals(uv=np.array(result['uvs'], dtype=np.float32))
 
         # Preserve metadata
         unwrapped.metadata = trimesh.metadata.copy()

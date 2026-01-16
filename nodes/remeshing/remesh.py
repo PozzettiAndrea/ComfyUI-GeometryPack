@@ -263,18 +263,18 @@ After:
 
     def _blender_voxel(self, trimesh, voxel_size):
         """Blender voxel remeshing using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_bridge import bpy_voxel_remesh
+        from .._utils.bpy_worker import call_bpy
 
         print(f"[Remesh] Running Blender voxel remesh (bpy isolated, voxel_size={voxel_size})...")
-        result = bpy_voxel_remesh(
+        result = call_bpy('bpy_voxel_remesh',
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             voxel_size=voxel_size
         )
 
         remeshed_mesh = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 
@@ -304,18 +304,18 @@ After:
 
     def _blender_quadriflow(self, trimesh, target_face_count):
         """Blender Quadriflow remeshing using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_bridge import bpy_quadriflow_remesh
+        from .._utils.bpy_worker import call_bpy
 
         print(f"[Remesh] Running Blender Quadriflow (bpy isolated, target_faces={target_face_count})...")
-        result = bpy_quadriflow_remesh(
+        result = call_bpy('bpy_quadriflow_remesh',
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             target_face_count=target_face_count
         )
 
         remeshed_mesh = trimesh_module.Trimesh(
-            vertices=result['vertices'],
-            faces=result['faces'],
+            vertices=np.array(result['vertices'], dtype=np.float32),
+            faces=np.array(result['faces'], dtype=np.int32),
             process=False
         )
 
