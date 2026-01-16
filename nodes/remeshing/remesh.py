@@ -9,7 +9,6 @@ import numpy as np
 import trimesh as trimesh_module
 
 from .._utils import mesh_ops
-from .._utils import blender_bridge
 
 
 class RemeshNode:
@@ -263,49 +262,35 @@ After:
         return remeshed_mesh, info
 
     def _blender_voxel(self, trimesh, voxel_size):
-        """Blender voxel remeshing."""
-        script = f"""
-import bpy
+        """Blender voxel remeshing using direct bpy via comfy-env isolation."""
+        from .._utils.bpy_bridge import bpy_voxel_remesh
 
-# Clear scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete()
-
-# Import mesh
-bpy.ops.wm.obj_import(filepath='{{input_path}}')
-
-# Get imported object
-obj = bpy.context.selected_objects[0]
-bpy.context.view_layer.objects.active = obj
-
-# Apply voxel remesh
-obj.data.remesh_voxel_size = {voxel_size}
-bpy.ops.object.voxel_remesh()
-
-# Export remeshed object
-bpy.ops.wm.obj_export(
-    filepath='{{output_path}}',
-    export_selected_objects=True,
-    export_uv=False,
-    export_materials=False
-)
-"""
-
-        print(f"[Remesh] Running Blender voxel remesh (voxel_size={voxel_size})...")
-        remeshed_mesh = blender_bridge.run_blender_mesh_operation(
-            trimesh, script,
-            metadata_key='remeshing',
-            metadata_values={
-                'algorithm': 'blender_voxel',
-                'voxel_size': voxel_size,
-                'original_vertices': len(trimesh.vertices),
-                'original_faces': len(trimesh.faces)
-            }
+        print(f"[Remesh] Running Blender voxel remesh (bpy isolated, voxel_size={voxel_size})...")
+        result = bpy_voxel_remesh(
+            vertices=np.asarray(trimesh.vertices, dtype=np.float32),
+            faces=np.asarray(trimesh.faces, dtype=np.int32),
+            voxel_size=voxel_size
         )
+
+        remeshed_mesh = trimesh_module.Trimesh(
+            vertices=result['vertices'],
+            faces=result['faces'],
+            process=False
+        )
+
+        # Preserve metadata
+        remeshed_mesh.metadata = trimesh.metadata.copy()
+        remeshed_mesh.metadata['remeshing'] = {
+            'algorithm': 'blender_voxel',
+            'voxel_size': voxel_size,
+            'original_vertices': len(trimesh.vertices),
+            'original_faces': len(trimesh.faces)
+        }
 
         info = f"""Remesh Results (Blender Voxel):
 
 Voxel Size: {voxel_size}
+Method: bpy isolated
 
 Before:
   Vertices: {len(trimesh.vertices):,}
@@ -318,56 +303,35 @@ After:
         return remeshed_mesh, info
 
     def _blender_quadriflow(self, trimesh, target_face_count):
-        """Blender Quadriflow remeshing."""
-        script = f"""
-import bpy
+        """Blender Quadriflow remeshing using direct bpy via comfy-env isolation."""
+        from .._utils.bpy_bridge import bpy_quadriflow_remesh
 
-# Clear scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete()
-
-# Import mesh
-bpy.ops.wm.obj_import(filepath='{{input_path}}')
-
-# Get imported object
-obj = bpy.context.selected_objects[0]
-bpy.context.view_layer.objects.active = obj
-
-# Apply Quadriflow remesh
-bpy.ops.object.quadriflow_remesh(
-    use_mesh_symmetry=False,
-    use_preserve_sharp=False,
-    use_preserve_boundary=False,
-    smooth_normals=False,
-    mode='FACES',
-    target_faces={target_face_count},
-    seed=0
-)
-
-# Export remeshed object
-bpy.ops.wm.obj_export(
-    filepath='{{output_path}}',
-    export_selected_objects=True,
-    export_uv=False,
-    export_materials=False
-)
-"""
-
-        print(f"[Remesh] Running Blender Quadriflow (target_faces={target_face_count})...")
-        remeshed_mesh = blender_bridge.run_blender_mesh_operation(
-            trimesh, script,
-            metadata_key='remeshing',
-            metadata_values={
-                'algorithm': 'blender_quadriflow',
-                'target_face_count': target_face_count,
-                'original_vertices': len(trimesh.vertices),
-                'original_faces': len(trimesh.faces)
-            }
+        print(f"[Remesh] Running Blender Quadriflow (bpy isolated, target_faces={target_face_count})...")
+        result = bpy_quadriflow_remesh(
+            vertices=np.asarray(trimesh.vertices, dtype=np.float32),
+            faces=np.asarray(trimesh.faces, dtype=np.int32),
+            target_face_count=target_face_count
         )
+
+        remeshed_mesh = trimesh_module.Trimesh(
+            vertices=result['vertices'],
+            faces=result['faces'],
+            process=False
+        )
+
+        # Preserve metadata
+        remeshed_mesh.metadata = trimesh.metadata.copy()
+        remeshed_mesh.metadata['remeshing'] = {
+            'algorithm': 'blender_quadriflow',
+            'target_face_count': target_face_count,
+            'original_vertices': len(trimesh.vertices),
+            'original_faces': len(trimesh.faces)
+        }
 
         info = f"""Remesh Results (Blender Quadriflow):
 
 Target Face Count: {target_face_count:,}
+Method: bpy isolated
 
 Before:
   Vertices: {len(trimesh.vertices):,}

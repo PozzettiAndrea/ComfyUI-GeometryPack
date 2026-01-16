@@ -2,11 +2,11 @@
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
 """
-Load Mesh FBX Node - Load FBX files with automatic conversion to GLB
+Load Mesh FBX Node - Load FBX files using direct bpy via comfy-env isolation.
 """
 
 import os
-import subprocess
+import trimesh as trimesh_module
 
 # ComfyUI folder paths
 try:
@@ -16,109 +16,13 @@ except (ImportError, AttributeError):
     # Fallback if folder_paths not available (e.g., during testing)
     COMFYUI_INPUT_FOLDER = None
 
-from .._utils import mesh_ops, blender_bridge
-
-
-def _convert_fbx_to_glb(fbx_path, cache_dir=None):
-    """
-    Convert FBX file to GLB using Blender.
-
-    Args:
-        fbx_path: Path to FBX file
-        cache_dir: Directory for caching converted files (optional)
-
-    Returns:
-        str: Path to converted GLB file
-
-    Raises:
-        RuntimeError: If conversion fails
-    """
-    print(f"[FBX→GLB] Converting: {fbx_path}")
-
-    # Setup cache
-    if cache_dir is None:
-        cache_dir = os.path.join(os.path.dirname(fbx_path), ".fbx_cache")
-
-    os.makedirs(cache_dir, exist_ok=True)
-
-    # Generate cache filename
-    fbx_basename = os.path.basename(fbx_path)
-    fbx_name_no_ext = os.path.splitext(fbx_basename)[0]
-    glb_cache_path = os.path.join(cache_dir, f"{fbx_name_no_ext}.glb")
-
-    # Check if cached GLB exists and is newer than FBX
-    if os.path.exists(glb_cache_path):
-        fbx_mtime = os.path.getmtime(fbx_path)
-        glb_mtime = os.path.getmtime(glb_cache_path)
-        if glb_mtime > fbx_mtime:
-            print(f"[FBX→GLB] Using cached GLB: {glb_cache_path}")
-            return glb_cache_path
-
-    # Find Blender
-    try:
-        blender_path = blender_bridge.find_blender()
-    except RuntimeError as e:
-        raise RuntimeError(f"FBX conversion requires Blender: {e}")
-
-    # Convert FBX to GLB using Blender
-    script = f"""
-import bpy
-import sys
-
-try:
-    # Clear scene
-    bpy.ops.wm.read_factory_settings(use_empty=True)
-
-    # Import FBX
-    print("[Blender] Importing FBX...")
-    bpy.ops.import_scene.fbx(filepath='{fbx_path}')
-
-    # Export as GLB
-    print("[Blender] Exporting GLB...")
-    bpy.ops.export_scene.gltf(
-        filepath='{glb_cache_path}',
-        export_format='GLB',
-        export_image_format='AUTO',
-        export_materials='EXPORT'
-    )
-
-    print("[Blender] Conversion complete!")
-    sys.exit(0)
-
-except Exception as e:
-    print(f"[Blender] Error: {{e}}")
-    import traceback
-    traceback.print_exc()
-    sys.exit(1)
-"""
-
-    print(f"[FBX→GLB] Running Blender conversion...")
-    result = subprocess.run(
-        [blender_path, '--background', '--python-expr', script],
-        capture_output=True,
-        text=True,
-        timeout=300
-    )
-
-    if result.returncode != 0:
-        error_msg = f"Blender conversion failed:\n{result.stderr}"
-        print(f"[FBX→GLB] {error_msg}")
-        raise RuntimeError(error_msg)
-
-    if not os.path.exists(glb_cache_path):
-        raise RuntimeError(f"GLB file was not created: {glb_cache_path}")
-
-    print(f"[FBX→GLB] ✓ Converted successfully: {glb_cache_path}")
-    return glb_cache_path
-
 
 class LoadMeshFBX:
     """
-    Load FBX files with automatic conversion to GLB.
+    Load FBX files using direct bpy via comfy-env isolation.
 
-    FBX files are not natively supported by trimesh, so this node automatically
-    converts them to GLB using Blender, then loads the result. Converted files
-    are cached to avoid repeated conversions.
+    Uses the bpy Python module in an isolated environment to directly
+    import FBX files and extract mesh data without subprocess or temp files.
     """
 
     @classmethod
@@ -182,7 +86,7 @@ class LoadMeshFBX:
 
     def load_fbx(self, file_path):
         """
-        Load FBX file by converting to GLB first.
+        Load FBX file using direct bpy via comfy-env isolation.
 
         Args:
             file_path: Path to FBX file (relative to input folder or absolute)
@@ -190,6 +94,8 @@ class LoadMeshFBX:
         Returns:
             tuple: (trimesh.Trimesh, info_string)
         """
+        from .._utils.bpy_bridge import bpy_import_fbx
+
         if not file_path or file_path.strip() == "":
             raise ValueError("File path cannot be empty")
 
@@ -226,26 +132,36 @@ class LoadMeshFBX:
                     error_msg += f"\n  - {path}"
                 raise ValueError(error_msg)
 
-        # Convert FBX to GLB
+        # Load FBX file using bpy_bridge
+        print(f"[LoadMeshFBX] Loading via bpy isolated: {full_path}")
         try:
-            glb_path = _convert_fbx_to_glb(full_path)
-        except RuntimeError as e:
-            raise ValueError(f"Failed to convert FBX to GLB: {e}")
+            result = bpy_import_fbx(full_path)
+        except Exception as e:
+            raise ValueError(f"Failed to load FBX file: {e}")
 
-        # Load the GLB mesh
-        loaded_mesh, error = mesh_ops.load_mesh_file(glb_path)
+        if len(result['vertices']) == 0:
+            raise ValueError(f"No mesh data found in FBX file: {full_path}")
 
-        if loaded_mesh is None:
-            raise ValueError(f"Failed to load converted GLB: {error}")
+        loaded_mesh = trimesh_module.Trimesh(
+            vertices=result['vertices'],
+            faces=result['faces'],
+            process=False
+        )
+
+        # Add metadata
+        loaded_mesh.metadata['source'] = {
+            'file': os.path.basename(full_path),
+            'format': 'fbx',
+            'loader': 'bpy_isolated'
+        }
 
         # Generate info string
-        info = f"FBX Loaded (auto-converted to GLB)\n"
-        info += f"Original: {os.path.basename(full_path)}\n"
-        info += f"Converted: {os.path.basename(glb_path)}\n"
+        info = f"FBX Loaded (bpy isolated)\n"
+        info += f"File: {os.path.basename(full_path)}\n"
         info += f"Vertices: {len(loaded_mesh.vertices):,}\n"
         info += f"Faces: {len(loaded_mesh.faces):,}"
 
-        print(f"[LoadMeshFBX] ✓ Loaded: {len(loaded_mesh.vertices)} vertices, {len(loaded_mesh.faces)} faces")
+        print(f"[LoadMeshFBX] Loaded: {len(loaded_mesh.vertices)} vertices, {len(loaded_mesh.faces)} faces")
 
         return (loaded_mesh, info)
 

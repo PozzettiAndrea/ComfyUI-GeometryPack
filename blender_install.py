@@ -3,14 +3,38 @@
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
 """
-Blender Installer for ComfyUI-GeometryPack
+DEPRECATED: Blender Installer for ComfyUI-GeometryPack
 
-Downloads and installs Blender for UV unwrapping and remeshing nodes.
-Run this script manually if you need Blender functionality.
+This script is DEPRECATED. Blender functionality now uses bpy (Blender as Python
+module) via comfy-env isolation, which is much cleaner and doesn't require
+downloading ~800MB of full Blender.
 
-Usage:
+Instead of running this script, use comfy-env:
+
+    cd custom_nodes/ComfyUI-GeometryPack
+    comfy-env install
+
+This creates an isolated Python 3.11 environment with:
+  - bpy>=4.2,<4.3 (Blender as Python module)
+  - cumesh (GPU-accelerated mesh operations)
+  - numpy<2 (required by bpy)
+  - trimesh>=4.0.0
+
+The old subprocess-based Blender approach is kept for backwards compatibility
+but will be removed in a future version.
+
+Usage (DEPRECATED):
     python blender_install.py
 """
+
+import warnings
+warnings.warn(
+    "blender_install.py is DEPRECATED. "
+    "Use 'comfy-env install' instead for bpy + cumesh in an isolated environment. "
+    "See comfy-env.toml for configuration.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 import os
 import sys

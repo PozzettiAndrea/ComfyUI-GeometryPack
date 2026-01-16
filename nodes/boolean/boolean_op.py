@@ -143,101 +143,50 @@ Watertight: {result.is_watertight}
             return None, str(e)
 
     def _try_blender(self, mesh_a, mesh_b, operation):
-        """Try boolean operation using Blender."""
+        """Try boolean operation using Blender via direct bpy (comfy-env isolation)."""
         try:
-            from .._utils import blender_bridge
-            import tempfile
-            import os
+            from .._utils.bpy_bridge import bpy_boolean_operation
 
-            print(f"[Boolean] Attempting Blender backend...")
+            print(f"[Boolean] Attempting Blender backend (bpy isolated)...")
 
-            # Create temp files for both meshes
-            with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_a:
-                input_a_path = f_a.name
-                mesh_a.export(input_a_path)
+            # Map operation to Blender modifier type
+            blender_op = {
+                "union": "UNION",
+                "difference": "DIFFERENCE",
+                "intersection": "INTERSECT"
+            }[operation]
 
-            with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_b:
-                input_b_path = f_b.name
-                mesh_b.export(input_b_path)
+            result_data = bpy_boolean_operation(
+                vertices_a=np.asarray(mesh_a.vertices, dtype=np.float32),
+                faces_a=np.asarray(mesh_a.faces, dtype=np.int32),
+                vertices_b=np.asarray(mesh_b.vertices, dtype=np.float32),
+                faces_b=np.asarray(mesh_b.faces, dtype=np.int32),
+                operation=blender_op
+            )
 
-            with tempfile.NamedTemporaryFile(suffix='.obj', delete=False) as f_out:
-                output_path = f_out.name
+            result = trimesh_module.Trimesh(
+                vertices=result_data['vertices'],
+                faces=result_data['faces'],
+                process=False
+            )
 
-            try:
-                # Map operation to Blender modifier type
-                blender_op = {
-                    "union": "UNION",
-                    "difference": "DIFFERENCE",
-                    "intersection": "INTERSECT"
-                }[operation]
+            # Preserve metadata
+            result.metadata = mesh_a.metadata.copy()
+            result.metadata['boolean'] = {
+                'operation': operation,
+                'engine': 'blender_bpy_isolated',
+                'mesh_a_vertices': len(mesh_a.vertices),
+                'mesh_a_faces': len(mesh_a.faces),
+                'mesh_b_vertices': len(mesh_b.vertices),
+                'mesh_b_faces': len(mesh_b.faces),
+                'result_vertices': len(result.vertices),
+                'result_faces': len(result.faces)
+            }
 
-                script = f"""
-import bpy
-
-# Clear scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete()
-
-# Import mesh A
-bpy.ops.wm.obj_import(filepath='{input_a_path}')
-obj_a = bpy.context.selected_objects[0]
-obj_a.name = "MeshA"
-
-# Import mesh B
-bpy.ops.wm.obj_import(filepath='{input_b_path}')
-obj_b = bpy.context.selected_objects[0]
-obj_b.name = "MeshB"
-
-# Select mesh A as active
-bpy.ops.object.select_all(action='DESELECT')
-obj_a.select_set(True)
-bpy.context.view_layer.objects.active = obj_a
-
-# Add boolean modifier
-bool_mod = obj_a.modifiers.new(name="Boolean", type='BOOLEAN')
-bool_mod.operation = '{blender_op}'
-bool_mod.object = obj_b
-bool_mod.solver = 'EXACT'
-
-# Apply modifier
-bpy.ops.object.modifier_apply(modifier="Boolean")
-
-# Delete mesh B
-bpy.data.objects.remove(obj_b, do_unlink=True)
-
-# Export result
-bpy.ops.wm.obj_export(
-    filepath='{output_path}',
-    export_selected_objects=True,
-    export_uv=False,
-    export_materials=False
-)
-"""
-
-                blender_bridge.run_blender_script(script, timeout=300)
-
-                # Load result
-                result = trimesh_module.load(output_path, process=False)
-                if isinstance(result, trimesh_module.Scene):
-                    result = result.dump(concatenate=True)
-
-                # Preserve metadata
-                result.metadata = mesh_a.metadata.copy()
-                result.metadata['boolean'] = {
-                    'operation': operation,
-                    'engine': 'blender',
-                    'mesh_a_vertices': len(mesh_a.vertices),
-                    'mesh_a_faces': len(mesh_a.faces),
-                    'mesh_b_vertices': len(mesh_b.vertices),
-                    'mesh_b_faces': len(mesh_b.faces),
-                    'result_vertices': len(result.vertices),
-                    'result_faces': len(result.faces)
-                }
-
-                info = f"""Boolean Operation Results:
+            info = f"""Boolean Operation Results:
 
 Operation: {operation.upper()}
-Engine: blender (EXACT solver)
+Engine: blender bpy isolated (EXACT solver)
 
 Mesh A:
   Vertices: {len(mesh_a.vertices):,}
@@ -254,14 +203,8 @@ Result:
 Watertight: {result.is_watertight}
 """
 
-                print(f"[Boolean] Blender success: {len(result.vertices)} vertices, {len(result.faces)} faces")
-                return result, info
-
-            finally:
-                # Cleanup temp files
-                for path in [input_a_path, input_b_path, output_path]:
-                    if os.path.exists(path):
-                        os.unlink(path)
+            print(f"[Boolean] Blender (bpy) success: {len(result.vertices)} vertices, {len(result.faces)} faces")
+            return result, info
 
         except Exception as e:
             print(f"[Boolean] Blender backend failed: {e}")

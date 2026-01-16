@@ -2,12 +2,27 @@
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
 """
-Shared Blender utilities for ComfyUI-GeometryPack nodes.
+DEPRECATED: Shared Blender utilities for ComfyUI-GeometryPack nodes.
 
-This module provides common functionality for interacting with Blender,
-including finding the Blender executable, running scripts, and managing
-temporary files.
+This module is DEPRECATED. Blender operations now use bpy_bridge.py with
+comfy-env isolation, which provides direct bpy API calls without subprocess
+or temp file I/O.
+
+Use bpy_bridge.py instead:
+    from .._utils.bpy_bridge import bpy_smart_uv_project, bpy_voxel_remesh, etc.
+
+This module is kept for backwards compatibility but will be removed in a
+future version.
 """
+
+import warnings
+warnings.warn(
+    "blender_bridge.py is DEPRECATED. "
+    "Blender operations now use bpy_bridge.py with comfy-env isolation. "
+    "This module will be removed in a future version.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 import os
 import subprocess

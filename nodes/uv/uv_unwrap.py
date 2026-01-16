@@ -519,67 +519,43 @@ Better preservation of angles and shapes.
         return unwrapped, info
 
     def _blender_smart(self, trimesh, angle_limit, island_margin, scale_to_bounds):
-        """Blender Smart UV Project."""
+        """Blender Smart UV Project using direct bpy via comfy-env isolation."""
         import math
-        from .._utils import blender_bridge
+        from .._utils.bpy_bridge import bpy_smart_uv_project
 
         angle_limit_rad = math.radians(angle_limit)
 
-        uv_script = f"""
-bpy.ops.uv.smart_project(
-    angle_limit={angle_limit_rad},
-    island_margin={island_margin},
-    area_weight=0.0,
-    correct_aspect=True,
-    scale_to_bounds={'True' if scale_to_bounds == 'true' else 'False'}
-)
-"""
-
-        script = f"""
-import bpy
-
-# Clear scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete()
-
-# Import mesh
-bpy.ops.wm.obj_import(filepath='{{input_path}}')
-
-# Get imported object
-obj = bpy.context.selected_objects[0]
-bpy.context.view_layer.objects.active = obj
-
-# Switch to edit mode and unwrap
-bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
-{uv_script}
-bpy.ops.object.mode_set(mode='OBJECT')
-
-# Export with UVs
-bpy.ops.wm.obj_export(
-    filepath='{{output_path}}',
-    export_selected_objects=True,
-    export_uv=True,
-    export_materials=False
-)
-"""
-
-        print(f"[UVUnwrap] Running Blender Smart UV Project...")
-        unwrapped = blender_bridge.run_blender_mesh_operation(
-            trimesh, script,
-            metadata_key='uv_unwrap',
-            metadata_values={
-                'algorithm': 'blender_smart_uv_project',
-                'angle_limit': angle_limit,
-                'island_margin': island_margin,
-                'scale_to_bounds': scale_to_bounds == 'true'
-            }
+        print(f"[UVUnwrap] Running Blender Smart UV Project (bpy isolated)...")
+        result = bpy_smart_uv_project(
+            vertices=np.asarray(trimesh.vertices, dtype=np.float32),
+            faces=np.asarray(trimesh.faces, dtype=np.int32),
+            angle_limit=angle_limit_rad,
+            island_margin=island_margin,
+            scale_to_bounds=(scale_to_bounds == 'true')
         )
+
+        unwrapped = trimesh_module.Trimesh(
+            vertices=result['vertices'],
+            faces=result['faces'],
+            process=False
+        )
+
+        from trimesh.visual import TextureVisuals
+        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+
+        # Preserve metadata
+        unwrapped.metadata = trimesh.metadata.copy()
+        unwrapped.metadata['uv_unwrap'] = {
+            'algorithm': 'blender_smart_uv_project',
+            'angle_limit': angle_limit,
+            'island_margin': island_margin,
+            'scale_to_bounds': scale_to_bounds == 'true'
+        }
 
         info = f"""UV Unwrap Results (Blender Smart UV):
 
-Method: Smart UV Project
-Angle Limit: {angle_limit}°
+Method: Smart UV Project (bpy isolated)
+Angle Limit: {angle_limit}deg
 Island Margin: {island_margin}
 Scale to Bounds: {scale_to_bounds}
 
@@ -596,59 +572,37 @@ Automatic seam-based unwrapping with intelligent island creation.
         return unwrapped, info
 
     def _blender_cube(self, trimesh, cube_size, scale_to_bounds):
-        """Blender Cube Projection."""
-        from .._utils import blender_bridge
+        """Blender Cube Projection using direct bpy via comfy-env isolation."""
+        from .._utils.bpy_bridge import bpy_cube_uv_project
 
-        uv_script = f"""
-bpy.ops.uv.cube_project(
-    cube_size={cube_size},
-    scale_to_bounds={'True' if scale_to_bounds == 'true' else 'False'}
-)
-"""
-
-        script = f"""
-import bpy
-
-# Clear scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete()
-
-# Import mesh
-bpy.ops.wm.obj_import(filepath='{{input_path}}')
-
-# Get imported object
-obj = bpy.context.selected_objects[0]
-bpy.context.view_layer.objects.active = obj
-
-# Switch to edit mode and project
-bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
-{uv_script}
-bpy.ops.object.mode_set(mode='OBJECT')
-
-# Export with UVs
-bpy.ops.wm.obj_export(
-    filepath='{{output_path}}',
-    export_selected_objects=True,
-    export_uv=True,
-    export_materials=False
-)
-"""
-
-        print(f"[UVUnwrap] Running Blender Cube Projection...")
-        unwrapped = blender_bridge.run_blender_mesh_operation(
-            trimesh, script,
-            metadata_key='uv_unwrap',
-            metadata_values={
-                'algorithm': 'blender_cube_projection',
-                'cube_size': cube_size,
-                'scale_to_bounds': scale_to_bounds == 'true'
-            }
+        print(f"[UVUnwrap] Running Blender Cube Projection (bpy isolated)...")
+        result = bpy_cube_uv_project(
+            vertices=np.asarray(trimesh.vertices, dtype=np.float32),
+            faces=np.asarray(trimesh.faces, dtype=np.int32),
+            cube_size=cube_size,
+            scale_to_bounds=(scale_to_bounds == 'true')
         )
+
+        unwrapped = trimesh_module.Trimesh(
+            vertices=result['vertices'],
+            faces=result['faces'],
+            process=False
+        )
+
+        from trimesh.visual import TextureVisuals
+        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+
+        # Preserve metadata
+        unwrapped.metadata = trimesh.metadata.copy()
+        unwrapped.metadata['uv_unwrap'] = {
+            'algorithm': 'blender_cube_projection',
+            'cube_size': cube_size,
+            'scale_to_bounds': scale_to_bounds == 'true'
+        }
 
         info = f"""UV Unwrap Results (Blender Cube):
 
-Method: Cube Projection
+Method: Cube Projection (bpy isolated)
 Cube Size: {cube_size}
 Scale to Bounds: {scale_to_bounds}
 
@@ -661,59 +615,37 @@ Best for box-like objects.
         return unwrapped, info
 
     def _blender_cylinder(self, trimesh, cylinder_radius, scale_to_bounds):
-        """Blender Cylinder Projection."""
-        from .._utils import blender_bridge
+        """Blender Cylinder Projection using direct bpy via comfy-env isolation."""
+        from .._utils.bpy_bridge import bpy_cylinder_uv_project
 
-        uv_script = f"""
-bpy.ops.uv.cylinder_project(
-    radius={cylinder_radius},
-    scale_to_bounds={'True' if scale_to_bounds == 'true' else 'False'}
-)
-"""
-
-        script = f"""
-import bpy
-
-# Clear scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete()
-
-# Import mesh
-bpy.ops.wm.obj_import(filepath='{{input_path}}')
-
-# Get imported object
-obj = bpy.context.selected_objects[0]
-bpy.context.view_layer.objects.active = obj
-
-# Switch to edit mode and project
-bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
-{uv_script}
-bpy.ops.object.mode_set(mode='OBJECT')
-
-# Export with UVs
-bpy.ops.wm.obj_export(
-    filepath='{{output_path}}',
-    export_selected_objects=True,
-    export_uv=True,
-    export_materials=False
-)
-"""
-
-        print(f"[UVUnwrap] Running Blender Cylinder Projection...")
-        unwrapped = blender_bridge.run_blender_mesh_operation(
-            trimesh, script,
-            metadata_key='uv_unwrap',
-            metadata_values={
-                'algorithm': 'blender_cylinder_projection',
-                'cylinder_radius': cylinder_radius,
-                'scale_to_bounds': scale_to_bounds == 'true'
-            }
+        print(f"[UVUnwrap] Running Blender Cylinder Projection (bpy isolated)...")
+        result = bpy_cylinder_uv_project(
+            vertices=np.asarray(trimesh.vertices, dtype=np.float32),
+            faces=np.asarray(trimesh.faces, dtype=np.int32),
+            radius=cylinder_radius,
+            scale_to_bounds=(scale_to_bounds == 'true')
         )
+
+        unwrapped = trimesh_module.Trimesh(
+            vertices=result['vertices'],
+            faces=result['faces'],
+            process=False
+        )
+
+        from trimesh.visual import TextureVisuals
+        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+
+        # Preserve metadata
+        unwrapped.metadata = trimesh.metadata.copy()
+        unwrapped.metadata['uv_unwrap'] = {
+            'algorithm': 'blender_cylinder_projection',
+            'cylinder_radius': cylinder_radius,
+            'scale_to_bounds': scale_to_bounds == 'true'
+        }
 
         info = f"""UV Unwrap Results (Blender Cylinder):
 
-Method: Cylinder Projection
+Method: Cylinder Projection (bpy isolated)
 Cylinder Radius: {cylinder_radius}
 Scale to Bounds: {scale_to_bounds}
 
@@ -726,57 +658,35 @@ Best for cylindrical objects.
         return unwrapped, info
 
     def _blender_sphere(self, trimesh, scale_to_bounds):
-        """Blender Sphere Projection."""
-        from .._utils import blender_bridge
+        """Blender Sphere Projection using direct bpy via comfy-env isolation."""
+        from .._utils.bpy_bridge import bpy_sphere_uv_project
 
-        uv_script = f"""
-bpy.ops.uv.sphere_project(
-    scale_to_bounds={'True' if scale_to_bounds == 'true' else 'False'}
-)
-"""
-
-        script = f"""
-import bpy
-
-# Clear scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete()
-
-# Import mesh
-bpy.ops.wm.obj_import(filepath='{{input_path}}')
-
-# Get imported object
-obj = bpy.context.selected_objects[0]
-bpy.context.view_layer.objects.active = obj
-
-# Switch to edit mode and project
-bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
-{uv_script}
-bpy.ops.object.mode_set(mode='OBJECT')
-
-# Export with UVs
-bpy.ops.wm.obj_export(
-    filepath='{{output_path}}',
-    export_selected_objects=True,
-    export_uv=True,
-    export_materials=False
-)
-"""
-
-        print(f"[UVUnwrap] Running Blender Sphere Projection...")
-        unwrapped = blender_bridge.run_blender_mesh_operation(
-            trimesh, script,
-            metadata_key='uv_unwrap',
-            metadata_values={
-                'algorithm': 'blender_sphere_projection',
-                'scale_to_bounds': scale_to_bounds == 'true'
-            }
+        print(f"[UVUnwrap] Running Blender Sphere Projection (bpy isolated)...")
+        result = bpy_sphere_uv_project(
+            vertices=np.asarray(trimesh.vertices, dtype=np.float32),
+            faces=np.asarray(trimesh.faces, dtype=np.int32),
+            scale_to_bounds=(scale_to_bounds == 'true')
         )
+
+        unwrapped = trimesh_module.Trimesh(
+            vertices=result['vertices'],
+            faces=result['faces'],
+            process=False
+        )
+
+        from trimesh.visual import TextureVisuals
+        unwrapped.visual = TextureVisuals(uv=result['uvs'])
+
+        # Preserve metadata
+        unwrapped.metadata = trimesh.metadata.copy()
+        unwrapped.metadata['uv_unwrap'] = {
+            'algorithm': 'blender_sphere_projection',
+            'scale_to_bounds': scale_to_bounds == 'true'
+        }
 
         info = f"""UV Unwrap Results (Blender Sphere):
 
-Method: Sphere Projection
+Method: Sphere Projection (bpy isolated)
 Scale to Bounds: {scale_to_bounds}
 
 Vertices: {len(unwrapped.vertices):,}
