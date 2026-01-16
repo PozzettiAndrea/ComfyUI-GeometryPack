@@ -1,6 +1,9 @@
 # ComfyUI-GeometryPack comfy-env configuration
 # Uses comfy-env for isolated Python environment with bpy + cumesh
 
+[system]
+linux = ["libgl1", "libopengl0", "libglu1-mesa", "libglx-mesa0", "libosmesa6"]
+
 [geometrypack]
 python = "3.11"           # Required by bpy
 cuda_version = "auto"

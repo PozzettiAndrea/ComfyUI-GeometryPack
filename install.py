@@ -5,76 +5,35 @@
 """
 GeometryPack Installer
 
-Orchestrates modular install scripts for ComfyUI-GeometryPack.
 Uses comfy-env for isolated Python environment with bpy + cumesh.
-
-For full functionality (Blender operations, cumesh GPU acceleration):
-    cd custom_nodes/ComfyUI-GeometryPack
-    comfy-env install
 """
 
 import sys
-
-from install_scripts import (
-    install_system_dependencies,
-    install_python_dependencies,
-)
+from pathlib import Path
 
 
 def main():
-    """Entry point."""
-    print("\n" + "="*60)
-    print("ComfyUI-GeometryPack: Installation")
-    print("="*60 + "\n")
-    print("This installer will set up:")
-    print("  1. System dependencies (OpenGL libraries on Linux)")
-    print("  2. Python dependencies (trimesh, pymeshlab, etc.)")
-    print("")
-    print("For Blender operations (UV Unwrap, Remesh, Boolean, etc.)")
-    print("and GPU-accelerated cumesh, run comfy-env install:")
-    print("")
-    print("    cd custom_nodes/ComfyUI-GeometryPack")
-    print("    comfy-env install")
-    print("")
-    print("This creates an isolated Python 3.11 environment with bpy + cumesh.")
-    print("")
+    print("\n" + "=" * 60)
+    print("ComfyUI-UniRig Installation")
+    print("=" * 60)
 
-    results = {
-        'system_deps': False,
-        'python_deps': False,
-    }
+    from comfy_env import install, IsolatedEnvManager, discover_config
+    from comfy_env.tools import find_blender
 
-    # Install in order
-    results['system_deps'] = install_system_dependencies()
-    results['python_deps'] = install_python_dependencies()
+    node_root = Path(__file__).parent.absolute()
 
-    # Print summary
-    print("\n" + "="*60)
-    print("Installation Summary")
-    print("="*60)
-    print(f"  System Dependencies: {'+ Success' if results['system_deps'] else 'x Failed'}")
-    print(f"  Python Dependencies: {'+ Success' if results['python_deps'] else 'x Failed'}")
-    print("="*60 + "\n")
+    # Run comfy-env install
+    try:
+        install(config=node_root / "comfy-env.toml", mode="isolated", node_dir=node_root)
+    except Exception as e:
+        print(f"\n[UniRig] Installation FAILED: {e}")
+        print("[UniRig] Report issues at: https://github.com/PozzettiAndrea/ComfyUI-UniRig/issues")
+        return 1
 
-    if results['python_deps']:
-        print("Basic installation completed successfully!")
-        print("You can now use basic ComfyUI-GeometryPack nodes in ComfyUI.")
-        print("")
-        print("For full functionality (Blender ops, GPU cumesh), run:")
-        print("")
-        print("    cd custom_nodes/ComfyUI-GeometryPack")
-        print("    comfy-env install")
-        print("")
-        sys.exit(0)
-    else:
-        print("Installation completed with issues.")
-        if not results['python_deps']:
-            print("\nPython dependencies failed to install. You can:")
-            print("  1. Try running: pip install -r requirements.txt")
-            print("  2. Check your Python environment and permissions")
-        print("")
-        sys.exit(1)
-
+    print("\n" + "=" * 60)
+    print("[UniRig] Installation completed!")
+    print("=" * 60)
+    return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
