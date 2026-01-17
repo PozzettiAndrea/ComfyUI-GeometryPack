@@ -15,7 +15,7 @@ import shutil
 def copy_3d_viewers():
     """Copy 3D viewer files from comfy-3d-viewers package to web/ directory."""
     try:
-        from comfy_3d_viewers import get_js_dir, get_html_dir, get_utils_dir
+        from comfy_3d_viewers import get_js_dir, get_html_dir, get_utils_dir, get_nodes_dir, get_assets_dir
 
         custom_node_dir = os.path.dirname(os.path.abspath(__file__))
         web_js_dir = os.path.join(custom_node_dir, "web", "js")
@@ -76,6 +76,29 @@ def copy_3d_viewers():
                     if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
                         shutil.copy2(src, dst)
                         copied_count += 1
+
+        # Copy node widget JS files
+        src_nodes_dir = get_nodes_dir()
+        if os.path.exists(src_nodes_dir):
+            for filename in os.listdir(src_nodes_dir):
+                if filename.endswith('.js'):
+                    src = os.path.join(src_nodes_dir, filename)
+                    dst = os.path.join(web_js_dir, filename)
+                    if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
+                        shutil.copy2(src, dst)
+                        copied_count += 1
+
+        # Copy assets (HDR environments, etc.)
+        src_assets_dir = get_assets_dir()
+        if os.path.exists(src_assets_dir):
+            dst_assets_dir = os.path.join(web_dir, "assets")
+            os.makedirs(dst_assets_dir, exist_ok=True)
+            for filename in os.listdir(src_assets_dir):
+                src = os.path.join(src_assets_dir, filename)
+                dst = os.path.join(dst_assets_dir, filename)
+                if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
+                    shutil.copy2(src, dst)
+                    copied_count += 1
 
         if copied_count > 0:
             print(f"[GeometryPack] Copied {copied_count} file(s) from comfy-3d-viewers package")
