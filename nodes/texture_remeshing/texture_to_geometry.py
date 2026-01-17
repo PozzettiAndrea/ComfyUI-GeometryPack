@@ -58,10 +58,14 @@ class TextureToGeometryNode:
                     "min": 4,
                     "max": 12,
                     "step": 1,
-                    "tooltip": "Octree depth for Poisson reconstruction (higher = more detail)"
+                    "tooltip": "Octree depth for Poisson reconstruction (higher = more detail)",
+                    "visible_when": {"backend": ["poisson_pymeshlab", "poisson_open3d"]},
                 }),
                 "invert_height": (["false", "true"], {"default": "false"}),
-                "smooth_normals": (["true", "false"], {"default": "true"}),
+                "smooth_normals": (["true", "false"], {
+                    "default": "true",
+                    "visible_when": {"backend": ["grid"]},
+                }),
                 "skip_black": (["false", "true"], {"default": "false", "tooltip": "Skip faces connected to near-black pixels in the depth map"}),
                 "black_threshold": ("FLOAT", {
                     "default": 0.01,

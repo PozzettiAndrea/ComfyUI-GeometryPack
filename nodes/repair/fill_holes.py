@@ -51,7 +51,7 @@ class FillHolesNode:
                     "min": 0.001,
                     "max": 1.0,
                     "step": 0.001,
-                    "backends": ["cumesh"],
+                    "visible_when": {"method": ["cumesh"]},
                 }),
                 # PyMeshLab parameter
                 "maxholesize": ("INT", {
@@ -59,7 +59,7 @@ class FillHolesNode:
                     "min": 1,
                     "max": 100000,
                     "step": 100,
-                    "backends": ["pymeshlab"],
+                    "visible_when": {"method": ["pymeshlab"]},
                 }),
             },
         }

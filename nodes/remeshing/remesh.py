@@ -52,7 +52,7 @@ class RemeshNode:
                     "step": 0.01,
                     "display": "number",
                     "tooltip": "Target edge length for output triangles. Value is relative to mesh scale.",
-                    "backends": ["pymeshlab_isotropic", "cgal_isotropic"],
+                    "visible_when": {"backend": ["pymeshlab_isotropic", "cgal_isotropic"]},
                 }),
                 "iterations": ("INT", {
                     "default": 3,
@@ -60,7 +60,7 @@ class RemeshNode:
                     "max": 20,
                     "step": 1,
                     "tooltip": "Number of remeshing passes. More iterations = smoother result, slower processing.",
-                    "backends": ["pymeshlab_isotropic", "cgal_isotropic"],
+                    "visible_when": {"backend": ["pymeshlab_isotropic", "cgal_isotropic"]},
                 }),
                 # PyMeshLab-specific
                 "feature_angle": ("FLOAT", {
@@ -69,18 +69,18 @@ class RemeshNode:
                     "max": 180.0,
                     "step": 1.0,
                     "tooltip": "Angle threshold (degrees) for feature edge detection. Edges with dihedral angle greater than this are preserved as sharp creases.",
-                    "backends": ["pymeshlab_isotropic"],
+                    "visible_when": {"backend": ["pymeshlab_isotropic"]},
                 }),
                 "adaptive": (["true", "false"], {
                     "default": "false",
                     "tooltip": "Use curvature-adaptive edge lengths. Creates smaller triangles in high-curvature areas, larger triangles in flat areas.",
-                    "backends": ["pymeshlab_isotropic"],
+                    "visible_when": {"backend": ["pymeshlab_isotropic"]},
                 }),
                 # CGAL-specific
                 "protect_boundaries": (["true", "false"], {
                     "default": "true",
                     "tooltip": "Lock boundary/open edges in place during remeshing. Prevents modification of mesh borders and holes.",
-                    "backends": ["cgal_isotropic"],
+                    "visible_when": {"backend": ["cgal_isotropic"]},
                 }),
                 # Blender voxel
                 "voxel_size": ("FLOAT", {
@@ -90,7 +90,7 @@ class RemeshNode:
                     "step": 0.01,
                     "display": "number",
                     "tooltip": "Voxel size for Blender voxel remesh. Smaller = more detail, more faces. Output is always watertight.",
-                    "backends": ["blender_voxel"],
+                    "visible_when": {"backend": ["blender_voxel"]},
                 }),
                 # CuMesh / Quadriflow
                 "target_face_count": ("INT", {
@@ -99,7 +99,7 @@ class RemeshNode:
                     "max": 5000000,
                     "step": 1000,
                     "tooltip": "Target number of output faces for cumesh/quadriflow backends.",
-                    "backends": ["cumesh", "blender_quadriflow"],
+                    "visible_when": {"backend": ["cumesh", "blender_quadriflow"]},
                 }),
                 # CuMesh specific (matches TRELLIS2)
                 "remesh_band": ("FLOAT", {
@@ -108,7 +108,7 @@ class RemeshNode:
                     "max": 5.0,
                     "step": 0.1,
                     "tooltip": "Band width for CuMesh dual-contouring. Affects surface detail capture. Higher = smoother but may lose fine details.",
-                    "backends": ["cumesh"],
+                    "visible_when": {"backend": ["cumesh"]},
                 }),
                 # Instant Meshes specific
                 "target_vertex_count": ("INT", {
@@ -117,12 +117,12 @@ class RemeshNode:
                     "max": 1000000,
                     "step": 100,
                     "tooltip": "Target vertex count for Instant Meshes output. Creates field-aligned quad-dominant mesh.",
-                    "backends": ["instant_meshes"],
+                    "visible_when": {"backend": ["instant_meshes"]},
                 }),
                 "deterministic": (["true", "false"], {
                     "default": "true",
                     "tooltip": "Use deterministic algorithm for reproducible results. Disable for potentially better quality but non-reproducible output.",
-                    "backends": ["instant_meshes"],
+                    "visible_when": {"backend": ["instant_meshes"]},
                 }),
                 "crease_angle": ("FLOAT", {
                     "default": 0.0,
@@ -130,7 +130,7 @@ class RemeshNode:
                     "max": 180.0,
                     "step": 1.0,
                     "tooltip": "Angle threshold (degrees) for preserving sharp/crease edges in Instant Meshes. 0 = no crease preservation.",
-                    "backends": ["instant_meshes"],
+                    "visible_when": {"backend": ["instant_meshes"]},
                 }),
             }
         }

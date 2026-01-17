@@ -53,74 +53,97 @@ class TransformMeshNode:
                     "default": 0.0,
                     "min": -1000.0,
                     "max": 1000.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"operation": ["translate"]},
                 }),
                 "translate_y": ("FLOAT", {
                     "default": 0.0,
                     "min": -1000.0,
                     "max": 1000.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"operation": ["translate"]},
                 }),
                 "translate_z": ("FLOAT", {
                     "default": 0.0,
                     "min": -1000.0,
                     "max": 1000.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"operation": ["translate"]},
                 }),
                 # Rotate (degrees)
                 "rotate_x": ("FLOAT", {
                     "default": 0.0,
                     "min": -360.0,
                     "max": 360.0,
-                    "step": 1.0
+                    "step": 1.0,
+                    "visible_when": {"operation": ["rotate"]},
                 }),
                 "rotate_y": ("FLOAT", {
                     "default": 0.0,
                     "min": -360.0,
                     "max": 360.0,
-                    "step": 1.0
+                    "step": 1.0,
+                    "visible_when": {"operation": ["rotate"]},
                 }),
                 "rotate_z": ("FLOAT", {
                     "default": 0.0,
                     "min": -360.0,
                     "max": 360.0,
-                    "step": 1.0
+                    "step": 1.0,
+                    "visible_when": {"operation": ["rotate"]},
                 }),
                 # Scale
                 "scale_uniform": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.001,
                     "max": 1000.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"operation": ["scale"]},
                 }),
                 "scale_x": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.001,
                     "max": 1000.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"operation": ["scale"]},
                 }),
                 "scale_y": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.001,
                     "max": 1000.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"operation": ["scale"]},
                 }),
                 "scale_z": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.001,
                     "max": 1000.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"operation": ["scale"]},
                 }),
                 # Mirror
-                "mirror_axis": (["x", "y", "z"], {"default": "x"}),
+                "mirror_axis": (["x", "y", "z"], {
+                    "default": "x",
+                    "visible_when": {"operation": ["mirror"]},
+                }),
                 # Center options
-                "center_x": (["true", "false"], {"default": "true"}),
-                "center_y": (["true", "false"], {"default": "true"}),
-                "center_z": (["true", "false"], {"default": "true"}),
+                "center_x": (["true", "false"], {
+                    "default": "true",
+                    "visible_when": {"operation": ["center"]},
+                }),
+                "center_y": (["true", "false"], {
+                    "default": "true",
+                    "visible_when": {"operation": ["center"]},
+                }),
+                "center_z": (["true", "false"], {
+                    "default": "true",
+                    "visible_when": {"operation": ["center"]},
+                }),
                 # Matrix (16 comma-separated floats, row-major)
                 "matrix_string": ("STRING", {
                     "default": "1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1",
-                    "multiline": False
+                    "multiline": False,
+                    "visible_when": {"operation": ["apply_matrix"]},
                 }),
             }
         }

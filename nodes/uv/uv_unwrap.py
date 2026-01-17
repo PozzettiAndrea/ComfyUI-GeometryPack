@@ -52,25 +52,29 @@ class UVUnwrapNode:
                     "default": 90.0,
                     "min": 0.0,
                     "max": 359.9,
-                    "step": 1.0
+                    "step": 1.0,
+                    "visible_when": {"method": ["cumesh"]},
                 }),
                 "chart_refine_iterations": ("INT", {
                     "default": 0,
                     "min": 0,
                     "max": 10,
-                    "step": 1
+                    "step": 1,
+                    "visible_when": {"method": ["cumesh"]},
                 }),
                 "chart_global_iterations": ("INT", {
                     "default": 1,
                     "min": 0,
                     "max": 10,
-                    "step": 1
+                    "step": 1,
+                    "visible_when": {"method": ["cumesh"]},
                 }),
                 "chart_smooth_strength": ("INT", {
                     "default": 1,
                     "min": 0,
                     "max": 10,
-                    "step": 1
+                    "step": 1,
+                    "visible_when": {"method": ["cumesh"]},
                 }),
 
                 # libigl_arap parameters
@@ -78,7 +82,8 @@ class UVUnwrapNode:
                     "default": 10,
                     "min": 1,
                     "max": 100,
-                    "step": 1
+                    "step": 1,
+                    "visible_when": {"method": ["libigl_arap"]},
                 }),
 
                 # Blender smart_uv parameters
@@ -86,28 +91,35 @@ class UVUnwrapNode:
                     "default": 66.0,
                     "min": 1.0,
                     "max": 89.0,
-                    "step": 1.0
+                    "step": 1.0,
+                    "visible_when": {"method": ["blender_smart"]},
                 }),
                 "island_margin": ("FLOAT", {
                     "default": 0.02,
                     "min": 0.0,
                     "max": 1.0,
-                    "step": 0.01
+                    "step": 0.01,
+                    "visible_when": {"method": ["blender_smart"]},
                 }),
 
                 # Blender projection parameters
-                "scale_to_bounds": (["true", "false"], {"default": "true"}),
+                "scale_to_bounds": (["true", "false"], {
+                    "default": "true",
+                    "visible_when": {"method": ["blender_smart", "blender_cube", "blender_cylinder", "blender_sphere"]},
+                }),
                 "cube_size": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.1,
                     "max": 10.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"method": ["blender_cube"]},
                 }),
                 "cylinder_radius": ("FLOAT", {
                     "default": 1.0,
                     "min": 0.1,
                     "max": 10.0,
-                    "step": 0.1
+                    "step": 0.1,
+                    "visible_when": {"method": ["blender_cylinder"]},
                 }),
             }
         }
