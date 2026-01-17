@@ -4,6 +4,8 @@
  */
 
 import { app } from "../../../scripts/app.js";
+import { createAnalysisPanel, createWidgetOptions } from "./utils/uiComponents.js";
+import { calculatePanelHeight, buildTableHeader, buildMoreRow } from "./utils/analysisPanel.js";
 
 app.registerExtension({
     name: "geompack.open_edges",
@@ -15,24 +17,11 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function() {
                 const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
 
-                // Create info panel container
-                const infoPanel = document.createElement("div");
-                infoPanel.style.backgroundColor = "#1a1a1a";
-                infoPanel.style.padding = "8px";
-                infoPanel.style.fontSize = "10px";
-                infoPanel.style.fontFamily = "monospace";
-                infoPanel.style.color = "#ccc";
-                infoPanel.style.lineHeight = "1.4";
-                infoPanel.style.maxHeight = "200px";
-                infoPanel.style.overflowY = "auto";
-                infoPanel.style.borderRadius = "4px";
-                infoPanel.innerHTML = '<span style="color: #666;">Run workflow to see open edge details</span>';
+                // Create info panel using utility
+                const infoPanel = createAnalysisPanel("Run workflow to see open edge details");
 
                 // Add widget
-                const widget = this.addDOMWidget("open_edges_info", "OPEN_EDGES_INFO", infoPanel, {
-                    getValue() { return ""; },
-                    setValue(v) { }
-                });
+                const widget = this.addDOMWidget("open_edges_info", "OPEN_EDGES_INFO", infoPanel, createWidgetOptions());
 
                 widget.computeSize = () => [this.size[0] - 20, 120];
 
@@ -104,8 +93,8 @@ app.registerExtension({
                         infoPanel.innerHTML = html;
 
                         // Resize widget based on content
-                        const numRows = Math.min(message.open_edges_data[0]?.faces?.length || 0, 20) + 3;
-                        const height = Math.min(Math.max(80, numRows * 16 + 40), 250);
+                        const numRows = message.open_edges_data[0]?.faces?.length || 0;
+                        const height = calculatePanelHeight(numRows);
                         widget.computeSize = () => [this.size[0] - 20, height];
                         this.setDirtyCanvas(true);
                     }

@@ -4,13 +4,11 @@
  */
 
 import { app } from "../../../scripts/app.js";
-
-// Auto-detect extension folder name (handles ComfyUI-GeometryPack or comfyui-geometrypack)
-const EXTENSION_FOLDER = (() => {
-    const url = import.meta.url;
-    const match = url.match(/\/extensions\/([^/]+)\//);
-    return match ? match[1] : "ComfyUI-GeometryPack";
-})();
+import { EXTENSION_FOLDER, getViewerUrl } from "./utils/extensionFolder.js";
+import { createContainer, createIframe, createInfoPanel, showPanelError, createWidgetOptions } from "./utils/uiComponents.js";
+import { buildMeshInfoHTML } from "./utils/formatting.js";
+import { createScreenshotHandler } from "./utils/screenshot.js";
+import { createViewerManager, createErrorHandler, buildViewUrl } from "./utils/postMessage.js";
 
 app.registerExtension({
     name: "geompack.meshpreview.vtk",
@@ -22,123 +20,35 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function() {
                 const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
 
-
                 // Create container for viewer + info panel
-                const container = document.createElement("div");
-                container.style.width = "100%";
-                container.style.height = "100%";
-                container.style.display = "flex";
-                container.style.flexDirection = "column";
-                container.style.backgroundColor = "#2a2a2a";
-                container.style.overflow = "hidden";
+                const container = createContainer();
 
                 // Create iframe for VTK.js viewer
-                const iframe = document.createElement("iframe");
-                iframe.style.width = "100%";
-                iframe.style.flex = "1 1 0";
-                iframe.style.minHeight = "0";
-                iframe.style.border = "none";
-                iframe.style.backgroundColor = "#2a2a2a";
-
-                // Point to VTK.js HTML viewer (with cache buster)
-                // Note: viewer will be dynamically switched based on mode in onExecuted
-                // Use unified v2 viewer with modular architecture
-                iframe.src = `/extensions/${EXTENSION_FOLDER}/viewer_vtk.html?v=` + Date.now();
-
-                // Track current viewer type to avoid unnecessary reloads
-                let currentViewerType = "fields";
+                const iframe = createIframe(getViewerUrl("viewer_vtk"));
 
                 // Create mesh info panel
-                const infoPanel = document.createElement("div");
-                infoPanel.style.backgroundColor = "#1a1a1a";
-                infoPanel.style.borderTop = "1px solid #444";
-                infoPanel.style.padding = "6px 12px";
-                infoPanel.style.fontSize = "10px";
-                infoPanel.style.fontFamily = "monospace";
-                infoPanel.style.color = "#ccc";
-                infoPanel.style.lineHeight = "1.3";
-                infoPanel.style.flexShrink = "0";
-                infoPanel.style.overflow = "hidden";
-                infoPanel.innerHTML = '<span style="color: #888;">Mesh info will appear here after execution</span>';
+                const infoPanel = createInfoPanel("Mesh info will appear here after execution");
 
                 // Add iframe and info panel to container
                 container.appendChild(iframe);
                 container.appendChild(infoPanel);
 
-                // Add widget with required options
+                // Add widget
+                const widget = this.addDOMWidget("preview_vtk", "MESH_PREVIEW_VTK", container, createWidgetOptions());
+                widget.computeSize = () => [512, 640];
 
-                const widget = this.addDOMWidget("preview_vtk", "MESH_PREVIEW_VTK", container, {
-                    getValue() { return ""; },
-                    setValue(v) { }
-                });
-
-
-                widget.computeSize = () => [512, 640];  // Increased height for viewer + info panel
-
-                // Store iframe and info panel references
+                // Store references
                 this.meshViewerIframeVTK = iframe;
                 this.meshInfoPanelVTK = infoPanel;
 
-                // Track iframe load state
-                let iframeLoaded = false;
-                iframe.addEventListener('load', () => {
-                    iframeLoaded = true;
-                });
+                // Create viewer manager for handling viewer switching
+                const viewerManager = createViewerManager(iframe, "[GeomPack VTK]");
 
-                // Listen for messages from iframe
-                window.addEventListener('message', async (event) => {
-                    // Handle screenshot messages
-                    if (event.data.type === 'SCREENSHOT' && event.data.image) {
+                // Listen for screenshot and error messages
+                window.addEventListener('message', createScreenshotHandler('vtk-screenshot'));
+                window.addEventListener('message', createErrorHandler(infoPanel, "[GeomPack VTK]"));
 
-                        try {
-                            // Convert base64 data URL to blob
-                            const base64Data = event.data.image.split(',')[1];
-                            const byteString = atob(base64Data);
-                            const arrayBuffer = new ArrayBuffer(byteString.length);
-                            const uint8Array = new Uint8Array(arrayBuffer);
-
-                            for (let i = 0; i < byteString.length; i++) {
-                                uint8Array[i] = byteString.charCodeAt(i);
-                            }
-
-                            const blob = new Blob([uint8Array], { type: 'image/png' });
-
-                            // Generate filename with timestamp
-                            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                            const filename = `vtk-screenshot-${timestamp}.png`;
-
-                            // Create FormData for upload
-                            const formData = new FormData();
-                            formData.append('image', blob, filename);
-                            formData.append('type', 'output');  // Save to output directory
-                            formData.append('subfolder', '');   // Root of output folder
-
-                            // Upload to ComfyUI backend
-                            const response = await fetch('/upload/image', {
-                                method: 'POST',
-                                body: formData
-                            });
-
-                            if (response.ok) {
-                                const result = await response.json();
-                            } else {
-                                throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
-                            }
-
-                        } catch (error) {
-                            console.error('[GeomPack VTK] Error saving screenshot:', error);
-                        }
-                    }
-                    // Handle error messages from iframe
-                    else if (event.data.type === 'MESH_ERROR' && event.data.error) {
-                        console.error('[GeomPack VTK] Error from viewer:', event.data.error);
-                        if (infoPanel) {
-                            infoPanel.innerHTML = `<div style="color: #ff6b6b; padding: 8px;">Error: ${event.data.error}</div>`;
-                        }
-                    }
-                });
-
-                // Set initial node size (increased for info panel)
+                // Set initial node size
                 this.setSize([512, 640]);
 
                 // Handle execution
@@ -146,157 +56,48 @@ app.registerExtension({
                 this.onExecuted = function(message) {
                     onExecuted?.apply(this, arguments);
 
-                    // The message IS the UI data (not message.ui)
                     if (message?.mesh_file && message.mesh_file[0]) {
                         const filename = message.mesh_file[0];
                         const viewerType = message.viewer_type?.[0] || "fields";
                         const mode = message.mode?.[0] || "fields";
 
                         // Determine which viewer HTML to use
-                        let viewerUrl;
+                        let viewerName;
                         if (viewerType === "pbr") {
-                            viewerUrl = `/extensions/${EXTENSION_FOLDER}/viewer_pbr.html`;
+                            viewerName = "viewer_pbr";
                         } else if (viewerType === "texture") {
-                            viewerUrl = `/extensions/${EXTENSION_FOLDER}/viewer_vtk_textured.html`;
+                            viewerName = "viewer_vtk_textured";
                         } else {
-                            viewerUrl = `/extensions/${EXTENSION_FOLDER}/viewer_vtk.html`;
+                            viewerName = "viewer_vtk";
                         }
 
-                        // Update mesh info panel with metadata
-                        const vertices = message.vertex_count?.[0] || 'N/A';
-                        const faces = message.face_count?.[0] || 'N/A';
-                        const boundsMin = message.bounds_min?.[0] || [];
-                        const boundsMax = message.bounds_max?.[0] || [];
-                        const extents = message.extents?.[0] || [];
-
-                        // Format bounds
-                        let boundsStr = 'N/A';
-                        if (boundsMin.length === 3 && boundsMax.length === 3) {
-                            boundsStr = `[${boundsMin.map(v => v.toFixed(2)).join(', ')}] to [${boundsMax.map(v => v.toFixed(2)).join(', ')}]`;
-                        }
-
-                        // Format extents
-                        let extentsStr = 'N/A';
-                        if (extents.length === 3) {
-                            extentsStr = `${extents.map(v => v.toFixed(2)).join(' × ')}`;
-                        }
-
-                        // Build info HTML
-                        const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
-                        const modeColor = mode === "texture (PBR)" ? '#fc6' : (mode === "texture" ? '#c8c' : '#6cc');
-
-                        let infoHTML = `
-                            <div style="display: grid; grid-template-columns: auto 1fr; gap: 2px 8px;">
-                                <span style="color: #888;">Mode:</span>
-                                <span style="color: ${modeColor}; font-weight: bold;">${modeLabel}</span>
-
-                                <span style="color: #888;">Vertices:</span>
-                                <span>${vertices.toLocaleString()}</span>
-
-                                <span style="color: #888;">Faces:</span>
-                                <span>${faces.toLocaleString()}</span>
-
-                                <span style="color: #888;">Bounds:</span>
-                                <span style="font-size: 9px;">${boundsStr}</span>
-
-                                <span style="color: #888;">Extents:</span>
-                                <span>${extentsStr}</span>
-                        `;
-
-                        // Add watertight status (always shown)
-                        if (message.is_watertight !== undefined) {
-                            const watertight = message.is_watertight[0] ? 'Yes' : 'No';
-                            const color = message.is_watertight[0] ? '#6c6' : '#c66';
-                            infoHTML += `
-                                <span style="color: #888;">Watertight:</span>
-                                <span style="color: ${color};">${watertight}</span>
-                            `;
-                        }
-
-                        // Add mode-specific info
-                        if (viewerType === "texture" || viewerType === "pbr") {
-                            // Texture/PBR mode info
-                            if (message.visual_kind !== undefined) {
-                                const visualKind = message.visual_kind[0] || 'none';
-                                infoHTML += `
-                                    <span style="color: #888;">Visual Kind:</span>
-                                    <span>${visualKind}</span>
-                                `;
-                            }
-                            if (message.has_texture !== undefined) {
-                                const hasTexture = message.has_texture[0] ? 'Yes' : 'No';
-                                const texColor = message.has_texture[0] ? '#c8c' : '#888';
-                                infoHTML += `
-                                    <span style="color: #888;">Textures:</span>
-                                    <span style="color: ${texColor};">${hasTexture}</span>
-                                `;
-                            }
-                            if (message.has_vertex_colors !== undefined) {
-                                const hasColors = message.has_vertex_colors[0] ? 'Yes' : 'No';
-                                infoHTML += `
-                                    <span style="color: #888;">Vertex Colors:</span>
-                                    <span>${hasColors}</span>
-                                `;
-                            }
-                        } else {
-                            // Fields mode info
-                            if (message.field_names && message.field_names[0]?.length > 0) {
-                                const fields = message.field_names[0].join(', ');
-                                infoHTML += `
-                                    <span style="color: #888;">Fields:</span>
-                                    <span style="font-size: 9px; color: #6cc;">${fields}</span>
-                                `;
-                            } else {
-                                infoHTML += `
-                                    <span style="color: #888;">Fields:</span>
-                                    <span style="color: #888;">None</span>
-                                `;
-                            }
-                        }
-
-                        infoHTML += '</div>';
+                        // Build info HTML using utility
+                        const infoHTML = buildMeshInfoHTML({
+                            mode: mode,
+                            vertices: message.vertex_count?.[0] || 'N/A',
+                            faces: message.face_count?.[0] || 'N/A',
+                            boundsMin: message.bounds_min?.[0] || [],
+                            boundsMax: message.bounds_max?.[0] || [],
+                            extents: message.extents?.[0] || [],
+                            isWatertight: message.is_watertight?.[0],
+                            fieldNames: message.field_names?.[0] || [],
+                            hasTexture: message.has_texture?.[0],
+                            hasVertexColors: message.has_vertex_colors?.[0],
+                            visualKind: message.visual_kind?.[0]
+                        });
 
                         infoPanel.innerHTML = infoHTML;
 
-                        // ComfyUI serves output files via /view API endpoint
-                        const filepath = `/view?filename=${encodeURIComponent(filename)}&type=output&subfolder=`;
-
-                        // Function to send message
-                        const sendMessage = () => {
-                            if (iframe.contentWindow) {
-                                iframe.contentWindow.postMessage({
-                                    type: "LOAD_MESH",
-                                    filepath: filepath,
-                                    timestamp: Date.now()
-                                }, "*");
-                            } else {
-                                console.error("[GeomPack VTK] Iframe contentWindow not available");
-                            }
+                        // Build file path and message
+                        const filepath = buildViewUrl(filename);
+                        const messageData = {
+                            type: "LOAD_MESH",
+                            filepath: filepath,
+                            timestamp: Date.now()
                         };
 
-                        // Reload iframe if viewer type changed
-                        if (viewerType !== currentViewerType) {
-                            currentViewerType = viewerType;
-                            iframeLoaded = false;
-
-                            // Set up one-time load listener before changing src
-                            const onViewerLoaded = () => {
-                                iframeLoaded = true;
-                                sendMessage();
-                            };
-                            iframe.addEventListener('load', onViewerLoaded, { once: true });
-
-                            // Change iframe src to trigger reload
-                            iframe.src = viewerUrl + "?v=" + Date.now();
-                        } else {
-                            // No viewer change needed, send message immediately or after short delay
-                            if (iframeLoaded) {
-                                sendMessage();
-                            } else {
-                                setTimeout(sendMessage, 500);
-                            }
-                        }
-                    } else {
+                        // Switch viewer if needed and send message
+                        viewerManager.switchViewer(viewerType, getViewerUrl(viewerName), messageData);
                     }
                 };
 

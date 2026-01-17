@@ -4,6 +4,7 @@
  */
 
 import { app } from "../../../scripts/app.js";
+import { createAnalysisPanel, createWidgetOptions } from "./utils/uiComponents.js";
 
 app.registerExtension({
     name: "geompack.degenerate_faces",
@@ -15,25 +16,11 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function() {
                 const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
 
-                // Create info panel container
-                const infoPanel = document.createElement("div");
-                infoPanel.style.backgroundColor = "#1a1a1a";
-                infoPanel.style.padding = "8px";
-                infoPanel.style.fontSize = "10px";
-                infoPanel.style.fontFamily = "monospace";
-                infoPanel.style.color = "#ccc";
-                infoPanel.style.lineHeight = "1.4";
-                infoPanel.style.maxHeight = "300px";
-                infoPanel.style.overflowY = "auto";
-                infoPanel.style.borderRadius = "4px";
-                infoPanel.innerHTML = '<span style="color: #666;">Run workflow to detect degenerate faces</span>';
+                // Create info panel using utility (with larger maxHeight for this panel)
+                const infoPanel = createAnalysisPanel("Run workflow to detect degenerate faces", { maxHeight: "300px" });
 
                 // Add widget
-                const widget = this.addDOMWidget("degenerate_info", "DEGENERATE_INFO", infoPanel, {
-                    getValue() { return ""; },
-                    setValue(v) { }
-                });
-
+                const widget = this.addDOMWidget("degenerate_info", "DEGENERATE_INFO", infoPanel, createWidgetOptions());
                 widget.computeSize = () => [this.size[0] - 20, 150];
 
                 this.degenerateInfoPanel = infoPanel;

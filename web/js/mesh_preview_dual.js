@@ -5,127 +5,49 @@
  */
 
 import { app } from "../../../scripts/app.js";
-
-// Auto-detect extension folder name (handles ComfyUI-GeometryPack or comfyui-geometrypack)
-const EXTENSION_FOLDER = (() => {
-    const url = import.meta.url;
-    const match = url.match(/\/extensions\/([^/]+)\//);
-    return match ? match[1] : "ComfyUI-GeometryPack";
-})();
-
-console.log('[GeomPack Dual JS] Loading mesh_preview_dual.js extension - v2 WITH INCREASED NODE HEIGHT (680px)');
+import { EXTENSION_FOLDER, getViewerUrl } from "./utils/extensionFolder.js";
+import { createContainer, createIframe, createInfoPanel, createWidgetOptions } from "./utils/uiComponents.js";
+import { buildDualMeshInfoHTML, formatExtents } from "./utils/formatting.js";
+import { createViewerManager, createErrorHandler, buildViewUrl, createLoadDualMeshMessage } from "./utils/postMessage.js";
 
 app.registerExtension({
     name: "geompack.meshpreview.dual",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        // console.log('[GeomPack Dual JS] beforeRegisterNodeDef called for:', nodeData.name);
         if (nodeData.name === "GeomPackPreviewMeshDual") {
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function() {
                 const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
 
-                console.log('[GeomPack Dual JS] Creating PreviewMeshDual node widget');
-
                 // Create container for viewer + info panel
-                const container = document.createElement("div");
-                container.style.width = "100%";
-                container.style.height = "100%";
-                container.style.display = "flex";
-                container.style.flexDirection = "column";
-                container.style.backgroundColor = "#2a2a2a";
+                const container = createContainer();
 
                 // Create iframe for VTK.js viewer
-                const iframe = document.createElement("iframe");
-                iframe.style.width = "100%";
-                iframe.style.flex = "1";
-                iframe.style.minHeight = "550px";
-                iframe.style.border = "none";
-                iframe.style.backgroundColor = "#2a2a2a";
-
-                console.log('[GeomPack Dual] Created iframe with minHeight:', iframe.style.minHeight);
-
-                // Point to unified dual VTK.js HTML viewer (with cache buster)
-                // Note: viewer will be dynamically switched based on mode in onExecuted
-                iframe.src = `/extensions/${EXTENSION_FOLDER}/viewer_dual.html?v=` + Date.now();
-
-                // Track current viewer type to avoid unnecessary reloads
-                let currentViewerType = "fields";
+                const iframe = createIframe(getViewerUrl("viewer_dual"), { minHeight: "550px" });
 
                 // Create mesh info panel
-                const infoPanel = document.createElement("div");
-                infoPanel.style.backgroundColor = "#1a1a1a";
-                infoPanel.style.borderTop = "1px solid #444";
-                infoPanel.style.padding = "6px 12px";
-                infoPanel.style.fontSize = "10px";
-                infoPanel.style.fontFamily = "monospace";
-                infoPanel.style.color = "#ccc";
-                infoPanel.style.lineHeight = "1.3";
-                infoPanel.style.flexShrink = "0";
-                infoPanel.style.overflow = "hidden";
-                infoPanel.innerHTML = '<span style="color: #888;">Mesh info will appear here after execution</span>';
+                const infoPanel = createInfoPanel("Mesh info will appear here after execution");
 
                 // Add iframe and info panel to container
                 container.appendChild(iframe);
                 container.appendChild(infoPanel);
 
-                // Add widget with required options
-                const widget = this.addDOMWidget("preview_dual", "MESH_PREVIEW_DUAL", container, {
-                    getValue() { return ""; },
-                    setValue(v) { }
-                });
-
-                // Default widget size (will be wider for side-by-side)
+                // Add widget
+                const widget = this.addDOMWidget("preview_dual", "MESH_PREVIEW_DUAL", container, createWidgetOptions());
                 widget.computeSize = () => [768, 680];
 
-                // Store iframe and info panel references
+                // Store references
                 this.meshViewerIframeDual = iframe;
                 this.meshInfoPanelDual = infoPanel;
 
-                // Track iframe load state
-                let iframeLoaded = false;
-                iframe.addEventListener('load', () => {
-                    iframeLoaded = true;
-                    console.log('[GeomPack Dual] Iframe loaded successfully');
-                    console.log('[GeomPack Dual] Iframe dimensions:', {
-                        width: iframe.offsetWidth,
-                        height: iframe.offsetHeight,
-                        clientWidth: iframe.clientWidth,
-                        clientHeight: iframe.clientHeight
-                    });
-                });
+                // Create viewer manager
+                const viewerManager = createViewerManager(iframe, "[GeomPack Dual]");
 
-                // Listen for messages from iframe
-                window.addEventListener('message', async (event) => {
-                    // Handle error messages from iframe
-                    if (event.data.type === 'MESH_ERROR' && event.data.error) {
-                        console.error('[GeomPack Dual] Error from viewer:', event.data.error);
-                        if (infoPanel) {
-                            infoPanel.innerHTML = `<div style="color: #ff6b6b; padding: 8px;">Error loading mesh: ${event.data.error}</div>`;
-                        }
-                    }
-                });
+                // Listen for error messages
+                window.addEventListener('message', createErrorHandler(infoPanel, "[GeomPack Dual]"));
 
                 // Set initial node size
                 this.setSize([768, 680]);
-
-                // Debug: Log container and iframe info after setup
-                setTimeout(() => {
-                    console.log('[GeomPack Dual JS] Container dimensions:', {
-                        width: container.offsetWidth,
-                        height: container.offsetHeight,
-                        clientWidth: container.clientWidth,
-                        clientHeight: container.clientHeight
-                    });
-                    console.log('[GeomPack Dual JS] Iframe dimensions after setup:', {
-                        width: iframe.offsetWidth,
-                        height: iframe.offsetHeight,
-                        clientWidth: iframe.clientWidth,
-                        clientHeight: iframe.clientHeight,
-                        minHeight: iframe.style.minHeight,
-                        flex: iframe.style.flex
-                    });
-                }, 500);
 
                 // Handle execution
                 const onExecuted = this.onExecuted;
@@ -138,29 +60,21 @@ app.registerExtension({
 
                     const layout = message.layout[0];
                     const mode = message.mode?.[0] || "fields";
-                    console.log(`[GeomPack Dual] onExecuted: layout=${layout}, mode=${mode}`);
 
-                    // Determine which viewer to use based on mode and layout
-                    let viewerType;
-                    let viewerUrl;
-
+                    // Determine viewer type and name
+                    let viewerType, viewerName;
                     if (layout === 'slider') {
                         viewerType = "slider";
-                        viewerUrl = `/extensions/${EXTENSION_FOLDER}/viewer_dual_slider.html`;
+                        viewerName = "viewer_dual_slider";
                     } else if (mode === "texture") {
                         viewerType = "texture";
-                        viewerUrl = `/extensions/${EXTENSION_FOLDER}/viewer_dual_textured.html`;
+                        viewerName = "viewer_dual_textured";
                     } else {
                         viewerType = "fields";
-                        viewerUrl = `/extensions/${EXTENSION_FOLDER}/viewer_dual.html`;
+                        viewerName = "viewer_dual";
                     }
 
-                    let infoHTML = '';
-                    let postMessageData = {
-                        type: 'LOAD_DUAL_MESH',
-                        layout: layout,
-                        timestamp: Date.now()
-                    };
+                    let postMessageData;
 
                     if (layout === 'side_by_side' || layout === 'slider') {
                         // Side-by-side mode
@@ -168,95 +82,36 @@ app.registerExtension({
                             return;
                         }
 
-                        const filename1 = message.mesh_1_file[0];
-                        const filename2 = message.mesh_2_file[0];
+                        // Build info HTML using utility
+                        const infoHTML = buildDualMeshInfoHTML({
+                            mode: mode,
+                            layout: layout,
+                            mesh1: {
+                                vertices: message.vertex_count_1?.[0] || 'N/A',
+                                faces: message.face_count_1?.[0] || 'N/A',
+                                extents: message.extents_1?.[0] || [],
+                                isWatertight: message.is_watertight_1?.[0],
+                                hasTexture: message.has_texture_1?.[0]
+                            },
+                            mesh2: {
+                                vertices: message.vertex_count_2?.[0] || 'N/A',
+                                faces: message.face_count_2?.[0] || 'N/A',
+                                extents: message.extents_2?.[0] || [],
+                                isWatertight: message.is_watertight_2?.[0],
+                                hasTexture: message.has_texture_2?.[0]
+                            },
+                            commonFields: message.common_fields?.[0] || []
+                        });
 
-                        // Update mesh info panel
-                        const vertices1 = message.vertex_count_1?.[0] || 'N/A';
-                        const vertices2 = message.vertex_count_2?.[0] || 'N/A';
-                        const faces1 = message.face_count_1?.[0] || 'N/A';
-                        const faces2 = message.face_count_2?.[0] || 'N/A';
+                        infoPanel.innerHTML = infoHTML;
 
-                        const extents1 = message.extents_1?.[0] || [];
-                        const extents2 = message.extents_2?.[0] || [];
-
-                        const extentsStr1 = extents1.length === 3 ?
-                            `${extents1.map(v => v.toFixed(2)).join(' × ')}` : 'N/A';
-                        const extentsStr2 = extents2.length === 3 ?
-                            `${extents2.map(v => v.toFixed(2)).join(' × ')}` : 'N/A';
-
-                        // Build info panel with mode info
-                        const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
-                        const modeColor = mode === "texture" ? '#c8c' : '#6cc';
-
-                        infoHTML = `
-                            <div style="display: grid; grid-template-columns: auto 1fr 1fr; gap: 2px 12px;">
-                                <span style="color: #888;">Mode:</span>
-                                <span colspan="2" style="grid-column: 2 / 4; color: ${modeColor}; font-weight: bold;">${modeLabel}</span>
-
-                                <span style="color: #888;"></span>
-                                <span style="color: #999; font-weight: bold; border-bottom: 1px solid #333;">Mesh 1</span>
-                                <span style="color: #999; font-weight: bold; border-bottom: 1px solid #333;">Mesh 2</span>
-
-                                <span style="color: #888;">Vertices:</span>
-                                <span>${vertices1.toLocaleString()}</span>
-                                <span>${vertices2.toLocaleString()}</span>
-
-                                <span style="color: #888;">Faces:</span>
-                                <span>${faces1.toLocaleString()}</span>
-                                <span>${faces2.toLocaleString()}</span>
-
-                                <span style="color: #888;">Extents:</span>
-                                <span style="font-size: 9px;">${extentsStr1}</span>
-                                <span style="font-size: 9px;">${extentsStr2}</span>
-                        `;
-
-                        // Add watertight info if available
-                        if (message.is_watertight_1 !== undefined && message.is_watertight_2 !== undefined) {
-                            const watertight1 = message.is_watertight_1[0] ? 'Yes' : 'No';
-                            const watertight2 = message.is_watertight_2[0] ? 'Yes' : 'No';
-                            const color1 = message.is_watertight_1[0] ? '#6c6' : '#c66';
-                            const color2 = message.is_watertight_2[0] ? '#6c6' : '#c66';
-                            infoHTML += `
-                                <span style="color: #888;">Watertight:</span>
-                                <span style="color: ${color1};">${watertight1}</span>
-                                <span style="color: ${color2};">${watertight2}</span>
-                            `;
-                        }
-
-                        // Add mode-specific metadata
-                        if (mode === "texture") {
-                            // Texture mode info
-                            if (message.has_texture_1 !== undefined) {
-                                const tex1 = message.has_texture_1[0] ? 'Yes' : 'No';
-                                const tex2 = message.has_texture_2[0] ? 'Yes' : 'No';
-                                infoHTML += `
-                                    <span style="color: #888;">Textures:</span>
-                                    <span style="color: ${message.has_texture_1[0] ? '#c8c' : '#888'};">${tex1}</span>
-                                    <span style="color: ${message.has_texture_2[0] ? '#c8c' : '#888'};">${tex2}</span>
-                                `;
-                            }
-                        } else {
-                            // Fields mode info
-                            if (message.common_fields && message.common_fields[0].length > 0) {
-                                const commonFields = message.common_fields[0];
-                                infoHTML += `
-                                    <span style="color: #888;">Fields:</span>
-                                    <span colspan="2" style="grid-column: 2 / 4; color: #9c9;">${commonFields.length} shared field(s)</span>
-                                `;
-                            }
-                        }
-
-                        infoHTML += '</div>';
-
-                        // Prepare file paths
-                        const filepath1 = `/view?filename=${encodeURIComponent(filename1)}&type=output&subfolder=`;
-                        const filepath2 = `/view?filename=${encodeURIComponent(filename2)}&type=output&subfolder=`;
-
-                        postMessageData.mesh1Filepath = filepath1;
-                        postMessageData.mesh2Filepath = filepath2;
-                        postMessageData.opacity1 = message.opacity_1?.[0] || 1.0;
-                        postMessageData.opacity2 = message.opacity_2?.[0] || 1.0;
+                        postMessageData = createLoadDualMeshMessage({
+                            layout: layout,
+                            mesh1Filepath: buildViewUrl(message.mesh_1_file[0]),
+                            mesh2Filepath: buildViewUrl(message.mesh_2_file[0]),
+                            opacity1: message.opacity_1?.[0] || 1.0,
+                            opacity2: message.opacity_2?.[0] || 1.0
+                        });
 
                     } else {
                         // Overlay mode
@@ -264,105 +119,35 @@ app.registerExtension({
                             return;
                         }
 
-                        const filename = message.mesh_file[0];
+                        // Build info HTML using utility
+                        const infoHTML = buildDualMeshInfoHTML({
+                            mode: mode,
+                            layout: "overlay",
+                            mesh1: {
+                                vertices: message.vertex_count_1?.[0] || 'N/A',
+                                faces: message.face_count_1?.[0] || 'N/A',
+                                hasTexture: message.has_texture_1?.[0]
+                            },
+                            mesh2: {
+                                vertices: message.vertex_count_2?.[0] || 'N/A',
+                                faces: message.face_count_2?.[0] || 'N/A',
+                                hasTexture: message.has_texture_2?.[0]
+                            },
+                            commonFields: message.common_fields?.[0] || []
+                        });
 
-                        // Update mesh info panel
-                        const vertices1 = message.vertex_count_1?.[0] || 'N/A';
-                        const vertices2 = message.vertex_count_2?.[0] || 'N/A';
-                        const faces1 = message.face_count_1?.[0] || 'N/A';
-                        const faces2 = message.face_count_2?.[0] || 'N/A';
+                        infoPanel.innerHTML = infoHTML;
 
-                        // Build info panel with mode info
-                        const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
-                        const modeColor = mode === "texture" ? '#c8c' : '#6cc';
-
-                        infoHTML = `
-                            <div style="display: grid; grid-template-columns: auto 1fr 1fr; gap: 2px 12px;">
-                                <span style="color: #888;">Mode:</span>
-                                <span colspan="2" style="grid-column: 2 / 4; color: ${modeColor}; font-weight: bold;">${modeLabel} (Overlay)</span>
-
-                                <span style="color: #888;"></span>
-                                <span style="color: #999; font-weight: bold; border-bottom: 1px solid #333;">Mesh 1</span>
-                                <span style="color: #999; font-weight: bold; border-bottom: 1px solid #333;">Mesh 2</span>
-
-                                <span style="color: #888;">Vertices:</span>
-                                <span>${vertices1.toLocaleString()}</span>
-                                <span>${vertices2.toLocaleString()}</span>
-
-                                <span style="color: #888;">Faces:</span>
-                                <span>${faces1.toLocaleString()}</span>
-                                <span>${faces2.toLocaleString()}</span>
-                        `;
-
-                        // Add mode-specific metadata
-                        if (mode === "texture") {
-                            // Texture mode info
-                            if (message.has_texture_1 !== undefined) {
-                                const tex1 = message.has_texture_1[0] ? 'Yes' : 'No';
-                                const tex2 = message.has_texture_2[0] ? 'Yes' : 'No';
-                                infoHTML += `
-                                    <span style="color: #888;">Textures:</span>
-                                    <span style="color: ${message.has_texture_1[0] ? '#c8c' : '#888'};">${tex1}</span>
-                                    <span style="color: ${message.has_texture_2[0] ? '#c8c' : '#888'};">${tex2}</span>
-                                `;
-                            }
-                        } else {
-                            // Fields mode info
-                            if (message.common_fields && message.common_fields[0].length > 0) {
-                                const commonFields = message.common_fields[0];
-                                infoHTML += `
-                                    <span style="color: #888;">Fields:</span>
-                                    <span colspan="2" style="grid-column: 2 / 4; color: #9c9;">${commonFields.length} shared field(s)</span>
-                                `;
-                            }
-                        }
-
-                        infoHTML += '</div>';
-
-                        // Prepare file path
-                        const filepath = `/view?filename=${encodeURIComponent(filename)}&type=output&subfolder=`;
-
-                        postMessageData.meshFilepath = filepath;
-                        postMessageData.opacity1 = message.opacity_1?.[0] || 1.0;
-                        postMessageData.opacity2 = message.opacity_2?.[0] || 1.0;
+                        postMessageData = createLoadDualMeshMessage({
+                            layout: layout,
+                            meshFilepath: buildViewUrl(message.mesh_file[0]),
+                            opacity1: message.opacity_1?.[0] || 1.0,
+                            opacity2: message.opacity_2?.[0] || 1.0
+                        });
                     }
 
-                    infoPanel.innerHTML = infoHTML;
-
-                    // Function to send message
-                    const sendMessage = () => {
-                        if (iframe.contentWindow) {
-                            console.log('[GeomPack Dual] Sending message to iframe:', postMessageData);
-                            iframe.contentWindow.postMessage(postMessageData, "*");
-                        } else {
-                            console.warn('[GeomPack Dual] iframe.contentWindow not available');
-                        }
-                    };
-
-                    // Reload iframe if viewer type changed
-                    if (viewerType !== currentViewerType) {
-                        console.log(`[GeomPack Dual] Switching viewer from ${currentViewerType} to ${viewerType}`);
-                        currentViewerType = viewerType;
-                        iframeLoaded = false;
-
-                        // Set up one-time load listener before changing src
-                        const onViewerLoaded = () => {
-                            console.log("[GeomPack Dual] New viewer loaded, sending mesh");
-                            iframeLoaded = true;
-                            sendMessage();
-                        };
-                        iframe.addEventListener('load', onViewerLoaded, { once: true });
-
-                        // Change iframe src to trigger reload
-                        iframe.src = viewerUrl + "?v=" + Date.now();
-                    } else {
-                        // No viewer change needed, send message immediately or after short delay
-                        if (iframeLoaded) {
-                            sendMessage();
-                        } else {
-                            setTimeout(sendMessage, 500);
-                        }
-                    }
+                    // Switch viewer if needed and send message
+                    viewerManager.switchViewer(viewerType, getViewerUrl(viewerName), postMessageData);
                 };
 
                 return r;

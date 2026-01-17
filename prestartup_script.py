@@ -3,12 +3,87 @@
 
 """
 GeometryPack PreStartup Script
+- Copies 3D viewer infrastructure from comfy-3d-viewers package
 - Generates dynamic widget visibility mappings
 - Copies example 3D assets to ComfyUI input folder on startup
 """
 import json
 import os
 import shutil
+
+
+def copy_3d_viewers():
+    """Copy 3D viewer files from comfy-3d-viewers package to web/ directory."""
+    try:
+        from comfy_3d_viewers import get_js_dir, get_html_dir, get_utils_dir
+
+        custom_node_dir = os.path.dirname(os.path.abspath(__file__))
+        web_js_dir = os.path.join(custom_node_dir, "web", "js")
+        web_dir = os.path.join(custom_node_dir, "web")
+
+        # Ensure directories exist
+        os.makedirs(web_js_dir, exist_ok=True)
+        os.makedirs(os.path.join(web_js_dir, "utils"), exist_ok=True)
+        os.makedirs(os.path.join(web_js_dir, "viewer"), exist_ok=True)
+
+        copied_count = 0
+
+        # Copy JS bundles (vtk-gltf.js, gsplat-bundle.js, viewer-bundle.js)
+        src_js_dir = get_js_dir()
+        for filename in os.listdir(src_js_dir):
+            if filename.endswith('.js') and not os.path.isdir(os.path.join(src_js_dir, filename)):
+                src = os.path.join(src_js_dir, filename)
+                dst = os.path.join(web_js_dir, filename)
+                if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
+                    shutil.copy2(src, dst)
+                    copied_count += 1
+
+        # Copy utils directory
+        src_utils_dir = get_utils_dir()
+        if os.path.exists(src_utils_dir):
+            dst_utils_dir = os.path.join(web_js_dir, "utils")
+            for filename in os.listdir(src_utils_dir):
+                if filename.endswith('.js'):
+                    src = os.path.join(src_utils_dir, filename)
+                    dst = os.path.join(dst_utils_dir, filename)
+                    if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
+                        shutil.copy2(src, dst)
+                        copied_count += 1
+
+        # Copy viewer directory (modular viewer source)
+        src_viewer_dir = os.path.join(src_js_dir, "viewer")
+        if os.path.exists(src_viewer_dir):
+            dst_viewer_dir = os.path.join(web_js_dir, "viewer")
+            for root, dirs, files in os.walk(src_viewer_dir):
+                rel_path = os.path.relpath(root, src_viewer_dir)
+                dst_root = os.path.join(dst_viewer_dir, rel_path) if rel_path != '.' else dst_viewer_dir
+                os.makedirs(dst_root, exist_ok=True)
+                for filename in files:
+                    if filename.endswith('.js'):
+                        src = os.path.join(root, filename)
+                        dst = os.path.join(dst_root, filename)
+                        if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
+                            shutil.copy2(src, dst)
+                            copied_count += 1
+
+        # Copy HTML viewer templates
+        src_html_dir = get_html_dir()
+        if os.path.exists(src_html_dir):
+            for filename in os.listdir(src_html_dir):
+                if filename.endswith('.html'):
+                    src = os.path.join(src_html_dir, filename)
+                    dst = os.path.join(web_dir, filename)
+                    if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
+                        shutil.copy2(src, dst)
+                        copied_count += 1
+
+        if copied_count > 0:
+            print(f"[GeometryPack] Copied {copied_count} file(s) from comfy-3d-viewers package")
+
+    except ImportError:
+        print("[GeometryPack] Warning: comfy-3d-viewers not installed, 3D viewers may not work")
+    except Exception as e:
+        print(f"[GeometryPack] Error copying 3D viewers: {e}")
 
 
 def copy_example_assets():
@@ -62,6 +137,33 @@ def copy_example_assets():
         print(f"[GeometryPack] Error copying assets: {e}")
 
 
+def copy_dynamic_widgets_js():
+    """Copy dynamic_widgets.js from pip package to web/js/."""
+    try:
+        from comfy_dynamic_widgets import get_js_path
+
+        source = get_js_path()
+        if not os.path.exists(source):
+            print(f"[GeometryPack] Warning: dynamic_widgets.js not found at {source}")
+            return
+
+        custom_node_dir = os.path.dirname(os.path.abspath(__file__))
+        dest = os.path.join(custom_node_dir, "web", "js", "dynamic_widgets.js")
+
+        # Ensure web/js directory exists
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+
+        # Copy if source is newer or dest doesn't exist
+        if not os.path.exists(dest) or os.path.getmtime(source) > os.path.getmtime(dest):
+            shutil.copy2(source, dest)
+            print("[GeometryPack] Copied dynamic_widgets.js from comfy-dynamic-widgets package")
+
+    except ImportError:
+        print("[GeometryPack] Warning: comfy-dynamic-widgets not installed")
+    except Exception as e:
+        print(f"[GeometryPack] Error copying JS: {e}")
+
+
 def generate_widget_mappings():
     """Generate dynamic widget visibility mappings using comfy-dynamic-widgets."""
     try:
@@ -95,5 +197,7 @@ def generate_widget_mappings():
 
 
 # Run on import
+copy_3d_viewers()
+copy_dynamic_widgets_js()
 generate_widget_mappings()
 copy_example_assets()
