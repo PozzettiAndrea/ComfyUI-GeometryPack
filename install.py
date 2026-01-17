@@ -18,7 +18,6 @@ def main():
     print("=" * 60)
 
     from comfy_env import install, IsolatedEnvManager, discover_config
-    from comfy_env.tools import find_blender
 
     node_root = Path(__file__).parent.absolute()
 
