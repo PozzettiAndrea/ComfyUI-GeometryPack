@@ -3,15 +3,12 @@ name = "ComfyUI-GeometryPack"
 python_version = "3.11"
 cpu_only = true
 timeout = 300
-levels = ["syntax", "install", "registration", "instantiation", "validation"]
+levels = ["syntax", "install", "registration", "instantiation", "validation", "execution"]
 
 [test.workflows]
-files = [
-    "workflows/mesh_info.json",
-    "workflows/transform.json",
-    "workflows/boolean_ops.json",
-]
 timeout = 120
+run = "all"
+screenshot = "all"
 
 [test.platforms]
 linux = true
