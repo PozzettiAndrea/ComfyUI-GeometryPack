@@ -40,6 +40,7 @@ class MeshDistanceNode:
 
     RETURN_TYPES = ("FLOAT", "STRING")
     RETURN_NAMES = ("distance", "info")
+    OUTPUT_NODE = True
     FUNCTION = "compute_distance"
     CATEGORY = "geompack/distance"
 
@@ -129,7 +130,10 @@ Chamfer distance measures average nearest-neighbor distance (overall similarity)
             raise ValueError(f"Unknown metric: {metric}")
 
         print(f"[MeshDistance] Result: {dist:.6f}")
-        return (float(dist), info)
+        return {
+            "result": (float(dist), info),
+            "ui": {"text": [info]}
+        }
 
 
 # Node mappings

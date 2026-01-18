@@ -36,6 +36,7 @@ class MeshQualityNode:
 
     RETURN_TYPES = ("FLOAT", "FLOAT", "STRING")
     RETURN_NAMES = ("min_quality", "mean_quality", "report")
+    OUTPUT_NODE = True
     FUNCTION = "analyze_quality"
     CATEGORY = "geompack/analysis"
 
@@ -168,7 +169,10 @@ class MeshQualityNode:
 
         print(f"[MeshQuality] Analysis complete")
 
-        return (min_quality, mean_quality, report)
+        return {
+            "result": (min_quality, mean_quality, report),
+            "ui": {"text": [report]}
+        }
 
     def _compute_face_quality(self, mesh):
         """

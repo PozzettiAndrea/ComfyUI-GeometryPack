@@ -66,6 +66,7 @@ class FillHolesNode:
 
     RETURN_TYPES = ("TRIMESH", "STRING")
     RETURN_NAMES = ("filled_mesh", "info")
+    OUTPUT_NODE = True
     FUNCTION = "fill_holes"
     CATEGORY = "geompack/repair"
 
@@ -252,7 +253,10 @@ After Filling:
 
         print(f"[FillHoles] Added {added_faces} faces, Watertight: {was_watertight} -> {is_watertight}")
 
-        return (filled_mesh, info)
+        return {
+            "result": (filled_mesh, info),
+            "ui": {"text": [info]}
+        }
 
 
 NODE_CLASS_MAPPINGS = {

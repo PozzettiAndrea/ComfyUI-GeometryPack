@@ -67,6 +67,7 @@ class RefineMeshNode:
 
     RETURN_TYPES = ("TRIMESH", "STRING")
     RETURN_NAMES = ("refined_mesh", "info")
+    OUTPUT_NODE = True
     FUNCTION = "refine"
     CATEGORY = "geompack/remeshing"
 
@@ -106,7 +107,10 @@ class RefineMeshNode:
         print(f"[RefineMesh] Output: {len(refined_mesh.vertices)} vertices ({vertex_change:+d}), "
               f"{len(refined_mesh.faces)} faces ({face_change:+d})")
 
-        return (refined_mesh, info)
+        return {
+            "result": (refined_mesh, info),
+            "ui": {"text": [info]}
+        }
 
     def _decimate(self, trimesh, target_face_count, method):
         """Decimate mesh to target face count."""

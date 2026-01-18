@@ -87,6 +87,7 @@ class ReconstructSurfaceNode:
 
     RETURN_TYPES = ("TRIMESH", "STRING")
     RETURN_NAMES = ("reconstructed_mesh", "info")
+    OUTPUT_NODE = True
     FUNCTION = "reconstruct"
     CATEGORY = "geompack/reconstruction"
 
@@ -160,7 +161,10 @@ class ReconstructSurfaceNode:
         }
 
         print(f"[Reconstruct] Output: {len(result.vertices)} vertices, {len(result.faces)} faces")
-        return (result, info)
+        return {
+            "result": (result, info),
+            "ui": {"text": [info]}
+        }
 
     def _poisson(self, vertices, normals, depth, scale, estimate_normals, normal_radius):
         """Poisson surface reconstruction using Open3D or PyMeshLab."""

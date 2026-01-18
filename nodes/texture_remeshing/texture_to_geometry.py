@@ -79,6 +79,7 @@ class TextureToGeometryNode:
 
     RETURN_TYPES = ("TRIMESH", "STRING")
     RETURN_NAMES = ("mesh", "info")
+    OUTPUT_NODE = True
     FUNCTION = "texture_to_geometry"
     CATEGORY = "geompack/texture_remeshing"
 
@@ -211,7 +212,10 @@ Output Mesh:
   Watertight: {mesh.is_watertight}
 """
 
-        return (mesh, info)
+        return {
+            "result": (mesh, info),
+            "ui": {"text": [info]}
+        }
 
     def _heightmap_to_points(self, heightmap, height_scale, skip_black, black_threshold):
         """Convert heightmap to 3D point cloud."""

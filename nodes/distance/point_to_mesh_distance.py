@@ -38,6 +38,7 @@ class PointToMeshDistanceNode:
 
     RETURN_TYPES = ("TRIMESH", "STRING")
     RETURN_NAMES = ("pointcloud", "info")
+    OUTPUT_NODE = True
     FUNCTION = "compute_distance"
     CATEGORY = "geompack/distance"
 
@@ -197,7 +198,10 @@ Output: {input_type} with 'distance' field in vertex_attributes
         print(f"[PointToMeshDistance] Min: {min_dist:.6f}, Max: {max_dist:.6f}, Mean: {mean_dist:.6f}")
         print(f"[PointToMeshDistance] Distance field added to vertex_attributes['distance']")
 
-        return (result, info)
+        return {
+            "result": (result, info),
+            "ui": {"text": [info]}
+        }
 
 
 # Node mappings

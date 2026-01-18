@@ -27,6 +27,7 @@ class MeshInfoNode:
 
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("info",)
+    OUTPUT_NODE = True
     FUNCTION = "get_mesh_info"
     CATEGORY = "geompack/analysis"
     INPUT_IS_LIST = True
@@ -39,7 +40,7 @@ class MeshInfoNode:
             trimesh: list of trimesh.Trimesh objects (when INPUT_IS_LIST=True)
 
         Returns:
-            tuple: (concatenated_info_string,)
+            dict: {"result": (info_string,), "ui": {"text": [info]}}
         """
         # Handle batch processing - concatenate all info
         all_info = []
@@ -50,7 +51,11 @@ class MeshInfoNode:
 
         # Join all info with separators
         combined_info = "\n\n".join(all_info)
-        return (combined_info,)
+
+        return {
+            "result": (combined_info,),
+            "ui": {"text": [combined_info]}
+        }
 
 
 # Node mappings
