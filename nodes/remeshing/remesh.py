@@ -237,46 +237,19 @@ After:
         return remeshed_mesh, info
 
     def _cgal_isotropic(self, trimesh, target_edge_length, iterations, protect_boundaries):
-        """CGAL isotropic remeshing using isolated environment."""
-        from .._utils.cgal_worker import call_cgal
-
+        """CGAL isotropic remeshing."""
         protect = (protect_boundaries == "true")
-
-        print(f"[Remesh] Running CGAL isotropic remesh (isolated environment)...")
-        result = call_cgal('cgal_isotropic_remesh',
-            vertices=np.asarray(trimesh.vertices, dtype=np.float64),
-            faces=np.asarray(trimesh.faces, dtype=np.int32),
-            target_edge_length=target_edge_length,
-            iterations=iterations,
-            protect_boundaries=protect
+        remeshed_mesh, error = mesh_ops.cgal_isotropic_remesh(
+            trimesh, target_edge_length, iterations, protect
         )
-
-        if result.get('error'):
-            raise ValueError(f"CGAL remeshing failed: {result['error']}")
-
-        remeshed_mesh = trimesh_module.Trimesh(
-            vertices=np.array(result['vertices'], dtype=np.float64),
-            faces=np.array(result['faces'], dtype=np.int32),
-            process=False
-        )
-
-        # Preserve metadata
-        remeshed_mesh.metadata = trimesh.metadata.copy()
-        remeshed_mesh.metadata['remeshing'] = {
-            'algorithm': 'cgal_isotropic',
-            'target_edge_length': target_edge_length,
-            'iterations': iterations,
-            'protect_boundaries': protect,
-            'original_vertices': len(trimesh.vertices),
-            'original_faces': len(trimesh.faces)
-        }
+        if remeshed_mesh is None:
+            raise ValueError(f"CGAL remeshing failed: {error}")
 
         info = f"""Remesh Results (CGAL Isotropic):
 
 Target Edge Length: {target_edge_length}
 Iterations: {iterations}
 Protect Boundaries: {protect_boundaries}
-Method: Isolated environment
 
 Before:
   Vertices: {len(trimesh.vertices):,}
