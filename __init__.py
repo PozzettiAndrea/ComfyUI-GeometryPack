@@ -17,15 +17,15 @@ from datetime import datetime
 # Only run initialization when loaded by ComfyUI, not during pytest
 # Use PYTEST_CURRENT_TEST env var which is only set when pytest is actually running tests
 if 'PYTEST_CURRENT_TEST' not in os.environ:
-    # Check if CGAL is available
-    try:
-        from CGAL import CGAL_Polygon_mesh_processing
-        print("[GeomPack] CGAL Python package found - CGAL Isotropic Remesh node available")
-    except ImportError:
-        print("[GeomPack] WARNING: CGAL Python package not found")
-        print("[GeomPack] The CGAL Isotropic Remesh node will not be available")
-        print("[GeomPack] Install with: pip install cgal")
-        print("[GeomPack] You can use PyMeshLab Remesh as an alternative")
+    # Check if isolated environment exists for CGAL/bpy operations
+    _node_dir = Path(__file__).parent
+    _env_path = _node_dir / "_env_geometrypack"
+    if _env_path.exists():
+        print("[GeomPack] Isolated environment found - CGAL and Blender operations available")
+    else:
+        print("[GeomPack] WARNING: Isolated environment not found at _env_geometrypack")
+        print("[GeomPack] CGAL and Blender operations will not be available")
+        print("[GeomPack] Run 'comfy-env install' to create the isolated environment")
 
     from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 
