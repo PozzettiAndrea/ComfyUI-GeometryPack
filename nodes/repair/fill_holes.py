@@ -8,12 +8,14 @@ Fill holes in mesh by adding new faces.
 import trimesh
 import numpy as np
 
-try:
-    import cumesh as CuMesh
-    import torch
-    HAS_CUMESH = True
-except ImportError:
-    HAS_CUMESH = False
+def _get_cumesh():
+    """Lazy cumesh+torch import to avoid importing before ComfyUI startup."""
+    try:
+        import cumesh as CuMesh
+        import torch
+        return CuMesh, torch
+    except ImportError:
+        return None, None
 
 try:
     import pymeshlab
@@ -107,7 +109,8 @@ class FillHolesNode:
         num_holes_filled = None
 
         # Fill holes using selected method
-        if method == "cumesh" and HAS_CUMESH:
+        CuMesh, torch = _get_cumesh()
+        if method == "cumesh" and CuMesh is not None:
             # GPU-accelerated hole filling (same as TRELLIS2)
             vertices = torch.tensor(filled_mesh.vertices, dtype=torch.float32).cuda()
             faces = torch.tensor(filled_mesh.faces, dtype=torch.int32).cuda()
@@ -129,7 +132,7 @@ class FillHolesNode:
 
             print(f"[FillHoles] CuMesh method completed (perimeter={perimeter})")
 
-        elif method == "cumesh" and not HAS_CUMESH:
+        elif method == "cumesh" and CuMesh is None:
             # Fallback to trimesh if cumesh not available
             print(f"[FillHoles] CuMesh not available, falling back to trimesh method")
             filled_mesh.fill_holes()

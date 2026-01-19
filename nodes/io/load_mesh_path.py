@@ -25,11 +25,14 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-try:
-    import torch
-    TORCH_AVAILABLE = True
-except ImportError:
-    TORCH_AVAILABLE = False
+
+def _get_torch():
+    """Lazy torch import to avoid importing before ComfyUI startup."""
+    try:
+        import torch
+        return torch
+    except ImportError:
+        return None
 
 
 class LoadMeshPath:
@@ -128,7 +131,8 @@ class LoadMeshPath:
 
     def _extract_texture_image(self, mesh):
         """Extract texture from mesh and convert to ComfyUI IMAGE format."""
-        if not PIL_AVAILABLE or not TORCH_AVAILABLE:
+        torch = _get_torch()
+        if not PIL_AVAILABLE or torch is None:
             return None
 
         texture_image = None

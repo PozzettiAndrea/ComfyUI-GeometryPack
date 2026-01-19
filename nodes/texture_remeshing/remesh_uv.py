@@ -17,11 +17,14 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-try:
-    import torch
-    TORCH_AVAILABLE = True
-except ImportError:
-    TORCH_AVAILABLE = False
+
+def _get_torch():
+    """Lazy torch import to avoid importing before ComfyUI startup."""
+    try:
+        import torch
+        return torch
+    except ImportError:
+        return None
 
 
 def _extract_texture(mesh):
@@ -95,7 +98,8 @@ def _extract_texture(mesh):
 
 def _load_as_comfy_image(texture_path):
     """Convert texture to ComfyUI IMAGE format."""
-    if not PIL_AVAILABLE or not TORCH_AVAILABLE:
+    torch = _get_torch()
+    if not PIL_AVAILABLE or torch is None:
         return None
 
     img = Image.open(texture_path).convert("RGB")
@@ -158,7 +162,7 @@ class RemeshWithTexture:
         if not PIL_AVAILABLE:
             raise RuntimeError("PIL required. Install: pip install Pillow")
 
-        if not TORCH_AVAILABLE:
+        if _get_torch() is None:
             raise RuntimeError("torch required. Install: pip install torch")
 
         from .._utils import blender_bridge
@@ -453,16 +457,16 @@ print(f"[Blender] Export complete")
                 comfy_image = comfy_image[np.newaxis, ...]  # Add batch dimension
 
                 # Convert to torch if needed
-                if TORCH_AVAILABLE:
-                    import torch
+                torch = _get_torch()
+                if torch is not None:
                     comfy_image = torch.from_numpy(comfy_image)
 
                 print(f"[BlenderRemeshWithTexture] Created vertex color visualization: {viz_size}x{viz_size}")
             else:
                 # Fallback: black image
                 comfy_image = np.zeros((1, 256, 256, 3), dtype=np.float32)
-                if TORCH_AVAILABLE:
-                    import torch
+                torch = _get_torch()
+                if torch is not None:
                     comfy_image = torch.from_numpy(comfy_image)
 
             placeholder_warning = "\n⚠️  WARNING: Used placeholder texture (no embedded texture in input)" if is_placeholder else ""

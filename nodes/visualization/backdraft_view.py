@@ -20,7 +20,6 @@ Supports three backends:
 """
 
 import numpy as np
-import torch
 from PIL import Image, ImageDraw, ImageFont
 import os
 
@@ -180,6 +179,7 @@ class BackdraftViewNode:
             image = np.array(pil_image)
 
         # Convert to ComfyUI IMAGE format: (B, H, W, C) float32 0-1
+        import torch
         img_tensor = torch.from_numpy(image.astype(np.float32) / 255.0)
         img_tensor = img_tensor.unsqueeze(0)  # Add batch dimension
 
