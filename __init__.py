@@ -18,7 +18,8 @@ from datetime import datetime
 # Use PYTEST_CURRENT_TEST env var which is only set when pytest is actually running tests
 if 'PYTEST_CURRENT_TEST' not in os.environ:
     # Check if isolated environment exists for CGAL/bpy operations
-    _node_dir = Path(__file__).parent
+    # Use .resolve() to follow symlinks (same pattern as folder_paths.py)
+    _node_dir = Path(__file__).resolve().parent
     _env_path = _node_dir / "_env_geometrypack"
     if _env_path.exists():
         print("[GeomPack] Isolated environment found - CGAL and Blender operations available")

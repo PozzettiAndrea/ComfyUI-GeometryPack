@@ -28,8 +28,8 @@ def _get_worker():
 
     from comfy_env import VenvWorker
 
-    # Find the isolated environment
-    node_dir = Path(__file__).parent.parent.parent  # ComfyUI-GeometryPack/
+    # Find the isolated environment (resolve symlinks like folder_paths.py does)
+    node_dir = Path(__file__).resolve().parent.parent.parent  # ComfyUI-GeometryPack/
     env_path = node_dir / "_env_geometrypack"
 
     if not env_path.exists():
@@ -46,7 +46,7 @@ def _get_worker():
         raise RuntimeError(f"Python not found in isolated environment: {env_path}")
 
     # Create worker with sys.path including our modules
-    utils_dir = Path(__file__).parent
+    utils_dir = Path(__file__).resolve().parent
     _worker = VenvWorker(
         python=str(python_path),
         sys_path=[str(utils_dir)],

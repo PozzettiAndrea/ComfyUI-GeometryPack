@@ -21,32 +21,32 @@ _worker = None
 
 
 def _get_worker():
-    """Get or create the VenvWorker for the geometrypack environment (CGAL)."""
+    """Get or create the VenvWorker for the geometrypack environment (CGAL).
+
+    Returns None if the isolated environment doesn't exist.
+    """
     global _worker
     if _worker is not None:
         return _worker
 
-    from comfy_env import VenvWorker
-
-    # Find the isolated environment
-    node_dir = Path(__file__).parent.parent.parent  # ComfyUI-GeometryPack/
+    # Find the isolated environment (resolve symlinks like folder_paths.py does)
+    node_dir = Path(__file__).resolve().parent.parent.parent  # ComfyUI-GeometryPack/
     env_path = node_dir / "_env_geometrypack"
 
     if not env_path.exists():
-        raise RuntimeError(
-            f"Isolated environment not found at {env_path}\n"
-            "Run 'comfy-env install' to create it."
-        )
+        return None  # Environment not installed
 
     python_path = env_path / "bin" / "python"
     if not python_path.exists():
         python_path = env_path / "Scripts" / "python.exe"  # Windows
 
     if not python_path.exists():
-        raise RuntimeError(f"Python not found in isolated environment: {env_path}")
+        return None  # Python not found in environment
+
+    from comfy_env import VenvWorker
 
     # Create worker with sys.path including our modules
-    utils_dir = Path(__file__).parent
+    utils_dir = Path(__file__).resolve().parent
     _worker = VenvWorker(
         python=str(python_path),
         sys_path=[str(utils_dir)],
