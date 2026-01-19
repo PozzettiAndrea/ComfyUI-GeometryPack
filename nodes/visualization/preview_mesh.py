@@ -12,11 +12,8 @@ import trimesh as trimesh_module
 import os
 import tempfile
 import uuid
-import sys
 
-# Add parent directory to path to import utilities
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from _utils.mesh_ops import is_point_cloud, get_face_count, get_geometry_type
+from .._utils.mesh_ops import is_point_cloud, get_face_count, get_geometry_type
 
 try:
     import folder_paths

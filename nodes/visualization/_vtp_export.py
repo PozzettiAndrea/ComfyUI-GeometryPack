@@ -13,12 +13,8 @@ Supports both meshes (with faces) and point clouds (without faces).
 import numpy as np
 import trimesh as trimesh_module
 import xml.etree.ElementTree as ET
-import sys
-import os
 
-# Add parent directory to path to import utilities
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from _utils.mesh_ops import is_point_cloud, get_face_count
+from .._utils.mesh_ops import is_point_cloud, get_face_count
 
 
 def export_mesh_with_scalars_vtp(trimesh: trimesh_module.Trimesh, filepath: str):
