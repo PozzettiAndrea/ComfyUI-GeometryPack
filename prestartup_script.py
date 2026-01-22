@@ -59,7 +59,7 @@ def copy_3d_viewers():
                 dst_root = os.path.join(dst_viewer_dir, rel_path) if rel_path != '.' else dst_viewer_dir
                 os.makedirs(dst_root, exist_ok=True)
                 for filename in files:
-                    if filename.endswith('.js'):
+                    if filename.endswith('.js') or filename.endswith('.css'):
                         src = os.path.join(root, filename)
                         dst = os.path.join(dst_root, filename)
                         if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
@@ -222,5 +222,5 @@ def generate_widget_mappings():
 # Run on import
 copy_3d_viewers()
 copy_dynamic_widgets_js()
-generate_widget_mappings()
+# Note: generate_widget_mappings() moved to __init__.py where NODE_CLASS_MAPPINGS is available
 copy_example_assets()

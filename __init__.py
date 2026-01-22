@@ -30,6 +30,37 @@ if 'PYTEST_CURRENT_TEST' not in os.environ:
 
     from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 
+    # Generate widget visibility mappings now that nodes are loaded
+    def _generate_widget_mappings():
+        try:
+            from comfy_dynamic_widgets import scan_specific_nodes, generate_mappings
+            import json
+
+            configs = scan_specific_nodes(NODE_CLASS_MAPPINGS)
+
+            if not configs:
+                print("[GeometryPack] No visible_when metadata found in any nodes")
+                return
+
+            mappings = generate_mappings(configs)
+
+            custom_node_dir = os.path.dirname(os.path.abspath(__file__))
+            output_path = os.path.join(custom_node_dir, "web", "js", "mappings.json")
+
+            with open(output_path, "w") as f:
+                json.dump(mappings, f, indent=2)
+
+            node_count = len(configs)
+            selector_count = sum(len(c.get("selectors", {})) for c in configs.values())
+            print(f"[GeometryPack] Generated widget mappings for {node_count} nodes ({selector_count} selectors)")
+
+        except ImportError:
+            print("[GeometryPack] Warning: comfy-dynamic-widgets not installed, skipping widget mappings")
+        except Exception as e:
+            print(f"[GeometryPack] Error generating widget mappings: {e}")
+
+    _generate_widget_mappings()
+
     # Setup custom server routes for save functionality
     try:
         from aiohttp import web
