@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ComfyUI Workflow Layouts</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 30px;
+        }
+        .workflow {
+            background: #16213e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .workflow h2 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #4a9eff;
+        }
+        .workflow svg {
+            background: #0f0f23;
+            border-radius: 4px;
+        }
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+        .stats {
+            color: #888;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ComfyUI Workflow Layouts</h1>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background: #4a9eff"></div>
+            <span>Loaders/Inputs</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #6bcb77"></div>
+            <span>Processors</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ffd93d"></div>
+            <span>Previews</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ff6b6b"></div>
+            <span>Savers/Outputs</span>
+        </div>
+    </div>
+
+    <div class="workflow">
+        <h2>depth_map_to_mesh.json</h2>
+        <svg width="773.853515625" height="385.41171875" viewBox="0 0 773.853515625 385.41171875">
+            <path d="M 483.1671875 76.5 C 495.5103515625 76.5, 495.5103515625 194.91171875, 507.853515625 194.91171875" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 167.5 89.796484375 C 172.07058593749997 89.796484375, 172.07058593749997 28.187031249999883, 176.64117187499994 28.187031249999883" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 311.64117187499994 28.187031249999883 C 317.4041796875 28.187031249999883, 317.4041796875 76.5, 323.1671875 76.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="11.296484375" width="157.5" height="157.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="88.75" y="89.796484375" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">LoadImage</text>
+    <rect x="507.853515625" y="14.41171875" width="256.0" height="361.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="635.853515625" y="194.91171875" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="323.1671875" y="10.0" width="160.0" height="133.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="403.1671875" y="76.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.428571428571427px" fill="#fff">GeomPackTextureToG...</text>
+    <rect x="176.64117187499994" y="13.687031249999883" width="135.0" height="29.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="244.14117187499994" y="28.187031249999883" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">ImageToMask</text>
+        </svg>
+        <div class="stats">4 nodes, 3 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>point_mesh_distance.json</h2>
+        <svg width="953.2327619476654" height="589.9735117510328" viewBox="0 0 953.2327619476654 589.9735117510328">
+            <path d="M 160.0 48.44831482438017 C 184.84443601497924 48.44831482438017, 184.84443601497924 42.5, 209.68887202995845 42.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 160.0 48.44831482438017 C 199.4350061337808 48.44831482438017, 199.4350061337808 212.03200461647702, 238.8700122675616 212.03200461647702" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 160.0 173.44831482438016 C 199.4350061337808 173.44831482438016, 199.4350061337808 212.03200461647702, 238.8700122675616 212.03200461647702" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 160.0 173.44831482438016 C 273.09421003357414 173.44831482438016, 273.09421003357414 110.1871771694214, 386.1884200671483 110.1871771694214" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 344.6888720299585 42.5 C 365.4386460485534 42.5, 365.4386460485534 110.1871771694214, 386.1884200671483 110.1871771694214" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 329.9832935175616 212.03200461647702 C 444.60802773261355 212.03200461647702, 444.60802773261355 371.47351175103285, 559.2327619476655 371.47351175103285" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 525.2206466296483 110.1871771694214 C 542.226704288657 110.1871771694214, 542.226704288657 371.47351175103285, 559.2327619476655 371.47351175103285" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="10.94831482438017" width="150.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="85.0" y="48.44831482438017" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.714285714285715px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="209.68887202995845" y="10.0" width="135.0" height="65.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="277.1888720299585" y="42.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackMeshToPoin...</text>
+    <rect x="10.0" y="135.94831482438016" width="150.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="85.0" y="173.44831482438016" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.714285714285715px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="386.1884200671483" y="74.68717716942142" width="139.0322265625" height="71.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="455.7045333483983" y="110.18717716942142" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.930873325892858px" fill="#fff">GeomPackPointToMes...</text>
+    <rect x="559.2327619476655" y="162.97351175103285" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="751.2327619476655" y="371.47351175103285" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="238.8700122675616" y="190.53200461647702" width="91.11328125" height="43.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="284.4266528925616" y="212.03200461647702" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8px" fill="#fff">GeomPackCombineMes...</text>
+        </svg>
+        <div class="stats">6 nodes, 7 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>remeshing.json</h2>
+        <svg width="511.38730662514934" height="535.8005956490155" viewBox="0 0 511.38730662514934 535.8005956490155">
+            <path d="M 145.0 32.07451589444869 C 159.277862232603 32.07451589444869, 159.277862232603 35.5, 173.55572446520603 35.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 308.588927590206 35.5 C 212.98811710767768 35.5, 212.98811710767768 319.30059564901546, 117.38730662514936 319.30059564901546" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 32.07451589444869 C 131.19365331257467 32.07451589444869, 131.19365331257467 319.30059564901546, 117.38730662514936 319.30059564901546" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="173.55572446520603" y="10.0" width="135.033203125" height="51.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="241.07232602770603" y="35.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackRemesh</text>
+    <rect x="10.0" y="12.574515894448687" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="32.07451589444869" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="117.38730662514936" y="112.80059564901548" width="384.0" height="413.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="309.38730662514934" y="319.30059564901546" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">3 nodes, 3 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>fill_holes.json</h2>
+        <svg width="731.8059895833333" height="437.0" viewBox="0 0 731.8059895833333 437.0">
+            <path d="M 145.0 48.8600260416667 C 241.40299479166666 48.8600260416667, 241.40299479166666 218.5, 337.8059895833333 218.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 310.35481770833326 113.82552083333333 C 324.08040364583326 113.82552083333333, 324.08040364583326 218.5, 337.8059895833333 218.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 48.8600260416667 C 160.17740885416663 48.8600260416667, 160.17740885416663 113.82552083333333, 175.35481770833326 113.82552083333333" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="29.3600260416667" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="48.8600260416667" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="337.8059895833333" y="10.0" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="529.8059895833333" y="218.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="175.35481770833326" y="82.32552083333333" width="135.0" height="63.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="242.85481770833326" y="113.82552083333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.911764705882353px" fill="#fff">GeomPackFillHoles</text>
+        </svg>
+        <div class="stats">3 nodes, 3 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>boolean_ops.json</h2>
+        <svg width="872.6740427524539" height="607.0085449218748" viewBox="0 0 872.6740427524539 607.0085449218748">
+            <path d="M 160.0 72.34664552394568 C 182.0025111198425 72.34664552394568, 182.0025111198425 43.03664825145424, 204.00502223968502 43.03664825145424" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 160.0 197.34664552394568 C 182.0025111198425 197.34664552394568, 182.0025111198425 43.03664825145424, 204.00502223968502 43.03664825145424" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 160.0 72.34664552394568 C 176.0447606340395 72.34664552394568, 176.0447606340395 388.5085449218748, 192.08952126807904 388.5085449218748" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 160.0 197.34664552394568 C 176.0447606340395 197.34664552394568, 176.0447606340395 388.5085449218748, 192.08952126807904 388.5085449218748" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 364.005022239685 43.03664825145424 C 485.33953249606947 43.03664825145424, 485.33953249606947 183.5, 606.6740427524539 183.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="34.84664552394568" width="150.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="85.0" y="72.34664552394568" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.714285714285715px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="192.08952126807904" y="180.0085449218748" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="384.089521268079" y="388.5085449218748" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="10.0" y="159.84664552394568" width="150.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="85.0" y="197.34664552394568" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.714285714285715px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="204.00502223968502" y="10.536648251454238" width="160.0" height="65.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="284.005022239685" y="43.03664825145424" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackBooleanOp</text>
+    <rect x="606.6740427524539" y="10.0" width="256.0" height="347.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="734.6740427524539" y="183.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">5 nodes, 5 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>alpha_wrap.json</h2>
+        <svg width="847.5835745368238" height="824.3699675803866" viewBox="0 0 847.5835745368238 824.3699675803866">
+            <path d="M 145.0 176.35223851073357 C 152.60200649136414 176.35223851073357, 152.60200649136414 281.24919635839984, 160.20401298272827 281.24919635839984" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 176.35223851073357 C 299.2917872684119 176.35223851073357, 299.2917872684119 216.5, 453.5835745368238 216.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 295.9962981389782 281.24919635839984 C 374.789936337901 281.24919635839984, 374.789936337901 216.5, 453.5835745368238 216.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 377.8880553850116 387.6596397610272 C 405.0410853054327 387.6596397610272, 405.0410853054327 640.8699675803866, 432.1941152258538 640.8699675803866" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 295.9962981389782 281.24919635839984 C 283.2478408244949 281.24919635839984, 283.2478408244949 387.6596397610272, 270.4993835100116 387.6596397610272" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 176.35223851073357 C 288.5970576129269 176.35223851073357, 288.5970576129269 640.8699675803866, 432.1941152258538 640.8699675803866" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 295.9962981389782 281.24919635839984 C 364.095206682416 281.24919635839984, 364.095206682416 640.8699675803866, 432.1941152258538 640.8699675803866" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="156.85223851073357" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="176.35223851073357" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="160.20401298272827" y="255.74919635839984" width="135.79228515625" height="51.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="228.10015556085327" y="281.24919635839984" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.981672219669116px" fill="#fff">GeomPackAlphaWrap</text>
+    <rect x="453.5835745368238" y="10.0" width="384.0" height="413.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="645.5835745368238" y="216.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="432.1941152258538" y="467.3699675803866" width="384.0" height="347.00000000000006" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="624.1941152258538" y="640.8699675803866" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="270.4993835100116" y="350.1596397610273" width="107.388671875" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="324.1937194475116" y="387.6596397610273" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.505929129464285px" fill="#fff">GeomPackRemesh</text>
+        </svg>
+        <div class="stats">5 nodes, 7 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>transform.json</h2>
+        <svg width="852.794872907308" height="437.0" viewBox="0 0 852.794872907308 437.0">
+            <path d="M 145.0 74.00042660905945 C 178.23385159542042 74.00042660905945, 178.23385159542042 82.28793631009702, 211.46770319084084 82.28793631009702" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 74.00042660905945 C 301.897436453654 74.00042660905945, 301.897436453654 218.5, 458.79487290730805 218.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 371.46770319084084 82.28793631009702 C 415.13128804907444 82.28793631009702, 415.13128804907444 218.5, 458.79487290730805 218.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="47.50042660905944" width="135.0" height="53.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="74.00042660905945" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="458.79487290730805" y="10.0" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="650.794872907308" y="218.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="211.46770319084084" y="44.78793631009702" width="160.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="291.46770319084084" y="82.28793631009702" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.428571428571427px" fill="#fff">GeomPackTransformM...</text>
+        </svg>
+        <div class="stats">3 nodes, 3 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>fix_self_intersection.json</h2>
+        <svg width="892.6088294060944" height="458.68942121138883" viewBox="0 0 892.6088294060944 458.68942121138883">
+            <path d="M 145.0 86.11465988658566 C 161.64171824756914 86.11465988658566, 161.64171824756914 54.5, 178.2834364951383 54.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 283.2834364951383 54.5 C 298.9102163830608 54.5, 298.9102163830608 158.91228096027817, 314.5369962709833 158.91228096027817" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 474.19695720848324 158.91228096027817 C 361.55083462163327 158.91228096027817, 361.55083462163327 356.41132895493826, 248.90471203478327 356.41132895493826" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 283.2834364951383 54.5 C 390.9461329506164 54.5, 390.9461329506164 240.18942121138883, 498.60882940609446 240.18942121138883" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 353.9047120347833 356.41132895493826 C 426.2567707204389 356.41132895493826, 426.2567707204389 240.18942121138883, 498.60882940609446 240.18942121138883" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="248.90471203478327" y="311.9113289549382" width="105.0" height="89.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="301.4047120347833" y="356.4113289549382" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8px" fill="#fff">GeomPackDetectSelf...</text>
+    <rect x="498.60882940609446" y="31.689421211388847" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="690.6088294060944" y="240.18942121138883" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="314.5369962709833" y="115.41228096027818" width="159.6599609375" height="87.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="394.36697673973333" y="158.91228096027817" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.404282924107143px" fill="#fff">GeomPackFixSelfInt...</text>
+    <rect x="10.0" y="66.61465988658566" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="86.11465988658566" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="178.2834364951383" y="10.0" width="105.0" height="89.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="230.7834364951383" y="54.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8px" fill="#fff">GeomPackDetectSelf...</text>
+        </svg>
+        <div class="stats">5 nodes, 5 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>normals.json</h2>
+        <svg width="789.6588541666667" height="445.4331597222223" viewBox="0 0 789.6588541666667 445.4331597222223">
+            <path d="M 145.0 104.5 C 157.5 104.5, 157.5 29.5, 170.0 29.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 104.5 C 179.70594618055554 104.5, 179.70594618055554 138.35633680555554, 214.4118923611111 138.35633680555554" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 374.4118923611111 138.35633680555554 C 449.0353732638889 138.35633680555554, 449.0353732638889 261.9331597222223, 523.6588541666667 261.9331597222223" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="170.0" y="10.0" width="160.0" height="39.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="250.0" y="29.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackCheckNormals</text>
+    <rect x="10.0" y="85.0" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="104.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="523.6588541666667" y="88.43315972222229" width="256.0" height="347.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="651.6588541666667" y="261.9331597222223" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="214.4118923611111" y="118.85633680555556" width="160.0" height="39.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="294.4118923611111" y="138.35633680555554" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.428571428571427px" fill="#fff">GeomPackComputeNor...</text>
+        </svg>
+        <div class="stats">4 nodes, 3 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>uv_wrapping.json</h2>
+        <svg width="626.5081832432711" height="215.33116713868725" viewBox="0 0 626.5081832432711 215.33116713868725">
+            <path d="M 145.0 29.5 C 153.80391575153365 29.5, 153.80391575153365 33.92883400781262, 162.6078315030673 33.92883400781262" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 297.6078315030673 33.92883400781262 C 307.05800737316923 33.92883400781262, 307.05800737316923 110.83116713868723, 316.50818324327116 110.83116713868723" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="10.0" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="29.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="162.6078315030673" y="14.428834007812618" width="135.0" height="39.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="230.1078315030673" y="33.92883400781262" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackUVUnwrap</text>
+    <rect x="316.50818324327116" y="16.33116713868722" width="300.0" height="189.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="466.50818324327116" y="110.83116713868722" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">3 nodes, 2 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>remesh_intersections.json</h2>
+        <svg width="939.8567708333333" height="504.0" viewBox="0 0 939.8567708333333 504.0">
+            <path d="M 145.0 70.27083333333333 C 190.02864583333331 70.27083333333333, 190.02864583333331 54.5, 235.05729166666663 54.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 70.27083333333333 C 166.73437499999997 70.27083333333333, 166.73437499999997 203.984375, 188.46874999999994 203.984375" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 329.17089843749994 203.984375 C 364.4318033854165 203.984375, 364.4318033854165 173.30468749999994, 399.69270833333314 173.30468749999994" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 340.05729166666663 54.5 C 442.95703124999994 54.5, 442.95703124999994 285.5, 545.8567708333333 285.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 504.69270833333314 173.30468749999994 C 525.2747395833333 173.30468749999994, 525.2747395833333 285.5, 545.8567708333333 285.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="50.77083333333333" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="70.27083333333333" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="399.69270833333314" y="128.80468749999994" width="105.0" height="89.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="452.19270833333314" y="173.30468749999994" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8px" fill="#fff">GeomPackDetectSelf...</text>
+    <rect x="545.8567708333333" y="77.00000000000001" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="737.8567708333333" y="285.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="188.46874999999994" y="166.484375" width="140.7021484375" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="258.81982421874994" y="203.984375" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.050153459821427px" fill="#fff">GeomPackRemeshSelf...</text>
+    <rect x="235.05729166666663" y="10.0" width="105.0" height="89.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="287.55729166666663" y="54.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8px" fill="#fff">GeomPackDetectSelf...</text>
+        </svg>
+        <div class="stats">5 nodes, 5 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>surface_reconstruction.json</h2>
+        <svg width="597.0862468328049" height="584.4136848690571" viewBox="0 0 597.0862468328049 584.4136848690571">
+            <path d="M 145.0 32.24204222623966 C 160.46947636880154 32.24204222623966, 160.46947636880154 36.5, 175.93895273760307 36.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 310.9389527376031 36.5 C 327.12067407024756 36.5, 327.12067407024756 68.22993607954544, 343.3023954028921 68.22993607954544" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 32.24204222623966 C 174.04312341640247 32.24204222623966, 174.04312341640247 367.91368486905714, 203.0862468328049 367.91368486905714" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 478.3023954028921 68.22993607954544 C 340.6943211178485 68.22993607954544, 340.6943211178485 367.91368486905714, 203.0862468328049 367.91368486905714" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="175.93895273760307" y="10.0" width="135.0" height="53.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="243.43895273760307" y="36.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackMeshToPoin...</text>
+    <rect x="343.3023954028921" y="12.729936079545446" width="135.0" height="111.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="410.8023954028921" y="68.22993607954544" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackReconstruc...</text>
+    <rect x="10.0" y="12.742042226239665" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="32.24204222623966" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="203.0862468328049" y="161.41368486905714" width="384.0" height="413.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="395.08624683280493" y="367.91368486905714" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">4 nodes, 4 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>preview_mesh.json</h2>
+        <svg width="557.759765625" height="291.0" viewBox="0 0 557.759765625 291.0">
+            <path d="M 145.0 32.046875 C 218.3798828125 32.046875, 218.3798828125 145.5, 291.759765625 145.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="12.546875" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="32.046875" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="291.759765625" y="10.0" width="256.0" height="271.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="419.759765625" y="145.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMesh</text>
+        </svg>
+        <div class="stats">2 nodes, 1 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>mesh_mesh_distance.json</h2>
+        <svg width="534.7301943440075" height="238.68798437176633" viewBox="0 0 534.7301943440075 238.68798437176633">
+            <path d="M 145.0 79.1237409607437 C 175.28788118220538 79.1237409607437, 175.28788118220538 57.83282234633261, 205.57576236441076 57.83282234633261" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 79.1237409607437 C 267.36509717200374 79.1237409607437, 267.36509717200374 41.5, 389.7301943440075 41.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 340.60896548941076 57.83282234633261 C 365.16957991670915 57.83282234633261, 365.16957991670915 41.5, 389.7301943440075 41.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 79.1237409607437 C 256.3980315607243 79.1237409607437, 256.3980315607243 188.13540975271167, 367.7960631214486 188.13540975271167" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 312.0295015194949 191.18798437176633 C 339.9127823204717 191.18798437176633, 339.9127823204717 188.13540975271167, 367.7960631214486 188.13540975271167" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 79.1237409607437 C 160.99814919724744 79.1237409607437, 160.99814919724744 191.18798437176633, 176.9962983944949 191.18798437176633" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="389.7301943440075" y="10.0" width="135.0" height="63.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="457.2301943440075" y="41.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackMeshToMesh...</text>
+    <rect x="10.0" y="59.6237409607437" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="79.1237409607437" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="367.7960631214486" y="156.63540975271167" width="135.0" height="63.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="435.2960631214486" y="188.13540975271167" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackMeshToMesh...</text>
+    <rect x="205.57576236441076" y="26.332822346332613" width="135.033203125" height="63.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="273.09236392691076" y="57.83282234633261" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackRemesh</text>
+    <rect x="176.9962983944949" y="153.68798437176633" width="135.033203125" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="244.5128999569949" y="191.18798437176633" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackRemesh</text>
+        </svg>
+        <div class="stats">5 nodes, 6 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>batch_remesh.json</h2>
+        <svg width="797.1043041865623" height="584.37627890625" viewBox="0 0 797.1043041865623 584.37627890625">
+            <path d="M 170.0 203.89722503243752 C 270.34217387062495 203.89722503243752, 270.34217387062495 16.5, 370.6843477412499 16.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 170.0 203.89722503243752 C 211.39755717140633 203.89722503243752, 211.39755717140633 261.70647832031244, 252.79511434281264 261.70647832031244" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 387.82831746781267 261.70647832031244 C 425.400249694375 261.70647832031244, 425.400249694375 381.15910693359376, 462.9721819209374 381.15910693359376" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="166.39722503243752" width="160.0" height="75.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="90.0" y="203.89722503243752" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.428571428571427px" fill="#fff">GeomPackLoadMeshBa...</text>
+    <rect x="252.79511434281264" y="176.20647832031244" width="135.033203125" height="171.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="320.31171590531267" y="261.70647832031244" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackRemesh</text>
+    <rect x="462.9721819209374" y="187.94193496093757" width="324.13212226562496" height="386.43434394531243" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="625.0382430537499" y="381.15910693359376" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="370.6843477412499" y="10.0" width="75.8671875" height="13.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="408.6179414912499" y="16.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8px" fill="#fff">GeomPackMeshInfo</text>
+        </svg>
+        <div class="stats">4 nodes, 3 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>mesh_info.json</h2>
+        <svg width="342.4617042226235" height="134.2024793388429" viewBox="0 0 342.4617042226235 134.2024793388429">
+            <path d="M 160.0 57.04367897727279 C 193.28242026084683 57.04367897727279, 193.28242026084683 16.5, 226.56484052169367 16.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 160.0 57.04367897727279 C 178.04481695506175 57.04367897727279, 178.04481695506175 93.70247933884289, 196.0896339101235 93.70247933884289" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="226.56484052169367" y="10.0" width="70.0" height="13.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="261.56484052169367" y="16.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8px" fill="#fff">GeomPackMeshInfo</text>
+    <rect x="10.0" y="19.54367897727279" width="150.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="85.0" y="57.04367897727279" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.714285714285715px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="196.0896339101235" y="63.2024793388429" width="136.3720703125" height="61.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="264.2756690663735" y="93.70247933884289" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.766216077302632px" fill="#fff">GeomPackMeshQuality</text>
+        </svg>
+        <div class="stats">3 nodes, 2 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>refine_mesh.json</h2>
+        <svg width="732.3020833333333" height="547.6927083333334" viewBox="0 0 732.3020833333333 547.6927083333334">
+            <path d="M 145.0 32.0 C 159.25 32.0, 159.25 41.5, 173.5 41.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 32.0 C 233.15104166666666 32.0, 233.15104166666666 325.69270833333337, 321.3020833333333 325.69270833333337" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 308.5 41.5 C 314.90104166666663 41.5, 314.90104166666663 325.69270833333337, 321.3020833333333 325.69270833333337" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="12.5" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="32.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="321.3020833333333" y="113.69270833333334" width="401.0" height="424.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="521.8020833333333" y="325.69270833333337" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="173.5" y="10.0" width="135.0" height="63.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="241.0" y="41.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.25px" fill="#fff">GeomPackRefineMesh</text>
+        </svg>
+        <div class="stats">3 nodes, 3 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>side_by_side_viewer.json</h2>
+        <svg width="752.7962454803712" height="437.0" viewBox="0 0 752.7962454803712 437.0">
+            <path d="M 160.0 67.37425748966946 C 259.3981227401856 67.37425748966946, 259.3981227401856 218.5, 358.7962454803713 218.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 170.84710743801662 179.46103434917362 C 264.82167645919395 179.46103434917362, 264.82167645919395 218.5, 358.7962454803713 218.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="20.84710743801662" y="141.96103434917362" width="150.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="95.84710743801662" y="179.46103434917362" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.714285714285715px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="10.0" y="29.874257489669457" width="150.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="85.0" y="67.37425748966946" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.714285714285715px" fill="#fff">GeomPackCreatePrim...</text>
+    <rect x="358.7962454803713" y="10.0" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="550.7962454803712" y="218.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">3 nodes, 2 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>fix_normals.json</h2>
+        <svg width="712.3593750000001" height="581.6640625" viewBox="0 0 712.3593750000001 581.6640625">
+            <path d="M 145.0 32.0 C 159.25 32.0, 159.25 29.5, 173.5 29.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 32.0 C 116.06250000000014 32.0, 116.06250000000014 149.60156250000006, 87.12500000000028 149.60156250000006" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 308.5 29.5 C 194.54427083333343 29.5, 194.54427083333343 201.72656249999997, 80.58854166666686 201.72656249999997" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 226.61686197916686 201.72656249999997 C 272.4881184895835 201.72656249999997, 272.4881184895835 363.1640625, 318.3593750000001 363.1640625" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 233.15332031250028 149.60156250000006 C 275.7563476562502 149.60156250000006, 275.7563476562502 363.1640625, 318.3593750000001 363.1640625" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="318.3593750000001" y="154.66406250000003" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="510.3593750000001" y="363.1640625" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="10.0" y="12.5" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="32.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="87.12500000000028" y="135.10156250000006" width="146.0283203125" height="29.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="160.13916015625028" y="149.60156250000006" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.430594308035715px" fill="#fff">GeomPackComputeNor...</text>
+    <rect x="80.58854166666686" y="187.22656249999997" width="146.0283203125" height="29.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="153.60270182291686" y="201.72656249999997" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.430594308035715px" fill="#fff">GeomPackComputeNor...</text>
+    <rect x="173.5" y="10.0" width="135.0" height="39.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="241.0" y="29.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.25px" fill="#fff">GeomPackFixNormals</text>
+        </svg>
+        <div class="stats">5 nodes, 5 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>view_texture.json</h2>
+        <svg width="320.074183648044" height="381.0" viewBox="0 0 320.074183648044 381.0">
+            <path d="M 145.0 30.43744994071656 C 165.82600783964702 30.43744994071656, 165.82600783964702 190.5, 186.65201567929404 190.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="10.937449940716562" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="30.43744994071656" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="186.65201567929404" y="10.0" width="123.42216796875" height="361.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="248.36309966366903" y="190.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="8.815869140625px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">2 nodes, 1 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>fix_intersections_removal.json</h2>
+        <svg width="861.2447916666665" height="549.265625" viewBox="0 0 861.2447916666665 549.265625">
+            <path d="M 145.0 32.0 C 157.5 32.0, 157.5 29.5, 170.0 29.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 305.0 29.5 C 317.5 29.5, 317.5 47.5, 330.0 47.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 490.0 47.5 C 478.62239583333326 47.5, 478.62239583333326 332.765625, 467.24479166666646 332.765625" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 32.0 C 306.12239583333326 32.0, 306.12239583333326 332.765625, 467.24479166666646 332.765625" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="170.0" y="10.0" width="135.0" height="39.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="237.5" y="29.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackDetectSelf...</text>
+    <rect x="467.24479166666646" y="126.265625" width="384.0" height="413.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="659.2447916666665" y="332.765625" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+    <rect x="330.0" y="10.0" width="160.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="410.0" y="47.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.428571428571427px" fill="#fff">GeomPackFixSelfInt...</text>
+    <rect x="10.0" y="12.5" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="32.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+        </svg>
+        <div class="stats">4 nodes, 4 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>test_loading.json</h2>
+        <svg width="704.0" height="462.0" viewBox="0 0 704.0 462.0">
+            <path d="M 145.0 29.5 C 227.5 29.5, 227.5 243.5, 310.0 243.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 145.0 129.5 C 227.5 129.5, 227.5 243.5, 310.0 243.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="10.0" y="10.0" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="29.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackLoadMeshBl...</text>
+    <rect x="10.0" y="110.0" width="135.0" height="39.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="77.5" y="129.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="10.657894736842106px" fill="#fff">GeomPackLoadMeshFBX</text>
+    <rect x="310.0" y="35.0" width="384.0" height="417.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="502.0" y="243.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">3 nodes, 2 connections</div>
+    </div>
+
+    <div class="workflow">
+        <h2>skeleton_extraction.json</h2>
+        <svg width="1020.874140625" height="436.6441796875" viewBox="0 0 1020.874140625 436.6441796875">
+            <path d="M 570.0 53.48001953124991 C 598.4370703125 53.48001953124991, 598.4370703125 220.1441796875, 626.874140625 220.1441796875" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 170.0 53.48001953124991 C 398.4370703125 53.48001953124991, 398.4370703125 220.1441796875, 626.874140625 220.1441796875" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 170.0 53.48001953124991 C 199.5173242187501 53.48001953124991, 199.5173242187501 84.5, 229.0346484375002 84.5" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 364.0346484375002 84.5 C 387.0173242187501 84.5, 387.0173242187501 53.48001953124991, 410.0 53.48001953124991" stroke="#666" stroke-width="2" fill="none" opacity="0.6"/>
+    <rect x="410.0" y="15.980019531249905" width="160.0" height="75.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="490.0" y="53.48001953124991" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="11.428571428571427px" fill="#fff">GeomPackMeshFromSk...</text>
+    <rect x="10.0" y="15.980019531249905" width="160.0" height="75.0" rx="4" fill="#4a9eff" stroke="#333" stroke-width="1"/>
+    <text x="90.0" y="53.48001953124991" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackLoadMesh</text>
+    <rect x="229.0346484375002" y="10.0" width="135.0" height="149.0" rx="4" fill="#6bcb77" stroke="#333" stroke-width="1"/>
+    <text x="296.5346484375002" y="84.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="9.642857142857142px" fill="#fff">GeomPackExtractSke...</text>
+    <rect x="626.874140625" y="13.644179687500014" width="384.0" height="413.0" rx="4" fill="#ffd93d" stroke="#333" stroke-width="1"/>
+    <text x="818.874140625" y="220.1441796875" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12px" fill="#fff">GeomPackPreviewMes...</text>
+        </svg>
+        <div class="stats">4 nodes, 4 connections</div>
+    </div>
+
+</body>
+</html>
