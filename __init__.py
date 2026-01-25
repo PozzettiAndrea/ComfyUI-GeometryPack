@@ -30,6 +30,15 @@ if 'PYTEST_CURRENT_TEST' not in os.environ:
 
     from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 
+    # Enable process isolation - all nodes run in pixi env (Python 3.11)
+    try:
+        from comfy_env import enable_isolation
+        enable_isolation(NODE_CLASS_MAPPINGS)
+    except ImportError:
+        print("[GeomPack] comfy-env not installed, isolation disabled")
+    except Exception as e:
+        print(f"[GeomPack] Failed to enable isolation: {e}")
+
     # Generate widget visibility mappings now that nodes are loaded
     def _generate_widget_mappings():
         try:

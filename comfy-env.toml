@@ -8,6 +8,7 @@ linux = ["libgl1", "libopengl0", "libglu1-mesa", "libglx-mesa0", "libosmesa6", "
 python = "3.11"           # Required by bpy
 cuda_version = "auto"
 pytorch_version = "auto"
+isolated = true           # Run all nodes in isolated environment
 
     [geometrypack.cuda]
     cumesh = "*"
@@ -18,9 +19,34 @@ pytorch_version = "auto"
 
     [geometrypack.packages]
     requirements = [
+        # Core
         "bpy>=4.2,<4.3",
-        "numpy",
-        "trimesh>=4.0.0",
-        "tqdm",               # Required by cumesh
-        "torch",              # Required for comfy-env VenvWorker IPC
+        "numpy>=1.21.0",
+        "scipy>=1.7.0",
+        "trimesh[easy]>=4.0.0",
+        "tqdm>=4.60.0",
+        "torch",
+        "requests>=2.25.0",
+
+        # Mesh processing
+        "libigl>=2.6.1",
+        "pymeshlab>=2022.2",
+        "rtree",
+        "embreex",
+        "point-cloud-utils>=0.30.0",
+        "mesh-to-sdf>=0.0.14",
+        "fast-simplification>=0.1.5",
+        "pymeshfix>=0.17.0",
+        "xatlas>=0.0.11",
+        "skeletor>=1.2.0",
+        "PyNanoInstantMeshes",
+
+        # Visualization
+        "matplotlib>=3.5.0",
+        "Pillow>=9.0.0",
+        "pyvista>=0.43.0",
+
+        # ComfyUI integration
+        "comfy-dynamic-widgets>=0.0.2",
+        "comfy-3d-viewers>=0.1.0",
     ]
