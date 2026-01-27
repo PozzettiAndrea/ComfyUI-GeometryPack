@@ -27,7 +27,6 @@ isolated = true           # Run all nodes in isolated environment
         "tqdm>=4.60.0",
         "torch",
         "requests>=2.25.0",
-	  "msvc-runtime",
 
         # Mesh processing
         "libigl>=2.6.1",
@@ -51,3 +50,6 @@ isolated = true           # Run all nodes in isolated environment
         "comfy-dynamic-widgets>=0.0.2",
         "comfy-3d-viewers>=0.1.0",
     ]
+
+    [geometrypack.packages.windows]
+    requirements = ["msvc-runtime"]
