@@ -11,6 +11,139 @@ import trimesh as trimesh_module
 from .._utils import mesh_ops
 
 
+def _cgal_isotropic_remesh(vertices, faces, target_edge_length, iterations, protect_boundaries):
+    """CGAL isotropic remeshing."""
+    from CGAL import CGAL_Polygon_mesh_processing
+    from CGAL.CGAL_Kernel import Point_3
+    from CGAL.CGAL_Polyhedron_3 import Polyhedron_3
+
+    if len(vertices) == 0 or len(faces) == 0:
+        return {'error': "Mesh is empty"}
+
+    # Convert to CGAL Polyhedron_3
+    points = CGAL_Polygon_mesh_processing.Point_3_Vector()
+    points.reserve(len(vertices))
+    for v in vertices:
+        points.append(Point_3(float(v[0]), float(v[1]), float(v[2])))
+
+    polygons = [[int(idx) for idx in face] for face in faces]
+
+    P = Polyhedron_3()
+    CGAL_Polygon_mesh_processing.polygon_soup_to_polygon_mesh(points, polygons, P)
+
+    # Collect all facets for remeshing
+    flist = []
+    for fh in P.facets():
+        flist.append(fh)
+
+    # Handle boundary protection if requested
+    if protect_boundaries:
+        hlist = []
+        for hh in P.halfedges():
+            if hh.is_border() or hh.opposite().is_border():
+                hlist.append(hh)
+
+        CGAL_Polygon_mesh_processing.isotropic_remeshing(
+            flist, target_edge_length, P, iterations, hlist, True
+        )
+    else:
+        CGAL_Polygon_mesh_processing.isotropic_remeshing(
+            flist, target_edge_length, P, iterations
+        )
+
+    # Extract vertices back to list
+    new_vertices = []
+    vertex_map = {}
+
+    for i, vertex in enumerate(P.vertices()):
+        point = vertex.point()
+        new_vertices.append([float(point.x()), float(point.y()), float(point.z())])
+        vertex_map[vertex] = i
+
+    # Extract faces back to list
+    new_faces = []
+    for facet in P.facets():
+        halfedge = facet.halfedge()
+        face_vertices = []
+
+        start = halfedge
+        current = start
+        while True:
+            vertex_handle = current.vertex()
+            face_vertices.append(vertex_map[vertex_handle])
+            current = current.next()
+            if current == start:
+                break
+
+        if len(face_vertices) == 3:
+            new_faces.append(face_vertices)
+
+    return {'vertices': new_vertices, 'faces': new_faces}
+
+
+def _bpy_voxel_remesh(vertices, faces, voxel_size):
+    """Blender voxel remesh using bpy."""
+    from .._utils import setup_bpy_dll_path
+    setup_bpy_dll_path()
+    import bpy
+
+    mesh = bpy.data.meshes.new("RemeshMesh")
+    obj = bpy.data.objects.new("RemeshObject", mesh)
+    bpy.context.collection.objects.link(obj)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+
+    mesh.from_pydata(vertices.tolist(), [], faces.tolist())
+    mesh.update()
+
+    obj.data.remesh_voxel_size = voxel_size
+    bpy.ops.object.voxel_remesh()
+
+    mesh = obj.data
+    result_vertices = [list(v.co) for v in mesh.vertices]
+    result_faces = [list(p.vertices) for p in mesh.polygons]
+
+    bpy.data.objects.remove(obj, do_unlink=True)
+    bpy.data.meshes.remove(mesh)
+
+    return {'vertices': result_vertices, 'faces': result_faces}
+
+
+def _bpy_quadriflow_remesh(vertices, faces, target_face_count):
+    """Blender Quadriflow remesh using bpy."""
+    from .._utils import setup_bpy_dll_path
+    setup_bpy_dll_path()
+    import bpy
+
+    mesh = bpy.data.meshes.new("RemeshMesh")
+    obj = bpy.data.objects.new("RemeshObject", mesh)
+    bpy.context.collection.objects.link(obj)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+
+    mesh.from_pydata(vertices.tolist(), [], faces.tolist())
+    mesh.update()
+
+    bpy.ops.object.quadriflow_remesh(
+        use_mesh_symmetry=False,
+        use_preserve_sharp=False,
+        use_preserve_boundary=False,
+        smooth_normals=False,
+        mode='FACES',
+        target_faces=target_face_count,
+        seed=0
+    )
+
+    mesh = obj.data
+    result_vertices = [list(v.co) for v in mesh.vertices]
+    result_faces = [list(p.vertices) for p in mesh.polygons]
+
+    bpy.data.objects.remove(obj, do_unlink=True)
+    bpy.data.meshes.remove(mesh)
+
+    return {'vertices': result_vertices, 'faces': result_faces}
+
+
 class RemeshNode:
     """
     Universal Remesh - Unified topology-changing remeshing operations.
@@ -237,13 +370,11 @@ After:
         return remeshed_mesh, info
 
     def _cgal_isotropic(self, trimesh, target_edge_length, iterations, protect_boundaries):
-        """CGAL isotropic remeshing using isolated environment."""
-        from .._utils.cgal_worker import call_cgal
-
+        """CGAL isotropic remeshing."""
         protect = (protect_boundaries == "true")
-        print(f"[Remesh] Running CGAL isotropic remesh (isolated, target_edge_length={target_edge_length})...")
+        print(f"[Remesh] Running CGAL isotropic remesh (target_edge_length={target_edge_length})...")
 
-        result = call_cgal('cgal_isotropic_remesh',
+        result = _cgal_isotropic_remesh(
             vertices=np.asarray(trimesh.vertices, dtype=np.float64),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             target_edge_length=target_edge_length,
@@ -277,11 +408,9 @@ After:
         return remeshed_mesh, info
 
     def _blender_voxel(self, trimesh, voxel_size):
-        """Blender voxel remeshing using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_worker import call_bpy
-
-        print(f"[Remesh] Running Blender voxel remesh (bpy isolated, voxel_size={voxel_size})...")
-        result = call_bpy('bpy_voxel_remesh',
+        """Blender voxel remeshing using bpy."""
+        print(f"[Remesh] Running Blender voxel remesh (voxel_size={voxel_size})...")
+        result = _bpy_voxel_remesh(
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             voxel_size=voxel_size
@@ -305,7 +434,7 @@ After:
         info = f"""Remesh Results (Blender Voxel):
 
 Voxel Size: {voxel_size}
-Method: bpy isolated
+Method: bpy
 
 Before:
   Vertices: {len(trimesh.vertices):,}
@@ -318,11 +447,9 @@ After:
         return remeshed_mesh, info
 
     def _blender_quadriflow(self, trimesh, target_face_count):
-        """Blender Quadriflow remeshing using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_worker import call_bpy
-
-        print(f"[Remesh] Running Blender Quadriflow (bpy isolated, target_faces={target_face_count})...")
-        result = call_bpy('bpy_quadriflow_remesh',
+        """Blender Quadriflow remeshing using bpy."""
+        print(f"[Remesh] Running Blender Quadriflow (target_faces={target_face_count})...")
+        result = _bpy_quadriflow_remesh(
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             target_face_count=target_face_count
@@ -346,7 +473,7 @@ After:
         info = f"""Remesh Results (Blender Quadriflow):
 
 Target Face Count: {target_face_count:,}
-Method: bpy isolated
+Method: bpy
 
 Before:
   Vertices: {len(trimesh.vertices):,}

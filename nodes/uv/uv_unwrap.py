@@ -21,6 +21,180 @@ import numpy as np
 import trimesh as trimesh_module
 
 
+def _extract_uvs_from_blender_mesh(mesh, vertices_np):
+    """Extract UVs from a blender mesh, handling vertex splitting at seams."""
+    uv_layer = mesh.uv_layers.active
+    if uv_layer:
+        loop_uvs = np.array([uv_layer.data[i].uv[:] for i in range(len(uv_layer.data))], dtype=np.float32)
+        new_vertices = []
+        new_faces = []
+        uvs_per_loop = []
+        vertex_map = {}
+
+        for poly in mesh.polygons:
+            new_face = []
+            for loop_idx in poly.loop_indices:
+                orig_vert_idx = mesh.loops[loop_idx].vertex_index
+                uv = tuple(loop_uvs[loop_idx])
+                key = (orig_vert_idx, uv)
+                if key not in vertex_map:
+                    vertex_map[key] = len(new_vertices)
+                    new_vertices.append(vertices_np[orig_vert_idx].tolist())
+                    uvs_per_loop.append(list(uv))
+                new_face.append(vertex_map[key])
+            new_faces.append(new_face)
+
+        return new_vertices, new_faces, uvs_per_loop
+    else:
+        return vertices_np.tolist(), [list(p.vertices) for p in mesh.polygons], [[0.0, 0.0]] * len(vertices_np)
+
+
+def _bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_bounds):
+    """Blender Smart UV Project using bpy."""
+    from .._utils import setup_bpy_dll_path
+    setup_bpy_dll_path()
+    import bpy
+    import bmesh
+
+    mesh = bpy.data.meshes.new("UVMesh")
+    obj = bpy.data.objects.new("UVObject", mesh)
+    bpy.context.collection.objects.link(obj)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+
+    mesh.from_pydata(vertices.tolist(), [], faces.tolist())
+    mesh.update()
+
+    bpy.ops.object.mode_set(mode='EDIT')
+    bm = bmesh.from_edit_mesh(mesh)
+    for face in bm.faces:
+        face.select = True
+    bmesh.update_edit_mesh(mesh)
+
+    bpy.ops.uv.smart_project(
+        angle_limit=angle_limit,
+        island_margin=island_margin,
+        area_weight=0.0,
+        correct_aspect=True,
+        scale_to_bounds=scale_to_bounds
+    )
+
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    result_vertices = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
+    result_verts, result_faces, result_uvs = _extract_uvs_from_blender_mesh(mesh, result_vertices)
+
+    bpy.data.objects.remove(obj, do_unlink=True)
+    bpy.data.meshes.remove(mesh)
+
+    return {'vertices': result_verts, 'faces': result_faces, 'uvs': result_uvs}
+
+
+def _bpy_cube_uv_project(vertices, faces, cube_size, scale_to_bounds):
+    """Blender Cube UV Project using bpy."""
+    from .._utils import setup_bpy_dll_path
+    setup_bpy_dll_path()
+    import bpy
+    import bmesh
+
+    mesh = bpy.data.meshes.new("UVMesh")
+    obj = bpy.data.objects.new("UVObject", mesh)
+    bpy.context.collection.objects.link(obj)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+
+    mesh.from_pydata(vertices.tolist(), [], faces.tolist())
+    mesh.update()
+
+    bpy.ops.object.mode_set(mode='EDIT')
+    bm = bmesh.from_edit_mesh(mesh)
+    for face in bm.faces:
+        face.select = True
+    bmesh.update_edit_mesh(mesh)
+
+    bpy.ops.uv.cube_project(cube_size=cube_size, scale_to_bounds=scale_to_bounds)
+
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    result_vertices = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
+    result_verts, result_faces, result_uvs = _extract_uvs_from_blender_mesh(mesh, result_vertices)
+
+    bpy.data.objects.remove(obj, do_unlink=True)
+    bpy.data.meshes.remove(mesh)
+
+    return {'vertices': result_verts, 'faces': result_faces, 'uvs': result_uvs}
+
+
+def _bpy_cylinder_uv_project(vertices, faces, radius, scale_to_bounds):
+    """Blender Cylinder UV Project using bpy."""
+    from .._utils import setup_bpy_dll_path
+    setup_bpy_dll_path()
+    import bpy
+    import bmesh
+
+    mesh = bpy.data.meshes.new("UVMesh")
+    obj = bpy.data.objects.new("UVObject", mesh)
+    bpy.context.collection.objects.link(obj)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+
+    mesh.from_pydata(vertices.tolist(), [], faces.tolist())
+    mesh.update()
+
+    bpy.ops.object.mode_set(mode='EDIT')
+    bm = bmesh.from_edit_mesh(mesh)
+    for face in bm.faces:
+        face.select = True
+    bmesh.update_edit_mesh(mesh)
+
+    bpy.ops.uv.cylinder_project(radius=radius, scale_to_bounds=scale_to_bounds)
+
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    result_vertices = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
+    result_verts, result_faces, result_uvs = _extract_uvs_from_blender_mesh(mesh, result_vertices)
+
+    bpy.data.objects.remove(obj, do_unlink=True)
+    bpy.data.meshes.remove(mesh)
+
+    return {'vertices': result_verts, 'faces': result_faces, 'uvs': result_uvs}
+
+
+def _bpy_sphere_uv_project(vertices, faces, scale_to_bounds):
+    """Blender Sphere UV Project using bpy."""
+    from .._utils import setup_bpy_dll_path
+    setup_bpy_dll_path()
+    import bpy
+    import bmesh
+
+    mesh = bpy.data.meshes.new("UVMesh")
+    obj = bpy.data.objects.new("UVObject", mesh)
+    bpy.context.collection.objects.link(obj)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+
+    mesh.from_pydata(vertices.tolist(), [], faces.tolist())
+    mesh.update()
+
+    bpy.ops.object.mode_set(mode='EDIT')
+    bm = bmesh.from_edit_mesh(mesh)
+    for face in bm.faces:
+        face.select = True
+    bmesh.update_edit_mesh(mesh)
+
+    bpy.ops.uv.sphere_project(scale_to_bounds=scale_to_bounds)
+
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    result_vertices = np.array([v.co[:] for v in mesh.vertices], dtype=np.float32)
+    result_verts, result_faces, result_uvs = _extract_uvs_from_blender_mesh(mesh, result_vertices)
+
+    bpy.data.objects.remove(obj, do_unlink=True)
+    bpy.data.meshes.remove(mesh)
+
+    return {'vertices': result_verts, 'faces': result_faces, 'uvs': result_uvs}
+
+
 class UVUnwrapNode:
     """
     Universal UV Unwrap - Unified UV unwrapping operations.
@@ -531,14 +705,13 @@ Better preservation of angles and shapes.
         return unwrapped, info
 
     def _blender_smart(self, trimesh, angle_limit, island_margin, scale_to_bounds):
-        """Blender Smart UV Project using direct bpy via comfy-env isolation."""
+        """Blender Smart UV Project using bpy."""
         import math
-        from .._utils.bpy_worker import call_bpy
 
         angle_limit_rad = math.radians(angle_limit)
 
-        print(f"[UVUnwrap] Running Blender Smart UV Project (bpy isolated)...")
-        result = call_bpy('bpy_smart_uv_project',
+        print(f"[UVUnwrap] Running Blender Smart UV Project...")
+        result = _bpy_smart_uv_project(
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             angle_limit=angle_limit_rad,
@@ -566,7 +739,7 @@ Better preservation of angles and shapes.
 
         info = f"""UV Unwrap Results (Blender Smart UV):
 
-Method: Smart UV Project (bpy isolated)
+Method: Smart UV Project (bpy)
 Angle Limit: {angle_limit}deg
 Island Margin: {island_margin}
 Scale to Bounds: {scale_to_bounds}
@@ -584,11 +757,9 @@ Automatic seam-based unwrapping with intelligent island creation.
         return unwrapped, info
 
     def _blender_cube(self, trimesh, cube_size, scale_to_bounds):
-        """Blender Cube Projection using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_worker import call_bpy
-
-        print(f"[UVUnwrap] Running Blender Cube Projection (bpy isolated)...")
-        result = call_bpy('bpy_cube_uv_project',
+        """Blender Cube Projection using bpy."""
+        print(f"[UVUnwrap] Running Blender Cube Projection...")
+        result = _bpy_cube_uv_project(
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             cube_size=cube_size,
@@ -614,7 +785,7 @@ Automatic seam-based unwrapping with intelligent island creation.
 
         info = f"""UV Unwrap Results (Blender Cube):
 
-Method: Cube Projection (bpy isolated)
+Method: Cube Projection (bpy)
 Cube Size: {cube_size}
 Scale to Bounds: {scale_to_bounds}
 
@@ -627,11 +798,9 @@ Best for box-like objects.
         return unwrapped, info
 
     def _blender_cylinder(self, trimesh, cylinder_radius, scale_to_bounds):
-        """Blender Cylinder Projection using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_worker import call_bpy
-
-        print(f"[UVUnwrap] Running Blender Cylinder Projection (bpy isolated)...")
-        result = call_bpy('bpy_cylinder_uv_project',
+        """Blender Cylinder Projection using bpy."""
+        print(f"[UVUnwrap] Running Blender Cylinder Projection...")
+        result = _bpy_cylinder_uv_project(
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             radius=cylinder_radius,
@@ -657,7 +826,7 @@ Best for box-like objects.
 
         info = f"""UV Unwrap Results (Blender Cylinder):
 
-Method: Cylinder Projection (bpy isolated)
+Method: Cylinder Projection (bpy)
 Cylinder Radius: {cylinder_radius}
 Scale to Bounds: {scale_to_bounds}
 
@@ -670,11 +839,9 @@ Best for cylindrical objects.
         return unwrapped, info
 
     def _blender_sphere(self, trimesh, scale_to_bounds):
-        """Blender Sphere Projection using direct bpy via comfy-env isolation."""
-        from .._utils.bpy_worker import call_bpy
-
-        print(f"[UVUnwrap] Running Blender Sphere Projection (bpy isolated)...")
-        result = call_bpy('bpy_sphere_uv_project',
+        """Blender Sphere Projection using bpy."""
+        print(f"[UVUnwrap] Running Blender Sphere Projection...")
+        result = _bpy_sphere_uv_project(
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
             scale_to_bounds=(scale_to_bounds == 'true')
@@ -698,7 +865,7 @@ Best for cylindrical objects.
 
         info = f"""UV Unwrap Results (Blender Sphere):
 
-Method: Sphere Projection (bpy isolated)
+Method: Sphere Projection (bpy)
 Scale to Bounds: {scale_to_bounds}
 
 Vertices: {len(unwrapped.vertices):,}

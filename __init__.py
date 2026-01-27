@@ -17,17 +17,6 @@ from datetime import datetime
 # Only run initialization when loaded by ComfyUI, not during pytest
 # Use PYTEST_CURRENT_TEST env var which is only set when pytest is actually running tests
 if 'PYTEST_CURRENT_TEST' not in os.environ:
-    # Check if isolated environment exists for CGAL/bpy operations
-    # Use .resolve() to follow symlinks (same pattern as folder_paths.py)
-    _node_dir = Path(__file__).resolve().parent
-    _env_path = _node_dir / "_env_geometrypack"
-    if _env_path.exists():
-        print("[GeomPack] Isolated environment found - CGAL and Blender operations available")
-    else:
-        print("[GeomPack] WARNING: Isolated environment not found at _env_geometrypack")
-        print("[GeomPack] CGAL and Blender operations will not be available")
-        print("[GeomPack] Run 'comfy-env install' to create the isolated environment")
-
     # Setup import stubs BEFORE importing nodes
     # This allows imports like 'import trimesh' to succeed even though
     # trimesh is only installed in the isolated pixi environment

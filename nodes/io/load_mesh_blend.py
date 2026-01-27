@@ -2,10 +2,11 @@
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
 """
-Load Mesh Blend Node - Load Blender .blend files using direct bpy via comfy-env isolation.
+Load Mesh Blend Node - Load Blender .blend files using bpy.
 """
 
 import os
+import numpy as np
 import trimesh as trimesh_module
 
 # ComfyUI folder paths
@@ -17,12 +18,64 @@ except (ImportError, AttributeError):
     COMFYUI_INPUT_FOLDER = None
 
 
+def _bpy_import_blend(blend_path):
+    """Import .blend file and extract mesh data using bpy."""
+    from .._utils import setup_bpy_dll_path
+    setup_bpy_dll_path()
+    import bpy
+
+    bpy.ops.wm.open_mainfile(filepath=blend_path)
+
+    mesh_objects = [obj for obj in bpy.data.objects if obj.type == 'MESH']
+
+    if not mesh_objects:
+        return {'vertices': [], 'faces': [], 'name': 'empty'}
+
+    all_vertices = []
+    all_faces = []
+    vertex_offset = 0
+
+    for obj in mesh_objects:
+        depsgraph = bpy.context.evaluated_depsgraph_get()
+        obj_eval = obj.evaluated_get(depsgraph)
+        mesh = obj_eval.to_mesh()
+        mesh.transform(obj.matrix_world)
+
+        verts = [list(v.co) for v in mesh.vertices]
+
+        for poly in mesh.polygons:
+            if len(poly.vertices) == 3:
+                all_faces.append([
+                    poly.vertices[0] + vertex_offset,
+                    poly.vertices[1] + vertex_offset,
+                    poly.vertices[2] + vertex_offset
+                ])
+            elif len(poly.vertices) > 3:
+                # Fan triangulation
+                v0 = poly.vertices[0]
+                for i in range(1, len(poly.vertices) - 1):
+                    all_faces.append([
+                        v0 + vertex_offset,
+                        poly.vertices[i] + vertex_offset,
+                        poly.vertices[i+1] + vertex_offset
+                    ])
+
+        all_vertices.extend(verts)
+        vertex_offset += len(verts)
+        obj_eval.to_mesh_clear()
+
+    return {
+        'vertices': all_vertices,
+        'faces': all_faces,
+        'name': mesh_objects[0].name if mesh_objects else 'combined'
+    }
+
+
 class LoadMeshBlend:
     """
-    Load Blender .blend files using direct bpy via comfy-env isolation.
+    Load Blender .blend files using bpy.
 
-    Uses the bpy Python module in an isolated environment to directly
-    extract mesh data from .blend files without subprocess or temp files.
+    Uses the bpy Python module to directly extract mesh data from .blend files.
     """
 
     @classmethod
@@ -86,7 +139,7 @@ class LoadMeshBlend:
 
     def load_blend(self, file_path):
         """
-        Load .blend file using direct bpy via comfy-env isolation.
+        Load .blend file using bpy.
 
         Args:
             file_path: Path to .blend file (relative to input folder or absolute)
@@ -94,8 +147,6 @@ class LoadMeshBlend:
         Returns:
             tuple: (trimesh.Trimesh, info_string)
         """
-        from .._utils.bpy_worker import call_bpy
-
         if not file_path or file_path.strip() == "":
             raise ValueError("File path cannot be empty")
 
@@ -132,17 +183,16 @@ class LoadMeshBlend:
                     error_msg += f"\n  - {path}"
                 raise ValueError(error_msg)
 
-        # Load .blend file using bpy_worker
-        print(f"[LoadMeshBlend] Loading via bpy isolated: {full_path}")
+        # Load .blend file using bpy directly
+        print(f"[LoadMeshBlend] Loading via bpy: {full_path}")
         try:
-            result = call_bpy('bpy_import_blend', blend_path=full_path)
+            result = _bpy_import_blend(full_path)
         except Exception as e:
             raise ValueError(f"Failed to load .blend file: {e}")
 
         if len(result['vertices']) == 0:
             raise ValueError(f"No mesh data found in .blend file: {full_path}")
 
-        import numpy as np
         loaded_mesh = trimesh_module.Trimesh(
             vertices=np.array(result['vertices'], dtype=np.float32),
             faces=np.array(result['faces'], dtype=np.int32),
@@ -153,11 +203,11 @@ class LoadMeshBlend:
         loaded_mesh.metadata['source'] = {
             'file': os.path.basename(full_path),
             'format': 'blend',
-            'loader': 'bpy_isolated'
+            'loader': 'bpy'
         }
 
         # Generate info string
-        info = f"Blender File Loaded (bpy isolated)\n"
+        info = f"Blender File Loaded (bpy)\n"
         info += f"File: {os.path.basename(full_path)}\n"
         info += f"Vertices: {len(loaded_mesh.vertices):,}\n"
         info += f"Faces: {len(loaded_mesh.faces):,}"
