@@ -30,8 +30,6 @@ isolated = true           # Run all nodes in isolated environment
         "tqdm>=4.60.0",
         "torch",
         "requests>=2.25.0",
-        "embreex",
-        
         # Mesh processing
         "libigl>=2.6.1",
         "pymeshlab",
@@ -55,4 +53,7 @@ isolated = true           # Run all nodes in isolated environment
     ]
 
     [geometrypack.packages.windows]
-    requirements = ["msvc-runtime"]
+    requirements = ["msvc-runtime", "embreex"]
+
+    [geometrypack.packages.linux]
+    requirements = ["embreex"]
