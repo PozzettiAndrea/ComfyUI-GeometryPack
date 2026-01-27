@@ -10,6 +10,9 @@ cuda_version = "auto"
 pytorch_version = "auto"
 isolated = true           # Run all nodes in isolated environment
 
+    [geometrypack.env]
+    CMAKE_ARGS = "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+
     [geometrypack.cuda]
     cumesh = "*"
 
