@@ -15,7 +15,7 @@ isolated = true           # Run all nodes in isolated environment
 
     [geometrypack.conda]
     channels = ["conda-forge"]
-    packages = ["cgal", "numpy<2"]
+    packages = ["cgal", "numpy<2", "embreex"]
 
     [geometrypack.packages]
     requirements = [
@@ -32,7 +32,6 @@ isolated = true           # Run all nodes in isolated environment
         "libigl>=2.6.1",
         "pymeshlab",
         "rtree",
-        "embreex",
         "point-cloud-utils>=0.30.0",
         "mesh-to-sdf>=0.0.14",
         "fast-simplification>=0.1.5",
