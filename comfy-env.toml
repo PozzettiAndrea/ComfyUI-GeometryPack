@@ -1,58 +1,39 @@
-# ComfyUI-GeometryPack comfy-env configuration
-# Uses comfy-env for isolated Python environment with bpy + cumesh
+# Conda packages (OpenGL stack for headless rendering)
+[dependencies]
+mesalib = "*"
+libglu = "*"
+libopengl = "*"
+xorg-libxi = "*"
+xkbcommon = "*"
 
-[system]
-linux = ["libgl1", "libopengl0", "libglu1-mesa", "libglx-mesa0", "libosmesa6", "libxi6", "libxkbcommon0"]
+# Common pip packages
+[pypi-dependencies]
+numpy = ">=1.21.0,<2"
+scipy = ">=1.7.0"
+trimesh = { version = ">=4.0.0", extras = ["easy"] }
+tqdm = ">=4.60.0"
+requests = ">=2.25.0"
+libigl = ">=2.6.1"
+pymeshlab = "*"
+rtree = "*"
+point-cloud-utils = ">=0.30.0"
+mesh-to-sdf = ">=0.0.14"
+fast-simplification = ">=0.1.5"
+pymeshfix = ">=0.17.0"
+xatlas = ">=0.0.11"
+skeletor = ">=1.2.0"
+PyNanoInstantMeshes = "*"
+matplotlib = ">=3.5.0"
+Pillow = ">=9.0.0"
+pyvista = ">=0.43.0"
+comfy-dynamic-widgets = ">=0.0.2"
+comfy-3d-viewers = ">=0.1.0"
 
-[geometrypack]
-python = "3.11"           # Required by bpy
-cuda_version = "auto"
-pytorch_version = "auto"
-isolated = true           # Run all nodes in isolated environment
+# Linux-specific packages
+[target.linux-64.pypi-dependencies]
+embreex = "*"
 
-    [geometrypack.env]
-    CMAKE_ARGS = "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-
-    [geometrypack.cuda]
-    cumesh = "*"
-
-    [geometrypack.conda]
-    channels = ["conda-forge"]
-    packages = ["cgal", "numpy<2"]
-
-    [geometrypack.packages]
-    requirements = [
-        # Core
-        "bpy>=4.2",
-        "numpy>=1.21.0,<2",
-        "scipy>=1.7.0",
-        "trimesh[easy]>=4.0.0",
-        "tqdm>=4.60.0",
-        "requests>=2.25.0",
-        # Mesh processing
-        "libigl>=2.6.1",
-        "pymeshlab",
-        "rtree",
-        "point-cloud-utils>=0.30.0",
-        "mesh-to-sdf>=0.0.14",
-        "fast-simplification>=0.1.5",
-        "pymeshfix>=0.17.0",
-        "xatlas>=0.0.11",
-        "skeletor>=1.2.0",
-        "PyNanoInstantMeshes",
-
-        # Visualization
-        "matplotlib>=3.5.0",
-        "Pillow>=9.0.0",
-        "pyvista>=0.43.0",
-
-        # ComfyUI integration
-        "comfy-dynamic-widgets>=0.0.2",
-        "comfy-3d-viewers>=0.1.0",
-    ]
-
-    [geometrypack.packages.windows]
-    requirements = ["msvc-runtime", "embreex"]
-
-    [geometrypack.packages.linux]
-    requirements = ["embreex"]
+# Windows-specific packages
+[target.win-64.pypi-dependencies]
+msvc-runtime = "*"
+embreex = "*"

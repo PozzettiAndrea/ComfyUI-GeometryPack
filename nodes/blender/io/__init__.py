@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025 ComfyUI-GeometryPack Contributors
+
+"""
+Blender I/O nodes - requires bpy
+"""
+
+from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP
+
+NODE_CLASS_MAPPINGS = {}
+NODE_DISPLAY_NAME_MAPPINGS = {}
+
+NODE_CLASS_MAPPINGS.update(LOAD_MESH_BLEND_MAPS)
+NODE_DISPLAY_NAME_MAPPINGS.update(LOAD_MESH_BLEND_DISP)
+
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']

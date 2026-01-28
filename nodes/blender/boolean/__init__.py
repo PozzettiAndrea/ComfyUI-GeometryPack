@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025 ComfyUI-GeometryPack Contributors
+
+"""
+Blender boolean nodes
+"""
+
+from .boolean import NODE_CLASS_MAPPINGS as BOOLEAN_MAPS, NODE_DISPLAY_NAME_MAPPINGS as BOOLEAN_DISP
+
+NODE_CLASS_MAPPINGS = {}
+NODE_DISPLAY_NAME_MAPPINGS = {}
+
+NODE_CLASS_MAPPINGS.update(BOOLEAN_MAPS)
+NODE_DISPLAY_NAME_MAPPINGS.update(BOOLEAN_DISP)
+
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']

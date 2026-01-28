@@ -17,27 +17,7 @@ from datetime import datetime
 # Only run initialization when loaded by ComfyUI, not during pytest
 # Use PYTEST_CURRENT_TEST env var which is only set when pytest is actually running tests
 if 'PYTEST_CURRENT_TEST' not in os.environ:
-    # Setup import stubs BEFORE importing nodes
-    # This allows imports like 'import trimesh' to succeed even though
-    # trimesh is only installed in the isolated pixi environment
-    try:
-        from comfy_env import setup_isolated_imports
-        setup_isolated_imports(__file__)
-    except ImportError:
-        print("[GeomPack] comfy-env not installed, import stubbing disabled")
-    except Exception as e:
-        print(f"[GeomPack] Failed to setup import stubs: {e}")
-
     from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
-
-    # Enable process isolation - all nodes run in pixi env (Python 3.11)
-    try:
-        from comfy_env import enable_isolation
-        enable_isolation(NODE_CLASS_MAPPINGS)
-    except ImportError:
-        pass  # Already warned above
-    except Exception as e:
-        print(f"[GeomPack] Failed to enable isolation: {e}")
 
     # Generate widget visibility mappings now that nodes are loaded
     def _generate_widget_mappings():
