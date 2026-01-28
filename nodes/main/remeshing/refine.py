@@ -249,3 +249,12 @@ Faces: {len(smoothed.faces):,}
 Smoothing reduces surface roughness and noise.
 """
         return smoothed, info
+
+
+NODE_CLASS_MAPPINGS = {
+    "RefineMesh": RefineMeshNode,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "RefineMesh": "Refine Mesh",
+}
