@@ -1,12 +1,12 @@
-# Conda packages (OpenGL stack for headless rendering)
-[dependencies]
+# Linux-specific conda packages (OpenGL stack for headless rendering)
+[target.linux-64.dependencies]
 mesalib = "*"
 libglu = "*"
 libopengl = "*"
 xorg-libxi = "*"
 libxkbcommon = "*"
 
-# Linux-specific packages (can't express in requirements.txt)
+# Linux-specific pypi packages
 [target.linux-64.pypi-dependencies]
 embreex = "*"
 
