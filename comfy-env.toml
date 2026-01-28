@@ -1,10 +1,5 @@
-# Linux-specific conda packages (OpenGL stack for headless rendering)
-[target.linux-64.dependencies]
-mesalib = "*"
-libglu = "*"
-libopengl = "*"
-xorg-libxi = "*"
-libxkbcommon = "*"
+[apt]
+packages = ["libgl1-mesa-glx", "libglu1-mesa"]
 
 # Linux-specific pypi packages
 [target.linux-64.pypi-dependencies]
