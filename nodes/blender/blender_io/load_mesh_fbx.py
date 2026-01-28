@@ -20,7 +20,7 @@ except (ImportError, AttributeError):
 
 def _bpy_import_fbx(fbx_path):
     """Import .fbx file and extract mesh data using bpy."""
-    from .._utils import setup_bpy_dll_path
+    from _utils import setup_bpy_dll_path
     setup_bpy_dll_path()
     import bpy
 
