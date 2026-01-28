@@ -7,4 +7,8 @@ cgal = "*"
 [pypi-dependencies]
 numpy = "*"
 trimesh = { version = "*", extras = ["easy"] }
-pymeshlab = "*"
+pymeshlab = ">=2025.7"
+
+# Windows needs Visual C++ runtime for CGAL DLLs
+[target.win-64.pypi-dependencies]
+msvc-runtime = "*"

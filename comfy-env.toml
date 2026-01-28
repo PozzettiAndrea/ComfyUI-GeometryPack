@@ -1,10 +1,11 @@
-[env_vars]                                                                                                                                                                            
-KMP_DUPLICATE_LIB_OK = "TRUE"       
+[env_vars]
+KMP_DUPLICATE_LIB_OK = "TRUE"
 
 [apt]
 # Include both old and new package names for compatibility across Ubuntu versions
 # (libgl1-mesa-glx was renamed to libgl1 in Ubuntu 22.04+)
-packages = ["libgl1-mesa-glx", "libgl1", "libglu1-mesa"]
+# libopengl0 provides libOpenGL.so.0 (required by pymeshlab)
+packages = ["libgl1-mesa-glx", "libgl1", "libopengl0", "libglu1-mesa"]
 
 # Linux-specific pypi packages
 [target.linux-64.pypi-dependencies]
