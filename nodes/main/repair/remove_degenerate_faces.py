@@ -111,7 +111,7 @@ After:
   Vertices: {verts_after:,} ({-verts_removed:+,})
   Faces: {faces_after:,} ({-faces_removed:+,})
 
-{'✓ Removed ' + str(faces_removed) + ' degenerate faces' if faces_removed > 0 else 'ℹ No degenerate faces found'}
+{'[OK] Removed ' + str(faces_removed) + ' degenerate faces' if faces_removed > 0 else '[INFO] No degenerate faces found'}
 """
 
         print(f"[RemoveDegenerateFaces] Removed {faces_removed} degenerate faces, {verts_removed} unreferenced vertices")

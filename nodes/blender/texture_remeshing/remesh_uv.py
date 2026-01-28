@@ -469,7 +469,7 @@ print(f"[Blender] Export complete")
                 if torch is not None:
                     comfy_image = torch.from_numpy(comfy_image)
 
-            placeholder_warning = "\n⚠️  WARNING: Used placeholder texture (no embedded texture in input)" if is_placeholder else ""
+            placeholder_warning = "\n[WARN] WARNING: Used placeholder texture (no embedded texture in input)" if is_placeholder else ""
             info = f"""Remesh with Texture (Python Transfer)
 Method: {remesh_method}
 Vertices: {len(trimesh.vertices)} -> {len(remeshed_with_colors.vertices)}

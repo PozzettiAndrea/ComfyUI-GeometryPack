@@ -146,7 +146,7 @@ class DetectSelfIntersectionsNode:
                 result_mesh.vertex_attributes['intersection_flag'] = np.zeros(len(trimesh.vertices), dtype=np.float32)
                 result_mesh.vertex_attributes['intersection_count'] = np.zeros(len(trimesh.vertices), dtype=np.float32)
 
-                print("[DetectSelfIntersections] ⚠ CGAL not available - install with: pip install cgal")
+                print("[DetectSelfIntersections] [WARN] CGAL not available - install with: pip install cgal")
 
             # Store metadata
             result_mesh.metadata['has_intersection_field'] = True
@@ -166,14 +166,14 @@ Detection Results:
   Detection Method: {'libigl CGAL' if has_cgal else 'Basic (CGAL unavailable)'}
 
 Status:
-  {'✓ No self-intersections detected!' if num_intersecting == 0 else '⚠ Self-intersections found!'}
+  {'[OK] No self-intersections detected!' if num_intersecting == 0 else '[WARN] Self-intersections found!'}
 
 Scalar Fields Added:
   • face: 'self_intersecting' (1.0 = intersecting, 0.0 = valid)
   • vertex: 'intersection_flag' (1.0 = adjacent to intersection)
   • vertex: 'intersection_count' (number of intersecting faces touching vertex)
 
-{'' if has_cgal else '⚠ Note: CGAL not available. Install for accurate detection: pip install cgal'}
+{'' if has_cgal else '[WARN] Note: CGAL not available. Install for accurate detection: pip install cgal'}
 
 Use 'Preview Mesh (VTK with Fields)' node to visualize the intersection fields!
 """

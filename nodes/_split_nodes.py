@@ -159,7 +159,7 @@ def create_node_file(source_content, class_name, output_path, display_name, cate
     class_code = extract_class_code(source_content, class_name)
 
     if not class_code:
-        print(f"  ⚠ Could not extract {class_name}")
+        print(f"  [WARN] Could not extract {class_name}")
         return False
 
     # Determine node key from class name
@@ -191,7 +191,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {{
     with open(output_path, 'w') as f:
         f.write(output_content)
 
-    print(f"  ✓ Created {output_path.name}")
+    print(f"  [OK] Created {output_path.name}")
     return True
 
 
@@ -230,7 +230,7 @@ __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
     with open(init_path, 'w') as f:
         f.write(init_content)
 
-    print(f"  ✓ Created {category_dir.name}/__init__.py")
+    print(f"  [OK] Created {category_dir.name}/__init__.py")
 
 
 def main():
@@ -242,12 +242,12 @@ def main():
     print("=" * 60)
 
     for source_file, category_name, nodes in SPLITS:
-        print(f"\n📁 Processing {category_name}/ ({len(nodes)} nodes)")
+        print(f"\n[DIR] Processing {category_name}/ ({len(nodes)} nodes)")
 
         # Read source file
         source_path = nodes_dir / source_file
         if not source_path.exists():
-            print(f"  ⚠ Source file not found: {source_file}")
+            print(f"  [WARN] Source file not found: {source_file}")
             continue
 
         with open(source_path, 'r') as f:
@@ -266,7 +266,7 @@ def main():
         create_init_file(category_dir, nodes)
 
     print("\n" + "=" * 60)
-    print("✓ Splitting complete!")
+    print("[OK] Splitting complete!")
     print("=" * 60)
 
 

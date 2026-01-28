@@ -178,20 +178,20 @@ Returning mesh unchanged.
                     result_mesh.face_attributes['self_intersecting'] = np.zeros(len(F), dtype=np.float32)
                     result_mesh.vertex_attributes['intersection_flag'] = np.zeros(len(V), dtype=np.float32)
                     result_mesh.vertex_attributes['intersection_count'] = np.zeros(len(V), dtype=np.float32)
-                    print("[FixByRemoval] ✓ No self-intersections remaining!")
+                    print("[FixByRemoval] [OK] No self-intersections remaining!")
 
                 # Generate status message
                 if num_intersecting > 0:
                     if new_intersecting_faces == 0:
-                        redetection_status = f"  ✓ All intersections FIXED! (removed {num_intersecting} faces)"
+                        redetection_status = f"  [OK] All intersections FIXED! (removed {num_intersecting} faces)"
                     else:
-                        redetection_status = f"  ⚠ {new_intersecting_faces} intersecting faces still remain"
+                        redetection_status = f"  [WARN] {new_intersecting_faces} intersecting faces still remain"
                 else:
                     redetection_status = f"  After fix: {new_intersecting_faces} intersecting faces"
 
             except Exception as e:
                 print(f"[FixByRemoval] Re-detection failed: {e}")
-                redetection_status = f"  ⚠ Re-detection failed: {e}"
+                redetection_status = f"  [WARN] Re-detection failed: {e}"
                 # Clear old data since we couldn't update it
                 if 'self_intersecting' in result_mesh.face_attributes:
                     del result_mesh.face_attributes['self_intersecting']
@@ -239,9 +239,9 @@ Re-Detection Results:
 {redetection_status}
 
 Status:
-  ✓ Self-intersecting faces removed!
+  [OK] Self-intersecting faces removed!
 
-{'⚠ Warning: Large number of faces removed. Consider using ' if num_intersecting > initial_faces * 0.1 else ''}
+{'[WARN] Warning: Large number of faces removed. Consider using ' if num_intersecting > initial_faces * 0.1 else ''}
 {'  perturbation or remeshing methods for better results.' if num_intersecting > initial_faces * 0.1 else ''}
 """
 

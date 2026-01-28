@@ -247,11 +247,11 @@ Initial State:
 After Filling:
   Vertices: {final_vertices:,} (+{added_vertices})
   Faces: {final_faces:,} (+{added_faces})
-  Watertight: {'✓ Yes' if is_watertight else '⚠ No'}{holes_info}
+  Watertight: {'[OK] Yes' if is_watertight else '[WARN] No'}{holes_info}
 
-{'✓ All holes successfully filled!' if is_watertight and added_faces > 0 else ''}
-{'ℹ No holes detected - mesh was already watertight.' if was_watertight else ''}
-{'⚠ Some holes may remain (check mesh topology).' if not is_watertight and added_faces > 0 else ''}
+{'[OK] All holes successfully filled!' if is_watertight and added_faces > 0 else ''}
+{'[INFO] No holes detected - mesh was already watertight.' if was_watertight else ''}
+{'[WARN] Some holes may remain (check mesh topology).' if not is_watertight and added_faces > 0 else ''}
 """
 
         print(f"[FillHoles] Added {added_faces} faces, Watertight: {was_watertight} -> {is_watertight}")

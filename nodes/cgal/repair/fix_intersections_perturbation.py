@@ -198,24 +198,24 @@ Returning mesh unchanged.
                     result_mesh.face_attributes['self_intersecting'] = np.zeros(len(F), dtype=np.float32)
                     result_mesh.vertex_attributes['intersection_flag'] = np.zeros(len(V), dtype=np.float32)
                     result_mesh.vertex_attributes['intersection_count'] = np.zeros(len(V), dtype=np.float32)
-                    print("[FixByPerturbation] ✓ No self-intersections remaining!")
+                    print("[FixByPerturbation] [OK] No self-intersections remaining!")
 
                 # Generate status message
                 if original_intersecting_faces > 0:
                     reduction = original_intersecting_faces - new_intersecting_faces
                     reduction_pct = 100.0 * reduction / original_intersecting_faces
                     if new_intersecting_faces == 0:
-                        redetection_status = f"  ✓ All {original_intersecting_faces} intersections FIXED!"
+                        redetection_status = f"  [OK] All {original_intersecting_faces} intersections FIXED!"
                     elif reduction > 0:
-                        redetection_status = f"  ⚠ Reduced from {original_intersecting_faces} to {new_intersecting_faces} ({reduction_pct:.1f}% reduction)"
+                        redetection_status = f"  [WARN] Reduced from {original_intersecting_faces} to {new_intersecting_faces} ({reduction_pct:.1f}% reduction)"
                     else:
-                        redetection_status = f"  ✗ No improvement: still {new_intersecting_faces} intersecting faces"
+                        redetection_status = f"  [FAIL] No improvement: still {new_intersecting_faces} intersecting faces"
                 else:
                     redetection_status = f"  After fix: {new_intersecting_faces} intersecting faces"
 
             except Exception as e:
                 print(f"[FixByPerturbation] Re-detection failed: {e}")
-                redetection_status = f"  ⚠ Re-detection failed: {e}"
+                redetection_status = f"  [WARN] Re-detection failed: {e}"
                 # Clear old data since we couldn't update it
                 if 'self_intersecting' in result_mesh.face_attributes:
                     del result_mesh.face_attributes['self_intersecting']
@@ -269,7 +269,7 @@ Re-Detection Results:
 {redetection_status}
 
 Status:
-  ✓ Vertices perturbed along normals!
+  [OK] Vertices perturbed along normals!
 
 Important Notes:
   • Mesh topology preserved (same faces and connectivity)

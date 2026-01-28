@@ -126,7 +126,7 @@ Returning mesh unchanged.
                                 print(f"[RemeshSelfIntersections] Outer hull: {len(VV_hull)} vertices, {len(FF_hull)} faces")
                                 VV, FF = VV_hull, FF_hull
                             else:
-                                print("[RemeshSelfIntersections] ⚠ outer_hull_legacy not available, skipping")
+                                print("[RemeshSelfIntersections] [WARN] outer_hull_legacy not available, skipping")
                         except Exception as e:
                             print(f"[RemeshSelfIntersections] Outer hull extraction failed: {e}")
 
@@ -156,7 +156,7 @@ Detection Results:
   Intersection Pairs: {num_intersection_pairs:,}
 
 Status:
-  {'✓ No self-intersections detected!' if num_intersection_pairs == 0 else '⚠ Self-intersections found!'}
+  {'[OK] No self-intersections detected!' if num_intersection_pairs == 0 else '[WARN] Self-intersections found!'}
 
 Note: Mesh was not modified (detect_only=True)
 To fix intersections, set detect_only=False
@@ -179,10 +179,10 @@ Processing:
   Stitch All: {'Yes' if stitch_all else 'No'}
 
 Status:
-  {'✓ Remeshing complete!' if not detect_only else '✓ Detection complete!'}
-  {'✓ Mesh is now manifold' if extract_outer_hull and result_mesh.is_watertight else ''}
+  {'[OK] Remeshing complete!' if not detect_only else '[OK] Detection complete!'}
+  {'[OK] Mesh is now manifold' if extract_outer_hull and result_mesh.is_watertight else ''}
 
-{'⚠ Note: Remeshing subdivides intersections but may create non-manifold edges.' if not extract_outer_hull else ''}
+{'[WARN] Note: Remeshing subdivides intersections but may create non-manifold edges.' if not extract_outer_hull else ''}
 {'  Consider enabling extract_outer_hull for a clean manifold result.' if not extract_outer_hull else ''}
 """
 

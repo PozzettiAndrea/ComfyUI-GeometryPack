@@ -290,10 +290,10 @@ After:  {'Consistent' if is_consistent else 'Inconsistent'}{components_info}{fli
 Vertices: {len(fixed_mesh.vertices):,}
 Faces: {len(fixed_mesh.faces):,}
 {extra_info}
-{'✓ Normals are now consistently oriented!' if is_consistent else '⚠ Some inconsistencies may remain (check mesh topology)'}
+{'[OK] Normals are now consistently oriented!' if is_consistent else '[WARN] Some inconsistencies may remain (check mesh topology)'}
 """
 
-        print(f"[FixNormals] {'✓' if is_consistent else '⚠'} Normal orientation: {was_consistent} -> {is_consistent}")
+        print(f"[FixNormals] {'[OK]' if is_consistent else '[WARN]'} Normal orientation: {was_consistent} -> {is_consistent}")
 
         return (fixed_mesh, info)
 

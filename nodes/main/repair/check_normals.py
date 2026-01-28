@@ -70,8 +70,8 @@ Mesh Statistics:
   Edges: {len(trimesh.edges_unique):,}
 
 Topology:
-  Winding Consistent: {'✓ Yes' if is_winding_consistent else '✗ No (normals may point in mixed directions)'}
-  Watertight: {'✓ Yes' if is_watertight else '✗ No (has boundary edges/holes)'}
+  Winding Consistent: {'[OK] Yes' if is_winding_consistent else '[FAIL] No (normals may point in mixed directions)'}
+  Watertight: {'[OK] Yes' if is_watertight else '[FAIL] No (has boundary edges/holes)'}
 
 Face Quality:
   Degenerate Faces: {degenerate_faces:,} ({100.0 * degenerate_faces / len(trimesh.faces):.2f}%)
@@ -94,7 +94,7 @@ Recommendations:
             report += "  • Remove degenerate faces before further processing\n"
 
         if is_winding_consistent and is_watertight and degenerate_faces == 0:
-            report += "  ✓ Mesh normals are in excellent condition!\n"
+            report += "  [OK] Mesh normals are in excellent condition!\n"
 
         print(f"[CheckNormals] Winding: {is_winding_consistent}, Watertight: {is_watertight}, Degenerate: {degenerate_faces}")
 

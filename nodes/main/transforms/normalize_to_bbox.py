@@ -96,7 +96,7 @@ class NormalizeMeshToBBox:
         result.apply_scale(scale_factor)
 
         print(f"[NormalizeToBBox] Scale factor: {scale_factor:.6f}")
-        print(f"[NormalizeToBBox] ✓ Normalized to [{-target_size/2:.2f}, {target_size/2:.2f}] bbox")
+        print(f"[NormalizeToBBox] [OK] Normalized to [{-target_size/2:.2f}, {target_size/2:.2f}] bbox")
 
         # Preserve existing metadata
         if hasattr(trimesh, 'metadata'):

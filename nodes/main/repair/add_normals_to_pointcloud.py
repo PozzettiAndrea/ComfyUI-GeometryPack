@@ -164,7 +164,7 @@ class AddNormalsToPointCloud:
         if add_as_attributes:
             info += " (stored as vertex_attributes for visualization)"
 
-        print(f"[AddNormalsToPointCloud] ✓ {info}")
+        print(f"[AddNormalsToPointCloud] [OK] {info}")
 
         return (result, info)
 

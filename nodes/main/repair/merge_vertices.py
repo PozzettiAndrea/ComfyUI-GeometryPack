@@ -114,9 +114,9 @@ After:
   Faces: {faces_after:,} ({-faces_removed:+,})
   Components: {components_after_str}{components_change_str}
 
-{'✓ Vertices merged successfully!' if verts_removed > 0 else 'ℹ No duplicate vertices found within tolerance.'}
-{'✓ Mesh is now fully connected!' if components_after == 1 else ''}
-{'⚠ Mesh still has multiple disconnected components.' if components_after is not None and components_after > 1 else ''}
+{'[OK] Vertices merged successfully!' if verts_removed > 0 else '[INFO] No duplicate vertices found within tolerance.'}
+{'[OK] Mesh is now fully connected!' if components_after == 1 else ''}
+{'[WARN] Mesh still has multiple disconnected components.' if components_after is not None and components_after > 1 else ''}
 """
 
         print(f"[MergeVertices] Removed {verts_removed} duplicate vertices")
