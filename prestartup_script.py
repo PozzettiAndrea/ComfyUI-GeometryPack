@@ -3,10 +3,15 @@
 
 """
 GeometryPack PreStartup Script
+- Sets up LD_LIBRARY_PATH for pixi conda libraries
 - Copies 3D viewer infrastructure from comfy-3d-viewers package
 - Generates dynamic widget visibility mappings
 - Copies example 3D assets to ComfyUI input folder on startup
 """
+# Must run before any native library imports
+from comfy_env import setup_env
+setup_env()
+
 import json
 import os
 import shutil
