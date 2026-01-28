@@ -181,7 +181,7 @@ Percentiles:
 Point Classification:
   Outside (d > 0): {num_outside:,} points ({100.0 * num_outside / len(points):.1f}%)
   Inside (d < 0): {num_inside:,} points ({100.0 * num_inside / len(points):.1f}%)
-  On surface (d ≈ 0): {num_on_surface:,} points ({100.0 * num_on_surface / len(points):.1f}%)
+  On surface (d ~= 0): {num_on_surface:,} points ({100.0 * num_on_surface / len(points):.1f}%)
 """
 
         # Add distance distribution using absolute values for signed mode

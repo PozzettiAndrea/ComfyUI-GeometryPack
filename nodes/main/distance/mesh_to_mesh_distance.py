@@ -89,8 +89,8 @@ class MeshDistanceNode:
                 info = f"""Mesh Distance Results (Hausdorff):
 
 Symmetric Distance: {dist:.6f}
-A → B (one-sided): {hd_a_to_b:.6f}
-B → A (one-sided): {hd_b_to_a:.6f}
+A -> B (one-sided): {hd_a_to_b:.6f}
+B -> A (one-sided): {hd_b_to_a:.6f}
 
 Samples: {sample_count:,} points per mesh
 Mesh A: {len(mesh_a.vertices):,} vertices, {len(mesh_a.faces):,} faces
@@ -105,7 +105,7 @@ Hausdorff distance measures the maximum deviation (worst-case error).
 
                 info = f"""Mesh Distance Results (Hausdorff - One-Sided):
 
-Distance A → B: {dist:.6f}
+Distance A -> B: {dist:.6f}
 
 Samples: {sample_count:,} points per mesh
 Mesh A: {len(mesh_a.vertices):,} vertices, {len(mesh_a.faces):,} faces

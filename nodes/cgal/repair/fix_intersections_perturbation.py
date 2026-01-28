@@ -70,7 +70,7 @@ which vertices are adjacent to self-intersecting faces.
 Returning mesh unchanged.
 
 Workflow suggestion:
-1. Load Mesh → Detect Self Intersections → Fix Self Intersections By Perturbation
+1. Load Mesh -> Detect Self Intersections -> Fix Self Intersections By Perturbation
 """
             return (trimesh, warning_msg)
 

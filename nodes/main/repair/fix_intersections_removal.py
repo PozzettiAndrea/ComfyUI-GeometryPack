@@ -70,7 +70,7 @@ which faces are self-intersecting.
 Returning mesh unchanged.
 
 Workflow suggestion:
-1. Load Mesh → Detect Self Intersections → Fix Self Intersections By Removal
+1. Load Mesh -> Detect Self Intersections -> Fix Self Intersections By Removal
 """
             return (trimesh, warning_msg)
 

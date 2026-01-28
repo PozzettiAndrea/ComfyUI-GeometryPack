@@ -9,7 +9,7 @@ Normalizes mesh/pointcloud to fit within a target bounding box by:
 2. Scaling isotropically (uniform scale) to fit target size
 
 Useful for:
-- Preparing meshes for TripoSF (target_size=1.0 → [-0.5, 0.5] box)
+- Preparing meshes for TripoSF (target_size=1.0 -> [-0.5, 0.5] box)
 - Standardizing mesh sizes for processing
 - Ensuring normals are estimated in the correct coordinate space
 """
@@ -126,7 +126,7 @@ Normalization:
   Scale factor: {scale_factor:.6f}
 
 New Bounds:
-  Target size: {target_size} → [{-target_size/2:.2f}, {target_size/2:.2f}] bbox
+  Target size: {target_size} -> [{-target_size/2:.2f}, {target_size/2:.2f}] bbox
   Actual extents: [{result.extents[0]:.3f}, {result.extents[1]:.3f}, {result.extents[2]:.3f}]
 
 Note: Use this BEFORE AddNormalsToPointCloud for TripoSF workflows.
