@@ -99,7 +99,7 @@ Mesh B: {len(mesh_b.vertices):,} vertices, {len(mesh_b.faces):,} faces
 Hausdorff distance measures the maximum deviation (worst-case error).
 """
             else:
-                # One-sided: A → B
+                # One-sided: A -> B
                 dist = pcu.one_sided_hausdorff_distance(points_a, points_b)
                 dist = dist[0] if isinstance(dist, tuple) else dist
 
