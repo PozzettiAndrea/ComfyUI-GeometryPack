@@ -6,30 +6,7 @@ libopengl = "*"
 xorg-libxi = "*"
 xkbcommon = "*"
 
-# Common pip packages
-[pypi-dependencies]
-numpy = ">=1.21.0,<2"
-scipy = ">=1.7.0"
-trimesh = { version = ">=4.0.0", extras = ["easy"] }
-tqdm = ">=4.60.0"
-requests = ">=2.25.0"
-libigl = ">=2.6.1"
-pymeshlab = "*"
-rtree = "*"
-point-cloud-utils = ">=0.30.0"
-mesh-to-sdf = ">=0.0.14"
-fast-simplification = ">=0.1.5"
-pymeshfix = ">=0.17.0"
-xatlas = ">=0.0.11"
-skeletor = ">=1.2.0"
-PyNanoInstantMeshes = "*"
-matplotlib = ">=3.5.0"
-Pillow = ">=9.0.0"
-pyvista = ">=0.43.0"
-comfy-dynamic-widgets = ">=0.0.2"
-comfy-3d-viewers = ">=0.1.0"
-
-# Linux-specific packages
+# Linux-specific packages (can't express in requirements.txt)
 [target.linux-64.pypi-dependencies]
 embreex = "*"
 
