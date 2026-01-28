@@ -8,8 +8,99 @@ Requires CUDA, torch, and cumesh.
 
 import numpy as np
 import trimesh as trimesh_module
+from typing import Tuple, Optional
 
-from ..._utils import mesh_ops
+
+def cumesh_dc_remesh(
+    mesh: trimesh_module.Trimesh,
+    grid_resolution: int = 128,
+    fill_holes_first: bool = True,
+    band: float = 1.0,
+) -> Tuple[Optional[trimesh_module.Trimesh], str]:
+    """
+    GPU-accelerated dual-contouring remeshing using CuMesh.
+
+    Uses the same algorithm as TRELLIS2: CuMesh.remeshing.remesh_narrow_band_dc()
+    """
+    # Lazy imports - only available in isolated env
+    import torch
+    import cumesh as CuMesh
+
+    try:
+        print(f"[cumesh_dc_remesh] Input: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[cumesh_dc_remesh] Grid resolution: {grid_resolution}, band: {band}")
+
+        # Convert to GPU tensors
+        vertices = torch.tensor(mesh.vertices, dtype=torch.float32).cuda()
+        faces = torch.tensor(mesh.faces, dtype=torch.int32).cuda()
+
+        # Calculate bounding box and scale
+        bbox_min = vertices.min(dim=0).values
+        bbox_max = vertices.max(dim=0).values
+        bbox_size = bbox_max - bbox_min
+        scale = bbox_size.max().item()
+
+        # Center the mesh
+        center = (bbox_min + bbox_max) / 2
+        vertices_centered = vertices - center
+
+        # Initialize CuMesh for pre-processing
+        cumesh = CuMesh.CuMesh()
+        cumesh.init(vertices_centered, faces)
+
+        # Pre-unify face orientations
+        cumesh.unify_face_orientations()
+
+        # Optionally fill holes
+        if fill_holes_first:
+            cumesh.fill_holes()
+            print(f"[cumesh_dc_remesh] Filled holes")
+
+        # Read current state after preprocessing
+        curr_verts, curr_faces = cumesh.read()
+
+        # Build BVH for the remeshing operation
+        bvh = CuMesh.cuBVH(curr_verts, curr_faces)
+
+        # Run dual-contouring remesh
+        print(f"[cumesh_dc_remesh] Running dual-contouring remesh...")
+        new_verts, new_faces = CuMesh.remeshing.remesh_narrow_band_dc(
+            curr_verts, curr_faces,
+            center=torch.zeros(3, device='cuda'),
+            scale=(grid_resolution + 3 * band) / grid_resolution * scale,
+            resolution=grid_resolution,
+            band=band,
+            project_back=0.0,
+            verbose=True,
+            bvh=bvh,
+        )
+
+        # Clean up BVH
+        del bvh, curr_verts, curr_faces
+
+        print(f"[cumesh_dc_remesh] After remesh: {len(new_verts)} vertices, {len(new_faces)} faces")
+
+        # Restore center offset
+        final_verts = new_verts + center
+
+        # Create result mesh
+        remeshed_mesh = trimesh_module.Trimesh(
+            vertices=final_verts.cpu().numpy().astype(np.float32),
+            faces=new_faces.cpu().numpy(),
+            process=False
+        )
+
+        # Cleanup GPU memory
+        del cumesh, vertices, faces, vertices_centered
+        del new_verts, new_faces, final_verts
+        torch.cuda.empty_cache()
+
+        return remeshed_mesh, ""
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return None, f"Error during CuMesh remesh: {str(e)}"
 
 
 class RemeshGPUNode:
@@ -67,7 +158,7 @@ class RemeshGPUNode:
         # Hardcoded resolution = 512 (same as TRELLIS2)
         grid_resolution = 512
 
-        remeshed_mesh, error = mesh_ops.cumesh_dc_remesh(
+        remeshed_mesh, error = cumesh_dc_remesh(
             trimesh, grid_resolution, fill_holes_first=False, band=remesh_band
         )
         if remeshed_mesh is None:
