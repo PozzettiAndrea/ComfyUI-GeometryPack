@@ -12,7 +12,7 @@ import trimesh as trimesh_module
 
 def _bpy_voxel_remesh(vertices, faces, voxel_size):
     """Blender voxel remesh using bpy."""
-    from ..._utils import setup_bpy_dll_path
+    from .._utils import setup_bpy_dll_path
     setup_bpy_dll_path()
     import bpy
 
@@ -40,7 +40,7 @@ def _bpy_voxel_remesh(vertices, faces, voxel_size):
 
 def _bpy_quadriflow_remesh(vertices, faces, target_face_count):
     """Blender Quadriflow remesh using bpy."""
-    from ..._utils import setup_bpy_dll_path
+    from .._utils import setup_bpy_dll_path
     setup_bpy_dll_path()
     import bpy
 
