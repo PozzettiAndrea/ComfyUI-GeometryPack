@@ -1,0 +1,18 @@
+[apt]
+packages = ["libgl1-mesa-glx", "libglu1-mesa"]
+
+[dependencies]
+cgal = "*"
+
+[pypi-dependencies]
+numpy = "*"
+trimesh = { version = "*", extras = ["easy"] }
+pymeshlab = ">=2025.7"
+
+# Windows needs Visual C++ runtime for CGAL DLLs
+[target.win-64.pypi-dependencies]
+msvc-runtime = "*"
+
+[env_vars]
+KMP_DUPLICATE_LIB_OK = "TRUE"
+OMP_NUM_THREADS = 1

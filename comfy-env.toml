@@ -1,18 +1,18 @@
-# ComfyUI-GeometryPack comfy-env configuration
-# Uses comfy-env for isolated Python environment with bpy + cumesh
+[env_vars]
+KMP_DUPLICATE_LIB_OK = "TRUE"
+OMP_NUM_THREADS = 1
 
-[geometrypack]
-python = "3.11"           # Required by bpy
-cuda_version = "auto"
-pytorch_version = "auto"
+[apt]
+# Include both old and new package names for compatibility across Ubuntu versions
+# (libgl1-mesa-glx was renamed to libgl1 in Ubuntu 22.04+)
+# libopengl0 provides libOpenGL.so.0 (required by pymeshlab)
+packages = ["libgl1-mesa-glx", "libgl1", "libopengl0", "libglu1-mesa"]
 
-    [geometrypack.cuda]
-    cumesh = "0.0.1"
+# Linux-specific pypi packages
+[target.linux-64.pypi-dependencies]
+embreex = "*"
 
-    [geometrypack.packages]
-    requirements = [
-        "bpy>=4.2,<4.3",
-        "numpy<2",            # bpy requires numpy 1.x
-        "trimesh>=4.0.0",
-        "tqdm",               # Required by cumesh
-    ]
+# Windows-specific packages
+[target.win-64.pypi-dependencies]
+msvc-runtime = "*"
+embreex = "*"

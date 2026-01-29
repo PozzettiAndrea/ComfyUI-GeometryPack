@@ -37,6 +37,10 @@ except ImportError:
     # Don't print warning - pyvista is optional
 
 # Official CGAL Python bindings for isotropic remeshing
+# Note: CGAL remeshing runs in an isolated environment (_env_geometrypack),
+# so it's normal for this import to fail in the main ComfyUI environment.
+# The critical CGAL functionality (boolean ops, self-intersections) is
+# provided by libigl (igl.copyleft.cgal), not this package.
 try:
     from CGAL import CGAL_Polygon_mesh_processing
     from CGAL.CGAL_Polyhedron_3 import Polyhedron_3
@@ -45,7 +49,7 @@ try:
     CGAL_AVAILABLE = True
 except ImportError:
     CGAL_AVAILABLE = False
-    print("[mesh_utils] Warning: CGAL not available. Install with: pip install cgal")
+    # Don't warn - CGAL remeshing uses isolated environment, not main env
 
 
 def is_point_cloud(mesh) -> bool:
@@ -174,7 +178,7 @@ def _load_vtk_mesh(file_path: str) -> Tuple[Optional[trimesh.Trimesh], str]:
         mesh.metadata['file_name'] = os.path.basename(file_path)
         mesh.metadata['file_format'] = os.path.splitext(file_path)[1].lower()
 
-        print(f"[load_mesh_file] ✓ Successfully loaded VTK: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[load_mesh_file] [OK] Successfully loaded VTK: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
         return mesh, ""
 
     except Exception as e:
@@ -220,7 +224,7 @@ def load_mesh_file(file_path: str) -> Tuple[Optional[trimesh.Trimesh], str]:
             loaded.metadata['file_name'] = os.path.basename(file_path)
             loaded.metadata['file_format'] = os.path.splitext(file_path)[1].lower()
             loaded.metadata['is_pointcloud'] = True
-            print(f"[load_mesh_file] ✓ Successfully loaded pointcloud: {len(loaded.vertices)} points")
+            print(f"[load_mesh_file] [OK] Successfully loaded pointcloud: {len(loaded.vertices)} points")
             return loaded, ""
 
         # Handle case where trimesh.load returns a Scene instead of a mesh
@@ -242,7 +246,7 @@ def load_mesh_file(file_path: str) -> Tuple[Optional[trimesh.Trimesh], str]:
             pointcloud.metadata['file_name'] = os.path.basename(file_path)
             pointcloud.metadata['file_format'] = os.path.splitext(file_path)[1].lower()
             pointcloud.metadata['is_pointcloud'] = True
-            print(f"[load_mesh_file] ✓ Successfully loaded as pointcloud: {len(pointcloud.vertices)} points")
+            print(f"[load_mesh_file] [OK] Successfully loaded as pointcloud: {len(pointcloud.vertices)} points")
             return pointcloud, ""
 
         print(f"[load_mesh_file] Initial mesh: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
@@ -294,7 +298,7 @@ def load_mesh_file(file_path: str) -> Tuple[Optional[trimesh.Trimesh], str]:
         mesh.metadata['file_name'] = os.path.basename(file_path)
         mesh.metadata['file_format'] = os.path.splitext(file_path)[1].lower()
 
-        print(f"[load_mesh_file] ✓ Successfully loaded: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+        print(f"[load_mesh_file] Successfully loaded: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
         return mesh, ""
 
     except Exception as e:
@@ -340,10 +344,10 @@ def load_mesh_file(file_path: str) -> Tuple[Optional[trimesh.Trimesh], str]:
             mesh.metadata['file_name'] = os.path.basename(file_path)
             mesh.metadata['file_format'] = os.path.splitext(file_path)[1].lower()
 
-            print(f"[load_mesh_file] ✓ Successfully loaded via libigl: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+            print(f"[load_mesh_file] Successfully loaded via libigl: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
             return mesh, ""
         except Exception as e2:
-            print(f"[load_mesh_file] ✗ Both loaders failed!")
+            print(f"[load_mesh_file] Both loaders failed!")
             return None, f"Error loading mesh: {str(e)}; Fallback error: {str(e2)}"
 
 

@@ -17,17 +17,38 @@ from datetime import datetime
 # Only run initialization when loaded by ComfyUI, not during pytest
 # Use PYTEST_CURRENT_TEST env var which is only set when pytest is actually running tests
 if 'PYTEST_CURRENT_TEST' not in os.environ:
-    # Check if CGAL is available
-    try:
-        from CGAL import CGAL_Polygon_mesh_processing
-        print("[GeomPack] CGAL Python package found - CGAL Isotropic Remesh node available")
-    except ImportError:
-        print("[GeomPack] WARNING: CGAL Python package not found")
-        print("[GeomPack] The CGAL Isotropic Remesh node will not be available")
-        print("[GeomPack] Install with: pip install cgal")
-        print("[GeomPack] You can use PyMeshLab Remesh as an alternative")
-
     from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+
+    # Generate widget visibility mappings now that nodes are loaded
+    def _generate_widget_mappings():
+        try:
+            from comfy_dynamic_widgets import scan_specific_nodes, generate_mappings
+            import json
+
+            configs = scan_specific_nodes(NODE_CLASS_MAPPINGS)
+
+            if not configs:
+                print("[GeometryPack] No visible_when metadata found in any nodes")
+                return
+
+            mappings = generate_mappings(configs)
+
+            custom_node_dir = os.path.dirname(os.path.abspath(__file__))
+            output_path = os.path.join(custom_node_dir, "web", "js", "mappings.json")
+
+            with open(output_path, "w") as f:
+                json.dump(mappings, f, indent=2)
+
+            node_count = len(configs)
+            selector_count = sum(len(c.get("selectors", {})) for c in configs.values())
+            print(f"[GeometryPack] Generated widget mappings for {node_count} nodes ({selector_count} selectors)")
+
+        except ImportError:
+            print("[GeometryPack] Warning: comfy-dynamic-widgets not installed, skipping widget mappings")
+        except Exception as e:
+            print(f"[GeometryPack] Error generating widget mappings: {e}")
+
+    _generate_widget_mappings()
 
     # Setup custom server routes for save functionality
     try:

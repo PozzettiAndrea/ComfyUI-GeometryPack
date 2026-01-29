@@ -18,9 +18,20 @@
       "flags": {},
       "order": 0,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "localized_name": "file_path",
+          "name": "file_path",
+          "type": "COMBO",
+          "widget": {
+            "name": "file_path"
+          },
+          "link": null
+        }
+      ],
       "outputs": [
         {
+          "localized_name": "mesh",
           "name": "mesh",
           "type": "TRIMESH",
           "links": [
@@ -29,6 +40,7 @@
           ]
         },
         {
+          "localized_name": "texture",
           "name": "texture",
           "type": "IMAGE",
           "links": null
@@ -44,69 +56,137 @@
       ]
     },
     {
-      "id": 6,
-      "type": "PreviewAny",
+      "id": 8,
+      "type": "GeomPackDetectSelfIntersections",
       "pos": [
-        -111.56250000000024,
-        361.2291666666666
+        277.38541666666634,
+        98.0677083333332
       ],
       "size": [
-        319.3489583333335,
-        269.95312500000006
+        210,
+        178
       ],
       "flags": {},
       "order": 3,
       "mode": 0,
       "inputs": [
         {
-          "name": "source",
-          "type": "*",
-          "link": 7
+          "localized_name": "trimesh",
+          "name": "trimesh",
+          "type": "TRIMESH",
+          "link": 17
         }
       ],
-      "outputs": [],
+      "outputs": [
+        {
+          "localized_name": "mesh_with_field",
+          "name": "mesh_with_field",
+          "type": "TRIMESH",
+          "links": [
+            21
+          ]
+        },
+        {
+          "localized_name": "report",
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.71",
-        "Node name for S&R": "PreviewAny"
-      },
-      "widgets_values": []
+        "cnr_id": "comfyui-geometrypack",
+        "ver": "991c7a75886f50d567e5ed6d36aed06d0729a938",
+        "Node name for S&R": "GeomPackDetectSelfIntersections"
+      }
     },
     {
-      "id": 10,
-      "type": "PreviewAny",
+      "id": 13,
+      "type": "GeomPackPreviewMeshDual",
       "pos": [
-        265.6197916666667,
-        363.4062499999999
+        569.7135416666664,
+        -5.54166666666663
       ],
       "size": [
-        418.5989583333335,
-        342.6979166666666
+        768,
+        834
       ],
       "flags": {},
-      "order": 6,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
-          "name": "source",
-          "type": "*",
-          "link": 10
+          "localized_name": "mesh_1",
+          "name": "mesh_1",
+          "type": "TRIMESH",
+          "link": 20
+        },
+        {
+          "localized_name": "mesh_2",
+          "name": "mesh_2",
+          "type": "TRIMESH",
+          "link": 21
+        },
+        {
+          "localized_name": "layout",
+          "name": "layout",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "layout"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "opacity_1",
+          "name": "opacity_1",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "opacity_1"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "opacity_2",
+          "name": "opacity_2",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "opacity_2"
+          },
+          "link": null
         }
       ],
       "outputs": [],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.71",
-        "Node name for S&R": "PreviewAny"
+        "cnr_id": "comfyui-geometrypack",
+        "ver": "991c7a75886f50d567e5ed6d36aed06d0729a938",
+        "Node name for S&R": "GeomPackPreviewMeshDual"
       },
-      "widgets_values": []
+      "widgets_values": [
+        "side_by_side",
+        "fields",
+        1,
+        1,
+        ""
+      ]
     },
     {
       "id": 12,
       "type": "GeomPackRemeshSelfIntersections",
       "pos": [
-        -130.30729166666683,
-        -54.2604166666667
+        -145.06250000000009,
+        173.42708333333334
       ],
       "size": [
         281.404296875,
@@ -117,13 +197,51 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "mesh",
           "name": "mesh",
           "type": "TRIMESH",
           "link": 16
+        },
+        {
+          "localized_name": "detect_only",
+          "name": "detect_only",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "detect_only"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "remove_unreferenced",
+          "name": "remove_unreferenced",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "remove_unreferenced"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "extract_outer_hull",
+          "name": "extract_outer_hull",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "extract_outer_hull"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "stitch_all",
+          "name": "stitch_all",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "stitch_all"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "fixed_mesh",
           "name": "fixed_mesh",
           "type": "TRIMESH",
           "links": [
@@ -131,6 +249,7 @@
           ]
         },
         {
+          "localized_name": "report",
           "name": "report",
           "type": "STRING",
           "links": null
@@ -149,61 +268,22 @@
       ]
     },
     {
-      "id": 13,
-      "type": "GeomPackPreviewMeshDual",
-      "pos": [
-        706.364583333333,
-        25.973958333333368
-      ],
-      "size": [
-        768,
-        826
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "mesh_1",
-          "type": "TRIMESH",
-          "link": 20
-        },
-        {
-          "name": "mesh_2",
-          "type": "TRIMESH",
-          "link": 21
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfyui-geometrypack",
-        "ver": "991c7a75886f50d567e5ed6d36aed06d0729a938",
-        "Node name for S&R": "GeomPackPreviewMeshDual"
-      },
-      "widgets_values": [
-        "side_by_side",
-        "fields",
-        1,
-        1,
-        ""
-      ]
-    },
-    {
       "id": 5,
       "type": "GeomPackDetectSelfIntersections",
       "pos": [
-        -105.59895833333343,
-        272.8958333333333
+        -51.88541666666677,
+        -139.54166666666666
       ],
       "size": [
-        191.6373046875,
-        46
+        210,
+        178
       ],
       "flags": {},
       "order": 1,
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "trimesh",
           "name": "trimesh",
           "type": "TRIMESH",
           "link": 6
@@ -211,6 +291,7 @@
       ],
       "outputs": [
         {
+          "localized_name": "mesh_with_field",
           "name": "mesh_with_field",
           "type": "TRIMESH",
           "links": [
@@ -218,63 +299,17 @@
           ]
         },
         {
+          "localized_name": "report",
           "name": "report",
           "type": "STRING",
-          "links": [
-            7
-          ]
+          "links": []
         }
       ],
       "properties": {
         "cnr_id": "comfyui-geometrypack",
         "ver": "991c7a75886f50d567e5ed6d36aed06d0729a938",
         "Node name for S&R": "GeomPackDetectSelfIntersections"
-      },
-      "widgets_values": []
-    },
-    {
-      "id": 8,
-      "type": "GeomPackDetectSelfIntersections",
-      "pos": [
-        262.9166666666664,
-        264.9739583333332
-      ],
-      "size": [
-        191.6373046875,
-        46
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "trimesh",
-          "type": "TRIMESH",
-          "link": 17
-        }
-      ],
-      "outputs": [
-        {
-          "name": "mesh_with_field",
-          "type": "TRIMESH",
-          "links": [
-            21
-          ]
-        },
-        {
-          "name": "report",
-          "type": "STRING",
-          "links": [
-            10
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfyui-geometrypack",
-        "ver": "991c7a75886f50d567e5ed6d36aed06d0729a938",
-        "Node name for S&R": "GeomPackDetectSelfIntersections"
-      },
-      "widgets_values": []
+      }
     }
   ],
   "links": [
@@ -285,22 +320,6 @@
       5,
       0,
       "TRIMESH"
-    ],
-    [
-      7,
-      5,
-      1,
-      6,
-      0,
-      "*"
-    ],
-    [
-      10,
-      8,
-      1,
-      10,
-      0,
-      "*"
     ],
     [
       16,
@@ -341,11 +360,12 @@
     "ds": {
       "scale": 0.75,
       "offset": [
-        602.8020833333337,
-        169.79166666666669
+        752.2864583333336,
+        325.95312500000006
       ]
     },
-    "frontendVersion": "1.30.6"
+    "frontendVersion": "1.30.6",
+    "workflowRendererVersion": "LG"
   },
   "version": 0.4
 }

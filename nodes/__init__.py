@@ -3,64 +3,68 @@
 
 """
 ComfyUI GeometryPack Nodes
-Organized by functional category
+Organized by dependency environment: main, cgal, blender, gpu
 """
 
-# Import all node modules
-from . import io
-from . import primitives
-from . import analysis
-from . import distance
-from . import conversion
-from . import remeshing
-from . import repair
-from . import uv
-from . import transforms
-from . import visualization
-from . import skeleton
-# from . import examples  # Module doesn't exist, commented out
-from . import texture_remeshing
-from . import boolean
-from . import combine
-from . import reconstruction
+from pathlib import Path
 
-# Collect all node class mappings
 NODE_CLASS_MAPPINGS = {}
-NODE_CLASS_MAPPINGS.update(io.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(primitives.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(analysis.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(distance.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(conversion.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(remeshing.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(repair.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(uv.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(transforms.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(visualization.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(skeleton.NODE_CLASS_MAPPINGS)
-# NODE_CLASS_MAPPINGS.update(examples.NODE_CLASS_MAPPINGS)  # Module doesn't exist
-NODE_CLASS_MAPPINGS.update(texture_remeshing.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(boolean.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(combine.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(reconstruction.NODE_CLASS_MAPPINGS)
-
-# Collect all display name mappings
 NODE_DISPLAY_NAME_MAPPINGS = {}
-NODE_DISPLAY_NAME_MAPPINGS.update(io.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(primitives.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(analysis.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(distance.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(conversion.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(remeshing.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(repair.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(uv.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(transforms.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(visualization.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(skeleton.NODE_DISPLAY_NAME_MAPPINGS)
-# NODE_DISPLAY_NAME_MAPPINGS.update(examples.NODE_DISPLAY_NAME_MAPPINGS)  # Module doesn't exist
-NODE_DISPLAY_NAME_MAPPINGS.update(texture_remeshing.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(boolean.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(combine.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(reconstruction.NODE_DISPLAY_NAME_MAPPINGS)
 
-# Export for ComfyUI
+# ==============================================================================
+# Main nodes (always load - basic dependencies like trimesh, numpy, pymeshlab)
+# ==============================================================================
+from .main import NODE_CLASS_MAPPINGS as main_mappings
+from .main import NODE_DISPLAY_NAME_MAPPINGS as main_display
+NODE_CLASS_MAPPINGS.update(main_mappings)
+NODE_DISPLAY_NAME_MAPPINGS.update(main_display)
+print(f"[GeomPack] Main nodes loaded ({len(main_mappings)} nodes)")
+
+# ==============================================================================
+# Isolated nodes - wrapped for subprocess execution
+# ==============================================================================
+try:
+    from comfy_env import wrap_isolated_nodes
+
+    nodes_dir = Path(__file__).parent
+
+    # CGAL nodes (isolated - C++ deps could conflict)
+    try:
+        from .cgal import NODE_CLASS_MAPPINGS as cgal_mappings
+        from .cgal import NODE_DISPLAY_NAME_MAPPINGS as cgal_display
+        cgal_wrapped = wrap_isolated_nodes(cgal_mappings, nodes_dir / "cgal")
+        NODE_CLASS_MAPPINGS.update(cgal_wrapped)
+        NODE_DISPLAY_NAME_MAPPINGS.update(cgal_display)
+        print(f"[GeomPack] CGAL nodes loaded ({len(cgal_mappings)} nodes, isolated)")
+    except ImportError as e:
+        print(f"[GeomPack] CGAL nodes not available: {e}")
+
+    # Blender nodes (isolated - needs Python 3.11)
+    try:
+        from .blender import NODE_CLASS_MAPPINGS as blender_mappings
+        from .blender import NODE_DISPLAY_NAME_MAPPINGS as blender_display
+        blender_wrapped = wrap_isolated_nodes(blender_mappings, nodes_dir / "blender")
+        NODE_CLASS_MAPPINGS.update(blender_wrapped)
+        NODE_DISPLAY_NAME_MAPPINGS.update(blender_display)
+        print(f"[GeomPack] Blender nodes loaded ({len(blender_mappings)} nodes, isolated)")
+    except ImportError as e:
+        print(f"[GeomPack] Blender nodes not available: {e}")
+
+    # GPU nodes (isolated - CUDA packages need specific PyTorch)
+    try:
+        from .gpu import NODE_CLASS_MAPPINGS as gpu_mappings
+        from .gpu import NODE_DISPLAY_NAME_MAPPINGS as gpu_display
+        gpu_wrapped = wrap_isolated_nodes(gpu_mappings, nodes_dir / "gpu")
+        NODE_CLASS_MAPPINGS.update(gpu_wrapped)
+        NODE_DISPLAY_NAME_MAPPINGS.update(gpu_display)
+        print(f"[GeomPack] GPU nodes loaded ({len(gpu_mappings)} nodes, isolated)")
+    except ImportError as e:
+        print(f"[GeomPack] GPU nodes not available: {e}")
+
+except ImportError:
+    print("[GeomPack] comfy-env not installed, isolated nodes disabled")
+    print("[GeomPack] Install with: pip install comfy-env")
+
+print(f"[GeomPack] Total nodes loaded: {len(NODE_CLASS_MAPPINGS)}")
+
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']

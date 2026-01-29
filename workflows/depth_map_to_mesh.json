@@ -18,9 +18,29 @@
       "flags": {},
       "order": 0,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "choose file to upload",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
       "outputs": [
         {
+          "localized_name": "IMAGE",
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
@@ -28,6 +48,7 @@
           ]
         },
         {
+          "localized_name": "MASK",
           "name": "MASK",
           "type": "MASK",
           "links": []
@@ -52,16 +73,34 @@
       ],
       "size": [
         512,
-        694
+        722
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "trimesh",
           "name": "trimesh",
+          "shape": 7,
           "type": "TRIMESH",
           "link": 3
+        },
+        {
+          "localized_name": "voxelgrid",
+          "name": "voxelgrid",
+          "shape": 7,
+          "type": "VOXELGRID",
+          "link": null
+        },
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
         }
       ],
       "outputs": [],
@@ -76,35 +115,6 @@
       ]
     },
     {
-      "id": 5,
-      "type": "MaskPreview",
-      "pos": [
-        -83.71406250000001,
-        262.6828125
-      ],
-      "size": [
-        361.92070312499993,
-        319.7300781249999
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "mask",
-          "type": "MASK",
-          "link": 7
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.71",
-        "Node name for S&R": "MaskPreview"
-      },
-      "widgets_values": []
-    },
-    {
       "id": 2,
       "type": "GeomPackTextureToGeometry",
       "pos": [
@@ -113,20 +123,116 @@
       ],
       "size": [
         320,
-        170
+        266
       ],
       "flags": {},
       "order": 2,
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "mask",
           "name": "mask",
+          "shape": 7,
           "type": "MASK",
           "link": 6
+        },
+        {
+          "localized_name": "depth_image",
+          "name": "depth_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "field",
+          "name": "field",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "localized_name": "height_scale",
+          "name": "height_scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "height_scale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "field_name",
+          "name": "field_name",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "field_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "backend",
+          "name": "backend",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "backend"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "poisson_depth",
+          "name": "poisson_depth",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "poisson_depth"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "invert_height",
+          "name": "invert_height",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "invert_height"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "smooth_normals",
+          "name": "smooth_normals",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "smooth_normals"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "skip_black",
+          "name": "skip_black",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "skip_black"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "black_threshold",
+          "name": "black_threshold",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "black_threshold"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "mesh",
           "name": "mesh",
           "type": "TRIMESH",
           "links": [
@@ -134,6 +240,7 @@
           ]
         },
         {
+          "localized_name": "info",
           "name": "info",
           "type": "STRING",
           "links": null
@@ -146,9 +253,13 @@
       },
       "widgets_values": [
         1,
-        512,
+        "field",
+        "grid",
+        8,
         "false",
-        "true"
+        "true",
+        "false",
+        0.01
       ]
     },
     {
@@ -167,13 +278,25 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "image",
           "name": "image",
           "type": "IMAGE",
           "link": 5
+        },
+        {
+          "localized_name": "channel",
+          "name": "channel",
+          "type": "COMBO",
+          "widget": {
+            "name": "channel",
+            "value": "red"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "MASK",
           "name": "MASK",
           "type": "MASK",
           "links": [
@@ -216,14 +339,6 @@
       2,
       0,
       "MASK"
-    ],
-    [
-      7,
-      6,
-      0,
-      5,
-      0,
-      "MASK"
     ]
   ],
   "groups": [],
@@ -236,7 +351,8 @@
         265.3396206607306
       ]
     },
-    "frontendVersion": "1.30.6"
+    "frontendVersion": "1.30.6",
+    "workflowRendererVersion": "LG"
   },
   "version": 0.4
 }
