@@ -71,11 +71,12 @@ def copy_3d_viewers():
                         shutil.copy2(src, dst)
                         copied_count += 1
 
-        # Copy node widget JS files
+        # Copy node widget JS files (skip FBX-specific files that GeometryPack doesn't use)
+        skip_files = {'mesh_preview_fbx.js', 'debug_skeleton_widget.js', 'compare_skeleton_widget.js'}
         src_nodes_dir = get_nodes_dir()
         if os.path.exists(src_nodes_dir):
             for filename in os.listdir(src_nodes_dir):
-                if filename.endswith('.js'):
+                if filename.endswith('.js') and filename not in skip_files:
                     src = os.path.join(src_nodes_dir, filename)
                     dst = os.path.join(web_js_dir, filename)
                     if not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst):
