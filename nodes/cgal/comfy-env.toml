@@ -1,5 +1,5 @@
 [apt]
-packages = ["libgl1-mesa-glx", "libglu1-mesa"]
+packages = ["libgl1-mesa-glx", "libgl1", "libopengl0", "libglu1-mesa"]
 
 [dependencies]
 cgal = "*"
@@ -8,6 +8,7 @@ cgal = "*"
 numpy = "*"
 trimesh = { version = "*", extras = ["easy"] }
 pymeshlab = ">=2025.7"
+libigl = "*"
 
 # Windows needs Visual C++ runtime for CGAL DLLs
 [target.win-64.pypi-dependencies]
