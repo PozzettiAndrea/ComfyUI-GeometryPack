@@ -1,27 +1,10 @@
 [project]
-name = "comfyui-geometrypack"
+name = "ComfyUI-GeometryPack"
 description = "CGAL - Blender - IGL - Paraview - VTK. Geometry processing nodes for ComfyUI - mesh manipulation, remeshing, hole filling, UV unwrapping, Alpha Wrapping, and 3D visualization"
 version = "0.1.15"
-license = { text= "GPL-3.0-or-later" }
-classifiers = [
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
-]
-dynamic = ["dependencies"]
-
-[project.urls]
-Repository = "https://github.com/PozzettiAndrea/ComfyUI-GeometryPack"
-Documentation = "https://github.com/PozzettiAndrea/ComfyUI-GeometryPack/blob/main/README.md"
+license = {file = "LICENSE"}
 
 [tool.comfy]
 PublisherId = "pznodes"
 DisplayName = "GeometryPack"
 Icon = ""
-
-[build-system]
-requires = ["setuptools>=45", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
