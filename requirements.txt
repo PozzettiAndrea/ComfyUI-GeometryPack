@@ -4,7 +4,6 @@ scipy>=1.7.0
 tqdm>=4.60.0
 requests>=2.25.0
 
-
 # Mesh processing
 trimesh[easy]>=4.0.0
 libigl>=2.6.1
@@ -26,3 +25,7 @@ pyvista>=0.43.0
 # ComfyUI integration
 comfy-dynamic-widgets==0.1.1
 comfy-3d-viewers==0.2.2
+
+# Platform-specific
+embreex; sys_platform != "darwin"
+msvc-runtime; sys_platform == "win32"
