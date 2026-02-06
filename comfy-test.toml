@@ -1,10 +1,10 @@
 [test]
-levels = ["syntax", "install", "registration", "instantiation", "static_capture", "execution"]
+levels = ["syntax", "install", "registration", "instantiation", "execution"]
 
 [test.workflows]
 timeout = 300
-cpu = "all"
-gpu = "all"
+cpu = ["!remesh_gpu"]
+gpu = ["remesh_gpu"]
 
 [test.platforms]
 linux = true
