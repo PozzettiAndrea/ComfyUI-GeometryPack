@@ -82,7 +82,7 @@ class SplitByFieldNode:
 
             if is_point_cloud:
                 # Create point cloud subset
-                subset = trimesh.PointCloud(geometry.vertices[mask])
+                subset = trimesh.Trimesh(vertices=geometry.vertices[mask])
             else:
                 # For meshes, extract submesh by vertex mask
                 # This is more complex - need to handle faces
@@ -101,7 +101,7 @@ class SplitByFieldNode:
                     )
                 else:
                     # No valid faces, create point cloud
-                    subset = trimesh.PointCloud(geometry.vertices[mask])
+                    subset = trimesh.Trimesh(vertices=geometry.vertices[mask])
 
             # Copy vertex attributes
             if not hasattr(subset, 'vertex_attributes'):

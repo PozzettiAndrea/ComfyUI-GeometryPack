@@ -106,25 +106,23 @@ class MeshToPointCloudNode:
             if include_normals == "true" and face_indices is not None:
                 normals = trimesh.face_normals[face_indices]
 
-        # Create point cloud as TRIMESH object (vertices only, no faces)
-        # This ensures compatibility with all TRIMESH-expecting nodes
-        point_cloud = trimesh_module.PointCloud(vertices=points)
+        # Create point cloud as Trimesh with vertices only (no faces)
+        # This ensures IPC serialization works and compatibility with TRIMESH-expecting nodes
+        point_cloud = trimesh_module.Trimesh(vertices=points)
 
         # Add normals as vertex_normals if computed
         if normals is not None:
             point_cloud.vertex_normals = normals
 
         # Store point cloud metadata
-        point_cloud.metadata = {
-            'is_point_cloud': True,
-            'mode': mode,
-            'face_indices': face_indices,
-            'source_mesh_vertices': len(trimesh.vertices),
-            'source_mesh_faces': len(trimesh.faces),
-            'sample_count': len(points),
-            'sampling_method': sampling_method if mode == "surface_sampling" else None,
-            'has_normals': normals is not None
-        }
+        point_cloud.metadata['is_point_cloud'] = True
+        point_cloud.metadata['mode'] = mode
+        point_cloud.metadata['face_indices'] = face_indices
+        point_cloud.metadata['source_mesh_vertices'] = len(trimesh.vertices)
+        point_cloud.metadata['source_mesh_faces'] = len(trimesh.faces)
+        point_cloud.metadata['sample_count'] = len(points)
+        point_cloud.metadata['sampling_method'] = sampling_method if mode == "surface_sampling" else None
+        point_cloud.metadata['has_normals'] = normals is not None
 
         print(f"[MeshToPointCloud] Generated point cloud with {len(points):,} points")
 

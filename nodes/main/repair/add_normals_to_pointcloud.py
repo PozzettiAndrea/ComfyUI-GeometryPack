@@ -130,14 +130,8 @@ class AddNormalsToPointCloud:
                 f"Normal estimation produced wrong shape: {normals.shape} vs {vertices.shape}"
             )
 
-        # Create result point cloud
-        # Use Trimesh with 0 faces instead of PointCloud to support vertex_attributes
-        if add_as_attributes:
-            # Create as Trimesh with no faces to get vertex_attributes support
-            result = trimesh.Trimesh(vertices=vertices, faces=[])
-        else:
-            # Use PointCloud if we don't need vertex_attributes
-            result = trimesh.PointCloud(vertices=vertices)
+        # Create result as Trimesh with no faces (compatible with IPC serialization)
+        result = trimesh.Trimesh(vertices=vertices)
 
         # Store normals as trimesh property
         result.vertex_normals = normals

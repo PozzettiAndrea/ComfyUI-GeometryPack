@@ -157,7 +157,7 @@ class SubsamplePointCloudNode:
         new_vertices = vertices[indices]
 
         # Create new point cloud
-        new_cloud = trimesh.PointCloud(vertices=new_vertices)
+        new_cloud = trimesh.Trimesh(vertices=new_vertices)
 
         # Preserve vertex colors if present
         if hasattr(point_cloud, 'colors') and point_cloud.colors is not None:

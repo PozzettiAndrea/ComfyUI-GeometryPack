@@ -156,7 +156,7 @@ def load_mesh_file(file_path: str) -> Tuple[Optional[trimesh.Trimesh], str]:
         # Check if it's actually a pointcloud (mesh with no faces)
         if not hasattr(mesh, 'faces') or mesh.faces is None or len(mesh.faces) == 0:
             # Convert to PointCloud
-            pointcloud = trimesh.PointCloud(vertices=mesh.vertices)
+            pointcloud = trimesh.Trimesh(vertices=mesh.vertices)
             pointcloud.metadata['file_path'] = file_path
             pointcloud.metadata['file_name'] = os.path.basename(file_path)
             pointcloud.metadata['file_format'] = os.path.splitext(file_path)[1].lower()
