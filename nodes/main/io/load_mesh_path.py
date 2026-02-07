@@ -26,15 +26,6 @@ except ImportError:
     PIL_AVAILABLE = False
 
 
-def _get_torch():
-    """Lazy torch import to avoid importing before ComfyUI startup."""
-    try:
-        import torch
-        return torch
-    except ImportError:
-        return None
-
-
 class LoadMeshPath:
     """
     Load a mesh from a string path (OBJ, PLY, STL, OFF, etc.)
@@ -131,8 +122,7 @@ class LoadMeshPath:
 
     def _extract_texture_image(self, mesh):
         """Extract texture from mesh and convert to ComfyUI IMAGE format."""
-        torch = _get_torch()
-        if not PIL_AVAILABLE or torch is None:
+        if not PIL_AVAILABLE:
             return None
 
         texture_image = None
@@ -168,7 +158,7 @@ class LoadMeshPath:
 
         # Convert to ComfyUI IMAGE format (BHWC with values 0-1)
         img_array = np.array(texture_image.convert("RGB")).astype(np.float32) / 255.0
-        return torch.from_numpy(img_array)[None,]
+        return img_array[np.newaxis, ...]
 
     def _load_single_mesh(self, file_path):
         """Load a single mesh from file path string."""

@@ -179,11 +179,9 @@ class BackdraftViewNode:
             image = np.array(pil_image)
 
         # Convert to ComfyUI IMAGE format: (B, H, W, C) float32 0-1
-        import torch
-        img_tensor = torch.from_numpy(image.astype(np.float32) / 255.0)
-        img_tensor = img_tensor.unsqueeze(0)  # Add batch dimension
+        img_arr = (image.astype(np.float32) / 255.0)[np.newaxis, ...]
 
-        return (img_tensor,)
+        return (img_arr,)
 
     def _raytrace_trimesh(self, mesh, xs, ys, z_start, nx, ny, total_rays):
         """Batch ray casting using trimesh (embree backend) with progress display."""

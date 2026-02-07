@@ -9,38 +9,6 @@ from comfy_3d_viewers import copy_viewer
 
 setup_env()
 
-# --- Diagnostic hooks (active when COMFY_ENV_DEBUG=1) ---
-if os.environ.get("COMFY_ENV_DEBUG", "").lower() in ("1", "true", "yes"):
-    import atexit
-
-    def _exit_hook():
-        print("[geompack] atexit handler called — clean Python shutdown",
-              file=sys.stderr, flush=True)
-    atexit.register(_exit_hook)
-
-    _orig_excepthook = sys.excepthook
-    def _crash_excepthook(exc_type, exc_value, exc_tb):
-        print(f"[geompack] UNHANDLED: {exc_type.__name__}: {exc_value}",
-              file=sys.stderr, flush=True)
-        _orig_excepthook(exc_type, exc_value, exc_tb)
-    sys.excepthook = _crash_excepthook
-
-    class _ImportTracer:
-        """Log first-time imports of key modules to identify crash location."""
-        _PREFIXES = ('comfy', 'execution', 'server', 'protocol', 'nodes',
-                     'torch', 'comfyui_version', 'hook_breaker', 'comfy_aimdo',
-                     'app', 'cuda_malloc')
-
-        def find_spec(self, fullname, path=None, target=None):
-            if fullname not in sys.modules:
-                parts = fullname.split('.')
-                if parts[0] in self._PREFIXES and len(parts) <= 2:
-                    print(f"[import-trace] {fullname}",
-                          file=sys.stderr, flush=True)
-            return None
-
-    sys.meta_path.insert(0, _ImportTracer())
-
 SCRIPT_DIR = Path(__file__).resolve().parent
 COMFYUI_DIR = SCRIPT_DIR.parent.parent
 

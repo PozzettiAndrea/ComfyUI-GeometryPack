@@ -10,6 +10,15 @@ import numpy as np
 import trimesh
 
 
+def _to_numpy(x):
+    """Convert tensor or array to numpy."""
+    if isinstance(x, np.ndarray):
+        return x
+    if hasattr(x, 'cpu'):
+        return x.cpu().numpy()
+    return np.array(x)
+
+
 class DepthNormalsToMeshNode:
     """
     Depth + Normals to Mesh - Convert depth map and normal map to smooth 3D mesh.
@@ -112,11 +121,7 @@ class DepthNormalsToMeshNode:
         Returns:
             tuple: (mesh, info_string)
         """
-        try:
-            import torch
-            from PIL import Image
-        except ImportError:
-            raise RuntimeError("torch and PIL required. Install with: pip install torch Pillow")
+        from PIL import Image
 
         # Validate that at least one depth input is provided
         if depth is None and depth_image is None:
@@ -128,10 +133,9 @@ class DepthNormalsToMeshNode:
         # Extract depth map - prefer depth_image if provided
         if depth_image is not None:
             print(f"[DepthNormalsToMesh] Using depth_image input (averaging RGB channels)")
-            if isinstance(depth_image, torch.Tensor):
-                depth_img_arr = depth_image[0].cpu().numpy()
-            else:
-                depth_img_arr = np.array(depth_image)
+            depth_img_arr = _to_numpy(depth_image)
+            if depth_img_arr.ndim == 4:
+                depth_img_arr = depth_img_arr[0]
 
             # Average RGB channels to create grayscale depth
             if len(depth_img_arr.shape) == 3 and depth_img_arr.shape[2] >= 3:
@@ -142,10 +146,9 @@ class DepthNormalsToMeshNode:
                 depth_arr = depth_img_arr
         else:
             print(f"[DepthNormalsToMesh] Using depth mask input")
-            if isinstance(depth, torch.Tensor):
-                depth_arr = depth[0].cpu().numpy()
-            else:
-                depth_arr = np.array(depth)
+            depth_arr = _to_numpy(depth)
+            if depth_arr.ndim == 3:
+                depth_arr = depth_arr[0]
 
             # Ensure 2D
             if len(depth_arr.shape) > 2:
@@ -159,10 +162,9 @@ class DepthNormalsToMeshNode:
         print(f"[DepthNormalsToMesh] Depth size: {depth_arr.shape}, range: [{depth_min:.3f}, {depth_max:.3f}]")
 
         # Extract normal map from tensor (B, H, W, C)
-        if isinstance(normal_map, torch.Tensor):
-            normal_arr = normal_map[0].cpu().numpy()
-        else:
-            normal_arr = np.array(normal_map)
+        normal_arr = _to_numpy(normal_map)
+        if normal_arr.ndim == 4:
+            normal_arr = normal_arr[0]
 
         # Ensure we have at least 2 channels (R, G for Nx, Ny)
         if len(normal_arr.shape) == 2:

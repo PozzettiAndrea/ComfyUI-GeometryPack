@@ -10,6 +10,15 @@ import numpy as np
 import trimesh
 
 
+def _to_numpy(x):
+    """Convert tensor or array to numpy."""
+    if isinstance(x, np.ndarray):
+        return x
+    if hasattr(x, 'cpu'):
+        return x.cpu().numpy()
+    return np.array(x)
+
+
 class TextureToGeometryNode:
     """
     Texture to Geometry - Convert a heightmap texture to 3D mesh geometry.
@@ -106,11 +115,6 @@ class TextureToGeometryNode:
         Returns:
             tuple: (mesh, info_string)
         """
-        try:
-            import torch
-        except ImportError:
-            raise RuntimeError("torch required. Install with: pip install torch")
-
         # Validate that at least one input is provided
         if mask is None and depth_image is None:
             raise ValueError("Either 'mask' or 'depth_image' must be provided")
@@ -120,10 +124,9 @@ class TextureToGeometryNode:
         # Use depth_image if provided, otherwise use mask
         if depth_image is not None:
             print(f"[TextureToGeometry] Using depth_image input (averaging RGB channels)")
-            if isinstance(depth_image, torch.Tensor):
-                img_arr = depth_image[0].cpu().numpy()
-            else:
-                img_arr = np.array(depth_image)
+            img_arr = _to_numpy(depth_image)
+            if img_arr.ndim == 4:
+                img_arr = img_arr[0]
 
             # Average RGB channels to create grayscale
             if len(img_arr.shape) == 3 and img_arr.shape[2] >= 3:
@@ -135,10 +138,9 @@ class TextureToGeometryNode:
         else:
             print(f"[TextureToGeometry] Using mask input")
             # Extract mask from ComfyUI tensor format (B, H, W)
-            if isinstance(mask, torch.Tensor):
-                heightmap = mask[0].cpu().numpy()
-            else:
-                heightmap = np.array(mask)
+            heightmap = _to_numpy(mask)
+            if heightmap.ndim == 3:
+                heightmap = heightmap[0]
 
             # Ensure 2D array (masks are single-channel)
             if len(heightmap.shape) > 2:
@@ -244,8 +246,6 @@ Output Mesh:
                          skip_black, black_threshold, smooth_normals,
                          field=None, field_name="field"):
         """Build mesh using grid-based displacement (original algorithm)."""
-        import torch
-
         # Generate vertices
         vertices = []
         for y in range(height):
@@ -283,10 +283,11 @@ Output Mesh:
 
         # Add field as vertex attribute if provided
         if field is not None:
-            if isinstance(field, torch.Tensor):
-                field_arr = field[0].cpu().numpy()
-            else:
-                field_arr = np.array(field)
+            field_arr = _to_numpy(field)
+            if field_arr.ndim == 3:
+                field_arr = field_arr[0]
+            elif field_arr.ndim == 4:
+                field_arr = field_arr[0]
 
             # Handle different shapes
             if len(field_arr.shape) > 2:
