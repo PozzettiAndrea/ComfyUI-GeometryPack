@@ -48,15 +48,13 @@ COMFYUI_DIR = SCRIPT_DIR.parent.parent
 viewers = [
     "viewer", "vtk", "vtk_textured", "multi", "dual", "dual_slider",
     "dual_textured", "uv", "pbr", "gaussian", "bvh", "fbx_animation",
-    "compare_smpl_bvh", "cad_analysis", "cad_curve", "cad_edge",
-    "cad_edge_detail", "cad_edge_vtk", "cad_hierarchy", "cad_occ",
-    "cad_roi", "cad_spline",
+    "compare_smpl_bvh",
 ]
 for viewer in viewers:
     try:
         copy_viewer(viewer, SCRIPT_DIR / "web")
-    except Exception:
-        pass  # Skip unavailable viewers
+    except Exception as e:
+        print(e)
 
 # Copy dynamic widgets
 try:
