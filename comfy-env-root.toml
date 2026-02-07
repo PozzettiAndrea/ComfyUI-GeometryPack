@@ -7,11 +7,3 @@ OMP_NUM_THREADS = 1
 # (libgl1-mesa-glx was renamed to libgl1 in Ubuntu 22.04+)
 # libopengl0 provides libOpenGL.so.0 (required by pymeshlab)
 packages = ["libgl1-mesa-glx", "libgl1", "libopengl0", "libglu1-mesa"]
-
-# Linux-specific pypi packages
-[target.linux-64.pypi-dependencies]
-embreex = "*"
-
-# Windows-specific packages
-[target.win-64.pypi-dependencies]
-embreex = "*"

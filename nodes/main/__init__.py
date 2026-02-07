@@ -2,8 +2,8 @@
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
 """
-Main nodes - Basic dependencies (trimesh, numpy, pymeshlab, etc.)
-These nodes will always load regardless of CGAL or Blender availability.
+Main nodes - All non-Blender geometry processing nodes.
+Runs in an isolation env (pixi/conda) to avoid DLL conflicts with ComfyUI's torch.
 """
 
 from . import io
@@ -21,6 +21,15 @@ from . import remeshing
 from . import reconstruction
 from . import texture_remeshing
 
+# CGAL nodes (moved from nodes/cgal/)
+from . import boolean
+from . import reconstruction_cgal
+from . import remeshing_cgal
+from . import repair_cgal
+
+# GPU nodes (moved from nodes/gpu/)
+from . import remeshing_gpu
+
 # Collect all node class mappings
 NODE_CLASS_MAPPINGS = {}
 NODE_CLASS_MAPPINGS.update(io.NODE_CLASS_MAPPINGS)
@@ -37,6 +46,11 @@ NODE_CLASS_MAPPINGS.update(repair.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(remeshing.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(reconstruction.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(texture_remeshing.NODE_CLASS_MAPPINGS)
+NODE_CLASS_MAPPINGS.update(boolean.NODE_CLASS_MAPPINGS)
+NODE_CLASS_MAPPINGS.update(reconstruction_cgal.NODE_CLASS_MAPPINGS)
+NODE_CLASS_MAPPINGS.update(remeshing_cgal.NODE_CLASS_MAPPINGS)
+NODE_CLASS_MAPPINGS.update(repair_cgal.NODE_CLASS_MAPPINGS)
+NODE_CLASS_MAPPINGS.update(remeshing_gpu.NODE_CLASS_MAPPINGS)
 
 # Collect all display name mappings
 NODE_DISPLAY_NAME_MAPPINGS = {}
@@ -54,5 +68,10 @@ NODE_DISPLAY_NAME_MAPPINGS.update(repair.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(remeshing.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(reconstruction.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(texture_remeshing.NODE_DISPLAY_NAME_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(boolean.NODE_DISPLAY_NAME_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(reconstruction_cgal.NODE_DISPLAY_NAME_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(remeshing_cgal.NODE_DISPLAY_NAME_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(repair_cgal.NODE_DISPLAY_NAME_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(remeshing_gpu.NODE_DISPLAY_NAME_MAPPINGS)
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']

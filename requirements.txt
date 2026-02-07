@@ -1,30 +1,7 @@
-# Core
-comfy-env==0.1.63
-scipy>=1.7.0
-tqdm>=4.60.0
-requests>=2.25.0
-
-# Mesh processing
-trimesh>=4.0.0
-libigl>=2.6.1
-pymeshlab>=2025.7
-rtree
-point-cloud-utils>=0.30.0
-mesh-to-sdf>=0.0.14
-fast-simplification>=0.1.5
-pymeshfix>=0.17.0
-xatlas>=0.0.11
-skeletor>=1.2.0
-PyNanoInstantMeshes
-
-# Visualization
-matplotlib>=3.5.0
-Pillow>=9.0.0
-pyvista>=0.43.0
-
-# ComfyUI integration
+# Main process deps (prestartup + lightweight shared libs)
+comfy-env==0.1.64
 comfy-dynamic-widgets==0.1.1
 comfy-3d-viewers==0.2.2
-
-# Platform-specific
-embreex; sys_platform != "darwin"
+numpy
+trimesh>=4.0.0
+scipy>=1.7.0
