@@ -6,7 +6,6 @@ Point to Mesh Distance Node - Compute distances from points to mesh surface
 """
 
 import numpy as np
-import igl
 
 
 class PointToMeshDistanceNode:
@@ -73,6 +72,11 @@ class PointToMeshDistanceNode:
 
         # Compute distances based on selected type
         if distance_type == "signed":
+            try:
+                import igl
+            except (ImportError, OSError):
+                raise ImportError("libigl is required for signed distance. Install with: pip install libigl")
+
             # Map sign method to igl enum
             sign_type_map = {
                 "default": igl.SIGNED_DISTANCE_TYPE_DEFAULT,

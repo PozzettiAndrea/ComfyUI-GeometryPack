@@ -16,7 +16,7 @@ except (ImportError, AttributeError):
     # Fallback if folder_paths not available (e.g., during testing)
     COMFYUI_INPUT_FOLDER = None
 
-from ..._utils import mesh_ops
+from . import mesh_io
 
 try:
     from PIL import Image
@@ -194,7 +194,7 @@ class LoadMesh:
                 raise ValueError(error_msg)
 
         # Load the mesh
-        loaded_mesh, error = mesh_ops.load_mesh_file(full_path)
+        loaded_mesh, error = mesh_io.load_mesh_file(full_path)
 
         if loaded_mesh is None:
             raise ValueError(f"Failed to load mesh: {error}")

@@ -10,23 +10,8 @@ import numpy as np
 import trimesh as trimesh_module
 
 
-def _setup_bpy_dll_path():
-    """Add bpy's DLL directory to the search path (Windows only)."""
-    import sys
-    if sys.platform == "win32":
-        import os
-        import importlib.util
-        try:
-            spec = importlib.util.find_spec("bpy")
-            if spec and spec.origin:
-                os.add_dll_directory(os.path.dirname(spec.origin))
-        except Exception:
-            pass
-
-
 def _bpy_voxel_remesh(vertices, faces, voxel_size):
     """Blender voxel remesh using bpy."""
-    _setup_bpy_dll_path()
     import bpy
 
     mesh = bpy.data.meshes.new("RemeshMesh")
@@ -53,7 +38,6 @@ def _bpy_voxel_remesh(vertices, faces, voxel_size):
 
 def _bpy_quadriflow_remesh(vertices, faces, target_face_count):
     """Blender Quadriflow remesh using bpy."""
-    _setup_bpy_dll_path()
     import bpy
 
     mesh = bpy.data.meshes.new("RemeshMesh")

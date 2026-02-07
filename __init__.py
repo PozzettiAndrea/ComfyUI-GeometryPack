@@ -6,10 +6,9 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-from comfy_env import wrap_nodes
-from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+from comfy_env import register_nodes
 
-wrap_nodes()
+NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS = register_nodes()
 
 
 def _generate_widget_mappings():

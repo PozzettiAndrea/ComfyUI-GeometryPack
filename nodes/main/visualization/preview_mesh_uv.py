@@ -19,7 +19,7 @@ import uuid
 import json
 import numpy as np
 
-from ..._utils.mesh_ops import is_point_cloud, get_face_count, get_geometry_type
+from .mesh_helpers import is_point_cloud, get_face_count, get_geometry_type
 
 try:
     import folder_paths

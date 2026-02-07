@@ -15,7 +15,7 @@ except (ImportError, AttributeError):
     # Fallback if folder_paths not available (e.g., during testing)
     COMFYUI_OUTPUT_FOLDER = None
 
-from ..._utils import mesh_ops
+from . import mesh_io
 
 
 class SaveMesh:
@@ -114,7 +114,7 @@ class SaveMesh:
             print(f"[SaveMesh] Saving to: {file_path}")
 
         # Save the mesh
-        success, error = mesh_ops.save_mesh_file(trimesh, full_path)
+        success, error = mesh_io.save_mesh_file(trimesh, full_path)
 
         if not success:
             raise ValueError(f"Failed to save trimesh: {error}")

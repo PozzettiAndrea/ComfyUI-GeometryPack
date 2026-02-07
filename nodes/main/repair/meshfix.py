@@ -10,7 +10,6 @@ with light touch-ups.
 
 import numpy as np
 import trimesh
-import pymeshfix
 
 
 class MeshFixNode:
@@ -133,6 +132,11 @@ class MeshFixNode:
         # Convert to numpy arrays
         v = np.asarray(input_mesh.vertices, dtype=np.float64)
         f = np.asarray(input_mesh.faces, dtype=np.int32)
+
+        try:
+            import pymeshfix
+        except (ImportError, OSError):
+            raise ImportError("pymeshfix is required. Install with: pip install pymeshfix")
 
         # Create PyTMesh instance
         tin = pymeshfix.PyTMesh()

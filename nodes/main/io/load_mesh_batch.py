@@ -20,7 +20,7 @@ except (ImportError, AttributeError):
     COMFYUI_OUTPUT_FOLDER = None
     COMFYUI_ROOT = None
 
-from ..._utils import mesh_ops
+from . import mesh_io
 
 
 class LoadMeshBatch:
@@ -147,7 +147,7 @@ class LoadMeshBatch:
         for i, filename in enumerate(mesh_files):
             file_path = os.path.join(full_folder_path, filename)
             try:
-                loaded_mesh, error = mesh_ops.load_mesh_file(file_path)
+                loaded_mesh, error = mesh_io.load_mesh_file(file_path)
                 if loaded_mesh is None:
                     print(f"[LoadMeshBatch] Warning: Failed to load {filename}: {error}")
                     continue

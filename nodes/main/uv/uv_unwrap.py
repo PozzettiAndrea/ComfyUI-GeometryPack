@@ -51,8 +51,6 @@ def _extract_uvs_from_blender_mesh(mesh, vertices_np):
 
 def _bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_bounds):
     """Blender Smart UV Project using bpy."""
-    from ..._utils import setup_bpy_dll_path
-    setup_bpy_dll_path()
     import bpy
     import bmesh
 
@@ -92,8 +90,6 @@ def _bpy_smart_uv_project(vertices, faces, angle_limit, island_margin, scale_to_
 
 def _bpy_cube_uv_project(vertices, faces, cube_size, scale_to_bounds):
     """Blender Cube UV Project using bpy."""
-    from ..._utils import setup_bpy_dll_path
-    setup_bpy_dll_path()
     import bpy
     import bmesh
 
@@ -127,8 +123,6 @@ def _bpy_cube_uv_project(vertices, faces, cube_size, scale_to_bounds):
 
 def _bpy_cylinder_uv_project(vertices, faces, radius, scale_to_bounds):
     """Blender Cylinder UV Project using bpy."""
-    from ..._utils import setup_bpy_dll_path
-    setup_bpy_dll_path()
     import bpy
     import bmesh
 
@@ -162,8 +156,6 @@ def _bpy_cylinder_uv_project(vertices, faces, radius, scale_to_bounds):
 
 def _bpy_sphere_uv_project(vertices, faces, scale_to_bounds):
     """Blender Sphere UV Project using bpy."""
-    from ..._utils import setup_bpy_dll_path
-    setup_bpy_dll_path()
     import bpy
     import bmesh
 

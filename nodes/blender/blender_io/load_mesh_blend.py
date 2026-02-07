@@ -20,8 +20,6 @@ except (ImportError, AttributeError):
 
 def _bpy_import_blend(blend_path):
     """Import .blend file and extract mesh data using bpy."""
-    from _utils import setup_bpy_dll_path
-    setup_bpy_dll_path()
     import bpy
 
     bpy.ops.wm.open_mainfile(filepath=blend_path)

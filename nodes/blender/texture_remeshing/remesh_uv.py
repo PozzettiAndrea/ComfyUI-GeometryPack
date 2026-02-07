@@ -11,6 +11,69 @@ import os
 import subprocess
 import tempfile
 
+
+def _transfer_texture_via_closest_point(original_mesh, remeshed_mesh):
+    """Transfer texture from original mesh to remeshed mesh using closest-point projection."""
+    print(f"[transfer_texture] Starting texture transfer via closest-point projection")
+    print(f"[transfer_texture] Original: {len(original_mesh.vertices)} verts, {len(original_mesh.faces)} faces")
+    print(f"[transfer_texture] Remeshed: {len(remeshed_mesh.vertices)} verts, {len(remeshed_mesh.faces)} faces")
+
+    if not hasattr(original_mesh, 'visual') or original_mesh.visual is None:
+        raise ValueError("Original mesh has no visual data")
+    if not hasattr(original_mesh.visual, 'uv') or original_mesh.visual.uv is None:
+        raise ValueError("Original mesh has no UV coordinates")
+    if not hasattr(original_mesh.visual, 'material') or original_mesh.visual.material is None:
+        raise ValueError("Original mesh has no material")
+
+    texture_image = None
+    if hasattr(original_mesh.visual.material, 'baseColorTexture'):
+        texture_image = original_mesh.visual.material.baseColorTexture
+    elif hasattr(original_mesh.visual.material, 'image'):
+        texture_image = original_mesh.visual.material.image
+
+    if texture_image is None:
+        raise ValueError("Original mesh material has no texture image")
+
+    print(f"[transfer_texture] Original texture size: {texture_image.size}")
+
+    texture_array = np.array(texture_image)
+    tex_height, tex_width = texture_array.shape[:2]
+    original_uvs = original_mesh.visual.uv
+
+    print(f"[transfer_texture] Finding closest points...")
+    closest_points, distances, triangle_ids = original_mesh.nearest.on_surface(remeshed_mesh.vertices)
+    print(f"[transfer_texture] Closest points found, max distance: {distances.max():.6f}")
+
+    print(f"[transfer_texture] Computing barycentric coordinates...")
+    triangles = original_mesh.vertices[original_mesh.faces[triangle_ids]]
+    bary_coords = trimesh_module.triangles.points_to_barycentric(triangles, closest_points)
+
+    print(f"[transfer_texture] Interpolating UV coordinates...")
+    triangle_uvs = original_uvs[original_mesh.faces[triangle_ids]]
+    interpolated_uvs = np.einsum('ij,ijk->ik', bary_coords, triangle_uvs)
+    interpolated_uvs = np.clip(interpolated_uvs, 0.0, 1.0)
+
+    print(f"[transfer_texture] Sampling texture...")
+    pixel_x = (interpolated_uvs[:, 0] * (tex_width - 1)).astype(int)
+    pixel_y = ((1.0 - interpolated_uvs[:, 1]) * (tex_height - 1)).astype(int)
+    pixel_x = np.clip(pixel_x, 0, tex_width - 1)
+    pixel_y = np.clip(pixel_y, 0, tex_height - 1)
+
+    vertex_colors = texture_array[pixel_y, pixel_x]
+
+    if vertex_colors.shape[1] == 3:
+        alpha = np.full((len(vertex_colors), 1), 255, dtype=vertex_colors.dtype)
+        vertex_colors = np.hstack([vertex_colors, alpha])
+
+    non_black = np.sum((vertex_colors[:, 0] > 10) | (vertex_colors[:, 1] > 10) | (vertex_colors[:, 2] > 10))
+    print(f"[transfer_texture] Non-black vertices: {non_black}/{len(vertex_colors)} ({100*non_black/len(vertex_colors):.1f}%)")
+
+    result_mesh = remeshed_mesh.copy()
+    result_mesh.visual.vertex_colors = vertex_colors
+
+    print(f"[transfer_texture] Texture transfer complete")
+    return result_mesh
+
 try:
     from PIL import Image
     PIL_AVAILABLE = True
@@ -165,9 +228,6 @@ class RemeshWithTexture:
         if _get_torch() is None:
             raise RuntimeError("torch required. Install: pip install torch")
 
-        from ..._utils import blender_bridge
-        from ..._utils import mesh_ops
-
         print(f"[BlenderRemeshWithTexture] Input: {len(trimesh.vertices)} vertices, {len(trimesh.faces)} faces")
         print(f"[BlenderRemeshWithTexture] Using Python texture transfer (no Blender baking)")
 
@@ -192,7 +252,10 @@ class RemeshWithTexture:
             print(f"[BlenderRemeshWithTexture] PIL not available, using default texture size: {actual_texture_size}x{actual_texture_size}")
 
         # Find Blender
-        blender_path = blender_bridge.find_blender()
+        import shutil
+        blender_path = shutil.which("blender")
+        if blender_path is None:
+            raise RuntimeError("Blender not found on PATH. Install Blender or add it to PATH.")
 
         # Create temp files (use GLB for both source and output to preserve materials)
         source_glb = tempfile.NamedTemporaryFile(suffix='_source.glb', delete=False)
@@ -428,7 +491,7 @@ print(f"[Blender] Export complete")
 
             # PYTHON TEXTURE TRANSFER: Use closest-point projection instead of Blender baking
             print(f"[BlenderRemeshWithTexture] Applying Python texture transfer...")
-            remeshed_with_colors = mesh_ops.transfer_texture_via_closest_point(trimesh, remeshed)
+            remeshed_with_colors = _transfer_texture_via_closest_point(trimesh, remeshed)
 
             # Create visualization texture from vertex colors for IMAGE output
             # Simple approach: render a small texture showing the vertex color distribution

@@ -12,8 +12,6 @@ import trimesh as trimesh_module
 
 def _bpy_boolean_operation(vertices_a, faces_a, vertices_b, faces_b, operation):
     """Blender boolean operation with EXACT solver using bpy."""
-    from .._utils import setup_bpy_dll_path
-    setup_bpy_dll_path()
     import bpy
 
     # Create mesh A

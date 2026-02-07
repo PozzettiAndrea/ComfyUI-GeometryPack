@@ -9,7 +9,7 @@ import os
 import glob as glob_module
 import numpy as np
 
-from ..._utils import mesh_ops
+from . import mesh_io
 
 try:
     from PIL import Image
@@ -147,7 +147,7 @@ class LoadMeshGlob:
         for path in matched_files:
             try:
                 print(f"[LoadMeshGlob] Loading: {path}")
-                mesh, error = mesh_ops.load_mesh_file(path)
+                mesh, error = mesh_io.load_mesh_file(path)
 
                 if mesh is None:
                     print(f"[LoadMeshGlob] Failed to load {path}: {error}")

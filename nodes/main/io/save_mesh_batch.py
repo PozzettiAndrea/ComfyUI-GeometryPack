@@ -16,7 +16,7 @@ except (ImportError, AttributeError):
     # Fallback if folder_paths not available (e.g., during testing)
     COMFYUI_OUTPUT_FOLDER = None
 
-from ..._utils import mesh_ops
+from . import mesh_io
 
 
 class SaveMeshBatch:
@@ -148,7 +148,7 @@ class SaveMeshBatch:
                     continue
 
                 # Save the mesh
-                success, error = mesh_ops.save_mesh_file(mesh, file_path)
+                success, error = mesh_io.save_mesh_file(mesh, file_path)
 
                 if success:
                     saved_count += 1

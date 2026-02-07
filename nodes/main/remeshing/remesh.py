@@ -7,8 +7,115 @@ Remesh Node - Main backends (pymeshlab, instant_meshes)
 
 import numpy as np
 import trimesh as trimesh_module
+from typing import Tuple, Optional
 
-from ..._utils import mesh_ops
+
+def _pymeshlab_isotropic_remesh(
+    mesh: trimesh_module.Trimesh,
+    target_edge_length: float,
+    iterations: int = 3,
+    adaptive: bool = False,
+    feature_angle: float = 30.0
+) -> Tuple[Optional[trimesh_module.Trimesh], str]:
+    """Apply isotropic remeshing using PyMeshLab."""
+    print(f"[pymeshlab_isotropic_remesh] ===== Starting Isotropic Remeshing =====")
+    print(f"[pymeshlab_isotropic_remesh] Input mesh: {len(mesh.vertices)} vertices, {len(mesh.faces)} faces")
+    print(f"[pymeshlab_isotropic_remesh] Parameters:")
+    print(f"[pymeshlab_isotropic_remesh]   target_edge_length: {target_edge_length}")
+    print(f"[pymeshlab_isotropic_remesh]   iterations: {iterations}")
+    print(f"[pymeshlab_isotropic_remesh]   adaptive: {adaptive}")
+    print(f"[pymeshlab_isotropic_remesh]   feature_angle: {feature_angle}")
+
+    try:
+        import pymeshlab
+    except (ImportError, OSError):
+        return None, "pymeshlab is not installed. Install with: pip install pymeshlab"
+
+    if not isinstance(mesh, trimesh_module.Trimesh):
+        return None, "Input must be a trimesh.Trimesh object"
+
+    if len(mesh.vertices) == 0 or len(mesh.faces) == 0:
+        return None, "Mesh is empty"
+
+    if target_edge_length <= 0:
+        return None, f"Target edge length must be positive, got {target_edge_length}"
+
+    if iterations < 1:
+        return None, f"Iterations must be at least 1, got {iterations}"
+
+    try:
+        print(f"[pymeshlab_isotropic_remesh] Converting to PyMeshLab format...")
+        ms = pymeshlab.MeshSet()
+
+        pml_mesh = pymeshlab.Mesh(
+            vertex_matrix=mesh.vertices,
+            face_matrix=mesh.faces
+        )
+        ms.add_mesh(pml_mesh)
+
+        print(f"[pymeshlab_isotropic_remesh] Applying isotropic remeshing...")
+        bbox_diag = np.linalg.norm(mesh.bounds[1] - mesh.bounds[0])
+        target_pct = (target_edge_length / bbox_diag) * 100.0
+
+        try:
+            ms.meshing_isotropic_explicit_remeshing(
+                targetlen=pymeshlab.PercentageValue(target_pct),
+                iterations=iterations,
+                adaptive=adaptive,
+                featuredeg=feature_angle
+            )
+        except AttributeError:
+            try:
+                ms.remeshing_isotropic_explicit_remeshing(
+                    targetlen=pymeshlab.PercentageValue(target_pct),
+                    iterations=iterations,
+                    adaptive=adaptive,
+                    featuredeg=feature_angle
+                )
+            except AttributeError:
+                return None, (
+                    "PyMeshLab meshing filter not available. "
+                    "This usually means the libfilter_meshing.so plugin failed to load. "
+                    "On Linux, install OpenGL libraries: sudo apt-get install libgl1-mesa-glx libglu1-mesa"
+                )
+
+        print(f"[pymeshlab_isotropic_remesh] Converting back to trimesh...")
+        remeshed_pml = ms.current_mesh()
+        remeshed_mesh = trimesh_module.Trimesh(
+            vertices=remeshed_pml.vertex_matrix(),
+            faces=remeshed_pml.face_matrix()
+        )
+
+        remeshed_mesh.metadata = mesh.metadata.copy()
+        remeshed_mesh.metadata['remeshing'] = {
+            'algorithm': 'pymeshlab_isotropic',
+            'target_edge_length': target_edge_length,
+            'target_percentage': target_pct,
+            'iterations': iterations,
+            'adaptive': adaptive,
+            'feature_angle': feature_angle,
+            'original_vertices': len(mesh.vertices),
+            'original_faces': len(mesh.faces),
+            'remeshed_vertices': len(remeshed_mesh.vertices),
+            'remeshed_faces': len(remeshed_mesh.faces)
+        }
+
+        vertex_change = len(remeshed_mesh.vertices) - len(mesh.vertices)
+        face_change = len(remeshed_mesh.faces) - len(mesh.faces)
+        vertex_pct = (vertex_change / len(mesh.vertices)) * 100 if len(mesh.vertices) > 0 else 0
+        face_pct = (face_change / len(mesh.faces)) * 100 if len(mesh.faces) > 0 else 0
+
+        print(f"[pymeshlab_isotropic_remesh] ===== Remeshing Complete =====")
+        print(f"[pymeshlab_isotropic_remesh] Results:")
+        print(f"[pymeshlab_isotropic_remesh]   Vertices: {len(mesh.vertices)} -> {len(remeshed_mesh.vertices)} ({vertex_change:+d}, {vertex_pct:+.1f}%)")
+        print(f"[pymeshlab_isotropic_remesh]   Faces:    {len(mesh.faces)} -> {len(remeshed_mesh.faces)} ({face_change:+d}, {face_pct:+.1f}%)")
+
+        return remeshed_mesh, ""
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return None, f"Error during remeshing: {str(e)}"
 
 
 class RemeshNode:
@@ -138,7 +245,7 @@ class RemeshNode:
     def _pymeshlab_isotropic(self, trimesh, target_edge_length, iterations, feature_angle, adaptive):
         """PyMeshLab isotropic remeshing."""
         adaptive_bool = (adaptive == "true")
-        remeshed_mesh, error = mesh_ops.pymeshlab_isotropic_remesh(
+        remeshed_mesh, error = _pymeshlab_isotropic_remesh(
             trimesh, target_edge_length, iterations,
             adaptive=adaptive_bool, feature_angle=feature_angle
         )
@@ -149,7 +256,7 @@ class RemeshNode:
 
 Target Edge Length: {target_edge_length}
 Iterations: {iterations}
-Feature Angle: {feature_angle}°
+Feature Angle: {feature_angle}\u00b0
 Adaptive: {adaptive}
 
 Before:

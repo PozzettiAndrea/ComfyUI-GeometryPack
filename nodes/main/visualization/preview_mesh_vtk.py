@@ -16,7 +16,7 @@ import os
 import tempfile
 import uuid
 
-from ..._utils.mesh_ops import is_point_cloud, get_face_count, get_geometry_type
+from .mesh_helpers import is_point_cloud, get_face_count, get_geometry_type
 from ._vtp_export import export_mesh_with_scalars_vtp
 
 try:

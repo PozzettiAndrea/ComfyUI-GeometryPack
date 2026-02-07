@@ -5,7 +5,53 @@
 Create Primitive Node - Create basic geometric shapes
 """
 
-from ..._utils import mesh_ops
+import numpy as np
+import trimesh
+
+
+def _create_cube(size: float = 1.0) -> trimesh.Trimesh:
+    mesh = trimesh.creation.box(extents=[size, size, size])
+    mesh.metadata['primitive_type'] = 'cube'
+    mesh.metadata['size'] = size
+    return mesh
+
+
+def _create_sphere(radius: float = 1.0, subdivisions: int = 2) -> trimesh.Trimesh:
+    mesh = trimesh.creation.icosphere(subdivisions=subdivisions, radius=radius)
+    mesh.metadata['primitive_type'] = 'sphere'
+    mesh.metadata['radius'] = radius
+    mesh.metadata['subdivisions'] = subdivisions
+    return mesh
+
+
+def _create_plane(size: float = 1.0, subdivisions: int = 1) -> trimesh.Trimesh:
+    n = subdivisions + 1
+    s = size / 2.0
+
+    x = np.linspace(-s, s, n)
+    y = np.linspace(-s, s, n)
+    xx, yy = np.meshgrid(x, y)
+
+    vertices = np.stack([
+        xx.flatten(),
+        yy.flatten(),
+        np.zeros(n * n)
+    ], axis=1).astype(np.float64)
+
+    faces = []
+    for i in range(n - 1):
+        for j in range(n - 1):
+            idx = i * n + j
+            faces.append([idx, idx + n, idx + n + 1])
+            faces.append([idx, idx + n + 1, idx + 1])
+
+    faces = np.array(faces, dtype=np.int32)
+
+    mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
+    mesh.metadata['primitive_type'] = 'plane'
+    mesh.metadata['size'] = size
+    mesh.metadata['subdivisions'] = subdivisions
+    return mesh
 
 
 class CreatePrimitive:
@@ -56,11 +102,11 @@ class CreatePrimitive:
             tuple: (trimesh.Trimesh,)
         """
         if shape == "cube":
-            mesh = mesh_ops.create_cube(size)
+            mesh = _create_cube(size)
         elif shape == "sphere":
-            mesh = mesh_ops.create_sphere(radius=size/2.0, subdivisions=subdivisions)
+            mesh = _create_sphere(radius=size/2.0, subdivisions=subdivisions)
         elif shape == "plane":
-            mesh = mesh_ops.create_plane(size=size, subdivisions=subdivisions)
+            mesh = _create_plane(size=size, subdivisions=subdivisions)
         else:
             raise ValueError(f"Unknown shape: {shape}")
 

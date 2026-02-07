@@ -14,7 +14,7 @@ import numpy as np
 import trimesh as trimesh_module
 import xml.etree.ElementTree as ET
 
-from ..._utils.mesh_ops import is_point_cloud, get_face_count
+from .mesh_helpers import is_point_cloud, get_face_count
 
 
 def export_mesh_with_scalars_vtp(trimesh: trimesh_module.Trimesh, filepath: str):
