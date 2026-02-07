@@ -46,9 +46,11 @@ COMFYUI_DIR = SCRIPT_DIR.parent.parent
 
 # Copy viewers (GeometryPack uses many viewer types)
 viewers = [
-    "viewer", "vtk", "vtk_textured", "multi", "dual", "dual_slider",
-    "dual_textured", "uv", "pbr", "gaussian", "bvh", "fbx_animation",
-    "compare_smpl_bvh",
+    "viewer", "vtk", "vtk_textured", "pointcloud_vtk",
+    "multi", "dual", "dual_slider", "dual_textured",
+    "uv", "pbr", "gaussian",
+    "fbx", "fbx_debug", "fbx_compare",
+    "bvh", "fbx_animation", "compare_smpl_bvh"
 ]
 for viewer in viewers:
     try:

@@ -41,7 +41,7 @@ def _transfer_texture_via_closest_point(original_mesh, remeshed_mesh):
     original_uvs = original_mesh.visual.uv
 
     print(f"[transfer_texture] Finding closest points...")
-    closest_points, distances, triangle_ids = original_mesh.nearest.on_surface(remeshed_mesh.vertices)
+    closest_points, distances, triangle_ids = trimesh_module.proximity.closest_point(original_mesh, remeshed_mesh.vertices)
     print(f"[transfer_texture] Closest points found, max distance: {distances.max():.6f}")
 
     print(f"[transfer_texture] Computing barycentric coordinates...")

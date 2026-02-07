@@ -99,8 +99,9 @@ class PointToMeshDistanceNode:
             )
         else:
             # Use trimesh's proximity query to find closest points and distances (unsigned)
-            print(f"[PointToMeshDistance] Using trimesh.nearest.on_surface (unsigned)")
-            closest_points, distances, triangle_ids = target_mesh.nearest.on_surface(points)
+            import trimesh
+            print(f"[PointToMeshDistance] Using trimesh.proximity.closest_point (unsigned)")
+            closest_points, distances, triangle_ids = trimesh.proximity.closest_point(target_mesh, points)
 
         # Create a copy of the input to add distance field
         result = pointcloud.copy()
