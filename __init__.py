@@ -2,11 +2,14 @@
 """ComfyUI GeometryPack - Geometry Processing Custom Nodes."""
 
 import os
+import sys
 import shutil
 from pathlib import Path
 from datetime import datetime
 
+print("[geompack] loading...", file=sys.stderr, flush=True)
 from comfy_env import register_nodes
+print("[geompack] calling register_nodes", file=sys.stderr, flush=True)
 
 NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS = register_nodes()
 
