@@ -360,7 +360,7 @@ Instant Meshes creates flow-aligned quad meshes.
     def _quadriflow(self, trimesh, target_face_count, preserve_sharp, preserve_boundary):
         """QuadriFlow quad remeshing using pyQuadriFlow."""
         try:
-            from pyquadriflow import pyquadriflow
+            from pyQuadriFlow.pyQuadriFlow import pyquadriflow
         except ImportError:
             raise ImportError(
                 "pyQuadriFlow not installed. Install with: pip install pyQuadriFlow"
@@ -370,7 +370,7 @@ Instant Meshes creates flow-aligned quad meshes.
         F = np.asarray(trimesh.faces, dtype=np.int32).tolist()
 
         print(f"[Remesh] Running QuadriFlow (target_faces={target_face_count})...")
-        V_out, F_out = pyquadriflow(
+        result = pyquadriflow(
             target_face_count,
             0,  # seed
             V,
@@ -381,6 +381,8 @@ Instant Meshes creates flow-aligned quad meshes.
             False,  # aggressive_sat
             False,  # minimum_cost_flow
         )
+        V_out = result['vertices']
+        F_out = result['faces']
 
         remeshed_mesh = trimesh_module.Trimesh(
             vertices=np.array(V_out, dtype=np.float32),
