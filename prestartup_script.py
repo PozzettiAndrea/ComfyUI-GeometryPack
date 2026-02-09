@@ -18,7 +18,8 @@ viewers = [
     "multi", "dual", "dual_slider", "dual_textured",
     "uv", "pbr", "gaussian",
     "fbx", "fbx_debug", "fbx_compare",
-    "bvh", "fbx_animation", "compare_smpl_bvh"
+    "bvh", "fbx_animation", "compare_smpl_bvh",
+    "text_report",
 ]
 for viewer in viewers:
     try:
