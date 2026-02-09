@@ -20,33 +20,7 @@ https://github.com/user-attachments/assets/7718a5d7-cd5b-47d3-874c-29ada4320694
 
 ## Installation
 
-```bash
-cd ComfyUI/custom_nodes/
-git clone https://github.com/PozzettiAndrea/ComfyUI-GeometryPack.git
-cd ComfyUI-GeometryPack
-pip install -r requirements.txt
-```
-
-**Automatic Blender Installation (Recommended):**
-```bash
-python install.py
-```
-
-This will automatically download and install a portable version of Blender for UV unwrapping and remeshing nodes. No admin rights required!
-
-Restart ComfyUI. Nodes appear in the `geompack/` category.
-
-**Optional Dependencies:**
-- **Blender**: Auto-installed via `install.py`, or install manually from [blender.org](https://www.blender.org/download/)
-- **CGAL**: Build tools for CGAL remeshing (see `cgal_tools/README.md`)
-
-## Quick Start
-
-**Basic workflow:**
-```
-Create Primitive → Mesh Info → Preview Mesh (3D)
-Load Mesh → PyMeshLab Remesh → Save Mesh
-```
+Please always install from ComfyUI Manager.
 
 ## Community
 
