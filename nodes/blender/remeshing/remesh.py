@@ -3,7 +3,7 @@
 
 """
 Remesh Blender Node - Blender remeshing backends using bpy.
-Supports: voxel, quadriflow, smooth, sharp, blocks.
+Supports: voxel, smooth, sharp, blocks.
 Requires bpy (Blender Python module).
 """
 
@@ -38,7 +38,7 @@ def _bpy_extract_and_cleanup(obj):
     mesh = obj.data
     result_vertices = [list(v.co) for v in mesh.vertices]
 
-    # Triangulate polygons with >3 verts (Quadriflow produces quads)
+    # Triangulate polygons with >3 verts (safety for any backend producing quads)
     result_faces = []
     for p in mesh.polygons:
         verts = list(p.vertices)
@@ -71,78 +71,6 @@ def _bpy_voxel_remesh(vertices, faces, voxel_size):
     return _bpy_extract_and_cleanup(obj)
 
 
-def _bpy_quadriflow_remesh(vertices, faces, target_face_count):
-    """Blender Quadriflow remesh using bpy with context override for headless."""
-    import bpy
-    import traceback
-
-    obj, mesh = _bpy_setup_object(vertices, faces)
-
-    # Quadriflow operator needs proper context — use temp_override for headless
-    window = bpy.context.window
-    screen = window.screen
-    area = next((a for a in screen.areas if a.type == 'VIEW_3D'), None)
-
-    print(f"[Remesh Blender] Quadriflow debug: areas={[a.type for a in screen.areas]}")
-
-    if area is None:
-        # Headless: no VIEW_3D area exists, override the first area
-        area = screen.areas[0]
-        original_type = area.type
-        area.type = 'VIEW_3D'
-        print(f"[Remesh Blender] Quadriflow debug: changed area from {original_type} to VIEW_3D")
-    else:
-        original_type = None
-
-    region = next((r for r in area.regions if r.type == 'WINDOW'), area.regions[0])
-    print(f"[Remesh Blender] Quadriflow debug: area.type={area.type}, region.type={region.type}")
-
-    # Check poll before calling
-    try:
-        with bpy.context.temp_override(window=window, area=area, region=region):
-            poll_ok = bpy.ops.object.quadriflow_remesh.poll()
-            print(f"[Remesh Blender] Quadriflow debug: poll={poll_ok}")
-            print(f"[Remesh Blender] Quadriflow debug: active_object={bpy.context.active_object}")
-            print(f"[Remesh Blender] Quadriflow debug: selected_objects={bpy.context.selected_objects}")
-    except Exception as e:
-        print(f"[Remesh Blender] Quadriflow debug: poll check failed: {e}")
-
-    # Clean mesh before quadriflow (fixes CANCELLED on non-manifold/degenerate meshes)
-    bpy.ops.object.mode_set(mode='EDIT')
-    bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.mesh.delete_loose()
-    bpy.ops.mesh.dissolve_degenerate()
-    bpy.ops.mesh.normals_make_consistent(inside=False)
-    bpy.ops.object.mode_set(mode='OBJECT')
-    print(f"[Remesh Blender] Quadriflow debug: mesh cleaned")
-
-    result = {'CANCELLED'}
-    try:
-        with bpy.context.temp_override(window=window, area=area, region=region):
-            result = bpy.ops.object.quadriflow_remesh(
-                'EXEC_DEFAULT',
-                use_mesh_symmetry=False,
-                use_preserve_sharp=False,
-                use_preserve_boundary=True,
-                smooth_normals=False,
-                mode='FACES',
-                target_faces=target_face_count,
-                seed=0
-            )
-        print(f"[Remesh Blender] Quadriflow result: {result}")
-    except Exception as e:
-        print(f"[Remesh Blender] Quadriflow EXCEPTION: {e}")
-        traceback.print_exc()
-    finally:
-        if original_type is not None:
-            area.type = original_type
-
-    if result != {'FINISHED'}:
-        print(f"[Remesh Blender] Quadriflow FAILED with result={result}")
-
-    return _bpy_extract_and_cleanup(obj)
-
-
 def _bpy_remesh_modifier(vertices, faces, mode, octree_depth=6, scale=0.9, sharpness=1.0):
     """Blender Remesh Modifier (Smooth/Sharp/Blocks) using bpy."""
     import bpy
@@ -167,7 +95,6 @@ class RemeshBlenderNode:
 
     Available backends:
     - blender_voxel: Voxel-based remeshing (watertight output)
-    - blender_quadriflow: Quadriflow quad remeshing
     - blender_smooth: Smooth remesh modifier
     - blender_sharp: Sharp remesh modifier (preserves edges)
     - blender_blocks: Blocky remesh modifier
@@ -182,13 +109,12 @@ class RemeshBlenderNode:
                 "trimesh": ("TRIMESH",),
                 "backend": ([
                     "blender_voxel",
-                    "blender_quadriflow",
                     "blender_smooth",
                     "blender_sharp",
                     "blender_blocks",
                 ], {
                     "default": "blender_voxel",
-                    "tooltip": "Remeshing algorithm. voxel=watertight, quadriflow=quad remesh, smooth/sharp/blocks=modifier-based"
+                    "tooltip": "Remeshing algorithm. voxel=watertight, smooth/sharp/blocks=modifier-based"
                 }),
             },
             "optional": {
@@ -201,15 +127,6 @@ class RemeshBlenderNode:
                     "display": "number",
                     "tooltip": "Voxel size for Blender voxel remesh. Smaller = more detail, more faces. Output is always watertight.",
                     "visible_when": {"backend": ["blender_voxel"]},
-                }),
-                # Quadriflow
-                "target_face_count": ("INT", {
-                    "default": 500000,
-                    "min": 1000,
-                    "max": 5000000,
-                    "step": 1000,
-                    "tooltip": "Target number of output faces for quadriflow backend.",
-                    "visible_when": {"backend": ["blender_quadriflow"]},
                 }),
                 # Modifier-based (Smooth/Sharp/Blocks)
                 "octree_depth": ("INT", {
@@ -247,12 +164,11 @@ class RemeshBlenderNode:
     CATEGORY = "geompack/remeshing"
     OUTPUT_NODE = True
 
-    def remesh(self, trimesh, backend, voxel_size=1.0, target_face_count=500000,
+    def remesh(self, trimesh, backend, voxel_size=1.0,
                octree_depth=6, scale=0.9, sharpness=1.0):
         """Apply Blender-based remeshing."""
         # Sanitize hidden widget values (ComfyUI sends '' for hidden visible_when widgets)
         voxel_size = float(voxel_size) if voxel_size not in (None, '') else 1.0
-        target_face_count = int(target_face_count) if target_face_count not in (None, '') else 500000
         octree_depth = int(octree_depth) if octree_depth not in (None, '') else 6
         scale = float(scale) if scale not in (None, '') else 0.9
         sharpness = float(sharpness) if sharpness not in (None, '') else 1.0
@@ -267,9 +183,6 @@ class RemeshBlenderNode:
         if backend == "blender_voxel":
             print(f"[Remesh Blender] Parameters: voxel_size={voxel_size}")
             remeshed_mesh, info = self._blender_voxel(trimesh, voxel_size)
-        elif backend == "blender_quadriflow":
-            print(f"[Remesh Blender] Parameters: target_face_count={target_face_count:,}")
-            remeshed_mesh, info = self._blender_quadriflow(trimesh, target_face_count)
         elif backend in ("blender_smooth", "blender_sharp", "blender_blocks"):
             mode = backend.replace("blender_", "").upper()
             print(f"[Remesh Blender] Parameters: mode={mode}, octree_depth={octree_depth}, scale={scale}"
@@ -323,54 +236,6 @@ Before:
 After:
   Vertices: {len(remeshed_mesh.vertices):,}
   Faces: {len(remeshed_mesh.faces):,}
-"""
-        return remeshed_mesh, info
-
-    def _blender_quadriflow(self, trimesh, target_face_count):
-        """Blender Quadriflow remeshing using bpy."""
-        print(f"[Remesh Blender] Running Blender Quadriflow (target_faces={target_face_count})...")
-        result = _bpy_quadriflow_remesh(
-            vertices=np.asarray(trimesh.vertices, dtype=np.float32),
-            faces=np.asarray(trimesh.faces, dtype=np.int32),
-            target_face_count=target_face_count
-        )
-
-        remeshed_mesh = trimesh_module.Trimesh(
-            vertices=np.array(result['vertices'], dtype=np.float32),
-            faces=np.array(result['faces'], dtype=np.int32),
-            process=False
-        )
-
-        remeshed_mesh.metadata = trimesh.metadata.copy()
-        remeshed_mesh.metadata['remeshing'] = {
-            'algorithm': 'blender_quadriflow',
-            'target_face_count': target_face_count,
-            'original_vertices': len(trimesh.vertices),
-            'original_faces': len(trimesh.faces)
-        }
-
-        changed = (len(remeshed_mesh.vertices) != len(trimesh.vertices) or
-                   len(remeshed_mesh.faces) != len(trimesh.faces))
-        if changed:
-            status = ""
-        else:
-            status = ("\nWARNING: Mesh unchanged — Quadriflow operator likely failed (CANCELLED).\n"
-                      "This is a known issue with bpy headless. Check server logs for debug info.\n")
-
-        info = f"""Remesh Results (Blender Quadriflow):
-
-Target Face Count: {target_face_count:,}
-Method: bpy
-
-Before:
-  Vertices: {len(trimesh.vertices):,}
-  Faces: {len(trimesh.faces):,}
-
-After:
-  Vertices: {len(remeshed_mesh.vertices):,}
-  Faces: {len(remeshed_mesh.faces):,}
-{status}
-Quadriflow creates quad-dominant meshes with good topology.
 """
         return remeshed_mesh, info
 

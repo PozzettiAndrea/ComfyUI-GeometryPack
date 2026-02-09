@@ -2,7 +2,7 @@
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
 """
-Remesh Node - Main backends (pymeshlab, instant_meshes)
+Remesh Node - Main backends (pymeshlab, instant_meshes, quadriflow)
 """
 
 import numpy as np
@@ -125,9 +125,10 @@ class RemeshNode:
     Available backends:
     - pymeshlab_isotropic: PyMeshLab isotropic remeshing (fast)
     - instant_meshes: Field-aligned quad remeshing
+    - quadriflow: QuadriFlow quad remeshing (good topology)
 
     For CGAL isotropic remeshing, use "Remesh CGAL" node.
-    For Blender voxel/quadriflow remeshing, use "Remesh Blender" node.
+    For Blender voxel/modifier remeshing, use "Remesh Blender" node.
     For GPU-accelerated remeshing, use "Remesh GPU" node.
     """
 
@@ -139,9 +140,10 @@ class RemeshNode:
                 "backend": ([
                     "pymeshlab_isotropic",
                     "instant_meshes",
+                    "quadriflow",
                 ], {
                     "default": "pymeshlab_isotropic",
-                    "tooltip": "Remeshing algorithm. pymeshlab=fast isotropic, instant_meshes=field-aligned quads"
+                    "tooltip": "Remeshing algorithm. pymeshlab=fast isotropic, instant_meshes=field-aligned quads, quadriflow=quad remesh with good topology"
                 }),
             },
             "optional": {
@@ -199,6 +201,25 @@ class RemeshNode:
                     "tooltip": "Angle threshold (degrees) for preserving sharp/crease edges in Instant Meshes. 0 = no crease preservation.",
                     "visible_when": {"backend": ["instant_meshes"]},
                 }),
+                # QuadriFlow specific
+                "target_face_count": ("INT", {
+                    "default": 5000,
+                    "min": 100,
+                    "max": 5000000,
+                    "step": 100,
+                    "tooltip": "Target number of output faces for QuadriFlow. Creates quad-dominant mesh with good topology.",
+                    "visible_when": {"backend": ["quadriflow"]},
+                }),
+                "preserve_sharp": (["true", "false"], {
+                    "default": "false",
+                    "tooltip": "Preserve sharp edges during QuadriFlow remeshing.",
+                    "visible_when": {"backend": ["quadriflow"]},
+                }),
+                "preserve_boundary": (["true", "false"], {
+                    "default": "true",
+                    "tooltip": "Preserve mesh boundary edges during QuadriFlow remeshing.",
+                    "visible_when": {"backend": ["quadriflow"]},
+                }),
             }
         }
 
@@ -210,8 +231,17 @@ class RemeshNode:
 
     def remesh(self, trimesh, backend, target_edge_length=1.0, iterations=3,
                feature_angle=30.0, adaptive="false",
-               target_vertex_count=5000, deterministic="true", crease_angle=0.0):
+               target_vertex_count=5000, deterministic="true", crease_angle=0.0,
+               target_face_count=5000, preserve_sharp="false", preserve_boundary="true"):
         """Apply remeshing based on selected backend."""
+        # Sanitize hidden widget values (ComfyUI sends '' for hidden visible_when widgets)
+        target_edge_length = float(target_edge_length) if target_edge_length not in (None, '') else 1.0
+        iterations = int(iterations) if iterations not in (None, '') else 3
+        feature_angle = float(feature_angle) if feature_angle not in (None, '') else 30.0
+        target_vertex_count = int(target_vertex_count) if target_vertex_count not in (None, '') else 5000
+        crease_angle = float(crease_angle) if crease_angle not in (None, '') else 0.0
+        target_face_count = int(target_face_count) if target_face_count not in (None, '') else 5000
+
         initial_vertices = len(trimesh.vertices)
         initial_faces = len(trimesh.faces)
 
@@ -228,6 +258,11 @@ class RemeshNode:
             print(f"[Remesh] Parameters: target_vertex_count={target_vertex_count:,}, deterministic={deterministic}, crease_angle={crease_angle}")
             remeshed_mesh, info = self._instant_meshes(
                 trimesh, target_vertex_count, deterministic, crease_angle
+            )
+        elif backend == "quadriflow":
+            print(f"[Remesh] Parameters: target_face_count={target_face_count:,}, preserve_sharp={preserve_sharp}, preserve_boundary={preserve_boundary}")
+            remeshed_mesh, info = self._quadriflow(
+                trimesh, target_face_count, preserve_sharp, preserve_boundary
             )
         else:
             raise ValueError(f"Unknown backend: {backend}")
@@ -319,6 +354,65 @@ After:
   Faces: {len(remeshed_mesh.faces):,}
 
 Instant Meshes creates flow-aligned quad meshes.
+"""
+        return remeshed_mesh, info
+
+    def _quadriflow(self, trimesh, target_face_count, preserve_sharp, preserve_boundary):
+        """QuadriFlow quad remeshing using pyQuadriFlow."""
+        try:
+            from pyquadriflow import pyquadriflow
+        except ImportError:
+            raise ImportError(
+                "pyQuadriFlow not installed. Install with: pip install pyQuadriFlow"
+            )
+
+        V = np.asarray(trimesh.vertices, dtype=np.float64).tolist()
+        F = np.asarray(trimesh.faces, dtype=np.int32).tolist()
+
+        print(f"[Remesh] Running QuadriFlow (target_faces={target_face_count})...")
+        V_out, F_out = pyquadriflow(
+            target_face_count,
+            0,  # seed
+            V,
+            F,
+            preserve_sharp == "true",
+            preserve_boundary == "true",
+            False,  # adaptive_scale
+            False,  # aggressive_sat
+            False,  # minimum_cost_flow
+        )
+
+        remeshed_mesh = trimesh_module.Trimesh(
+            vertices=np.array(V_out, dtype=np.float32),
+            faces=np.array(F_out, dtype=np.int32),
+            process=False
+        )
+
+        remeshed_mesh.metadata = trimesh.metadata.copy()
+        remeshed_mesh.metadata['remeshing'] = {
+            'algorithm': 'quadriflow',
+            'target_face_count': target_face_count,
+            'preserve_sharp': preserve_sharp == "true",
+            'preserve_boundary': preserve_boundary == "true",
+            'original_vertices': len(trimesh.vertices),
+            'original_faces': len(trimesh.faces)
+        }
+
+        info = f"""Remesh Results (QuadriFlow):
+
+Target Face Count: {target_face_count:,}
+Preserve Sharp: {preserve_sharp}
+Preserve Boundary: {preserve_boundary}
+
+Before:
+  Vertices: {len(trimesh.vertices):,}
+  Faces: {len(trimesh.faces):,}
+
+After:
+  Vertices: {len(remeshed_mesh.vertices):,}
+  Faces: {len(remeshed_mesh.faces):,}
+
+QuadriFlow creates quad-dominant meshes with good topology.
 """
         return remeshed_mesh, info
 
