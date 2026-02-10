@@ -51,6 +51,10 @@ class PreviewMeshVTKNode:
                     "default": "",
                     "tooltip": "Camera position/orientation state (managed by viewer)"
                 }),
+                "selected_field": ("STRING", {
+                    "default": "",
+                    "tooltip": "Active scalar field for visualization (managed by viewer)"
+                }),
             },
         }
 
@@ -59,7 +63,7 @@ class PreviewMeshVTKNode:
     FUNCTION = "preview_mesh_vtk"
     CATEGORY = "geompack/visualization"
 
-    def preview_mesh_vtk(self, mode="fields", trimesh=None, voxelgrid=None, show_edges=False, camera_state=""):
+    def preview_mesh_vtk(self, mode="fields", trimesh=None, voxelgrid=None, show_edges=False, camera_state="", selected_field=""):
         """
         Export mesh and prepare for VTK.js preview.
 
@@ -241,6 +245,7 @@ class PreviewMeshVTKNode:
             "is_watertight": [bool(is_watertight)],
             "show_edges": [bool(show_edges)],
             "camera_state": [camera_state],
+            "selected_field": [selected_field],
         }
 
         # Add mode-specific metadata
