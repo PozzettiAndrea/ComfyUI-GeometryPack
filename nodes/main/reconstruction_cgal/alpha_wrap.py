@@ -57,7 +57,7 @@ class AlphaWrapNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("wrapped_mesh", "report")
+    RETURN_NAMES = ("wrapped_mesh", "info")
     FUNCTION = "alpha_wrap"
     CATEGORY = "geompack/reconstruction"
     OUTPUT_NODE = True

@@ -32,7 +32,7 @@ class RemeshSelfIntersectionsNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("fixed_mesh", "report")
+    RETURN_NAMES = ("fixed_mesh", "info")
     FUNCTION = "remesh_intersections"
     CATEGORY = "geompack/repair"
 

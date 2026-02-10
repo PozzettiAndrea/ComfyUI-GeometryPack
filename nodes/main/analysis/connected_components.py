@@ -36,7 +36,7 @@ class ConnectedComponentsNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("trimesh", "component_summary")
+    RETURN_NAMES = ("trimesh", "info")
     OUTPUT_IS_LIST = (True, False)  # TRIMESH is list, STRING is single summary
     OUTPUT_NODE = True  # Enable UI output for dynamic display
     FUNCTION = "label_components"

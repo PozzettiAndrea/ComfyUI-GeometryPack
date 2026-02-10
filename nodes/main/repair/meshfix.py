@@ -77,7 +77,7 @@ class MeshFixNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("repaired_mesh", "report")
+    RETURN_NAMES = ("repaired_mesh", "info")
     FUNCTION = "repair_mesh"
     CATEGORY = "geompack/repair"
     OUTPUT_NODE = True

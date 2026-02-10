@@ -91,6 +91,10 @@ class PreviewMeshMultiNode:
                     "default": False,
                     "tooltip": "Show mesh edge overlay"
                 }),
+                "camera_state": ("STRING", {
+                    "default": "",
+                    "tooltip": "Camera position/orientation state (managed by viewer)"
+                }),
             }
         }
 
@@ -99,7 +103,7 @@ class PreviewMeshMultiNode:
     FUNCTION = "preview_multi"
     CATEGORY = "geompack/visualization"
 
-    def preview_multi(self, mesh_1, mesh_2=None, mesh_3=None, mesh_4=None, mode="fields", show_edges=False):
+    def preview_multi(self, mesh_1, mesh_2=None, mesh_3=None, mesh_4=None, mode="fields", show_edges=False, camera_state=""):
         """
         Preview multiple meshes in a grid layout.
 
@@ -210,6 +214,7 @@ class PreviewMeshMultiNode:
             "extents_list": [extents_list],
             "is_watertight_list": [is_watertight_list],
             "show_edges": [bool(show_edges)],
+            "camera_state": [camera_state],
         }
 
         # Add mode-specific metadata

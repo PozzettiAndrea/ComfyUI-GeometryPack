@@ -26,7 +26,7 @@ class CheckNormalsNode:
         }
 
     RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("report",)
+    RETURN_NAMES = ("info",)
     FUNCTION = "check_normals"
     CATEGORY = "geompack/repair"
 

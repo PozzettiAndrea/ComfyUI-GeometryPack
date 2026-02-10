@@ -37,7 +37,7 @@ class DegenerateFacesNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("trimesh", "degenerate_summary")
+    RETURN_NAMES = ("trimesh", "info")
     OUTPUT_IS_LIST = (True, False)
     OUTPUT_NODE = True
     FUNCTION = "find_degenerate_faces"

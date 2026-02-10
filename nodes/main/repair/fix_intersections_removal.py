@@ -33,7 +33,7 @@ class FixSelfIntersectionsByRemovalNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("fixed_mesh", "report")
+    RETURN_NAMES = ("fixed_mesh", "info")
     FUNCTION = "fix_by_removal"
     CATEGORY = "geompack/repair"
 

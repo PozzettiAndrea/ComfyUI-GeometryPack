@@ -35,7 +35,7 @@ class MeshQualityNode:
         }
 
     RETURN_TYPES = ("FLOAT", "FLOAT", "STRING")
-    RETURN_NAMES = ("min_quality", "mean_quality", "report")
+    RETURN_NAMES = ("min_quality", "mean_quality", "info")
     OUTPUT_NODE = True
     FUNCTION = "analyze_quality"
     CATEGORY = "geompack/analysis"

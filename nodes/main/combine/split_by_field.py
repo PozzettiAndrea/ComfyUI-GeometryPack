@@ -34,7 +34,7 @@ class SplitByFieldNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("geometries", "summary")
+    RETURN_NAMES = ("geometries", "info")
     OUTPUT_IS_LIST = (True, False)
     FUNCTION = "split"
     CATEGORY = "geompack/combine"

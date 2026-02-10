@@ -29,7 +29,7 @@ class DetectSelfIntersectionsNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("mesh_with_field", "report")
+    RETURN_NAMES = ("mesh_with_field", "info")
     OUTPUT_NODE = True  # Enable UI output for dynamic display
     FUNCTION = "detect_intersections"
     CATEGORY = "geompack/repair"

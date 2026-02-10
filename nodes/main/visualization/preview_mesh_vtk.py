@@ -47,6 +47,10 @@ class PreviewMeshVTKNode:
                     "default": False,
                     "tooltip": "Show mesh edge overlay"
                 }),
+                "camera_state": ("STRING", {
+                    "default": "",
+                    "tooltip": "Camera position/orientation state (managed by viewer)"
+                }),
             },
         }
 
@@ -55,7 +59,7 @@ class PreviewMeshVTKNode:
     FUNCTION = "preview_mesh_vtk"
     CATEGORY = "geompack/visualization"
 
-    def preview_mesh_vtk(self, mode="fields", trimesh=None, voxelgrid=None, show_edges=False):
+    def preview_mesh_vtk(self, mode="fields", trimesh=None, voxelgrid=None, show_edges=False, camera_state=""):
         """
         Export mesh and prepare for VTK.js preview.
 
@@ -236,6 +240,7 @@ class PreviewMeshVTKNode:
             "max_extent": [float(max_extent)],
             "is_watertight": [bool(is_watertight)],
             "show_edges": [bool(show_edges)],
+            "camera_state": [camera_state],
         }
 
         # Add mode-specific metadata

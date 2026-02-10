@@ -34,7 +34,7 @@ class FixSelfIntersectionsByPerturbationNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("fixed_mesh", "report")
+    RETURN_NAMES = ("fixed_mesh", "info")
     FUNCTION = "fix_by_perturbation"
     CATEGORY = "geompack/repair"
 

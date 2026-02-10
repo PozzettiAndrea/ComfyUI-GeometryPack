@@ -35,7 +35,7 @@ class OpenEdgesNode:
         }
 
     RETURN_TYPES = ("TRIMESH", "STRING")
-    RETURN_NAMES = ("trimesh", "open_edges_summary")
+    RETURN_NAMES = ("trimesh", "info")
     OUTPUT_IS_LIST = (True, False)  # TRIMESH is list, STRING is single summary
     OUTPUT_NODE = True  # Enable UI output for dynamic display
     FUNCTION = "find_open_edges"
