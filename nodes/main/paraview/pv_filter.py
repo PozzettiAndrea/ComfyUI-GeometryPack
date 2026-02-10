@@ -21,14 +21,14 @@ def _trimesh_to_pyvista(mesh):
     faces_pv = np.column_stack([np.full(len(faces), 3), faces])
     pv_mesh = pv.PolyData(vertices, faces_pv)
 
-    # Transfer vertex_attributes → point_data
+    # Transfer vertex_attributes -> point_data
     if hasattr(mesh, 'vertex_attributes'):
         for name, data in mesh.vertex_attributes.items():
             arr = np.array(data)
             if arr.ndim == 1 and len(arr) == len(vertices):
                 pv_mesh.point_data[name] = arr.astype(np.float32)
 
-    # Transfer face_attributes → cell_data
+    # Transfer face_attributes -> cell_data
     if hasattr(mesh, 'face_attributes'):
         for name, data in mesh.face_attributes.items():
             arr = np.array(data)
@@ -64,13 +64,13 @@ def _pyvista_to_trimesh(pv_mesh):
 
     result = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
 
-    # Transfer point_data → vertex_attributes
+    # Transfer point_data -> vertex_attributes
     for name in pv_mesh.point_data.keys():
         data = np.array(pv_mesh.point_data[name])
         if data.ndim == 1 and len(data) == len(vertices):
             result.vertex_attributes[name] = data.astype(np.float32)
 
-    # Transfer cell_data → face_attributes
+    # Transfer cell_data -> face_attributes
     for name in pv_mesh.cell_data.keys():
         data = np.array(pv_mesh.cell_data[name])
         if data.ndim == 1 and len(data) == len(faces):
