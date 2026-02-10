@@ -21,6 +21,9 @@ from . import remeshing
 from . import reconstruction
 from . import texture_remeshing
 
+# ParaView/VTK filter nodes
+from . import paraview
+
 # CGAL nodes (moved from nodes/cgal/)
 from . import boolean
 from . import reconstruction_cgal
@@ -43,6 +46,7 @@ NODE_CLASS_MAPPINGS.update(repair.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(remeshing.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(reconstruction.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(texture_remeshing.NODE_CLASS_MAPPINGS)
+NODE_CLASS_MAPPINGS.update(paraview.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(boolean.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(reconstruction_cgal.NODE_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(remeshing_cgal.NODE_CLASS_MAPPINGS)
@@ -64,6 +68,7 @@ NODE_DISPLAY_NAME_MAPPINGS.update(repair.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(remeshing.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(reconstruction.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(texture_remeshing.NODE_DISPLAY_NAME_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(paraview.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(boolean.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(reconstruction_cgal.NODE_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(remeshing_cgal.NODE_DISPLAY_NAME_MAPPINGS)

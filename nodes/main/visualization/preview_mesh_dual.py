@@ -82,6 +82,10 @@ class PreviewMeshDualNode:
                 "mode": (["fields", "texture"], {"default": "fields"}),
                 "opacity_1": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.1}),
                 "opacity_2": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.1}),
+                "show_edges": ("BOOLEAN", {
+                    "default": False,
+                    "tooltip": "Show mesh edge overlay"
+                }),
             }
         }
 
@@ -90,7 +94,7 @@ class PreviewMeshDualNode:
     FUNCTION = "preview_dual"
     CATEGORY = "geompack/visualization"
 
-    def preview_dual(self, mesh_1, mesh_2, layout="side_by_side", mode="fields", opacity_1=1.0, opacity_2=1.0):
+    def preview_dual(self, mesh_1, mesh_2, layout="side_by_side", mode="fields", opacity_1=1.0, opacity_2=1.0, show_edges=False):
         """
         Preview two meshes with chosen layout and visualization mode.
 
@@ -171,6 +175,7 @@ class PreviewMeshDualNode:
                 "is_watertight_2": [bool(mesh_2.is_watertight) if not is_point_cloud(mesh_2) else False],
                 "opacity_1": [float(opacity_1)],
                 "opacity_2": [float(opacity_2)],
+                "show_edges": [bool(show_edges)],
             }
 
             # Add mode-specific metadata
@@ -233,6 +238,7 @@ class PreviewMeshDualNode:
                 "opacity_2": [float(opacity_2)],
                 "is_watertight_1": [bool(mesh_1.is_watertight) if not is_point_cloud(mesh_1) else False],
                 "is_watertight_2": [bool(mesh_2.is_watertight) if not is_point_cloud(mesh_2) else False],
+                "show_edges": [bool(show_edges)],
             }
 
             # Add mode-specific metadata
