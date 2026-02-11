@@ -294,6 +294,7 @@ class UVUnwrapNode:
     RETURN_NAMES = ("unwrapped_mesh", "info")
     FUNCTION = "unwrap"
     CATEGORY = "geompack/uv"
+    OUTPUT_NODE = True
 
     def unwrap(self, trimesh, method,
                chart_cone_angle=90.0, chart_refine_iterations=0,
@@ -352,7 +353,7 @@ class UVUnwrapNode:
 
         print(f"[UVUnwrap] Output: {len(unwrapped_mesh.vertices)} vertices, {len(unwrapped_mesh.faces)} faces")
 
-        return (unwrapped_mesh, info)
+        return {"ui": {"text": [info]}, "result": (unwrapped_mesh, info)}
 
     def _xatlas(self, trimesh):
         """XAtlas automatic UV unwrapping."""

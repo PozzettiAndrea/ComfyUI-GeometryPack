@@ -37,6 +37,7 @@ class FixSelfIntersectionsByPerturbationNode:
     RETURN_NAMES = ("fixed_mesh", "info")
     FUNCTION = "fix_by_perturbation"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def fix_by_perturbation(self, trimesh, epsilon=0.001, max_iterations=10,
                             direction="outward", scale_by_intersection_count=True,
@@ -72,7 +73,7 @@ Returning mesh unchanged.
 Workflow suggestion:
 1. Load Mesh -> Detect Self Intersections -> Fix Self Intersections By Perturbation
 """
-            return (trimesh, warning_msg)
+            return {"ui": {"text": [warning_msg]}, "result": (trimesh, warning_msg)}
 
         # Get vertices to perturb
         vertex_flags = trimesh.vertex_attributes['intersection_flag']
@@ -89,7 +90,7 @@ Either the mesh is already clean, or you need to run
 
 Returning mesh unchanged.
 """
-            return (trimesh, report)
+            return {"ui": {"text": [report]}, "result": (trimesh, report)}
 
         print(f"[FixByPerturbation] Found {num_affected} vertices to perturb")
 
@@ -279,7 +280,7 @@ Important Notes:
 """
 
         print(f"[FixByPerturbation] Complete: perturbed {num_affected} vertices over {iterations_used} iterations")
-        return (result_mesh, report)
+        return {"ui": {"text": [report]}, "result": (result_mesh, report)}
 
 
 NODE_CLASS_MAPPINGS = {

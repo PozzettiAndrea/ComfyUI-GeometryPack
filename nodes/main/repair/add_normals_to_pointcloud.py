@@ -63,6 +63,7 @@ class AddNormalsToPointCloud:
     RETURN_NAMES = ("pointcloud_with_normals", "info")
     FUNCTION = "add_normals"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
     DESCRIPTION = "Estimate and add normals to a point cloud using Open3D or PyMeshLab methods."
 
     def add_normals(
@@ -160,7 +161,7 @@ class AddNormalsToPointCloud:
 
         print(f"[AddNormalsToPointCloud] [OK] {info}")
 
-        return (result, info)
+        return {"ui": {"text": [info]}, "result": (result, info)}
 
     def _estimate_normals_open3d_knn(self, points, k_neighbors, orient_normals):
         """

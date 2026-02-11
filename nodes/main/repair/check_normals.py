@@ -29,6 +29,7 @@ class CheckNormalsNode:
     RETURN_NAMES = ("info",)
     FUNCTION = "check_normals"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def check_normals(self, trimesh):
         """
@@ -98,7 +99,7 @@ Recommendations:
 
         print(f"[CheckNormals] Winding: {is_winding_consistent}, Watertight: {is_watertight}, Degenerate: {degenerate_faces}")
 
-        return (report,)
+        return {"ui": {"text": [report]}, "result": (report,)}
 
 
 NODE_CLASS_MAPPINGS = {

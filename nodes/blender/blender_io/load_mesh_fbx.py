@@ -94,6 +94,7 @@ class LoadMeshFBX:
     RETURN_NAMES = ("mesh", "info")
     FUNCTION = "load_fbx"
     CATEGORY = "geompack/io"
+    OUTPUT_NODE = True
 
     @classmethod
     def get_fbx_files(cls):
@@ -212,7 +213,7 @@ class LoadMeshFBX:
 
         print(f"[LoadMeshFBX] Loaded: {len(loaded_mesh.vertices)} vertices, {len(loaded_mesh.faces)} faces")
 
-        return (loaded_mesh, info)
+        return {"ui": {"text": [info]}, "result": (loaded_mesh, info)}
 
 
 # Node mappings

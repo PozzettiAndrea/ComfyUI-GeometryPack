@@ -195,6 +195,7 @@ Use 'Preview Mesh (VTK with Fields)' node to visualize the intersection fields!
             return {
                 "result": (result_mesh, report),
                 "ui": {
+                    "text": [report],
                     "intersection_data": [ui_data]
                 }
             }
@@ -211,7 +212,7 @@ Install with: pip install libigl cgal
 For now, returning mesh unchanged.
 """
             print(f"[DetectSelfIntersections] libigl import error: {e}")
-            return (trimesh, error_msg)
+            return {"ui": {"text": [error_msg]}, "result": (trimesh, error_msg)}
 
         except Exception as e:
             import traceback
@@ -223,7 +224,7 @@ For now, returning mesh unchanged.
 Returning mesh unchanged. Check console for details.
 """
             print(f"[DetectSelfIntersections] Unexpected error: {e}")
-            return (trimesh, error_msg)
+            return {"ui": {"text": [error_msg]}, "result": (trimesh, error_msg)}
 
 
 NODE_CLASS_MAPPINGS = {

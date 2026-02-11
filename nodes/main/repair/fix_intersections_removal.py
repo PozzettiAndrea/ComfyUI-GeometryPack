@@ -36,6 +36,7 @@ class FixSelfIntersectionsByRemovalNode:
     RETURN_NAMES = ("fixed_mesh", "info")
     FUNCTION = "fix_by_removal"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def fix_by_removal(self, trimesh, fill_holes=True, fix_normals=True, max_hole_size=100,
                       re_detect_after_fix=True):
@@ -72,7 +73,7 @@ Returning mesh unchanged.
 Workflow suggestion:
 1. Load Mesh -> Detect Self Intersections -> Fix Self Intersections By Removal
 """
-            return (trimesh, warning_msg)
+            return {"ui": {"text": [warning_msg]}, "result": (trimesh, warning_msg)}
 
         # Get intersecting face indices
         face_field = trimesh.face_attributes['self_intersecting']
@@ -89,7 +90,7 @@ Either the mesh is already clean, or you need to run
 
 Returning mesh unchanged.
 """
-            return (trimesh, report)
+            return {"ui": {"text": [report]}, "result": (trimesh, report)}
 
         print(f"[FixByRemoval] Found {num_intersecting} intersecting faces to remove")
 
@@ -246,7 +247,7 @@ Status:
 """
 
         print(f"[FixByRemoval] Complete: {final_vertices} vertices, {final_faces} faces")
-        return (result_mesh, report)
+        return {"ui": {"text": [report]}, "result": (result_mesh, report)}
 
 
 NODE_CLASS_MAPPINGS = {

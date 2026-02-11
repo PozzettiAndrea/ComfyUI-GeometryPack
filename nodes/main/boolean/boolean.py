@@ -37,6 +37,7 @@ class BooleanCGALNode:
     RETURN_NAMES = ("result_mesh", "info")
     FUNCTION = "boolean_op"
     CATEGORY = "geompack/boolean"
+    OUTPUT_NODE = True
 
     def boolean_op(self, mesh_a, mesh_b, operation):
         """
@@ -114,7 +115,7 @@ Watertight: {result.is_watertight}
 """
 
             print(f"[Boolean CGAL] Success: {len(result.vertices)} vertices, {len(result.faces)} faces")
-            return (result, info)
+            return {"ui": {"text": [info]}, "result": (result, info)}
 
         except Exception as e:
             raise RuntimeError(f"Boolean CGAL operation failed: {e}")

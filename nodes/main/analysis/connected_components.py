@@ -144,6 +144,7 @@ class ConnectedComponentsNode:
         return {
             "result": (result_meshes, summary),
             "ui": {
+                "text": [summary],
                 "component_data": ui_components
             }
         }

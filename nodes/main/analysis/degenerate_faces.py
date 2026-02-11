@@ -186,6 +186,7 @@ class DegenerateFacesNode:
         return {
             "result": (result_meshes, summary),
             "ui": {
+                "text": [summary],
                 "degenerate_data": ui_data
             }
         }

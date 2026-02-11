@@ -181,6 +181,7 @@ class OpenEdgesNode:
         return {
             "result": (result_meshes, summary),
             "ui": {
+                "text": [summary],
                 "open_edges_data": ui_data
             }
         }

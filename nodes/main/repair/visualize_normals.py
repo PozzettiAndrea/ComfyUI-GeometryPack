@@ -30,6 +30,7 @@ class VisualizNormalFieldNode:
     RETURN_NAMES = ("mesh_with_fields", "info")
     FUNCTION = "visualize_normals"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def visualize_normals(self, trimesh):
         """
@@ -76,7 +77,7 @@ Expected Values:
 
         print(f"[VisualizeNormals] Added 4 scalar fields to mesh")
 
-        return (result_mesh, info)
+        return {"ui": {"text": [info]}, "result": (result_mesh, info)}
 
 
 NODE_CLASS_MAPPINGS = {

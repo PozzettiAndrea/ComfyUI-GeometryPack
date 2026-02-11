@@ -94,6 +94,7 @@ class LoadMeshBlend:
     RETURN_NAMES = ("mesh", "info")
     FUNCTION = "load_blend"
     CATEGORY = "geompack/io"
+    OUTPUT_NODE = True
 
     @classmethod
     def get_blend_files(cls):
@@ -212,7 +213,7 @@ class LoadMeshBlend:
 
         print(f"[LoadMeshBlend] Loaded: {len(loaded_mesh.vertices)} vertices, {len(loaded_mesh.faces)} faces")
 
-        return (loaded_mesh, info)
+        return {"ui": {"text": [info]}, "result": (loaded_mesh, info)}
 
 
 # Node mappings

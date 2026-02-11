@@ -46,6 +46,7 @@ class RemoveDegenerateFacesNode:
     RETURN_NAMES = ("cleaned_mesh", "info")
     FUNCTION = "remove_degenerate"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def remove_degenerate(self, mesh, min_area=1e-10):
         """
@@ -116,7 +117,7 @@ After:
 
         print(f"[RemoveDegenerateFaces] Removed {faces_removed} degenerate faces, {verts_removed} unreferenced vertices")
 
-        return (cleaned_mesh, info)
+        return {"ui": {"text": [info]}, "result": (cleaned_mesh, info)}
 
 
 NODE_CLASS_MAPPINGS = {

@@ -82,6 +82,7 @@ class BooleanBlenderNode:
     RETURN_NAMES = ("result_mesh", "info")
     FUNCTION = "boolean_op"
     CATEGORY = "geompack/boolean"
+    OUTPUT_NODE = True
 
     def boolean_op(self, mesh_a, mesh_b, operation):
         """
@@ -157,7 +158,7 @@ Watertight: {result.is_watertight}
 """
 
             print(f"[Boolean Blender] Success: {len(result.vertices)} vertices, {len(result.faces)} faces")
-            return (result, info)
+            return {"ui": {"text": [info]}, "result": (result, info)}
 
         except Exception as e:
             raise RuntimeError(f"Boolean Blender operation failed: {e}")

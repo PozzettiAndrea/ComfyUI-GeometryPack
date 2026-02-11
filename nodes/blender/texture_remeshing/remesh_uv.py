@@ -213,6 +213,7 @@ class RemeshWithTexture:
     RETURN_NAMES = ("remeshed_mesh", "baked_texture", "info")
     FUNCTION = "remesh_with_texture"
     CATEGORY = "geompack/texture_remeshing"
+    OUTPUT_NODE = True
 
     def remesh_with_texture(self, trimesh, method, remesh_method, voxel_size, target_face_count,
                            bake_margin):
@@ -541,7 +542,7 @@ Texture Transfer: Closest-Point Projection{placeholder_warning}
 """
 
             print(f"[BlenderRemeshWithTexture] Complete")
-            return (remeshed_with_colors, comfy_image, info)
+            return {"ui": {"text": [info]}, "result": (remeshed_with_colors, comfy_image, info)}
 
         finally:
             # Cleanup

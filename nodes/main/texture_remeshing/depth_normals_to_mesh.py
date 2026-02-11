@@ -96,6 +96,7 @@ class DepthNormalsToMeshNode:
     RETURN_NAMES = ("mesh", "info")
     FUNCTION = "depth_normals_to_mesh"
     CATEGORY = "geompack/texture_remeshing"
+    OUTPUT_NODE = True
 
     def depth_normals_to_mesh(self, normal_map, resolution, depth_scale,
                                depth=None, depth_image=None,
@@ -265,7 +266,7 @@ Output Mesh:
 
 {method_info}
 """
-        return (mesh, info)
+        return {"ui": {"text": [info]}, "result": (mesh, info)}
 
     def _poisson_reconstruct(self, points, normals, depth, scale):
         """Poisson surface reconstruction using Open3D or PyMeshLab."""

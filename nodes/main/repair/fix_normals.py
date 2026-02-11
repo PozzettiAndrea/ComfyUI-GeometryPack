@@ -169,6 +169,7 @@ class FixNormalsNode:
     RETURN_NAMES = ("fixed_mesh", "info")
     FUNCTION = "fix_normals"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def fix_normals(self, trimesh, method="trimesh"):
         """
@@ -295,7 +296,7 @@ Faces: {len(fixed_mesh.faces):,}
 
         print(f"[FixNormals] {'[OK]' if is_consistent else '[WARN]'} Normal orientation: {was_consistent} -> {is_consistent}")
 
-        return (fixed_mesh, info)
+        return {"ui": {"text": [info]}, "result": (fixed_mesh, info)}
 
 
 # Node mappings

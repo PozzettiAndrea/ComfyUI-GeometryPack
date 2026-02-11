@@ -38,6 +38,7 @@ class SplitByFieldNode:
     OUTPUT_IS_LIST = (True, False)
     FUNCTION = "split"
     CATEGORY = "geompack/combine"
+    OUTPUT_NODE = True
 
     def split(self, geometry, field_name: str) -> Tuple:
         """Split geometry by a discrete field."""
@@ -131,7 +132,7 @@ class SplitByFieldNode:
             print(f"   {field_name}={val}: {num_points} points")
 
         summary = "\n".join(summary_lines)
-        return (result, summary)
+        return {"ui": {"text": [summary]}, "result": (result, summary)}
 
 
 # Node mappings

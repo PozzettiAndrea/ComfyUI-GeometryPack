@@ -45,6 +45,7 @@ class MergeVerticesNode:
     RETURN_NAMES = ("merged_mesh", "info")
     FUNCTION = "merge_vertices"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def merge_vertices(self, mesh, tolerance=1e-5):
         """
@@ -123,7 +124,7 @@ After:
         if components_change is not None:
             print(f"[MergeVertices] Components: {components_before} -> {components_after}")
 
-        return (merged_mesh, info)
+        return {"ui": {"text": [info]}, "result": (merged_mesh, info)}
 
 
 NODE_CLASS_MAPPINGS = {

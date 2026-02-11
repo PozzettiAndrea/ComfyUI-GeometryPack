@@ -35,6 +35,7 @@ class RemeshSelfIntersectionsNode:
     RETURN_NAMES = ("fixed_mesh", "info")
     FUNCTION = "remesh_intersections"
     CATEGORY = "geompack/repair"
+    OUTPUT_NODE = True
 
     def remesh_intersections(self, mesh, detect_only=False, remove_unreferenced=True,
                            extract_outer_hull=False, stitch_all=True):
@@ -74,7 +75,7 @@ Install with: pip install cgal
 Returning mesh unchanged.
 """
                 print("[RemeshSelfIntersections] CGAL not available")
-                return (mesh, error_msg)
+                return {"ui": {"text": [error_msg]}, "result": (mesh, error_msg)}
 
             print("[RemeshSelfIntersections] Using libigl CGAL method")
 
@@ -186,7 +187,7 @@ Status:
 {'  Consider enabling extract_outer_hull for a clean manifold result.' if not extract_outer_hull else ''}
 """
 
-                return (result_mesh, report)
+                return {"ui": {"text": [report]}, "result": (result_mesh, report)}
 
             except Exception as e:
                 import traceback
@@ -198,7 +199,7 @@ Status:
 Returning mesh unchanged. Check console for details.
 """
                 print(f"[RemeshSelfIntersections] Remeshing error: {e}")
-                return (mesh, error_msg)
+                return {"ui": {"text": [error_msg]}, "result": (mesh, error_msg)}
 
         except ImportError as e:
             error_msg = f"""Error: libigl not available
@@ -211,7 +212,7 @@ Install with: pip install libigl cgal
 Returning mesh unchanged.
 """
             print(f"[RemeshSelfIntersections] libigl import error: {e}")
-            return (mesh, error_msg)
+            return {"ui": {"text": [error_msg]}, "result": (mesh, error_msg)}
 
         except Exception as e:
             import traceback
@@ -223,7 +224,7 @@ Returning mesh unchanged.
 Returning mesh unchanged. Check console for details.
 """
             print(f"[RemeshSelfIntersections] Unexpected error: {e}")
-            return (mesh, error_msg)
+            return {"ui": {"text": [error_msg]}, "result": (mesh, error_msg)}
 
 
 NODE_CLASS_MAPPINGS = {

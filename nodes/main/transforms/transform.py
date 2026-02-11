@@ -152,6 +152,7 @@ class TransformMeshNode:
     RETURN_NAMES = ("transformed_mesh", "info")
     FUNCTION = "transform"
     CATEGORY = "geompack/transforms"
+    OUTPUT_NODE = True
 
     def transform(self, trimesh, operation,
                   translate_x=0.0, translate_y=0.0, translate_z=0.0,
@@ -203,7 +204,7 @@ class TransformMeshNode:
         }
 
         print(f"[Transform] Complete")
-        return (result, info)
+        return {"ui": {"text": [info]}, "result": (result, info)}
 
     def _translate(self, mesh, tx, ty, tz):
         """Translate mesh by offset."""

@@ -33,6 +33,7 @@ class CombineMeshesBatchNode:
     RETURN_NAMES = ("combined_mesh", "info")
     FUNCTION = "combine"
     CATEGORY = "geompack/combine"
+    OUTPUT_NODE = True
     DESCRIPTION = "Combine a batch of meshes into a single mesh."
 
     def combine(self, meshes):
@@ -121,7 +122,7 @@ Components remain separate within the combined mesh.
 """
 
         print(f"[CombineMeshesBatch] Result: {len(result.vertices)} vertices, {len(result.faces)} faces")
-        return (result, info)
+        return {"ui": {"text": [info]}, "result": (result, info)}
 
 
 # Node mappings

@@ -49,6 +49,7 @@ class NormalizeMeshToBBox:
     RETURN_NAMES = ("normalized_mesh", "info")
     FUNCTION = "normalize_to_bbox"
     CATEGORY = "geompack/transforms"
+    OUTPUT_NODE = True
     DESCRIPTION = "Center and scale mesh isotropically to fit target bounding box. Use before estimating normals for TripoSF."
 
     def normalize_to_bbox(self, trimesh, target_size=1.0):
@@ -132,7 +133,7 @@ New Bounds:
 Note: Use this BEFORE AddNormalsToPointCloud for TripoSF workflows.
 """
 
-        return (result, info)
+        return {"ui": {"text": [info]}, "result": (result, info)}
 
 
 # Node registration
