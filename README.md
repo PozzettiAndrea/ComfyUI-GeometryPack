@@ -2,7 +2,13 @@
 
 Professional geometry processing nodes for ComfyUI. Load, analyze, remesh, unwrap, and visualize 3D meshes directly in your workflows.
 
-**[View Workflow Gallery](https://pozzettiandrea.github.io/ComfyUI-GeometryPack/)**
+<div align="center">
+<a href="https://pozzettiandrea.github.io/ComfyUI-GeometryPack/">
+<img src="docs/workflow_gallery.png" alt="Workflow Test Gallery" width="800">
+</a>
+<br>
+<b><a href="https://pozzettiandrea.github.io/ComfyUI-GeometryPack/">View Live Test Gallery →</a></b>
+</div>
 
 
 ## Some previews
