@@ -44,12 +44,7 @@ class PreviewMeshVTKBatchNode:
                 "mode": (["fields", "texture"], {"default": "fields"}),
                 "index": ("INT", {"default": 0, "min": 0, "max": 100}),
             },
-            "optional": {
-                "show_edges": ("BOOLEAN", {
-                    "default": False,
-                    "tooltip": "Show mesh edge overlay"
-                }),
-            },
+            "optional": {},
         }
 
     RETURN_TYPES = ()
@@ -58,7 +53,7 @@ class PreviewMeshVTKBatchNode:
     CATEGORY = "geompack/visualization"
     INPUT_IS_LIST = True
 
-    def preview_mesh_vtk_batch(self, trimesh, mode, index, show_edges=None):
+    def preview_mesh_vtk_batch(self, trimesh, mode, index):
         """
         Export mesh from batch and prepare for VTK.js preview.
 
@@ -77,8 +72,6 @@ class PreviewMeshVTKBatchNode:
         # Extract values from lists (ComfyUI passes inputs as lists when INPUT_IS_LIST=True)
         mode_val = mode[0] if isinstance(mode, list) else mode
         index_val = index[0] if isinstance(index, list) else index
-        show_edges_val = (show_edges[0] if isinstance(show_edges, list) else show_edges) if show_edges is not None else False
-
         # Validate batch
         if not trimesh or len(trimesh) == 0:
             raise ValueError("Empty mesh batch provided")
@@ -212,7 +205,6 @@ class PreviewMeshVTKBatchNode:
             # Batch-specific metadata
             "batch_size": [batch_size],
             "current_index": [actual_index],
-            "show_edges": [bool(show_edges_val)],
         }
 
         # Add mode-specific metadata
