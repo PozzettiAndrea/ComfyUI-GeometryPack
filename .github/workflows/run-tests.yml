@@ -1,5 +1,7 @@
-name: Test Installation
-on: [push, pull_request, workflow_dispatch]
+name: Workflow Tests
+on:
+  push:
+    branches: [dev]
 
 jobs:
   test:
