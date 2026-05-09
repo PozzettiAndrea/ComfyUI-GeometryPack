@@ -5,13 +5,11 @@ publish = true
 [test.workflows]
 timeout = 300
 cpu = [
-    "!remeshing_gpu",
     "!fill_holes_all",
     "!remeshing_all",
     "!uv_unwrap_all",
 ]
 gpu = [
-    "remeshing_gpu",
     "fill_holes_all",
     "remeshing_all",
     "uv_unwrap_all",
