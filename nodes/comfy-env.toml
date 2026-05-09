@@ -1,8 +1,10 @@
+[workspace]
+channels = ["conda-forge", "pozzettiandrea"]
+
 [dependencies]
 cgal = "*"
 igl = "*"
 scipy = ">=1.11,<1.17"
-numpy = "*"
 pillow = ">=9.0.0"
 matplotlib = ">=3.5.0"
 pyvista = ">=0.43.0"
@@ -10,6 +12,22 @@ pyopengl = ">=3.1.10"
 rtree = "*"
 tqdm = ">=4.60.0"
 trimesh = "*"
+av = "*"
+safetensors = "*"
+einops = "*"
+psutil = "*"
+bpy = {version = "*", channel = "pozzettiandrea"}
+
+[target.linux-64.dependencies]
+mesalib = "*"        # replaces apt: libgl1-mesa-glx, libgl1
+libglu = "*"         # replaces apt: libglu1-mesa
+libglvnd = "*"       # replaces apt: libopengl0
+xorg-libsm = "*"     # libSM.so.6 required by bpy
+mmgpy = ">=0.5.2"
+pymeshlab = "*"
+
+[cuda]
+packages = ["cumesh"]
 
 [pypi-dependencies]
 requests = ">=2.25.0"
@@ -24,17 +42,11 @@ pygeogram-ap = { version = ">=0.1.0", index = "https://pozzettiandrea.github.io/
 pypmp = { version = ">=0.1.0", index = "https://pozzettiandrea.github.io/pypmp/simple/" }
 pyquadwild = { version = ">=0.1.0", index = "https://pozzettiandrea.github.io/pyquadwild/simple/" }
 pymesh2 = { version = ">=0.3", index = "https://pozzettiandrea.github.io/PyMesh/simple/" }
+comfy-aimdo = "*"
 
 [target.win-64.pypi-dependencies]
 embreex = "*"
 msvc-runtime = "*"
-pymeshlab = "*"
-
-[target.linux-64.dependencies]
-mesalib = "*"        # replaces apt: libgl1-mesa-glx, libgl1
-libglu = "*"         # replaces apt: libglu1-mesa
-libglvnd = "*"       # replaces apt: libopengl0
-mmgpy = ">=0.5.2"
 pymeshlab = "*"
 
 [target.linux-64.pypi-dependencies]
@@ -46,3 +58,4 @@ pymeshlab = "*"
 
 [env_vars]
 KMP_DUPLICATE_LIB_OK = "TRUE"
+OMP_NUM_THREADS = 1
