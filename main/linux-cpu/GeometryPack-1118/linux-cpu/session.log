@@ -1,0 +1,673 @@
+[00:00] Crash dump logging enabled: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/GeometryPack-1118/linux-cpu/crash_dump.log
+[00:00] 
+[00:00] [1/3] REGISTRATION
+[00:00] ----------------------------------------
+[00:00] 
+[DEBUG] server=None, server_url=http://127.0.0.1:8188, api=None
+[00:00] 
+Connecting to existing server at http://127.0.0.1:8188...
+[00:00] Connecting to existing server at http://127.0.0.1:8188...
+[00:00] Connected to server! (attempt 1, 0.0s)
+[00:00] Checking for import errors in server logs...
+[00:00] No import errors detected
+[00:00] Found 824 registered nodes
+[00:00] [REGISTRATION] PASSED
+[00:00] 
+[00:00] [2/3] INSTANTIATION
+[00:00] ----------------------------------------
+[00:00] 
+[DEBUG] server=<comfy_test.comfyui.server.ExternalComfyUIServer object at 0x7f9027e51cc0>, server_url=http://127.0.0.1:8188, api=<comfy_test.comfyui.api.ComfyUIAPI object at 0x7f9027e522c0>
+[00:00] Testing node constructors...
+[00:01] All 125 node(s) instantiated successfully!
+[00:01] [INSTANTIATION] PASSED
+[00:01] 
+[00:01] [3/3] EXECUTION
+[00:01] ----------------------------------------
+[00:01] 
+[DEBUG] server=<comfy_test.comfyui.server.ExternalComfyUIServer object at 0x7f9027e51cc0>, server_url=http://127.0.0.1:8188, api=<comfy_test.comfyui.api.ComfyUIAPI object at 0x7f9027e522c0>
+[00:01] CPU runner - will execute 30 workflow(s)
+[00:01] Running 33 workflow(s) (all with videos)...
+[00:02] Starting headless browser...
+[00:02]   Installing Mesa llvmpipe (apt)...
+[00:13]   Mesa install failed: E: Unable to locate package libegl1-mesa
+
+[00:13]   No GPU, no Mesa — using SwiftShader software rendering
+[00:13] Capturing execution frames: alpha_wrap.json
+[00:20]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[00:20]   Validating workflow...
+[00:20]   Queuing workflow for execution...
+[00:22]   Frame 2 saved (frame_001.jpg, t=2.3s)
+[00:22]   [capture-periodic] freeze=2ms shot=113ms unfreeze=2ms saved=True
+[00:24]   Frame 3 saved (frame_002.jpg, t=4.5s)
+[00:24]   [capture-periodic] freeze=1ms shot=97ms unfreeze=2ms saved=True
+[00:25]   [capture-loop] iter=50 t=5.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=2.6/15.6GB (17%) swap=0.0/3.0GB (0%) cpu=35% browser_rss=0.85GB
+[00:27]   Frame 4 saved (frame_003.jpg, t=6.7s)
+[00:27]   [capture-periodic] freeze=1ms shot=99ms unfreeze=2ms saved=True
+[00:28]   Node executed (1 total), capturing...
+[00:29]   Frame 5 saved (frame_004.jpg, t=8.2s)
+[00:29]   [capture-node] freeze=8ms shot=615ms unfreeze=8ms saved=True
+[00:29]   Node executed (2 total), capturing...
+[00:29]   Frame 6 saved (frame_005.jpg, t=9.5s)
+[00:29]   [capture-node] freeze=2ms shot=130ms unfreeze=3ms saved=True
+[00:30]   Node executed (3 total), capturing...
+[00:30]   Frame 7 saved (frame_006.jpg, t=10.0s)
+[00:30]   [capture-node] freeze=4ms shot=126ms unfreeze=2ms saved=True
+[00:31]   Node executed (4 total), capturing...
+[00:31]   Frame 8 saved (frame_007.jpg, t=11.0s)
+[00:31]   [capture-node] freeze=42ms shot=128ms unfreeze=0ms saved=True
+[00:31]   Execution complete (t=11.0s)
+[00:31]   Captured 8 unique frames over 11.17s
+[00:31]   [debug] iframes: 2
+[00:31]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[00:31]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=244x393, rafFrozen=True
+[00:31]   [timing] trigger_3d_previews: 0.0s
+[00:33]   Saved high-quality screenshot: alpha_wrap_executed.png
+[00:33]   [timing] final_screenshot: 0.3s
+[00:34] Capturing execution frames: batch_remesh.json
+[00:39]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[00:39]   Validating workflow...
+[00:39]   Queuing workflow for execution...
+[00:41]   Node executed (1 total), capturing...
+[00:41]   Frame 2 saved (frame_001.jpg, t=1.5s)
+[00:41]   [capture-node] freeze=2ms shot=135ms unfreeze=2ms saved=True
+[00:42]   Node executed (2 total), capturing...
+[00:42]   Frame 3 saved (frame_002.jpg, t=2.9s)
+[00:42]   [capture-node] freeze=3ms shot=100ms unfreeze=6ms saved=True
+[00:45]   Frame 4 saved (frame_003.jpg, t=5.1s)
+[00:45]   [capture-periodic] freeze=1ms shot=100ms unfreeze=6ms saved=True
+[00:45]   [capture-loop] iter=50 t=6.1s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=2 ram=3.0/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=34% browser_rss=0.84GB
+[00:48]   Node executed (3 total), capturing...
+[00:48]   Frame 5 saved (frame_004.jpg, t=8.7s)
+[00:48]   [capture-node] freeze=2ms shot=98ms unfreeze=2ms saved=True
+[00:48]   Node executed (4 total), capturing...
+[00:49]   Frame 6 saved (frame_005.jpg, t=9.3s)
+[00:49]   [capture-node] freeze=2ms shot=89ms unfreeze=3ms saved=True
+[00:49]   Node executed (5 total), capturing...
+[00:50]   Frame 7 saved (frame_006.jpg, t=10.1s)
+[00:50]   [capture-node] freeze=2ms shot=104ms unfreeze=3ms saved=True
+[00:50]   Node executed (6 total), capturing...
+[00:50]   Frame 8 saved (frame_007.jpg, t=10.7s)
+[00:50]   [capture-node] freeze=2ms shot=100ms unfreeze=0ms saved=True
+[00:50]   Execution complete (t=10.7s)
+[00:50]   Captured 8 unique frames over 10.79s
+[00:50]   [debug] iframes: 1
+[00:50]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17782391, canvas=622x373, rafFrozen=True
+[00:50]   [timing] trigger_3d_previews: 0.0s
+[00:52]   Saved high-quality screenshot: batch_remesh_executed.png
+[00:52]   [timing] final_screenshot: 0.2s
+[00:53] Capturing execution frames: boolean_ops.json
+[00:59]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[00:59]   Validating workflow...
+[00:59]   Queuing workflow for execution...
+[00:59]   Node executed (1 total), capturing...
+[00:59]   Frame 2 saved (frame_001.jpg, t=0.4s)
+[00:59]   [capture-node] freeze=17ms shot=255ms unfreeze=10ms saved=True
+[00:59]   Node executed (3 total), capturing...
+[01:00]   Frame 3 saved (frame_002.jpg, t=1.0s)
+[01:00]   [capture-node] freeze=2ms shot=120ms unfreeze=0ms saved=True
+[01:00]   Execution complete (t=1.0s)
+[01:00]   Captured 3 unique frames over 1.15s
+[01:00]   [debug] iframes: 2
+[01:00]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[01:00]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17782391, canvas=486x348, rafFrozen=True
+[01:00]   [timing] trigger_3d_previews: 0.0s
+[01:02]   Saved high-quality screenshot: boolean_ops_executed.png
+[01:02]   [timing] final_screenshot: 0.3s
+[01:02] Capturing execution frames: decimate.json
+[01:09]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[01:09]   Validating workflow...
+[01:09]   Queuing workflow for execution...
+[01:09]   Node executed (1 total), capturing...
+[01:09]   Frame 2 saved (frame_001.jpg, t=0.5s)
+[01:09]   [capture-node] freeze=26ms shot=235ms unfreeze=4ms saved=True
+[01:09]   Node executed (2 total), capturing...
+[01:10]   [capture-node] freeze=5ms shot=150ms unfreeze=0ms saved=False
+[01:10]   Execution complete (t=1.0s)
+[01:10]   Captured 2 unique frames over 1.21s
+[01:10]   [debug] iframes: 1
+[01:10]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[01:10]   [timing] trigger_3d_previews: 0.0s
+[01:12]   Saved high-quality screenshot: decimate_executed.png
+[01:12]   [timing] final_screenshot: 0.3s
+[01:12] Capturing execution frames: depth_map_to_mesh.json
+[01:18]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[01:18]   Validating workflow...
+[01:18]   Queuing workflow for execution...
+[01:20]   Frame 2 saved (frame_001.jpg, t=2.3s)
+[01:20]   [capture-periodic] freeze=2ms shot=94ms unfreeze=3ms saved=True
+[01:23]   Frame 3 saved (frame_002.jpg, t=4.5s)
+[01:23]   [capture-periodic] freeze=2ms shot=107ms unfreeze=3ms saved=True
+[01:23]   Node executed (1 total), capturing...
+[01:23]   Frame 4 saved (frame_003.jpg, t=5.1s)
+[01:23]   [capture-node] freeze=3ms shot=107ms unfreeze=3ms saved=True
+[01:24]   [capture-loop] iter=50 t=5.9s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=2 ram=3.1/15.6GB (20%) swap=0.0/3.0GB (0%) cpu=25% browser_rss=1.03GB
+[01:28]   Node executed (2 total), capturing...
+[01:31]   Frame 5 saved (frame_004.jpg, t=9.9s)
+[01:31]   [capture-node] freeze=110ms shot=3199ms unfreeze=0ms saved=True
+[01:31]   Execution complete (t=9.9s)
+[01:31]   Captured 5 unique frames over 13.27s
+[01:31]   [debug] iframes: 1
+[01:31]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17782391, canvas=486x348, rafFrozen=True
+[01:31]   [timing] trigger_3d_previews: 0.0s
+[01:33]   Saved high-quality screenshot: depth_map_to_mesh_executed.png
+[01:33]   [timing] final_screenshot: 0.2s
+[01:34] Capturing execution frames: fix_self_intersection.json
+[01:40]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[01:40]   Validating workflow...
+[01:40]   Queuing workflow for execution...
+[01:40]   Node executed (1 total), capturing...
+[01:41]   Frame 2 saved (frame_001.jpg, t=0.5s)
+[01:41]   [capture-node] freeze=2ms shot=133ms unfreeze=3ms saved=True
+[01:41]   Node executed (3 total), capturing...
+[01:41]   Frame 3 saved (frame_002.jpg, t=0.9s)
+[01:41]   [capture-node] freeze=22ms shot=608ms unfreeze=2ms saved=True
+[01:42]   Node executed (4 total), capturing...
+[01:42]   [capture-node] freeze=1ms shot=196ms unfreeze=0ms saved=False
+[01:42]   Execution complete (t=1.9s)
+[01:42]   Captured 3 unique frames over 2.14s
+[01:42]   [debug] iframes: 1
+[01:42]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[01:42]   [timing] trigger_3d_previews: 0.0s
+[01:44]   Saved high-quality screenshot: fix_self_intersection_executed.png
+[01:44]   [timing] final_screenshot: 0.4s
+[01:45] Capturing execution frames: mesh_info.json
+[01:50]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[01:50]   Validating workflow...
+[01:50]   Queuing workflow for execution...
+[01:51]   Node executed (2 total), capturing...
+[01:51]   Frame 2 saved (frame_001.jpg, t=0.4s)
+[01:51]   [capture-node] freeze=2ms shot=81ms unfreeze=0ms saved=True
+[01:51]   Execution complete (t=0.4s)
+[01:51]   Captured 2 unique frames over 0.53s
+[01:51]   [debug] iframes: 0
+[01:51]   [timing] trigger_3d_previews: 0.0s
+[01:53]   Saved high-quality screenshot: mesh_info_executed.png
+[01:53]   [timing] final_screenshot: 0.2s
+[01:53] Capturing execution frames: mesh_mesh_distance.json
+[01:59]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[01:59]   Validating workflow...
+[01:59]   Queuing workflow for execution...
+[02:01]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[02:01]   [capture-periodic] freeze=1ms shot=95ms unfreeze=4ms saved=True
+[02:04]   Frame 3 saved (frame_002.jpg, t=4.4s)
+[02:04]   [capture-periodic] freeze=1ms shot=88ms unfreeze=4ms saved=True
+[02:05]   [capture-loop] iter=50 t=5.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=2.9/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=26% browser_rss=0.99GB
+[02:05]   Node executed (1 total), capturing...
+[02:06]   Frame 4 saved (frame_003.jpg, t=6.4s)
+[02:06]   [capture-node] freeze=5ms shot=117ms unfreeze=4ms saved=True
+[02:06]   Node executed (2 total), capturing...
+[02:06]   [capture-node] freeze=2ms shot=102ms unfreeze=2ms saved=False
+[02:11]   [capture-loop] iter=100 t=11.6s state={'complete': False, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=3 ram=2.9/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=35% browser_rss=0.99GB
+[02:11]   Node executed (3 total), capturing...
+[02:11]   Frame 5 saved (frame_004.jpg, t=11.8s)
+[02:11]   [capture-node] freeze=2ms shot=115ms unfreeze=3ms saved=True
+[02:11]   Node executed (4 total), capturing...
+[02:11]   Frame 6 saved (frame_005.jpg, t=12.2s)
+[02:11]   [capture-node] freeze=2ms shot=93ms unfreeze=0ms saved=True
+[02:11]   Execution complete (t=12.2s)
+[02:11]   Captured 6 unique frames over 12.3s
+[02:11]   [debug] iframes: 0
+[02:11]   [timing] trigger_3d_previews: 0.0s
+[02:14]   Saved high-quality screenshot: mesh_mesh_distance_executed.png
+[02:14]   [timing] final_screenshot: 0.2s
+[02:14] Capturing execution frames: normals.json
+[02:20]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[02:20]   Validating workflow...
+[02:20]   Queuing workflow for execution...
+[02:20]   Node executed (1 total), capturing...
+[02:20]   Frame 2 saved (frame_001.jpg, t=0.7s)
+[02:20]   [capture-node] freeze=2ms shot=83ms unfreeze=3ms saved=True
+[02:21]   Node executed (2 total), capturing...
+[02:22]   Frame 3 saved (frame_002.jpg, t=1.4s)
+[02:22]   [capture-node] freeze=650ms shot=96ms unfreeze=0ms saved=True
+[02:22]   Execution complete (t=1.4s)
+[02:22]   Captured 3 unique frames over 2.23s
+[02:22]   [debug] iframes: 1
+[02:22]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17782392, canvas=486x348, rafFrozen=True
+[02:22]   [timing] trigger_3d_previews: 0.0s
+[02:24]   Saved high-quality screenshot: normals_executed.png
+[02:24]   [timing] final_screenshot: 0.2s
+[02:24] Capturing execution frames: point_mesh_distance.json
+[02:30]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[02:30]   Validating workflow...
+[02:30]   Queuing workflow for execution...
+[02:32]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[02:32]   [capture-periodic] freeze=1ms shot=98ms unfreeze=5ms saved=True
+[02:33]   Node executed (1 total), capturing...
+[02:33]   Frame 3 saved (frame_002.jpg, t=3.1s)
+[02:33]   [capture-node] freeze=2ms shot=101ms unfreeze=3ms saved=True
+[02:33]   Node executed (3 total), capturing...
+[02:34]   Frame 4 saved (frame_003.jpg, t=3.6s)
+[02:34]   [capture-node] freeze=14ms shot=180ms unfreeze=2ms saved=True
+[02:34]   Execution complete (t=4.0s)
+[02:34]   Captured 4 unique frames over 3.98s
+[02:34]   [debug] iframes: 1
+[02:34]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=False
+[02:34]   [timing] trigger_3d_previews: 0.0s
+[02:36]   Saved high-quality screenshot: point_mesh_distance_executed.png
+[02:36]   [timing] final_screenshot: 0.2s
+[02:36] Capturing execution frames: preview_mesh_threejs.json
+[02:42]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[02:42]   Validating workflow...
+[02:42]   Queuing workflow for execution...
+[02:43]   Node executed (1 total), capturing...
+[02:43]   Frame 2 saved (frame_001.jpg, t=0.7s)
+[02:43]   [capture-node] freeze=30ms shot=136ms unfreeze=0ms saved=True
+[02:43]   Execution complete (t=0.7s)
+[02:43]   Captured 2 unique frames over 0.86s
+[02:43]   [debug] iframes: 1
+[02:43]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer.html?v=177823924677, canvas=486x486, rafFrozen=True
+[02:43]   [timing] trigger_3d_previews: 0.0s
+[02:45]   Saved high-quality screenshot: preview_mesh_threejs_executed.png
+[02:45]   [timing] final_screenshot: 0.2s
+[02:46] Capturing execution frames: refine_mesh.json
+[02:51]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[02:51]   Validating workflow...
+[02:51]   Queuing workflow for execution...
+[02:51]   Node executed (1 total), capturing...
+[02:52]   Frame 2 saved (frame_001.jpg, t=0.7s)
+[02:52]   [capture-node] freeze=2ms shot=91ms unfreeze=3ms saved=True
+[02:52]   Node executed (2 total), capturing...
+[02:53]   Frame 3 saved (frame_002.jpg, t=1.2s)
+[02:53]   [capture-node] freeze=275ms shot=673ms unfreeze=7ms saved=True
+[02:54]   Execution complete (t=2.8s)
+[02:54]   Captured 3 unique frames over 2.84s
+[02:54]   [debug] iframes: 1
+[02:54]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=387x485, rafFrozen=False
+[02:54]   [timing] trigger_3d_previews: 0.0s
+[02:56]   Saved high-quality screenshot: refine_mesh_executed.png
+[02:56]   [timing] final_screenshot: 0.2s
+[02:56] Capturing execution frames: remesh_intersections.json
+[03:02]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[03:02]   Validating workflow...
+[03:02]   Queuing workflow for execution...
+[03:02]   Node executed (1 total), capturing...
+[03:02]   Frame 2 saved (frame_001.jpg, t=0.5s)
+[03:02]   [capture-node] freeze=5ms shot=100ms unfreeze=2ms saved=True
+[03:03]   Node executed (3 total), capturing...
+[03:03]   Frame 3 saved (frame_002.jpg, t=0.9s)
+[03:03]   [capture-node] freeze=4ms shot=117ms unfreeze=5ms saved=True
+[03:03]   Node executed (4 total), capturing...
+[03:03]   Frame 4 saved (frame_003.jpg, t=1.5s)
+[03:03]   [capture-node] freeze=35ms shot=101ms unfreeze=0ms saved=True
+[03:03]   Execution complete (t=1.5s)
+[03:03]   Captured 4 unique frames over 1.67s
+[03:03]   [debug] iframes: 1
+[03:03]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[03:04]   [timing] trigger_3d_previews: 0.0s
+[03:06]   Saved high-quality screenshot: remesh_intersections_executed.png
+[03:06]   [timing] final_screenshot: 0.2s
+[03:06] Capturing execution frames: remeshing.json
+[03:12]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[03:12]   Validating workflow...
+[03:12]   Queuing workflow for execution...
+[03:14]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[03:14]   [capture-periodic] freeze=1ms shot=85ms unfreeze=3ms saved=True
+[03:16]   Frame 3 saved (frame_002.jpg, t=4.4s)
+[03:16]   [capture-periodic] freeze=2ms shot=96ms unfreeze=2ms saved=True
+[03:17]   [capture-loop] iter=50 t=5.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=2.9/15.6GB (18%) swap=0.0/3.0GB (0%) cpu=26% browser_rss=1.05GB
+[03:23]   [capture-loop] iter=100 t=11.1s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=2.7/15.6GB (17%) swap=0.0/3.0GB (0%) cpu=35% browser_rss=0.90GB
+[03:28]   [capture-loop] iter=150 t=16.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=2.7/15.6GB (17%) swap=0.0/3.0GB (0%) cpu=33% browser_rss=0.90GB
+[03:33]   [capture-loop] iter=200 t=21.9s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=2.7/15.6GB (17%) swap=0.0/3.0GB (0%) cpu=34% browser_rss=0.87GB
+[03:39]   [capture-loop] iter=250 t=27.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=2.7/15.6GB (17%) swap=0.0/3.0GB (0%) cpu=33% browser_rss=0.87GB
+[03:39]   Node executed (1 total), capturing...
+[03:39]   Frame 4 saved (frame_003.jpg, t=27.8s)
+[03:39]   [capture-node] freeze=2ms shot=92ms unfreeze=3ms saved=True
+[03:40]   Node executed (2 total), capturing...
+[03:41]   Frame 5 saved (frame_004.jpg, t=28.6s)
+[03:41]   [capture-node] freeze=16ms shot=1058ms unfreeze=0ms saved=True
+[03:41]   Execution complete (t=28.6s)
+[03:41]   Captured 5 unique frames over 29.75s
+[03:41]   [debug] iframes: 1
+[03:41]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[03:41]   [timing] trigger_3d_previews: 0.0s
+[03:44]   Saved high-quality screenshot: remeshing_executed.png
+[03:44]   [timing] final_screenshot: 0.3s
+[03:44] Capturing execution frames: sMOOth.json
+[03:49]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[03:49]   Validating workflow...
+[03:49]   Queuing workflow for execution...
+[03:50]   Node executed (2 total), capturing...
+[03:50]   Frame 2 saved (frame_001.jpg, t=0.7s)
+[03:50]   [capture-node] freeze=111ms shot=273ms unfreeze=0ms saved=True
+[03:50]   Execution complete (t=0.7s)
+[03:50]   Captured 2 unique frames over 1.1s
+[03:50]   [debug] iframes: 1
+[03:50]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[03:50]   [timing] trigger_3d_previews: 0.0s
+[03:53]   Saved high-quality screenshot: sMOOth_executed.png
+[03:53]   [timing] final_screenshot: 0.3s
+[03:53] Capturing execution frames: sharpen.json
+[03:59]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[03:59]   Validating workflow...
+[03:59]   Queuing workflow for execution...
+[03:59]   Node executed (1 total), capturing...
+[03:59]   Frame 2 saved (frame_001.jpg, t=0.4s)
+[03:59]   [capture-node] freeze=2ms shot=110ms unfreeze=38ms saved=True
+[04:00]   Node executed (2 total), capturing...
+[04:00]   Frame 3 saved (frame_002.jpg, t=1.2s)
+[04:00]   [capture-node] freeze=41ms shot=103ms unfreeze=0ms saved=True
+[04:00]   Execution complete (t=1.2s)
+[04:00]   Captured 3 unique frames over 1.39s
+[04:00]   [debug] iframes: 1
+[04:00]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=244x393, rafFrozen=True
+[04:00]   [timing] trigger_3d_previews: 0.0s
+[04:02]   Saved high-quality screenshot: sharpen_executed.png
+[04:02]   [timing] final_screenshot: 0.2s
+[04:03] Capturing execution frames: side_by_side_viewer.json
+[04:08]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[04:08]   Validating workflow...
+[04:08]   Queuing workflow for execution...
+[04:08]   Node executed (1 total), capturing...
+[04:08]   Frame 2 saved (frame_001.jpg, t=0.4s)
+[04:08]   [capture-node] freeze=16ms shot=149ms unfreeze=0ms saved=True
+[04:08]   Execution complete (t=0.4s)
+[04:08]   Captured 2 unique frames over 0.64s
+[04:08]   [debug] iframes: 1
+[04:08]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=True
+[04:08]   [timing] trigger_3d_previews: 0.0s
+[04:11]   Saved high-quality screenshot: side_by_side_viewer_executed.png
+[04:11]   [timing] final_screenshot: 0.2s
+[04:11] Capturing execution frames: skeleton_extraction.json
+[04:17]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[04:17]   Validating workflow...
+[04:17]   Queuing workflow for execution...
+[04:19]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[04:19]   [capture-periodic] freeze=2ms shot=100ms unfreeze=5ms saved=True
+[04:19]   Node executed (1 total), capturing...
+[04:20]   Frame 3 saved (frame_002.jpg, t=2.7s)
+[04:20]   [capture-node] freeze=92ms shot=128ms unfreeze=0ms saved=True
+[04:20]   Execution complete (t=2.7s)
+[04:20]   Captured 3 unique frames over 2.95s
+[04:20]   [debug] iframes: 1
+[04:20]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=742x485, rafFrozen=True
+[04:20]   [timing] trigger_3d_previews: 0.0s
+[04:22]   Saved high-quality screenshot: skeleton_extraction_executed.png
+[04:22]   [timing] final_screenshot: 0.2s
+[04:22] Capturing execution frames: surface_reconstruction.json
+[04:28]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[04:28]   Validating workflow...
+[04:28]   Queuing workflow for execution...
+[04:30]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[04:30]   [capture-periodic] freeze=2ms shot=120ms unfreeze=3ms saved=True
+[04:33]   Frame 3 saved (frame_002.jpg, t=4.5s)
+[04:33]   [capture-periodic] freeze=2ms shot=112ms unfreeze=5ms saved=True
+[04:33]   Node executed (1 total), capturing...
+[04:33]   Frame 4 saved (frame_003.jpg, t=5.0s)
+[04:33]   [capture-node] freeze=2ms shot=99ms unfreeze=3ms saved=True
+[04:33]   Node executed (2 total), capturing...
+[04:34]   Frame 5 saved (frame_004.jpg, t=5.6s)
+[04:34]   [capture-node] freeze=2ms shot=97ms unfreeze=3ms saved=True
+[04:34]   Execution complete (t=5.8s)
+[04:34]   Captured 5 unique frames over 5.84s
+[04:34]   [debug] iframes: 1
+[04:34]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=False
+[04:34]   [timing] trigger_3d_previews: 0.3s
+[04:36]   Saved high-quality screenshot: surface_reconstruction_executed.png
+[04:36]   [timing] final_screenshot: 0.2s
+[04:37] Capturing execution frames: test_loading.json
+[04:42]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[04:42]   Validating workflow...
+[04:42]   Queuing workflow for execution...
+[04:44]   Frame 2 saved (frame_001.jpg, t=2.1s)
+[04:44]   [capture-periodic] freeze=1ms shot=81ms unfreeze=3ms saved=True
+[04:47]   Frame 3 saved (frame_002.jpg, t=4.3s)
+[04:47]   [capture-periodic] freeze=1ms shot=93ms unfreeze=3ms saved=True
+[04:48]   [capture-loop] iter=50 t=5.5s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=2 ram=3.3/15.6GB (21%) swap=0.0/3.0GB (0%) cpu=27% browser_rss=1.00GB
+[04:48]   Node executed (1 total), capturing...
+[04:48]   Frame 4 saved (frame_003.jpg, t=5.9s)
+[04:48]   [capture-node] freeze=3ms shot=109ms unfreeze=2ms saved=True
+[04:49]   Node executed (2 total), capturing...
+[04:49]   Frame 5 saved (frame_004.jpg, t=6.6s)
+[04:49]   [capture-node] freeze=2ms shot=81ms unfreeze=3ms saved=True
+[04:51]   Node executed (3 total), capturing...
+[04:52]   Frame 6 saved (frame_005.jpg, t=9.5s)
+[04:52]   [capture-node] freeze=2ms shot=86ms unfreeze=2ms saved=True
+[04:52]   Execution complete (t=9.8s)
+[04:52]   Captured 6 unique frames over 9.81s
+[04:52]   [debug] iframes: 1
+[04:52]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=370x485, rafFrozen=False
+[04:52]   [timing] trigger_3d_previews: 0.0s
+[04:54]   Saved high-quality screenshot: test_loading_executed.png
+[04:54]   [timing] final_screenshot: 0.2s
+[04:55] Capturing execution frames: boolean_ops_all.json
+[05:01]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[05:01]   Validating workflow...
+[05:01]   Queuing workflow for execution...
+[05:01]   Node executed (1 total), capturing...
+[05:01]   Frame 2 saved (frame_001.jpg, t=0.6s)
+[05:01]   [capture-node] freeze=2ms shot=95ms unfreeze=3ms saved=True
+[05:02]   Node executed (3 total), capturing...
+[05:02]   Frame 3 saved (frame_002.jpg, t=1.2s)
+[05:02]   [capture-node] freeze=172ms shot=242ms unfreeze=0ms saved=True
+[05:02]   Execution complete (t=1.2s)
+[05:02]   Captured 3 unique frames over 1.67s
+[05:02]   [debug] iframes: 1
+[05:02]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x393, rafFrozen=True
+[05:02]   [timing] trigger_3d_previews: 0.0s
+[05:04]   Saved high-quality screenshot: boolean_ops_all_executed.png
+[05:04]   [timing] final_screenshot: 0.3s
+[05:05] Capturing execution frames: decimate_all.json
+[05:11]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[05:11]   Validating workflow...
+[05:11]   Queuing workflow for execution...
+[05:13]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[05:13]   [capture-periodic] freeze=1ms shot=95ms unfreeze=7ms saved=True
+[05:14]   Node executed (2 total), capturing...
+[05:14]   Frame 3 saved (frame_002.jpg, t=2.9s)
+[05:14]   [capture-node] freeze=2ms shot=97ms unfreeze=5ms saved=True
+[05:15]   Node executed (3 total), capturing...
+[05:15]   Frame 4 saved (frame_003.jpg, t=4.0s)
+[05:15]   [capture-node] freeze=3ms shot=110ms unfreeze=2ms saved=True
+[05:15]   Node executed (4 total), capturing...
+[05:19]   Frame 5 saved (frame_004.jpg, t=4.7s)
+[05:19]   [capture-node] freeze=1385ms shot=1758ms unfreeze=6ms saved=True
+[05:19]   Node executed (6 total), capturing...
+[05:20]   Frame 6 saved (frame_005.jpg, t=8.4s)
+[05:20]   [capture-node] freeze=2ms shot=184ms unfreeze=0ms saved=True
+[05:20]   Execution complete (t=8.4s)
+[05:20]   Captured 6 unique frames over 8.68s
+[05:20]   [debug] iframes: 2
+[05:20]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=244x393, rafFrozen=True
+[05:20]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=244x393, rafFrozen=True
+[05:20]   [timing] trigger_3d_previews: 0.0s
+[05:22]   Saved high-quality screenshot: decimate_all_executed.png
+[05:22]   [timing] final_screenshot: 0.4s
+[05:22]   [23/33] SKIPPED (not in cpu list) fill_holes_all.json
+[05:22] Capturing execution frames: fix_normals_all.json
+[05:28]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[05:28]   Validating workflow...
+[05:28]   Queuing workflow for execution...
+[05:30]   Node executed (1 total), capturing...
+[05:30]   Frame 2 saved (frame_001.jpg, t=1.8s)
+[05:30]   [capture-node] freeze=2ms shot=103ms unfreeze=2ms saved=True
+[05:30]   Node executed (6 total), capturing...
+[05:32]   Frame 3 saved (frame_002.jpg, t=2.2s)
+[05:32]   [capture-node] freeze=221ms shot=972ms unfreeze=2ms saved=True
+[05:32]   Node executed (7 total), capturing...
+[05:32]   [capture-node] freeze=2ms shot=129ms unfreeze=0ms saved=False
+[05:32]   Execution complete (t=3.9s)
+[05:32]   Captured 3 unique frames over 3.99s
+[05:32]   [debug] iframes: 2
+[05:32]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x393, rafFrozen=True
+[05:32]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x195, rafFrozen=True
+[05:32]   [timing] trigger_3d_previews: 0.0s
+[05:35]   Saved high-quality screenshot: fix_normals_all_executed.png
+[05:35]   [timing] final_screenshot: 0.3s
+[05:35] Capturing execution frames: reconstruct_all.json
+[05:41]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[05:41]   Validating workflow...
+[05:41]   Queuing workflow for execution...
+[05:41]   Node executed (1 total), capturing...
+[05:42]   Frame 2 saved (frame_001.jpg, t=0.7s)
+[05:42]   [capture-node] freeze=107ms shot=125ms unfreeze=5ms saved=True
+[05:42]   Node executed (2 total), capturing...
+[05:42]   [capture-node] freeze=2ms shot=118ms unfreeze=5ms saved=False
+[05:44]   Node executed (3 total), capturing...
+[05:44]   Frame 3 saved (frame_002.jpg, t=3.0s)
+[05:44]   [capture-node] freeze=2ms shot=147ms unfreeze=2ms saved=True
+[05:44]   Node executed (4 total), capturing...
+[05:44]   [capture-node] freeze=2ms shot=140ms unfreeze=8ms saved=False
+[05:47]   Frame 4 saved (frame_003.jpg, t=5.7s)
+[05:47]   [capture-periodic] freeze=2ms shot=145ms unfreeze=3ms saved=True
+[05:48]   [capture-loop] iter=50 t=6.9s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=3 ram=3.4/15.6GB (22%) swap=0.0/3.0GB (0%) cpu=33% browser_rss=1.15GB
+[05:48]   Node executed (5 total), capturing...
+[05:48]   Frame 5 saved (frame_004.jpg, t=7.5s)
+[05:48]   [capture-node] freeze=2ms shot=128ms unfreeze=4ms saved=True
+[05:49]   Node executed (6 total), capturing...
+[05:49]   Frame 6 saved (frame_005.jpg, t=8.0s)
+[05:49]   [capture-node] freeze=2ms shot=125ms unfreeze=3ms saved=True
+[05:49]   Execution complete (t=8.4s)
+[05:49]   Captured 6 unique frames over 8.4s
+[05:50]   [debug] iframes: 2
+[05:50]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17782394, canvas=486x384, rafFrozen=False
+[05:50]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x195, rafFrozen=False
+[05:50]   [timing] trigger_3d_previews: 0.4s
+[05:53]   Saved high-quality screenshot: reconstruct_all_executed.png
+[05:53]   [timing] final_screenshot: 0.3s
+[05:53]   [26/33] SKIPPED (not in cpu list) remeshing_all.json
+[05:53] Capturing execution frames: sharpen_all.json
+[05:59]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[05:59]   Validating workflow...
+[05:59]   Queuing workflow for execution...
+[06:02]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[06:02]   [capture-periodic] freeze=2ms shot=113ms unfreeze=2ms saved=True
+[06:02]   Node executed (1 total), capturing...
+[06:03]   Frame 3 saved (frame_002.jpg, t=3.4s)
+[06:03]   [capture-node] freeze=2ms shot=106ms unfreeze=4ms saved=True
+[06:05]   Frame 4 saved (frame_003.jpg, t=5.6s)
+[06:05]   [capture-periodic] freeze=2ms shot=109ms unfreeze=2ms saved=True
+[06:05]   [capture-loop] iter=50 t=6.0s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=2 ram=3.2/15.6GB (21%) swap=0.0/3.0GB (0%) cpu=34% browser_rss=1.17GB
+[06:05]   Node executed (2 total), capturing...
+[06:06]   Frame 5 saved (frame_004.jpg, t=6.3s)
+[06:06]   [capture-node] freeze=2ms shot=109ms unfreeze=2ms saved=True
+[06:06]   Node executed (3 total), capturing...
+[06:06]   Frame 6 saved (frame_005.jpg, t=6.7s)
+[06:06]   [capture-node] freeze=2ms shot=112ms unfreeze=6ms saved=True
+[06:11]   [capture-loop] iter=100 t=12.0s state={'complete': False, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=2 ram=3.1/15.6GB (20%) swap=0.0/3.0GB (0%) cpu=36% browser_rss=0.97GB
+[06:13]   Node executed (4 total), capturing...
+[06:14]   Frame 7 saved (frame_006.jpg, t=14.3s)
+[06:14]   [capture-node] freeze=3ms shot=110ms unfreeze=2ms saved=True
+[06:16]   Frame 8 saved (frame_007.jpg, t=16.5s)
+[06:16]   [capture-periodic] freeze=2ms shot=111ms unfreeze=2ms saved=True
+[06:17]   [capture-loop] iter=150 t=17.8s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=2 ram=3.0/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=36% browser_rss=0.94GB
+[06:22]   Node executed (5 total), capturing...
+[06:22]   Frame 9 saved (frame_008.jpg, t=22.6s)
+[06:22]   [capture-node] freeze=2ms shot=109ms unfreeze=2ms saved=True
+[06:23]   [capture-loop] iter=200 t=23.5s state={'complete': False, 'error': None, 'executedCount': 5, 'wsState': 1} eval_ms=2 ram=3.0/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=34% browser_rss=0.94GB
+[06:24]   Frame 10 saved (frame_009.jpg, t=24.8s)
+[06:24]   [capture-periodic] freeze=2ms shot=120ms unfreeze=4ms saved=True
+[06:28]   [capture-loop] iter=250 t=29.0s state={'complete': False, 'error': None, 'executedCount': 5, 'wsState': 1} eval_ms=2 ram=3.0/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=33% browser_rss=0.94GB
+[06:34]   [capture-loop] iter=300 t=34.5s state={'complete': False, 'error': None, 'executedCount': 5, 'wsState': 1} eval_ms=2 ram=3.0/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=34% browser_rss=0.93GB
+[06:39]   [capture-loop] iter=350 t=40.0s state={'complete': False, 'error': None, 'executedCount': 5, 'wsState': 1} eval_ms=2 ram=3.0/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=34% browser_rss=0.94GB
+[06:45]   [capture-loop] iter=400 t=45.5s state={'complete': False, 'error': None, 'executedCount': 5, 'wsState': 1} eval_ms=2 ram=3.0/15.6GB (19%) swap=0.0/3.0GB (0%) cpu=34% browser_rss=0.94GB
+[06:46]   Node executed (6 total), capturing...
+[06:47]   Frame 11 saved (frame_010.jpg, t=47.4s)
+[06:47]   [capture-node] freeze=2ms shot=193ms unfreeze=53ms saved=True
+[06:48]   Node executed (7 total), capturing...
+[06:49]   Frame 12 saved (frame_011.jpg, t=48.6s)
+[06:49]   [capture-node] freeze=86ms shot=821ms unfreeze=11ms saved=True
+[06:49]   Node executed (9 total), capturing...
+[06:49]   Frame 13 saved (frame_012.jpg, t=49.9s)
+[06:49]   [capture-node] freeze=2ms shot=141ms unfreeze=0ms saved=True
+[06:49]   Execution complete (t=49.9s)
+[06:49]   Captured 13 unique frames over 50.12s
+[06:49]   [debug] iframes: 2
+[06:49]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x195, rafFrozen=True
+[06:49]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x195, rafFrozen=True
+[06:49]   [timing] trigger_3d_previews: 0.0s
+[06:52]   Saved high-quality screenshot: sharpen_all_executed.png
+[06:52]   [timing] final_screenshot: 0.3s
+[06:52] Capturing execution frames: skeleton_all.json
+[06:58]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[06:58]   Validating workflow...
+[06:58]   Queuing workflow for execution...
+[07:00]   Frame 2 saved (frame_001.jpg, t=2.3s)
+[07:00]   [capture-periodic] freeze=2ms shot=130ms unfreeze=2ms saved=True
+[07:01]   Node executed (1 total), capturing...
+[07:02]   Frame 3 saved (frame_002.jpg, t=3.0s)
+[07:02]   [capture-node] freeze=458ms shot=641ms unfreeze=3ms saved=True
+[07:02]   Node executed (2 total), capturing...
+[07:03]   Frame 4 saved (frame_003.jpg, t=4.4s)
+[07:03]   [capture-node] freeze=2ms shot=107ms unfreeze=0ms saved=True
+[07:03]   Execution complete (t=4.4s)
+[07:03]   Captured 4 unique frames over 4.57s
+[07:03]   [debug] iframes: 2
+[07:03]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x393, rafFrozen=True
+[07:03]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x195, rafFrozen=True
+[07:03]   [timing] trigger_3d_previews: 0.0s
+[07:05]   Saved high-quality screenshot: skeleton_all_executed.png
+[07:05]   [timing] final_screenshot: 0.3s
+[07:05] Capturing execution frames: smooth_all.json
+[07:11]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[07:11]   Validating workflow...
+[07:11]   Queuing workflow for execution...
+[07:11]   Node executed (3 total), capturing...
+[07:12]   Frame 2 saved (frame_001.jpg, t=0.5s)
+[07:12]   [capture-node] freeze=209ms shot=682ms unfreeze=2ms saved=True
+[07:13]   Node executed (7 total), capturing...
+[07:13]   Frame 3 saved (frame_002.jpg, t=1.7s)
+[07:13]   [capture-node] freeze=2ms shot=131ms unfreeze=0ms saved=True
+[07:13]   Execution complete (t=1.7s)
+[07:13]   Captured 3 unique frames over 1.91s
+[07:13]   [debug] iframes: 2
+[07:13]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x393, rafFrozen=True
+[07:13]   [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177823, canvas=368x195, rafFrozen=True
+[07:13]   [timing] trigger_3d_previews: 0.0s
+[07:15]   Saved high-quality screenshot: smooth_all_executed.png
+[07:15]   [timing] final_screenshot: 0.3s
+[07:16]   [30/33] SKIPPED (not in cpu list) uv_unwrap_all.json
+[07:16] Capturing execution frames: transform.json
+[07:22]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[07:22]   Validating workflow...
+[07:22]   Queuing workflow for execution...
+[07:22]   Node executed (2 total), capturing...
+[07:23]   Frame 2 saved (frame_001.jpg, t=0.4s)
+[07:23]   [capture-node] freeze=2ms shot=102ms unfreeze=0ms saved=True
+[07:23]   Execution complete (t=0.4s)
+[07:23]   Captured 2 unique frames over 0.59s
+[07:23]   [debug] iframes: 1
+[07:23]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778239, canvas=742x485, rafFrozen=True
+[07:23]   [timing] trigger_3d_previews: 0.0s
+[07:25]   Saved high-quality screenshot: transform_executed.png
+[07:25]   [timing] final_screenshot: 0.2s
+[07:25] Capturing execution frames: uv_unwrap.json
+[07:31]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[07:31]   Validating workflow...
+[07:31]   Queuing workflow for execution...
+[07:34]   Frame 2 saved (frame_001.jpg, t=2.2s)
+[07:34]   [capture-periodic] freeze=2ms shot=97ms unfreeze=3ms saved=True
+[07:36]   Frame 3 saved (frame_002.jpg, t=4.4s)
+[07:36]   [capture-periodic] freeze=10ms shot=148ms unfreeze=4ms saved=True
+[07:36]   Node executed (1 total), capturing...
+[07:36]   Frame 4 saved (frame_003.jpg, t=5.1s)
+[07:36]   [capture-node] freeze=2ms shot=98ms unfreeze=2ms saved=True
+[07:37]   Node executed (2 total), capturing...
+[07:37]   Frame 5 saved (frame_004.jpg, t=5.8s)
+[07:37]   [capture-node] freeze=18ms shot=203ms unfreeze=0ms saved=True
+[07:37]   Execution complete (t=5.8s)
+[07:37]   Captured 5 unique frames over 6.03s
+[07:37]   [debug] iframes: 1
+[07:37]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_uv.html?v=177823953, canvas=287x287, rafFrozen=True
+[07:37]   [timing] trigger_3d_previews: 0.0s
+[07:39]   Saved high-quality screenshot: uv_unwrap_executed.png
+[07:39]   [timing] final_screenshot: 0.2s
+[07:40] Capturing execution frames: view_texture.json
+[07:45]   Frame 1 saved (frame_000.jpg, t=0.0s)
+[07:45]   Validating workflow...
+[07:45]   Queuing workflow for execution...
+[07:46]   Node executed (1 total), capturing...
+[07:46]   Frame 2 saved (frame_001.jpg, t=0.6s)
+[07:46]   [capture-node] freeze=5ms shot=242ms unfreeze=0ms saved=True
+[07:46]   Execution complete (t=0.6s)
+[07:46]   Captured 2 unique frames over 0.93s
+[07:46]   [debug] iframes: 1
+[07:46]   [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk_textured.html?v, canvas=221x249, rafFrozen=True
+[07:46]   [timing] trigger_3d_previews: 0.0s
+[07:48]   Saved high-quality screenshot: view_texture_executed.png
+[07:48]   [timing] final_screenshot: 0.2s
+[07:48] Results saved to /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/GeometryPack-1118/linux-cpu/results.json
+[07:49] Saved: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/GeometryPack-1118/linux-cpu/index.html
+[07:49] [EXECUTION] PASSED
+[07:49] 
+linux: PASSED

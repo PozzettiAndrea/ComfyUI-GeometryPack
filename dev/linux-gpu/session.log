@@ -1,0 +1,245 @@
+[00:00] Crash dump logging enabled: /logs/GeometryPack-1653/dev/linux-gpu/crash_dump.log
+[00:00] 
+[00:00] [1/5] SYNTAX
+[00:00] ----------------------------------------
+[00:00] [DEBUG] server=None, server_url=None, api=None
+[00:00] Found pyproject.toml (modern format)
+[00:00] Found requirements.txt (legacy format)
+[00:00] Unicode check: OK (all characters cp1252-safe)
+[00:00] Forbidden patterns check: OK
+[00:00] [SYNTAX] PASSED
+[00:00] 
+[00:00] [2/5] INSTALL
+[00:00] ----------------------------------------
+[00:00] [DEBUG] server=None, server_url=None, api=None
+[00:00] Setting up ComfyUI...
+[00:00] Creating virtual environment...
+[00:00] Running: uv venv /workspaces/GeometryPack-1653/.venv --python 3.10
+[00:00] Cloning ComfyUI (latest)...
+[00:00] Running: git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git /workspaces/GeometryPack-1653/ComfyUI
+[00:02] Installing ComfyUI requirements...
+[00:02] Running: uv pip install --python /workspaces/GeometryPack-1653/.venv/bin/python --index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.org/simple --index-strategy unsafe-best-match -r /workspaces/GeometryPack-1653/ComfyUI/requirements.txt
+[01:21] Installing custom node...
+[01:21] Copying ComfyUI-GeometryPack to custom_nodes/...
+[01:21] Installing node requirements...
+[01:21] Running: uv pip install --python /workspaces/GeometryPack-1653/.venv/bin/python --index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.org/simple --index-strategy unsafe-best-match -r /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-GeometryPack/requirements.txt
+[01:24] Running install.py...
+[01:24] Running: /workspaces/GeometryPack-1653/.venv/bin/python /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-GeometryPack/install.py
+[01:26]   [comfy-env] Workspace: /workspaces/GeometryPack-1653/ComfyUI/.ce
+[01:26]   [comfy-env] ComfyUI: /workspaces/GeometryPack-1653/ComfyUI
+[01:26]   [comfy-env] Found 1 node config(s):
+[01:26]     - geometrypack-nodes <- custom_nodes/ComfyUI-GeometryPack/nodes/comfy-env.toml (python=host)
+[01:26]   [comfy-env] Bootstrap interpreter has python 3.10 + torch 2.11.0 (cu128). Looking for cuda-only wheels matching cu128/torch2.11/cp310.
+[01:26]   [comfy-env] GPU: Detection: smi
+[01:26]   Driver: 580.126.20
+[01:26]   CUDA: 13.0
+[01:26]   Recommended: CUDA 13.0
+[01:26]   
+[01:26]     GPU 0: NVIDIA GeForce RTX 5060 (sm_120) [Blackwell] 8151MB
+[01:26]   [comfy-env] Comfyui feature -> torch 2.11.0 from https://download.pytorch.org/whl/cu128 (CUDA 12.8 via bootstrap torch)
+[01:27]   [comfy-env] cuda-wheels: 1 package(s) need a matched (cuda, torch, python) combo: ['cumesh']
+[01:27]   [comfy-env] cuda-wheels tier 1 (bootstrap): probing cu12.8/torch2.11/cp310
+[01:27]   [cuda-wheels] Looking up cumesh: cu128 torch2.11 cp310 manylinux linux
+[01:27]   [cuda-wheels]   Found: cumesh-0.0.1+cu128torch2.11-cp310-cp310-manylinux_2_35_x86_64.whl
+[01:27]   [comfy-env] cuda-wheels combo: cu12.8/torch2.11 (bootstrap matches; per-node envs will pin to this)
+[01:27]   [comfy-env] Root conda deps from ComfyUI-GeometryPack: ['av', 'ffmpeg']
+[01:27]   [comfy-env] Comfyui feature pin: torch ==2.11.0, torchvision ==0.26.*, torchaudio ==2.11.*
+[01:27]   [comfy-env] Host glibc 2.35 -> comfyui feature system-requirements
+[01:27]   [comfy-env] Root conda deps: ['av', 'ffmpeg']
+[01:27]   [comfy-env] comfyui310: python 3.10, torch from https://download.pytorch.org/whl/cu128
+[01:27]   [comfy-env] cuda-wheels combo: per-node cuda features will pin ['torch', 'torchaudio', 'torchvision'] via pypi-options.dependency-overrides (https://download.pytorch.org/whl/cu128)
+[01:27]   [cuda-wheels] Looking up cumesh: cu128 torch2.11 cp310 manylinux linux
+[01:27]   [cuda-wheels]   Found: cumesh-0.0.1+cu128torch2.11-cp310-cp310-manylinux_2_35_x86_64.whl
+[01:27]   [comfy-env] geometrypack-nodes: cuda-wheels deferred for post-pixi install (cumesh)
+[01:27]   [comfy-env] geometrypack-nodes: torch override -> torch==2.11.0, torchvision==0.26.*, torchaudio==2.11.* from https://download.pytorch.org/whl/cu128
+[01:27]   Generated /workspaces/GeometryPack-1653/ComfyUI/.ce/pixi.toml
+[01:27]   [comfy-env] Installing 1 environment(s):
+[01:27]     - geometrypack-nodes (python=host, 13 pypi deps, 1 cuda wheels)
+[01:27]   [comfy-env] Running `pixi install --all`...
+[01:41]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`
+[01:41]     	- bin/.librsvg-pre-unlink.sh
+[01:41]     To enable them, run:
+[01:41]     	pixi config set --local run-post-link-scripts insecure
+[01:41]     More info:
+[01:41]     	https://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts
+[01:41]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`
+[01:42]     	- bin/.librsvg-pre-unlink.sh
+[01:42]     To enable them, run:
+[01:42]     	pixi config set --local run-post-link-scripts insecure
+[01:42]     More info:
+[01:42]     	https://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts
+[02:58]     The following environments have been installed: default, comfyui, geometrypack-nodes.
+[02:58]   [comfy-env] Note: env `default` is on disk but no node declares it in this run. Leaving as-is. Remove via `pixi clean --environment default` if intended.
+[02:58]   [comfy-env] geometrypack-nodes: installing cuda-wheels with --no-deps (cumesh)
+[02:58]     Using Python 3.10.20 environment at: .pixi/envs/geometrypack-nodes
+[02:59]     Resolved 1 package in 684ms
+[02:59]     Downloading cumesh (19.5MiB)
+[02:59]      Downloaded cumesh
+[02:59]     Prepared 1 package in 357ms
+[02:59]     Installed 1 package in 3ms
+[02:59]      + cumesh==0.0.1+cu128torch2.11 (from https://github.com/PozzettiAndrea/cuda-wheels/releases/download/cumesh-latest/cumesh-0.0.1%2Bcu128torch2.11-cp310-cp310-manylinux_2_35_x86_64.whl)
+[02:59]   [comfy-env] Install log: /workspaces/GeometryPack-1653/ComfyUI/.ce/install.log
+[02:59]   
+[02:59]   Installation complete!
+[02:59] Installing validation endpoint...
+[02:59]   Cloning PozzettiAndrea/ComfyUI-validate-endpoint...
+[02:59] Running: git clone --depth 1 https://github.com/PozzettiAndrea/ComfyUI-validate-endpoint.git /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-validate-endpoint
+[03:00] COMFY_TEST_GPU env var = '1'
+[03:00] GPU mode: using real CUDA (no mocking)
+[03:00] [INSTALL] PASSED
+[03:00] 
+[03:00] [3/5] REGISTRATION
+[03:00] ----------------------------------------
+[03:00] [DEBUG] server=None, server_url=None, api=None
+[03:00] 
+Starting ComfyUI server...
+[03:00] Starting ComfyUI server on port 41893...
+[03:00] Starting ComfyUI server on port 41893...
+[03:00] Waiting for server to be ready (timeout: 600s)...
+[03:01]   [ComfyUI] setup plugin alembic.autogenerate.schemas
+[03:01]   [ComfyUI] setup plugin alembic.autogenerate.tables
+[03:01]   [ComfyUI] setup plugin alembic.autogenerate.types
+[03:01]   [ComfyUI] setup plugin alembic.autogenerate.constraints
+[03:01]   [ComfyUI] setup plugin alembic.autogenerate.defaults
+[03:01]   [ComfyUI] setup plugin alembic.autogenerate.comments
+[03:01]   [ComfyUI] [comfy-env] ComfyUI-GeometryPack: 1 isolation env(s):
+[03:01]   [ComfyUI] [comfy-env]   nodes -> /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-GeometryPack/nodes
+[03:01]   [ComfyUI] [comfy-env] prestartup complete
+[03:01]   [ComfyUI] 
+[03:01]   [ComfyUI] Prestartup times for custom nodes:
+[03:01]   [ComfyUI]    0.2 seconds: /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-GeometryPack
+[03:01]   [ComfyUI] 
+[03:06]   [ComfyUI] WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+[03:06]   [ComfyUI] Found comfy_kitchen backend cuda: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8']}
+[03:06]   [ComfyUI] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}
+[03:06]   [ComfyUI] Found comfy_kitchen backend triton: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8']}
+[03:06]   [ComfyUI] Checkpoint files will always be loaded safely.
+[03:06]   [ComfyUI] Total VRAM 7704 MB, total RAM 32011 MB
+[03:06]   [ComfyUI] pytorch version: 2.11.0+cu128
+[03:06]   [ComfyUI] Set vram state to: NORMAL_VRAM
+[03:06]   [ComfyUI] Device: cuda:0 NVIDIA GeForce RTX 5060 : cudaMallocAsync
+[03:06]   [ComfyUI] Using async weight offloading with 2 streams
+[03:06]   [ComfyUI] Enabled pinned memory 28810.0
+[03:07]   [ComfyUI] Using pytorch attention
+[03:10]   [ComfyUI] aimdo: /project/src-posix/cuda-funchooks.c:52:DEBUG:aimdo_setup_hooks: hooks successfully installed
+[03:10]   [ComfyUI] aimdo: /project/src/control.c:151:INFO:comfy-aimdo inited for GPU: NVIDIA GeForce RTX 5060 (VRAM: 7703 MB)
+[03:10]   [ComfyUI] DynamicVRAM support detected and enabled
+[03:10]   [ComfyUI] Python version: 3.10.20 (main, Apr 14 2026, 14:28:08) [Clang 22.1.3 ]
+[03:10]   [ComfyUI] ComfyUI version: 0.20.1
+[03:10]   [ComfyUI] comfy-aimdo version: 0.3.0
+[03:10]   [ComfyUI] comfy-kitchen version: 0.2.8
+[03:10]   [ComfyUI] ****** User settings have been changed to be stored on the server instead of browser storage. ******
+[03:10]   [ComfyUI] ****** For multi-user setups add the --multi-user CLI argument to enable multiple user profiles. ******
+[03:10]   [ComfyUI] ComfyUI frontend version: 1.43.18
+[03:10]   [ComfyUI] [Prompt Server] web root: /workspaces/GeometryPack-1653/.venv/lib/python3.10/site-packages/comfyui_frontend_package/static
+[03:10]   [ComfyUI] Asset seeder disabled
+[03:12]   [ComfyUI] loading...
+[03:12]   [ComfyUI] calling register_nodes
+[03:12]   [ComfyUI] [comfy-env] Version: 0.3.78
+[03:12]   [ComfyUI] [comfy-env] register_nodes: ComfyUI-GeometryPack
+[03:12]   [ComfyUI] [comfy-env] ComfyUI source dir: /workspaces/GeometryPack-1653/ComfyUI
+[03:12]   [ComfyUI] [comfy-env] Found 1 isolation env(s)
+[03:12]   [ComfyUI] [comfy-env] Scanning nodes metadata (isolation root)...
+[03:12]   [ComfyUI] [comfy-env] Metadata scan: /root/.pixi/bin/pixi run --as-is --manifest-path /workspaces/GeometryPack-1653/ComfyUI/.ce/pixi.toml -e geometrypack-nodes python /tmp/comfy_meta_qptc5lbg.py /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-GeometryPack nodes
+[03:12]   [ComfyUI] [comfy-env] Scan env PATH for nodes:
+[03:12]   [ComfyUI] [comfy-env]   [0] /root/.local/bin
+[03:12]   [ComfyUI] [comfy-env]   [1] /usr/local/nvidia/bin
+[03:12]   [ComfyUI] [comfy-env]   [2] /usr/local/cuda/bin
+[03:12]   [ComfyUI] [comfy-env]   [3] /usr/local/sbin
+[03:12]   [ComfyUI] [comfy-env]   [4] /usr/local/bin
+[03:12]   [ComfyUI] [comfy-env]   [5] /usr/sbin
+[03:12]   [ComfyUI] [comfy-env]   [6] /usr/bin
+[03:12]   [ComfyUI] [comfy-env]   [7] /sbin
+[03:12]   [ComfyUI] [comfy-env]   [8] /bin
+[03:19]   [ComfyUI] [comfy-env] Metadata scan stderr for nodes:
+[03:19]   [ComfyUI] [comfy-env]   [meta-scan] importing nodes from /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-GeometryPack
+[03:19]   [ComfyUI] [comfy-env]   WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+[03:19]   [ComfyUI] [comfy-env]   [meta-scan] import OK
+[03:19]   [ComfyUI] [comfy-env]   Traceback (most recent call last):
+[03:19]   [ComfyUI] [comfy-env]     File "/workspaces/GeometryPack-1653/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.10/site-packages/bpy/3.6/scripts/modules/addon_utils.py", line 421, in disable
+[03:19]   [ComfyUI] [comfy-env]       mod.unregister()
+[03:19]   [ComfyUI] [comfy-env]   TypeError: '_OpNamespace' object is not callable
+[03:19]   [ComfyUI] [comfy-env]   Traceback (most recent call last):
+[03:19]   [ComfyUI] [comfy-env]     File "/workspaces/GeometryPack-1653/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.10/site-packages/bpy/3.6/scripts/modules/addon_utils.py", line 421, in disable
+[03:19]   [ComfyUI] [comfy-env]       mod.unregister()
+[03:19]   [ComfyUI] [comfy-env]   TypeError: '_ClassNamespace' object is not callable
+[03:19]   [ComfyUI] [comfy-env] Scanned nodes: 125 nodes (7.2s)
+[03:19]   [ComfyUI] [comfy-env] Scanned nodes root: 125 nodes (7.2s)
+[03:19]   [ComfyUI] [comfy-env] Imported nodes root: 125 nodes (isolation)
+[03:19]   [ComfyUI] [comfy-env] Registered 125 total nodes
+[03:19]   [ComfyUI] 
+[03:19]   [ComfyUI] Import times for custom nodes:
+[03:19]   [ComfyUI]    0.0 seconds: /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-validate-endpoint
+[03:19]   [ComfyUI]    0.0 seconds: /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/websocket_image_save.py
+[03:19]   [ComfyUI]    7.4 seconds: /workspaces/GeometryPack-1653/ComfyUI/custom_nodes/ComfyUI-GeometryPack
+[03:19]   [ComfyUI] 
+[03:19]   [ComfyUI] Context impl SQLiteImpl.
+[03:19]   [ComfyUI] Will assume non-transactional DDL.
+[03:19]   [ComfyUI] Context impl SQLiteImpl.
+[03:19]   [ComfyUI] Will assume non-transactional DDL.
+[03:19]   [ComfyUI] Running upgrade  -> 0001_assets, Initial assets schema
+[03:19]   [ComfyUI] Revision ID: 0001_assets
+[03:19]   [ComfyUI] Revises: None
+[03:19]   [ComfyUI] Create Date: 2025-12-10 00:00:00
+[03:19]   [ComfyUI] Running upgrade 0001_assets -> 0002_merge_to_asset_references, Merge AssetInfo and AssetCacheState into unified asset_references table.
+[03:19]   [ComfyUI] Running upgrade 0002_merge_to_asset_references -> 0003_add_metadata_job_id, Add system_metadata and job_id columns to asset_references.
+[03:19]   [ComfyUI] Change preview_id FK from assets.id to asset_references.id.
+[03:19]   [ComfyUI] Database upgraded from None to 0003_add_metadata_job_id
+[03:19]   [ComfyUI] Starting server
+[03:19]   [ComfyUI] 
+[03:19]   [ComfyUI] To see the GUI go to: http://127.0.0.1:41893
+[03:20] Server responding, waiting for nodes to load...
+[03:40] Server is ready!
+[03:40] Checking for import errors in server logs...
+[03:40] No import errors detected
+[03:40] Found 826 registered nodes
+[03:40] [REGISTRATION] PASSED
+[03:40] 
+[03:40] [4/5] INSTANTIATION
+[03:40] ----------------------------------------
+[03:40] [DEBUG] server=<comfy_test.comfyui.server.ComfyUIServer object at 0x7a13bc18bd90>, server_url=None, api=<comfy_test.comfyui.api.ComfyUIAPI object at 0x7a13bbab6290>
+[03:40] Testing node constructors...
+[03:41] All 125 node(s) instantiated successfully!
+[03:41] [INSTANTIATION] PASSED
+[03:41] 
+[03:41] [5/5] EXECUTION
+[03:41] ----------------------------------------
+[03:41] [DEBUG] server=<comfy_test.comfyui.server.ComfyUIServer object at 0x7a13bc18bd90>, server_url=None, api=<comfy_test.comfyui.api.ComfyUIAPI object at 0x7a13bbab6290>
+[03:41] GPU runner - will execute 4 workflow(s)
+[03:41] Running 23 workflow(s) (all with videos)...
+[03:41] Installing screenshot dependencies (playwright, pillow)...
+[03:42]   Packages installed, downloading chromium browser...
+[03:58]   Screenshot dependencies installed successfully
+[03:59] Starting headless browser...
+[03:59]   Installing Vulkan stack (apt)...
+[03:59]   Vulkan install error: [Errno 2] No such file or directory: 'sudo'
+[03:59]   GPU detected (no Vulkan) — using ANGLE/OpenGL rendering
+[03:59]   [1/23] SKIPPED (not in gpu list) alpha_wrap.json
+[03:59]   [2/23] SKIPPED (not in gpu list) batch_remesh.json
+[03:59]   [3/23] SKIPPED (not in gpu list) boolean_ops.json
+[03:59]   [4/23] SKIPPED (not in gpu list) decimate.json
+[04:00]   [5/23] SKIPPED (not in gpu list) depth_map_to_mesh.json
+[04:00]   [6/23] SKIPPED (not in gpu list) fix_self_intersection.json
+[04:00]   [7/23] SKIPPED (not in gpu list) mesh_info.json
+[04:00]   [8/23] SKIPPED (not in gpu list) mesh_mesh_distance.json
+[04:00]   [9/23] SKIPPED (not in gpu list) normals.json
+[04:00]   [10/23] SKIPPED (not in gpu list) point_mesh_distance.json
+[04:01]   [11/23] SKIPPED (not in gpu list) preview_mesh_threejs.json
+[04:01]   [12/23] SKIPPED (not in gpu list) refine_mesh.json
+[04:01]   [13/23] SKIPPED (not in gpu list) remesh_intersections.json
+[04:01]   [14/23] SKIPPED (not in gpu list) remeshing.json
+[04:01]   [15/23] SKIPPED (not in gpu list) sMOOth.json
+[04:01]   [16/23] SKIPPED (not in gpu list) sharpen.json
+[04:01]   [17/23] SKIPPED (not in gpu list) side_by_side_viewer.json
+[04:02]   [18/23] SKIPPED (not in gpu list) skeleton_extraction.json
+[04:02]   [19/23] SKIPPED (not in gpu list) surface_reconstruction.json
+[04:02]   [20/23] SKIPPED (not in gpu list) test_loading.json
+[04:02]   [21/23] SKIPPED (not in gpu list) transform.json
+[04:02]   [22/23] SKIPPED (not in gpu list) uv_unwrap.json
+[04:02]   [23/23] SKIPPED (not in gpu list) view_texture.json
+[04:03] Results saved to /logs/GeometryPack-1653/dev/linux-gpu/results.json
+[04:03] Saved: /logs/GeometryPack-1653/dev/linux-gpu/index.html
+[04:03] [EXECUTION] PASSED
+[04:03] 
+linux: PASSED
+[04:03] Stopping ComfyUI server...

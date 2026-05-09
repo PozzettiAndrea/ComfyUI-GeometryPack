@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComfyUI-GeometryPack - Test Results</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1923;
+            color: #e6edf3;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #162033;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid #243656;
+        }
+
+        body.in-iframe header {
+            display: none;
+        }
+
+        body.in-iframe .container {
+            padding-top: 1.25rem;
+        }
+
+        body.in-iframe .summary-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 a {
+            color: #e6edf3;
+            text-decoration: none;
+        }
+
+        h1 a:hover { color: #58a6ff; }
+
+        .meta-chips {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.6rem;
+            background: #1c2d44;
+            border: 1px solid #243656;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            color: #8ba3c1;
+        }
+
+        .meta-chip svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Summary Section */
+        .summary {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            background: #1c2d44;
+            border-radius: 6px;
+            height: 10px;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .progress-fill {
+            background: #3fb950;
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.has-failures {
+            background: linear-gradient(90deg, #3fb950 0%, #3fb950 100.0%, #f85149 100.0%, #f85149 100%);
+            width: 100% !important;
+            border-radius: 6px;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #8ba3c1;
+            white-space: nowrap;
+            min-width: 3.5rem;
+            text-align: right;
+        }
+
+        .stats {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .stat-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .stat-pass {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+        }
+
+        .stat-fail {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+        }
+
+        .stat-total {
+            color: #8ba3c1;
+            font-size: 0.85rem;
+        }
+
+        /* Failed Section */
+        .failed-section {
+            background: rgba(248, 81, 73, 0.08);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .failed-section h2 {
+            color: #f85149;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .failed-item {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .failed-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .failed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .failed-name {
+            font-weight: 600;
+            color: #f85149;
+        }
+
+        .failed-duration {
+            color: #8ba3c1;
+            font-size: 0.8rem;
+        }
+
+        .failed-error {
+            background: #0f1923;
+            border: 1px solid #243656;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            font-size: 0.8rem;
+            color: #d29922;
+            margin-bottom: 0.5rem;
+        }
+
+        .log-link {
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .log-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Workflow Grid */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            color: #8ba3c1;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .view-controls {
+            display: flex;
+            gap: 0;
+            align-items: center;
+            border: 1px solid #243656;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            background: #1c2d44;
+            color: #8ba3c1;
+            border: none;
+            border-right: 1px solid #243656;
+            padding: 0.3rem 0.75rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .view-btn:last-child {
+            border-right: none;
+        }
+
+        .view-btn:hover {
+            background: #243656;
+            color: #e6edf3;
+        }
+
+        .view-btn.active {
+            background: #58a6ff;
+            color: #fff;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .workflow-grid.view-list {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .workflow-grid.view-list .workflow-card {
+            border-radius: 0;
+            border-bottom: 1px solid #243656;
+        }
+
+        .workflow-grid.view-list .workflow-card:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .workflow-grid.view-list .workflow-card:last-child {
+            border-radius: 0 0 8px 8px;
+            border-bottom: none;
+        }
+
+        .workflow-grid.view-list .workflow-card:only-child {
+            border-radius: 8px;
+        }
+
+        .workflow-grid.view-list .workflow-screenshot {
+            width: 100%;
+            height: auto;
+            aspect-ratio: auto;
+        }
+
+        .workflow-grid.view-list .workflow-info {
+            border-top: 1px solid #243656;
+            padding: 0.75rem 1rem;
+        }
+
+        .workflow-grid.view-list .workflow-name {
+            max-width: none;
+            font-size: 0.9rem;
+        }
+
+        .workflow-card {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+
+        .workflow-card:hover {
+            transform: translateY(-1px);
+            border-color: #4a6282;
+        }
+
+        .workflow-card.clickable {
+            cursor: pointer;
+        }
+
+        .workflow-card.failed {
+            border-color: #f85149;
+        }
+
+        .workflow-card.failed:hover {
+            border-color: #f85149;
+        }
+
+        .workflow-screenshot {
+            width: 100%;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            background: #0f1923;
+            display: block;
+        }
+
+        .workflow-screenshot.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a6282;
+            font-size: 0.8rem;
+        }
+
+        .workflow-info {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #243656;
+        }
+
+        .workflow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .workflow-name {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #e6edf3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 65%;
+        }
+
+        .workflow-badge {
+            padding: 0.15rem 0.5rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            flex-shrink: 0;
+        }
+
+        .workflow-badge.pass {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+        }
+
+        .workflow-badge.fail {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+        }
+
+        .workflow-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #4a6282;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(1, 4, 9, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #243656;
+            align-self: center;
+            cursor: zoom-in;
+        }
+
+        .img-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1002;
+            background: rgba(1, 4, 9, 0.95);
+            overflow: auto;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-overlay.active {
+            display: flex;
+        }
+
+        .img-overlay.zoomed {
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .img-overlay img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            cursor: zoom-in;
+        }
+
+        .img-overlay.zoomed img {
+            max-width: none;
+            max-height: none;
+            cursor: zoom-out;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            color: #e6edf3;
+            cursor: pointer;
+            opacity: 0.6;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+
+        .lightbox-close:hover {
+            opacity: 1;
+        }
+
+        .lightbox-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(22, 32, 51, 0.8);
+            border: 1px solid #243656;
+            color: #e6edf3;
+            font-size: 2.5rem;
+            width: 48px;
+            height: 64px;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0.6;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.15s;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .lightbox-nav:hover {
+            opacity: 1;
+        }
+
+        .lightbox-nav-left { left: 1rem; }
+        .lightbox-nav-right { right: 1rem; }
+
+        .lightbox-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .lightbox-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e6edf3;
+        }
+
+        .lightbox-hardware {
+            display: block;
+            font-size: 0.75rem;
+            color: #8ba3c1;
+            margin-top: 0.25rem;
+        }
+
+        .lightbox-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .lightbox-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .lightbox-badge.pass {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+        }
+
+        .lightbox-badge.fail {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+        }
+
+        .lightbox-duration {
+            color: #8ba3c1;
+            font-size: 0.85rem;
+        }
+
+        .lightbox-log {
+            background: #0f1923;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #8ba3c1;
+        }
+
+        .lightbox-log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .lightbox-log::-webkit-scrollbar-track {
+            background: #162033;
+            border-radius: 4px;
+        }
+
+        .lightbox-log::-webkit-scrollbar-thumb {
+            background: #243656;
+            border-radius: 4px;
+        }
+
+        .lightbox-log::-webkit-scrollbar-thumb:hover {
+            background: #4a6282;
+        }
+
+        /* Resource Graph */
+        .resource-graph {
+            display: none;
+            margin-top: 1rem;
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .resource-graph.active {
+            display: block;
+        }
+
+        .resource-graph-title {
+            font-size: 0.8rem;
+            color: #8ba3c1;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-graph canvas {
+            width: 100%;
+            height: 120px;
+            cursor: crosshair;
+        }
+
+        .resource-legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #8ba3c1;
+        }
+
+        .resource-legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .resource-legend .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .resource-legend .ram { background: #3fb950; }
+        .resource-legend .gpu { background: #d29922; }
+
+        /* Video Player */
+        .video-player {
+            display: none;
+            margin-top: 1rem;
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .video-player.active {
+            display: block;
+        }
+
+        .video-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .video-play-btn {
+            background: #58a6ff;
+            color: #fff;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .video-play-btn:hover {
+            background: #79b8ff;
+        }
+
+        .video-frame-counter {
+            color: #8ba3c1;
+            font-size: 0.8rem;
+        }
+
+        .video-slider-container {
+            padding: 15px 0;
+        }
+
+        /* noUiSlider customization */
+        #video-slider {
+            height: 6px;
+            background: #1c2d44;
+            border: none;
+            box-shadow: none;
+        }
+
+        #video-slider .noUi-connect {
+            background: #58a6ff;
+        }
+
+        #video-slider .noUi-handle {
+            width: 16px;
+            height: 16px;
+            background: #58a6ff;
+            border: none;
+            border-radius: 50%;
+            box-shadow: none;
+            top: -5px;
+            right: -8px;
+            cursor: pointer;
+        }
+
+        #video-slider .noUi-handle:before,
+        #video-slider .noUi-handle:after {
+            display: none;
+        }
+
+        /* Pips (tick marks) */
+        .noUi-pips {
+            color: #4a6282;
+        }
+
+        .noUi-marker {
+            background: #243656;
+            width: 2px;
+        }
+
+        .noUi-marker-large {
+            height: 12px;
+        }
+
+        .noUi-value {
+            display: none;
+        }
+
+        /* Models Section */
+        .models-section {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .models-total {
+            font-size: 0.8rem;
+            color: #8ba3c1;
+        }
+
+        .models-folder {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .models-folder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            user-select: none;
+            list-style: none;
+        }
+
+        .models-folder-header::-webkit-details-marker {
+            display: none;
+        }
+
+        .models-folder-header::before {
+            content: '\25B6';
+            font-size: 0.6rem;
+            color: #4a6282;
+            margin-right: 0.5rem;
+            transition: transform 0.15s;
+        }
+
+        .models-folder[open] > .models-folder-header::before {
+            transform: rotate(90deg);
+        }
+
+        .models-folder-name {
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+
+        .models-folder-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .models-folder-size {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #8ba3c1;
+        }
+
+        .models-source-link {
+            font-size: 0.75rem;
+            color: #3fb950;
+            text-decoration: none;
+            padding: 0.15rem 0.5rem;
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.2);
+            border-radius: 2rem;
+        }
+
+        .models-source-link:hover {
+            background: rgba(63, 185, 80, 0.2);
+            text-decoration: none;
+        }
+
+        .models-file-list {
+            border-top: 1px solid #243656;
+            padding: 0.25rem 0;
+        }
+
+        .models-file {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.35rem 1rem 0.35rem 2rem;
+            font-size: 0.8rem;
+        }
+
+        .models-file:hover {
+            background: rgba(88, 166, 255, 0.05);
+        }
+
+        .models-file-path {
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            color: #8ba3c1;
+            word-break: break-all;
+        }
+
+        .models-file-size {
+            color: #4a6282;
+            white-space: nowrap;
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            color: #4a6282;
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .workflow-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .workflow-grid.view-list .workflow-card {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-grid.view-list .workflow-screenshot {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16/10;
+            }
+
+            .stats {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@15/dist/nouislider.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15/dist/nouislider.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1><a href="https://github.com/PozzettiAndrea/ComfyUI-GeometryPack">ComfyUI-GeometryPack</a> Test Results</h1>
+        <div class="meta-chips">
+            <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 110 16A8 8 0 018 0zm.5 4.5a.5.5 0 00-1 0v3.793L5.854 9.854a.5.5 0 10.708.708l1.853-1.854a.5.5 0 00.085-.094V4.5z"/></svg> 2026-05-05 21:21 UTC</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M2.5 4a.5.5 0 100 1 .5.5 0 000-1zM4 4.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zM2.5 7a.5.5 0 100 1 .5.5 0 000-1zM4 7.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7A.5.5 0 014 7.5zM2.5 10a.5.5 0 100 1 .5.5 0 000-1zM4 10.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5z"/></svg> macOS-15.7.4-arm64-arm-64bit</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M5 0a.5.5 0 01.5.5V2h1V.5a.5.5 0 011 0V2h1V.5a.5.5 0 011 0V2h.5A2.5 2.5 0 0112.5 4.5H14v1h-1.5v1H14v1h-1.5v1H14v1h-1.5A2.5 2.5 0 0110 12h-.5v1.5a.5.5 0 01-1 0V12h-1v1.5a.5.5 0 01-1 0V12H6v1.5a.5.5 0 01-1 0V12h-.5A2.5 2.5 0 012 9.5H.5v-1H2v-1H.5v-1H2v-1H.5v-1H2A2.5 2.5 0 014.5 2V.5A.5.5 0 015 0zm-.5 4A1.5 1.5 0 003 5.5v4A1.5 1.5 0 004.5 11h6a1.5 1.5 0 001.5-1.5v-4A1.5 1.5 0 0010.5 4h-6z"/></svg> arm</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="summary">
+            <div class="progress-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100.0%"></div>
+                </div>
+                <span class="progress-label">100.0%</span>
+            </div>
+            <div class="stats">
+                <span class="stat-badge stat-pass">30 passed</span>
+                
+                <span class="stat-total">30/30 tests</span>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 class="section-title">Workflows</h2>
+            <div class="view-controls">
+                <button class="view-btn active" onclick="setView('grid')">Grid</button>
+                <button class="view-btn" onclick="setView('list')">List</button>
+            </div>
+        </div>
+        <div class="workflow-grid" id="workflow-grid">
+            
+            <div class="workflow-card clickable " onclick="openLightboxByName('alpha_wrap')">
+                
+                <img class="workflow-screenshot" src="screenshots/alpha_wrap_executed.png"
+                     alt="alpha_wrap" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="alpha_wrap">alpha_wrap</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>28.74s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('batch_remesh')">
+                
+                <img class="workflow-screenshot" src="screenshots/batch_remesh_executed.png"
+                     alt="batch_remesh" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="batch_remesh">batch_remesh</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>14.84s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('boolean_ops')">
+                
+                <img class="workflow-screenshot" src="screenshots/boolean_ops_executed.png"
+                     alt="boolean_ops" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="boolean_ops">boolean_ops</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>12.09s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('decimate')">
+                
+                <img class="workflow-screenshot" src="screenshots/decimate_executed.png"
+                     alt="decimate" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="decimate">decimate</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>12.35s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('depth_map_to_mesh')">
+                
+                <img class="workflow-screenshot" src="screenshots/depth_map_to_mesh_executed.png"
+                     alt="depth_map_to_mesh" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="depth_map_to_mesh">depth_map_to_mesh</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>30.97s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('fix_self_intersection')">
+                
+                <img class="workflow-screenshot" src="screenshots/fix_self_intersection_executed.png"
+                     alt="fix_self_intersection" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="fix_self_intersection">fix_self_intersection</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>12.64s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('mesh_info')">
+                
+                <img class="workflow-screenshot" src="screenshots/mesh_info_executed.png"
+                     alt="mesh_info" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="mesh_info">mesh_info</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>9.99s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('mesh_mesh_distance')">
+                
+                <img class="workflow-screenshot" src="screenshots/mesh_mesh_distance_executed.png"
+                     alt="mesh_mesh_distance" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="mesh_mesh_distance">mesh_mesh_distance</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>21.15s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('normals')">
+                
+                <img class="workflow-screenshot" src="screenshots/normals_executed.png"
+                     alt="normals" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="normals">normals</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>12.48s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('point_mesh_distance')">
+                
+                <img class="workflow-screenshot" src="screenshots/point_mesh_distance_executed.png"
+                     alt="point_mesh_distance" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="point_mesh_distance">point_mesh_distance</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>11.43s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('preview_mesh_threejs')">
+                
+                <img class="workflow-screenshot" src="screenshots/preview_mesh_threejs_executed.png"
+                     alt="preview_mesh_threejs" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="preview_mesh_threejs">preview_mesh_threejs</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.29s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('refine_mesh')">
+                
+                <img class="workflow-screenshot" src="screenshots/refine_mesh_executed.png"
+                     alt="refine_mesh" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="refine_mesh">refine_mesh</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>11.06s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('remesh_intersections')">
+                
+                <img class="workflow-screenshot" src="screenshots/remesh_intersections_executed.png"
+                     alt="remesh_intersections" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="remesh_intersections">remesh_intersections</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>17.37s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('remeshing')">
+                
+                <img class="workflow-screenshot" src="screenshots/remeshing_executed.png"
+                     alt="remeshing" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="remeshing">remeshing</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>33.44s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('sMOOth')">
+                
+                <img class="workflow-screenshot" src="screenshots/sMOOth_executed.png"
+                     alt="sMOOth" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="sMOOth">sMOOth</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>12.48s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('sharpen')">
+                
+                <img class="workflow-screenshot" src="screenshots/sharpen_executed.png"
+                     alt="sharpen" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="sharpen">sharpen</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>18.45s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('side_by_side_viewer')">
+                
+                <img class="workflow-screenshot" src="screenshots/side_by_side_viewer_executed.png"
+                     alt="side_by_side_viewer" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="side_by_side_viewer">side_by_side_viewer</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.07s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_extraction')">
+                
+                <img class="workflow-screenshot" src="screenshots/skeleton_extraction_executed.png"
+                     alt="skeleton_extraction" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="skeleton_extraction">skeleton_extraction</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>29.77s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('surface_reconstruction')">
+                
+                <img class="workflow-screenshot" src="screenshots/surface_reconstruction_executed.png"
+                     alt="surface_reconstruction" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="surface_reconstruction">surface_reconstruction</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>15.43s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('test_loading')">
+                
+                <img class="workflow-screenshot" src="screenshots/test_loading_executed.png"
+                     alt="test_loading" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="test_loading">test_loading</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>24.17s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('boolean_ops_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/boolean_ops_all_executed.png"
+                     alt="boolean_ops_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="boolean_ops_all">boolean_ops_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>12.37s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('decimate_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/decimate_all_executed.png"
+                     alt="decimate_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="decimate_all">decimate_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>17.47s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('fix_normals_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/fix_normals_all_executed.png"
+                     alt="fix_normals_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="fix_normals_all">fix_normals_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>18.28s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('reconstruct_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/reconstruct_all_executed.png"
+                     alt="reconstruct_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="reconstruct_all">reconstruct_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>19.59s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('sharpen_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/sharpen_all_executed.png"
+                     alt="sharpen_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="sharpen_all">sharpen_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>49.01s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/skeleton_all_executed.png"
+                     alt="skeleton_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="skeleton_all">skeleton_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>15.63s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('smooth_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/smooth_all_executed.png"
+                     alt="smooth_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="smooth_all">smooth_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>11.68s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('transform')">
+                
+                <img class="workflow-screenshot" src="screenshots/transform_executed.png"
+                     alt="transform" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="transform">transform</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.67s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('uv_unwrap')">
+                
+                <img class="workflow-screenshot" src="screenshots/uv_unwrap_executed.png"
+                     alt="uv_unwrap" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="uv_unwrap">uv_unwrap</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>20.73s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('view_texture')">
+                
+                <img class="workflow-screenshot" src="screenshots/view_texture_executed.png"
+                     alt="view_texture" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="view_texture">view_texture</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.72s</span>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+
+        
+
+        
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-nav-left" onclick="navigateLightbox(-1)">&#8249;</button>
+        <button class="lightbox-nav lightbox-nav-right" onclick="navigateLightbox(1)">&#8250;</button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <div class="video-player" id="video-player">
+                <div class="video-slider-container">
+                    <div id="video-slider"></div>
+                </div>
+                <div class="video-controls">
+                    <span class="video-frame-counter" id="video-frame-counter">0.0s / 0.0s</span>
+                </div>
+            </div>
+            <div class="resource-graph" id="resource-graph">
+                <div class="resource-graph-title">Resource Usage</div>
+                <canvas id="resource-canvas"></canvas>
+                <div class="resource-legend">
+                    <span><span class="dot ram"></span> RAM (GB)</span>
+                    <span id="gpu-legend" style="display:none"><span class="dot gpu"></span> VRAM (GB)</span>
+                </div>
+            </div>
+            <div class="lightbox-info">
+                <div>
+                    <span class="lightbox-title" id="lightbox-title"></span>
+                    <span class="lightbox-hardware" id="lightbox-hardware"></span>
+                </div>
+                <div class="lightbox-meta">
+                    <span class="lightbox-badge" id="lightbox-badge"></span>
+                    <span class="lightbox-duration" id="lightbox-duration"></span>
+                </div>
+            </div>
+            <pre class="lightbox-log" id="lightbox-log"></pre>
+        </div>
+    </div>
+
+    <div class="img-overlay" id="img-overlay">
+        <img id="img-overlay-content" src="" alt="">
+    </div>
+
+    <footer>
+        Generated by <a href="https://github.com/PozzettiAndrea/comfy-test">comfy-test</a>
+    </footer>
+
+    <script>
+        function setView(mode) {
+            const grid = document.getElementById('workflow-grid');
+            grid.className = mode === 'list' ? 'workflow-grid view-list' : 'workflow-grid';
+            document.querySelectorAll('.view-controls .view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === mode);
+            });
+        }
+
+        const workflowData = {"alpha_wrap": {"src": "screenshots/alpha_wrap_executed.png", "title": "alpha_wrap", "status": "pass", "duration": "28.74", "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.1s)\n  [capture-periodic] freeze=5ms shot=242ms unfreeze=23ms saved=True\n  [capture-loop] iter=50 t=7.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=10 ram=3.7/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=56% browser_rss=0.74GB\n  Frame 4 saved (frame_003.jpg, t=10.1s)\n  [capture-periodic] freeze=9ms shot=256ms unfreeze=25ms saved=True\n  Frame 5 saved (frame_004.jpg, t=12.4s)\n  [capture-periodic] freeze=9ms shot=261ms unfreeze=27ms saved=True\n  Node executed (1 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=14.0s)\n  [capture-node] freeze=13ms shot=374ms unfreeze=36ms saved=True\n  Node executed (2 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=14.7s)\n  [capture-node] freeze=9ms shot=209ms unfreeze=35ms saved=True\n  [capture-loop] iter=100 t=15.4s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=6 ram=3.7/7.0GB (59%) swap=0.0/0.0GB (0%) cpu=66% browser_rss=0.72GB\n  Node executed (3 total), capturing...\n  Frame 8 saved (frame_007.jpg, t=17.2s)\n  [capture-node] freeze=9ms shot=237ms unfreeze=13ms saved=True\n  Node executed (4 total), capturing...\n  Frame 9 saved (frame_008.jpg, t=17.8s)\n  [capture-node] freeze=11ms shot=213ms unfreeze=0ms saved=True\n  Execution complete (t=17.8s)\n  Captured 9 unique frames over 18.04s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: alpha_wrap_executed.png\n  [timing] final_screenshot: 1.0s\n    Captured 10 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "batch_remesh": {"src": "screenshots/batch_remesh_executed.png", "title": "batch_remesh", "status": "pass", "duration": "14.84", "log": "Capturing execution frames: batch_remesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-node] freeze=7ms shot=220ms unfreeze=30ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.0s)\n  [capture-node] freeze=9ms shot=200ms unfreeze=16ms saved=True\n  Node executed (3 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.0s)\n  [capture-node] freeze=4ms shot=280ms unfreeze=30ms saved=True\n  Node executed (6 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=4.6s)\n  [capture-node] freeze=4ms shot=201ms unfreeze=0ms saved=True\n  Execution complete (t=4.6s)\n  Captured 5 unique frames over 4.86s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17780156, canvas=622x480, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: batch_remesh_executed.png\n  [timing] final_screenshot: 1.2s\n    Captured 6 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "boolean_ops": {"src": "screenshots/boolean_ops_executed.png", "title": "boolean_ops", "status": "pass", "duration": "12.09", "log": "Capturing execution frames: boolean_ops.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.9s)\n  [capture-node] freeze=58ms shot=286ms unfreeze=27ms saved=True\n  Node executed (3 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=1.5s)\n  [capture-node] freeze=4ms shot=211ms unfreeze=0ms saved=True\n  Execution complete (t=1.5s)\n  Captured 3 unique frames over 1.8s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17780156, canvas=486x384, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: boolean_ops_executed.png\n  [timing] final_screenshot: 1.3s\n    Captured 4 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "decimate": {"src": "screenshots/decimate_executed.png", "title": "decimate", "status": "pass", "duration": "12.35", "log": "Capturing execution frames: decimate.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (2 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.9s)\n  [capture-node] freeze=26ms shot=241ms unfreeze=0ms saved=True\n  Execution complete (t=0.9s)\n  Captured 2 unique frames over 1.27s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: decimate_executed.png\n  [timing] final_screenshot: 1.6s\n    Captured 3 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "depth_map_to_mesh": {"src": "screenshots/depth_map_to_mesh_executed.png", "title": "depth_map_to_mesh", "status": "pass", "duration": "30.97", "log": "Capturing execution frames: depth_map_to_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=7ms shot=228ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=12ms shot=330ms unfreeze=31ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=9 ram=3.3/7.0GB (54%) swap=0.0/0.0GB (0%) cpu=73% browser_rss=0.76GB\n  Frame 4 saved (frame_003.jpg, t=7.3s)\n  [capture-periodic] freeze=5ms shot=229ms unfreeze=27ms saved=True\n  [capture-loop] iter=100 t=13.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=11 ram=3.7/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.73GB\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=14.6s)\n  [capture-node] freeze=19ms shot=400ms unfreeze=25ms saved=True\n  Frame 6 saved (frame_005.jpg, t=17.2s)\n  [capture-periodic] freeze=9ms shot=337ms unfreeze=43ms saved=True\n  Node executed (2 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=20.4s)\n  [capture-node] freeze=6ms shot=270ms unfreeze=57ms saved=True\n  Execution complete (t=21.0s)\n  Captured 7 unique frames over 20.98s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17780156, canvas=0x0, rafFrozen=False\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: depth_map_to_mesh_executed.png\n  [timing] final_screenshot: 1.4s\n    Captured 8 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "fix_self_intersection": {"src": "screenshots/fix_self_intersection_executed.png", "title": "fix_self_intersection", "status": "pass", "duration": "12.64", "log": "Capturing execution frames: fix_self_intersection.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.4s)\n  [capture-node] freeze=77ms shot=289ms unfreeze=8ms saved=True\n  Node executed (4 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=2.0s)\n  [capture-node] freeze=4ms shot=206ms unfreeze=0ms saved=True\n  Execution complete (t=2.0s)\n  Captured 3 unique frames over 2.27s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: fix_self_intersection_executed.png\n  [timing] final_screenshot: 1.0s\n    Captured 4 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "mesh_info": {"src": "screenshots/mesh_info_executed.png", "title": "mesh_info", "status": "pass", "duration": "9.99", "log": "Capturing execution frames: mesh_info.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (2 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.7s)\n  [capture-node] freeze=4ms shot=201ms unfreeze=0ms saved=True\n  Execution complete (t=0.7s)\n  Captured 2 unique frames over 0.94s\n  [debug] iframes: 0\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: mesh_info_executed.png\n  [timing] final_screenshot: 1.1s\n    Captured 3 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "mesh_mesh_distance": {"src": "screenshots/mesh_mesh_distance_executed.png", "title": "mesh_mesh_distance", "status": "pass", "duration": "21.15", "log": "Capturing execution frames: mesh_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=291ms unfreeze=37ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.0s)\n  [capture-periodic] freeze=3ms shot=223ms unfreeze=19ms saved=True\n  Node executed (1 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=6.4s)\n  [capture-node] freeze=8ms shot=275ms unfreeze=24ms saved=True\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.0s)\n  [capture-node] freeze=5ms shot=222ms unfreeze=7ms saved=True\n  [capture-loop] iter=50 t=7.9s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.75GB\n  Node executed (3 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=10.3s)\n  [capture-node] freeze=33ms shot=316ms unfreeze=41ms saved=True\n  Node executed (4 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=11.1s)\n  [capture-node] freeze=4ms shot=257ms unfreeze=0ms saved=True\n  Execution complete (t=11.1s)\n  Captured 7 unique frames over 11.36s\n  [debug] iframes: 0\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: mesh_mesh_distance_executed.png\n  [timing] final_screenshot: 1.4s\n    Captured 8 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "normals": {"src": "screenshots/normals_executed.png", "title": "normals", "status": "pass", "duration": "12.48", "log": "Capturing execution frames: normals.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.4s)\n  [capture-node] freeze=33ms shot=195ms unfreeze=19ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=2.2s)\n  [capture-node] freeze=5ms shot=207ms unfreeze=0ms saved=True\n  Execution complete (t=2.2s)\n  Captured 3 unique frames over 2.4s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17780157, canvas=486x384, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: normals_executed.png\n  [timing] final_screenshot: 1.1s\n    Captured 4 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "point_mesh_distance": {"src": "screenshots/point_mesh_distance_executed.png", "title": "point_mesh_distance", "status": "pass", "duration": "11.43", "log": "Capturing execution frames: point_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.8s)\n  [capture-node] freeze=7ms shot=382ms unfreeze=24ms saved=True\n  Node executed (3 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=1.5s)\n  [capture-node] freeze=5ms shot=211ms unfreeze=0ms saved=True\n  Execution complete (t=1.5s)\n  Captured 3 unique frames over 1.73s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: point_mesh_distance_executed.png\n  [timing] final_screenshot: 1.3s\n    Captured 4 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "preview_mesh_threejs": {"src": "screenshots/preview_mesh_threejs_executed.png", "title": "preview_mesh_threejs", "status": "pass", "duration": "10.29", "log": "Capturing execution frames: preview_mesh_threejs.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.8s)\n  [capture-node] freeze=4ms shot=232ms unfreeze=0ms saved=True\n  Execution complete (t=0.8s)\n  Captured 2 unique frames over 1.1s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer.html?v=177801574573, canvas=300x150, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: preview_mesh_threejs_executed.png\n  [timing] final_screenshot: 0.8s\n    Captured 3 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "refine_mesh": {"src": "screenshots/refine_mesh_executed.png", "title": "refine_mesh", "status": "pass", "duration": "11.06", "log": "Capturing execution frames: refine_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.2s)\n  [capture-node] freeze=20ms shot=305ms unfreeze=22ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=1.9s)\n  [capture-node] freeze=8ms shot=186ms unfreeze=0ms saved=True\n  Execution complete (t=1.9s)\n  Captured 3 unique frames over 2.09s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: refine_mesh_executed.png\n  [timing] final_screenshot: 1.2s\n    Captured 4 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "remesh_intersections": {"src": "screenshots/remesh_intersections_executed.png", "title": "remesh_intersections", "status": "pass", "duration": "17.37", "log": "Capturing execution frames: remesh_intersections.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=9ms shot=195ms unfreeze=4ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=6ms shot=213ms unfreeze=47ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=12 ram=3.3/7.0GB (55%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.82GB\n  Node executed (1 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=6.9s)\n  [capture-node] freeze=5ms shot=201ms unfreeze=38ms saved=True\n  Node executed (4 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.5s)\n  [capture-node] freeze=7ms shot=268ms unfreeze=0ms saved=True\n  Execution complete (t=7.5s)\n  Captured 5 unique frames over 7.78s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=False\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: remesh_intersections_executed.png\n  [timing] final_screenshot: 1.1s\n    Captured 6 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "remeshing": {"src": "screenshots/remeshing_executed.png", "title": "remeshing", "status": "pass", "duration": "33.44", "log": "Capturing execution frames: remeshing.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=4ms shot=178ms unfreeze=4ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=8ms shot=170ms unfreeze=20ms saved=True\n  [capture-loop] iter=50 t=6.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=93% browser_rss=0.78GB\n  [capture-loop] iter=100 t=12.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.78GB\n  [capture-loop] iter=150 t=19.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB\n  Frame 4 saved (frame_003.jpg, t=20.6s)\n  [capture-periodic] freeze=9ms shot=228ms unfreeze=3ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=22.9s)\n  [capture-node] freeze=8ms shot=185ms unfreeze=16ms saved=True\n  Node executed (2 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=23.5s)\n  [capture-node] freeze=9ms shot=263ms unfreeze=0ms saved=True\n  Execution complete (t=23.5s)\n  Captured 6 unique frames over 23.85s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=0x0, rafFrozen=False\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: remeshing_executed.png\n  [timing] final_screenshot: 1.2s\n    Captured 7 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "sMOOth": {"src": "screenshots/sMOOth_executed.png", "title": "sMOOth", "status": "pass", "duration": "12.48", "log": "Capturing execution frames: sMOOth.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=8ms shot=253ms unfreeze=46ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.0s)\n  [capture-node] freeze=8ms shot=184ms unfreeze=0ms saved=True\n  Execution complete (t=3.0s)\n  Captured 3 unique frames over 3.28s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: sMOOth_executed.png\n  [timing] final_screenshot: 1.1s\n    Captured 4 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "sharpen": {"src": "screenshots/sharpen_executed.png", "title": "sharpen", "status": "pass", "duration": "18.45", "log": "Capturing execution frames: sharpen.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=217ms unfreeze=17ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=5ms shot=262ms unfreeze=15ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.5/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB\n  Frame 4 saved (frame_003.jpg, t=7.1s)\n  [capture-periodic] freeze=6ms shot=229ms unfreeze=40ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.7s)\n  [capture-node] freeze=13ms shot=309ms unfreeze=37ms saved=True\n  Node executed (2 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=8.4s)\n  [capture-node] freeze=11ms shot=246ms unfreeze=13ms saved=True\n  Execution complete (t=8.8s)\n  Captured 6 unique frames over 8.83s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=False\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: sharpen_executed.png\n  [timing] final_screenshot: 1.1s\n    Captured 7 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "side_by_side_viewer": {"src": "screenshots/side_by_side_viewer_executed.png", "title": "side_by_side_viewer", "status": "pass", "duration": "10.07", "log": "Capturing execution frames: side_by_side_viewer.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.7s)\n  [capture-node] freeze=4ms shot=202ms unfreeze=0ms saved=True\n  Execution complete (t=0.7s)\n  Captured 2 unique frames over 0.96s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: side_by_side_viewer_executed.png\n  [timing] final_screenshot: 0.8s\n    Captured 3 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "skeleton_extraction": {"src": "screenshots/skeleton_extraction_executed.png", "title": "skeleton_extraction", "status": "pass", "duration": "29.77", "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=5ms shot=175ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=3ms shot=194ms unfreeze=28ms saved=True\n  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.80GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=7ms shot=232ms unfreeze=18ms saved=True\n  Frame 5 saved (frame_004.jpg, t=9.3s)\n  [capture-periodic] freeze=4ms shot=193ms unfreeze=25ms saved=True\n  [capture-loop] iter=100 t=13.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=79% browser_rss=0.78GB\n  Frame 6 saved (frame_005.jpg, t=16.3s)\n  [capture-periodic] freeze=3ms shot=263ms unfreeze=26ms saved=True\n  Frame 7 saved (frame_006.jpg, t=18.7s)\n  [capture-periodic] freeze=4ms shot=190ms unfreeze=25ms saved=True\n  [capture-loop] iter=150 t=19.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=91% browser_rss=0.78GB\n  Node executed (1 total), capturing...\n  Frame 8 saved (frame_007.jpg, t=20.7s)\n  [capture-node] freeze=7ms shot=241ms unfreeze=0ms saved=True\n  Execution complete (t=20.7s)\n  Captured 8 unique frames over 20.99s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=0x0, rafFrozen=False\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: skeleton_extraction_executed.png\n  [timing] final_screenshot: 1.0s\n    Captured 9 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "surface_reconstruction": {"src": "screenshots/surface_reconstruction_executed.png", "title": "surface_reconstruction", "status": "pass", "duration": "15.43", "log": "Capturing execution frames: surface_reconstruction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=190ms unfreeze=24ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-node] freeze=4ms shot=202ms unfreeze=6ms saved=True\n  Node executed (2 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=5.9s)\n  [capture-node] freeze=3ms shot=235ms unfreeze=0ms saved=True\n  Execution complete (t=5.9s)\n  Captured 4 unique frames over 6.14s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: surface_reconstruction_executed.png\n  [timing] final_screenshot: 1.2s\n    Captured 5 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "test_loading": {"src": "screenshots/test_loading_executed.png", "title": "test_loading", "status": "pass", "duration": "24.17", "log": "Capturing execution frames: test_loading.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=234ms unfreeze=18ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=10ms shot=235ms unfreeze=17ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=82% browser_rss=0.77GB\n  Frame 4 saved (frame_003.jpg, t=7.2s)\n  [capture-periodic] freeze=6ms shot=171ms unfreeze=14ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=13.2s)\n  [capture-node] freeze=9ms shot=283ms unfreeze=42ms saved=True\n  [capture-loop] iter=100 t=13.9s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=68% browser_rss=0.72GB\n  Node executed (2 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=14.1s)\n  [capture-node] freeze=12ms shot=298ms unfreeze=11ms saved=True\n  Node executed (3 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=14.7s)\n  [capture-node] freeze=25ms shot=220ms unfreeze=0ms saved=True\n  Execution complete (t=14.7s)\n  Captured 7 unique frames over 15.02s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778015, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: test_loading_executed.png\n  [timing] final_screenshot: 1.2s\n    Captured 8 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "boolean_ops_all": {"src": "screenshots/boolean_ops_all_executed.png", "title": "boolean_ops_all", "status": "pass", "duration": "12.37", "log": "Capturing execution frames: boolean_ops_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.1s)\n  [capture-node] freeze=5ms shot=269ms unfreeze=19ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=1.9s)\n  [capture-node] freeze=4ms shot=248ms unfreeze=18ms saved=True\n  Node executed (3 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=2.5s)\n  [capture-node] freeze=4ms shot=233ms unfreeze=0ms saved=True\n  Execution complete (t=2.5s)\n  Captured 4 unique frames over 2.77s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: boolean_ops_all_executed.png\n  [timing] final_screenshot: 1.2s\n    Captured 5 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "decimate_all": {"src": "screenshots/decimate_all_executed.png", "title": "decimate_all", "status": "pass", "duration": "17.47", "log": "Capturing execution frames: decimate_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=11ms shot=238ms unfreeze=50ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.6s)\n  [capture-node] freeze=16ms shot=250ms unfreeze=5ms saved=True\n  Node executed (3 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.2s)\n  [capture-node] freeze=8ms shot=314ms unfreeze=48ms saved=True\n  Node executed (4 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=4.9s)\n  [capture-node] freeze=7ms shot=298ms unfreeze=33ms saved=True\n  Node executed (5 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=6.4s)\n  [capture-node] freeze=9ms shot=258ms unfreeze=46ms saved=True\n  Node executed (6 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=7.0s)\n  [capture-node] freeze=6ms shot=328ms unfreeze=0ms saved=True\n  Execution complete (t=7.0s)\n  Captured 7 unique frames over 7.41s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: decimate_all_executed.png\n  [timing] final_screenshot: 1.3s\n    Captured 8 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "fix_normals_all": {"src": "screenshots/fix_normals_all_executed.png", "title": "fix_normals_all", "status": "pass", "duration": "18.28", "log": "Capturing execution frames: fix_normals_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=272ms unfreeze=32ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.9s)\n  [capture-periodic] freeze=5ms shot=194ms unfreeze=21ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.4/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=85% browser_rss=0.76GB\n  Frame 4 saved (frame_003.jpg, t=7.2s)\n  [capture-periodic] freeze=5ms shot=164ms unfreeze=38ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.8s)\n  [capture-node] freeze=10ms shot=230ms unfreeze=4ms saved=True\n  Node executed (7 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=8.3s)\n  [capture-node] freeze=6ms shot=348ms unfreeze=0ms saved=True\n  Execution complete (t=8.3s)\n  Captured 6 unique frames over 8.7s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: fix_normals_all_executed.png\n  [timing] final_screenshot: 1.1s\n    Captured 7 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "reconstruct_all": {"src": "screenshots/reconstruct_all_executed.png", "title": "reconstruct_all", "status": "pass", "duration": "19.59", "log": "Capturing execution frames: reconstruct_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.0s)\n  [capture-node] freeze=10ms shot=180ms unfreeze=33ms saved=True\n  Node executed (3 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=2.8s)\n  [capture-node] freeze=9ms shot=281ms unfreeze=46ms saved=True\n  Node executed (4 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.7s)\n  [capture-node] freeze=16ms shot=329ms unfreeze=38ms saved=True\n  Frame 5 saved (frame_004.jpg, t=7.2s)\n  [capture-periodic] freeze=4ms shot=182ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=7.8s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=90% browser_rss=0.80GB\n  Node executed (5 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=8.1s)\n  [capture-node] freeze=5ms shot=300ms unfreeze=68ms saved=True\n  Node executed (6 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=8.8s)\n  [capture-node] freeze=12ms shot=291ms unfreeze=30ms saved=True\n  Execution complete (t=9.3s)\n  Captured 7 unique frames over 9.29s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17780159, canvas=486x384, rafFrozen=False\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=False\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: reconstruct_all_executed.png\n  [timing] final_screenshot: 1.6s\n    Captured 8 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "sharpen_all": {"src": "screenshots/sharpen_all_executed.png", "title": "sharpen_all", "status": "pass", "duration": "49.01", "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True\n  Frame 4 saved (frame_003.jpg, t=5.8s)\n  [capture-periodic] freeze=3ms shot=279ms unfreeze=6ms saved=True\n  [capture-loop] iter=50 t=7.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.78GB\n  [capture-loop] iter=100 t=13.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=5 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  [capture-loop] iter=150 t=19.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=24.7s)\n  [capture-node] freeze=3ms shot=296ms unfreeze=30ms saved=True\n  Node executed (3 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=25.3s)\n  [capture-node] freeze=7ms shot=256ms unfreeze=36ms saved=True\n  [capture-loop] iter=200 t=26.8s state={'complete': False, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=91% browser_rss=0.75GB\n  Node executed (4 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=31.0s)\n  [capture-node] freeze=7ms shot=253ms unfreeze=39ms saved=True\n  Frame 8 saved (frame_007.jpg, t=33.4s)\n  [capture-periodic] freeze=4ms shot=193ms unfreeze=77ms saved=True\n  [capture-loop] iter=250 t=33.8s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=8 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=89% browser_rss=0.75GB\n  Node executed (5 total), capturing...\n  Frame 9 saved (frame_008.jpg, t=37.6s)\n  [capture-node] freeze=22ms shot=251ms unfreeze=74ms saved=True\n  Node executed (9 total), capturing...\n  Frame 10 saved (frame_009.jpg, t=38.3s)\n  [capture-node] freeze=7ms shot=327ms unfreeze=0ms saved=True\n  Execution complete (t=38.3s)\n  Captured 10 unique frames over 38.65s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: sharpen_all_executed.png\n  [timing] final_screenshot: 1.3s\n    Captured 11 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "skeleton_all": {"src": "screenshots/skeleton_all_executed.png", "title": "skeleton_all", "status": "pass", "duration": "15.63", "log": "Capturing execution frames: skeleton_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=293ms unfreeze=47ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=4.3s)\n  [capture-node] freeze=4ms shot=305ms unfreeze=52ms saved=True\n  Node executed (2 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=5.0s)\n  [capture-node] freeze=9ms shot=281ms unfreeze=0ms saved=True\n  Execution complete (t=5.0s)\n  Captured 4 unique frames over 5.35s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: skeleton_all_executed.png\n  [timing] final_screenshot: 1.4s\n    Captured 5 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "smooth_all": {"src": "screenshots/smooth_all_executed.png", "title": "smooth_all", "status": "pass", "duration": "11.68", "log": "Capturing execution frames: smooth_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (6 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.9s)\n  [capture-node] freeze=4ms shot=190ms unfreeze=19ms saved=True\n  Node executed (7 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=1.4s)\n  [capture-node] freeze=4ms shot=187ms unfreeze=0ms saved=True\n  Execution complete (t=1.4s)\n  Captured 3 unique frames over 1.62s\n  [debug] iframes: 2\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177801, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: smooth_all_executed.png\n  [timing] final_screenshot: 1.3s\n    Captured 4 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "transform": {"src": "screenshots/transform_executed.png", "title": "transform", "status": "pass", "duration": "10.67", "log": "Capturing execution frames: transform.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (2 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.7s)\n  [capture-node] freeze=8ms shot=203ms unfreeze=0ms saved=True\n  Execution complete (t=0.7s)\n  Captured 2 unique frames over 0.9s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778016, canvas=300x300, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: transform_executed.png\n  [timing] final_screenshot: 1.1s\n    Captured 3 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "uv_unwrap": {"src": "screenshots/uv_unwrap_executed.png", "title": "uv_unwrap", "status": "pass", "duration": "20.73", "log": "Capturing execution frames: uv_unwrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=176ms unfreeze=14ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=8ms shot=140ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=6.5s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.78GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=3ms shot=173ms unfreeze=14ms saved=True\n  Frame 5 saved (frame_004.jpg, t=9.3s)\n  [capture-periodic] freeze=38ms shot=192ms unfreeze=12ms saved=True\n  Node executed (1 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=10.5s)\n  [capture-node] freeze=8ms shot=251ms unfreeze=21ms saved=True\n  Node executed (2 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=11.1s)\n  [capture-node] freeze=4ms shot=149ms unfreeze=0ms saved=True\n  Execution complete (t=11.1s)\n  Captured 7 unique frames over 11.27s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_uv.html?v=177801608, canvas=300x150, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: uv_unwrap_executed.png\n  [timing] final_screenshot: 0.9s\n    Captured 8 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}, "view_texture": {"src": "screenshots/view_texture_executed.png", "title": "view_texture", "status": "pass", "duration": "10.72", "log": "Capturing execution frames: view_texture.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.0s)\n  [capture-node] freeze=7ms shot=250ms unfreeze=0ms saved=True\n  Execution complete (t=1.0s)\n  Captured 2 unique frames over 1.31s\n  [debug] iframes: 1\n  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk_textured.html?v, canvas=221x249, rafFrozen=True\n  [timing] trigger_3d_previews: 0.0s\n  Saved high-quality screenshot: view_texture_executed.png\n  [timing] final_screenshot: 1.0s\n    Captured 3 video frames", "hardware": {"os": "macOS-15.7.4-arm64-arm-64bit", "cpu": "arm"}}};
+        const workflowNames = Object.keys(workflowData);
+        const videoData = {"remesh_intersections": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: remesh_intersections.json"}, {"file": "frame_001.jpg", "time": 2.44, "log": "Capturing execution frames: remesh_intersections.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.7, "log": "Capturing execution frames: remesh_intersections.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=9ms shot=195ms unfreeze=4ms saved=True"}, {"file": "frame_003.jpg", "time": 6.91, "log": "Capturing execution frames: remesh_intersections.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=9ms shot=195ms unfreeze=4ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=6ms shot=213ms unfreeze=47ms saved=True"}, {"file": "frame_004.jpg", "time": 7.47, "log": "Capturing execution frames: remesh_intersections.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=9ms shot=195ms unfreeze=4ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=6ms shot=213ms unfreeze=47ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=12 ram=3.3/7.0GB (55%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.82GB\n  Node executed (1 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=6.9s)\n  [capture-node] freeze=5ms shot=201ms unfreeze=38ms saved=True"}, {"file": "frame_005.jpg", "time": 10.912792205810547, "log": "Final screenshot"}], "total_time": 7.78}, "test_loading": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: test_loading.json"}, {"file": "frame_001.jpg", "time": 2.46, "log": "Capturing execution frames: test_loading.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.84, "log": "Capturing execution frames: test_loading.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=234ms unfreeze=18ms saved=True"}, {"file": "frame_003.jpg", "time": 7.17, "log": "Capturing execution frames: test_loading.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=234ms unfreeze=18ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=10ms shot=235ms unfreeze=17ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=82% browser_rss=0.77GB"}, {"file": "frame_004.jpg", "time": 13.16, "log": "Capturing execution frames: test_loading.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=234ms unfreeze=18ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=10ms shot=235ms unfreeze=17ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=82% browser_rss=0.77GB\n  Frame 4 saved (frame_003.jpg, t=7.2s)\n  [capture-periodic] freeze=6ms shot=171ms unfreeze=14ms saved=True"}, {"file": "frame_005.jpg", "time": 14.06, "log": "Capturing execution frames: test_loading.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=234ms unfreeze=18ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=10ms shot=235ms unfreeze=17ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=82% browser_rss=0.77GB\n  Frame 4 saved (frame_003.jpg, t=7.2s)\n  [capture-periodic] freeze=6ms shot=171ms unfreeze=14ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=13.2s)\n  [capture-node] freeze=9ms shot=283ms unfreeze=42ms saved=True"}, {"file": "frame_006.jpg", "time": 14.7, "log": "Capturing execution frames: test_loading.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=234ms unfreeze=18ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=10ms shot=235ms unfreeze=17ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=82% browser_rss=0.77GB\n  Frame 4 saved (frame_003.jpg, t=7.2s)\n  [capture-periodic] freeze=6ms shot=171ms unfreeze=14ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=13.2s)\n  [capture-node] freeze=9ms shot=283ms unfreeze=42ms saved=True\n  [capture-loop] iter=100 t=13.9s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=68% browser_rss=0.72GB\n  Node executed (2 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=14.1s)\n  [capture-node] freeze=12ms shot=298ms unfreeze=11ms saved=True"}, {"file": "frame_007.jpg", "time": 18.29288387298584, "log": "Final screenshot"}], "total_time": 15.02}, "mesh_mesh_distance": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: mesh_mesh_distance.json"}, {"file": "frame_001.jpg", "time": 2.54, "log": "Capturing execution frames: mesh_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 5.0, "log": "Capturing execution frames: mesh_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=291ms unfreeze=37ms saved=True"}, {"file": "frame_003.jpg", "time": 6.36, "log": "Capturing execution frames: mesh_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=291ms unfreeze=37ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.0s)\n  [capture-periodic] freeze=3ms shot=223ms unfreeze=19ms saved=True"}, {"file": "frame_004.jpg", "time": 6.98, "log": "Capturing execution frames: mesh_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=291ms unfreeze=37ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.0s)\n  [capture-periodic] freeze=3ms shot=223ms unfreeze=19ms saved=True\n  Node executed (1 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=6.4s)\n  [capture-node] freeze=8ms shot=275ms unfreeze=24ms saved=True"}, {"file": "frame_005.jpg", "time": 10.34, "log": "Capturing execution frames: mesh_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=291ms unfreeze=37ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.0s)\n  [capture-periodic] freeze=3ms shot=223ms unfreeze=19ms saved=True\n  Node executed (1 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=6.4s)\n  [capture-node] freeze=8ms shot=275ms unfreeze=24ms saved=True\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.0s)\n  [capture-node] freeze=5ms shot=222ms unfreeze=7ms saved=True\n  [capture-loop] iter=50 t=7.9s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.75GB"}, {"file": "frame_006.jpg", "time": 11.05, "log": "Capturing execution frames: mesh_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=291ms unfreeze=37ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.0s)\n  [capture-periodic] freeze=3ms shot=223ms unfreeze=19ms saved=True\n  Node executed (1 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=6.4s)\n  [capture-node] freeze=8ms shot=275ms unfreeze=24ms saved=True\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.0s)\n  [capture-node] freeze=5ms shot=222ms unfreeze=7ms saved=True\n  [capture-loop] iter=50 t=7.9s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.75GB\n  Node executed (3 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=10.3s)\n  [capture-node] freeze=33ms shot=316ms unfreeze=41ms saved=True"}, {"file": "frame_007.jpg", "time": 14.818185091018677, "log": "Final screenshot"}], "total_time": 11.36}, "refine_mesh": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: refine_mesh.json"}, {"file": "frame_001.jpg", "time": 1.19, "log": "Capturing execution frames: refine_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 1.86, "log": "Capturing execution frames: refine_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.2s)\n  [capture-node] freeze=20ms shot=305ms unfreeze=22ms saved=True"}, {"file": "frame_003.jpg", "time": 5.286305904388428, "log": "Final screenshot"}], "total_time": 2.09}, "sharpen": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: sharpen.json"}, {"file": "frame_001.jpg", "time": 2.45, "log": "Capturing execution frames: sharpen.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.78, "log": "Capturing execution frames: sharpen.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=217ms unfreeze=17ms saved=True"}, {"file": "frame_003.jpg", "time": 7.14, "log": "Capturing execution frames: sharpen.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=217ms unfreeze=17ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=5ms shot=262ms unfreeze=15ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.5/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB"}, {"file": "frame_004.jpg", "time": 7.73, "log": "Capturing execution frames: sharpen.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=217ms unfreeze=17ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=5ms shot=262ms unfreeze=15ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.5/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB\n  Frame 4 saved (frame_003.jpg, t=7.1s)\n  [capture-periodic] freeze=6ms shot=229ms unfreeze=40ms saved=True"}, {"file": "frame_005.jpg", "time": 8.41, "log": "Capturing execution frames: sharpen.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=217ms unfreeze=17ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=5ms shot=262ms unfreeze=15ms saved=True\n  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.5/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB\n  Frame 4 saved (frame_003.jpg, t=7.1s)\n  [capture-periodic] freeze=6ms shot=229ms unfreeze=40ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.7s)\n  [capture-node] freeze=13ms shot=309ms unfreeze=37ms saved=True"}, {"file": "frame_006.jpg", "time": 11.982582092285156, "log": "Final screenshot"}], "total_time": 8.83}, "boolean_ops": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: boolean_ops.json"}, {"file": "frame_001.jpg", "time": 0.87, "log": "Capturing execution frames: boolean_ops.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 1.54, "log": "Capturing execution frames: boolean_ops.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.9s)\n  [capture-node] freeze=58ms shot=286ms unfreeze=27ms saved=True"}, {"file": "frame_003.jpg", "time": 5.138854026794434, "log": "Final screenshot"}], "total_time": 1.8}, "decimate": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: decimate.json"}, {"file": "frame_001.jpg", "time": 0.89, "log": "Capturing execution frames: decimate.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.962442874908447, "log": "Final screenshot"}], "total_time": 1.27}, "skeleton_all": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: skeleton_all.json"}, {"file": "frame_001.jpg", "time": 2.49, "log": "Capturing execution frames: skeleton_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.31, "log": "Capturing execution frames: skeleton_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=293ms unfreeze=47ms saved=True"}, {"file": "frame_003.jpg", "time": 5.02, "log": "Capturing execution frames: skeleton_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=293ms unfreeze=47ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=4.3s)\n  [capture-node] freeze=4ms shot=305ms unfreeze=52ms saved=True"}, {"file": "frame_004.jpg", "time": 8.7672860622406, "log": "Final screenshot"}], "total_time": 5.35}, "uv_unwrap": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: uv_unwrap.json"}, {"file": "frame_001.jpg", "time": 2.48, "log": "Capturing execution frames: uv_unwrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.76, "log": "Capturing execution frames: uv_unwrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=176ms unfreeze=14ms saved=True"}, {"file": "frame_003.jpg", "time": 6.98, "log": "Capturing execution frames: uv_unwrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=176ms unfreeze=14ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=8ms shot=140ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=6.5s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.78GB"}, {"file": "frame_004.jpg", "time": 9.27, "log": "Capturing execution frames: uv_unwrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=176ms unfreeze=14ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=8ms shot=140ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=6.5s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.78GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=3ms shot=173ms unfreeze=14ms saved=True"}, {"file": "frame_005.jpg", "time": 10.48, "log": "Capturing execution frames: uv_unwrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=176ms unfreeze=14ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=8ms shot=140ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=6.5s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.78GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=3ms shot=173ms unfreeze=14ms saved=True\n  Frame 5 saved (frame_004.jpg, t=9.3s)\n  [capture-periodic] freeze=38ms shot=192ms unfreeze=12ms saved=True"}, {"file": "frame_006.jpg", "time": 11.08, "log": "Capturing execution frames: uv_unwrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=176ms unfreeze=14ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=8ms shot=140ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=6.5s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.78GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=3ms shot=173ms unfreeze=14ms saved=True\n  Frame 5 saved (frame_004.jpg, t=9.3s)\n  [capture-periodic] freeze=38ms shot=192ms unfreeze=12ms saved=True\n  Node executed (1 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=10.5s)\n  [capture-node] freeze=8ms shot=251ms unfreeze=21ms saved=True"}, {"file": "frame_007.jpg", "time": 14.22868299484253, "log": "Final screenshot"}], "total_time": 11.27}, "sMOOth": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: sMOOth.json"}, {"file": "frame_001.jpg", "time": 2.43, "log": "Capturing execution frames: sMOOth.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 3.05, "log": "Capturing execution frames: sMOOth.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=8ms shot=253ms unfreeze=46ms saved=True"}, {"file": "frame_003.jpg", "time": 6.418025970458984, "log": "Final screenshot"}], "total_time": 3.28}, "mesh_info": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: mesh_info.json"}, {"file": "frame_001.jpg", "time": 0.69, "log": "Capturing execution frames: mesh_info.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.0271570682525635, "log": "Final screenshot"}], "total_time": 0.94}, "view_texture": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: view_texture.json"}, {"file": "frame_001.jpg", "time": 1.02, "log": "Capturing execution frames: view_texture.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.3991522789001465, "log": "Final screenshot"}], "total_time": 1.31}, "side_by_side_viewer": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: side_by_side_viewer.json"}, {"file": "frame_001.jpg", "time": 0.7, "log": "Capturing execution frames: side_by_side_viewer.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 3.8167178630828857, "log": "Final screenshot"}], "total_time": 0.96}, "fix_self_intersection": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: fix_self_intersection.json"}, {"file": "frame_001.jpg", "time": 1.35, "log": "Capturing execution frames: fix_self_intersection.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 2.02, "log": "Capturing execution frames: fix_self_intersection.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.4s)\n  [capture-node] freeze=77ms shot=289ms unfreeze=8ms saved=True"}, {"file": "frame_003.jpg", "time": 5.330519199371338, "log": "Final screenshot"}], "total_time": 2.27}, "remeshing": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: remeshing.json"}, {"file": "frame_001.jpg", "time": 2.37, "log": "Capturing execution frames: remeshing.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.7, "log": "Capturing execution frames: remeshing.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=4ms shot=178ms unfreeze=4ms saved=True"}, {"file": "frame_003.jpg", "time": 20.61, "log": "Capturing execution frames: remeshing.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=4ms shot=178ms unfreeze=4ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=8ms shot=170ms unfreeze=20ms saved=True\n  [capture-loop] iter=50 t=6.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=93% browser_rss=0.78GB\n  [capture-loop] iter=100 t=12.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.78GB\n  [capture-loop] iter=150 t=19.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB"}, {"file": "frame_004.jpg", "time": 22.86, "log": "Capturing execution frames: remeshing.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=4ms shot=178ms unfreeze=4ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=8ms shot=170ms unfreeze=20ms saved=True\n  [capture-loop] iter=50 t=6.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=93% browser_rss=0.78GB\n  [capture-loop] iter=100 t=12.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.78GB\n  [capture-loop] iter=150 t=19.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB\n  Frame 4 saved (frame_003.jpg, t=20.6s)\n  [capture-periodic] freeze=9ms shot=228ms unfreeze=3ms saved=True"}, {"file": "frame_005.jpg", "time": 23.52, "log": "Capturing execution frames: remeshing.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=4ms shot=178ms unfreeze=4ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=8ms shot=170ms unfreeze=20ms saved=True\n  [capture-loop] iter=50 t=6.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=93% browser_rss=0.78GB\n  [capture-loop] iter=100 t=12.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.78GB\n  [capture-loop] iter=150 t=19.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.79GB\n  Frame 4 saved (frame_003.jpg, t=20.6s)\n  [capture-periodic] freeze=9ms shot=228ms unfreeze=3ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=22.9s)\n  [capture-node] freeze=8ms shot=185ms unfreeze=16ms saved=True"}, {"file": "frame_006.jpg", "time": 27.054704189300537, "log": "Final screenshot"}], "total_time": 23.85}, "smooth_all": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: smooth_all.json"}, {"file": "frame_001.jpg", "time": 0.86, "log": "Capturing execution frames: smooth_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 1.39, "log": "Capturing execution frames: smooth_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (6 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.9s)\n  [capture-node] freeze=4ms shot=190ms unfreeze=19ms saved=True"}, {"file": "frame_003.jpg", "time": 4.934635162353516, "log": "Final screenshot"}], "total_time": 1.62}, "decimate_all": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: decimate_all.json"}, {"file": "frame_001.jpg", "time": 2.53, "log": "Capturing execution frames: decimate_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 3.61, "log": "Capturing execution frames: decimate_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=11ms shot=238ms unfreeze=50ms saved=True"}, {"file": "frame_003.jpg", "time": 4.21, "log": "Capturing execution frames: decimate_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=11ms shot=238ms unfreeze=50ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.6s)\n  [capture-node] freeze=16ms shot=250ms unfreeze=5ms saved=True"}, {"file": "frame_004.jpg", "time": 4.89, "log": "Capturing execution frames: decimate_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=11ms shot=238ms unfreeze=50ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.6s)\n  [capture-node] freeze=16ms shot=250ms unfreeze=5ms saved=True\n  Node executed (3 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.2s)\n  [capture-node] freeze=8ms shot=314ms unfreeze=48ms saved=True"}, {"file": "frame_005.jpg", "time": 6.4, "log": "Capturing execution frames: decimate_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=11ms shot=238ms unfreeze=50ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.6s)\n  [capture-node] freeze=16ms shot=250ms unfreeze=5ms saved=True\n  Node executed (3 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.2s)\n  [capture-node] freeze=8ms shot=314ms unfreeze=48ms saved=True\n  Node executed (4 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=4.9s)\n  [capture-node] freeze=7ms shot=298ms unfreeze=33ms saved=True"}, {"file": "frame_006.jpg", "time": 7.02, "log": "Capturing execution frames: decimate_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=11ms shot=238ms unfreeze=50ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.6s)\n  [capture-node] freeze=16ms shot=250ms unfreeze=5ms saved=True\n  Node executed (3 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.2s)\n  [capture-node] freeze=8ms shot=314ms unfreeze=48ms saved=True\n  Node executed (4 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=4.9s)\n  [capture-node] freeze=7ms shot=298ms unfreeze=33ms saved=True\n  Node executed (5 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=6.4s)\n  [capture-node] freeze=9ms shot=258ms unfreeze=46ms saved=True"}, {"file": "frame_007.jpg", "time": 10.743616104125977, "log": "Final screenshot"}], "total_time": 7.41}, "sharpen_all": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: sharpen_all.json"}, {"file": "frame_001.jpg", "time": 2.55, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 3.45, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True"}, {"file": "frame_003.jpg", "time": 5.78, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True"}, {"file": "frame_004.jpg", "time": 24.7, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True\n  Frame 4 saved (frame_003.jpg, t=5.8s)\n  [capture-periodic] freeze=3ms shot=279ms unfreeze=6ms saved=True\n  [capture-loop] iter=50 t=7.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.78GB\n  [capture-loop] iter=100 t=13.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=5 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  [capture-loop] iter=150 t=19.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB"}, {"file": "frame_005.jpg", "time": 25.34, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True\n  Frame 4 saved (frame_003.jpg, t=5.8s)\n  [capture-periodic] freeze=3ms shot=279ms unfreeze=6ms saved=True\n  [capture-loop] iter=50 t=7.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.78GB\n  [capture-loop] iter=100 t=13.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=5 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  [capture-loop] iter=150 t=19.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=24.7s)\n  [capture-node] freeze=3ms shot=296ms unfreeze=30ms saved=True"}, {"file": "frame_006.jpg", "time": 30.99, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True\n  Frame 4 saved (frame_003.jpg, t=5.8s)\n  [capture-periodic] freeze=3ms shot=279ms unfreeze=6ms saved=True\n  [capture-loop] iter=50 t=7.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.78GB\n  [capture-loop] iter=100 t=13.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=5 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  [capture-loop] iter=150 t=19.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=24.7s)\n  [capture-node] freeze=3ms shot=296ms unfreeze=30ms saved=True\n  Node executed (3 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=25.3s)\n  [capture-node] freeze=7ms shot=256ms unfreeze=36ms saved=True\n  [capture-loop] iter=200 t=26.8s state={'complete': False, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=91% browser_rss=0.75GB"}, {"file": "frame_007.jpg", "time": 33.35, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True\n  Frame 4 saved (frame_003.jpg, t=5.8s)\n  [capture-periodic] freeze=3ms shot=279ms unfreeze=6ms saved=True\n  [capture-loop] iter=50 t=7.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.78GB\n  [capture-loop] iter=100 t=13.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=5 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  [capture-loop] iter=150 t=19.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=24.7s)\n  [capture-node] freeze=3ms shot=296ms unfreeze=30ms saved=True\n  Node executed (3 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=25.3s)\n  [capture-node] freeze=7ms shot=256ms unfreeze=36ms saved=True\n  [capture-loop] iter=200 t=26.8s state={'complete': False, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=91% browser_rss=0.75GB\n  Node executed (4 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=31.0s)\n  [capture-node] freeze=7ms shot=253ms unfreeze=39ms saved=True"}, {"file": "frame_008.jpg", "time": 37.6, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True\n  Frame 4 saved (frame_003.jpg, t=5.8s)\n  [capture-periodic] freeze=3ms shot=279ms unfreeze=6ms saved=True\n  [capture-loop] iter=50 t=7.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.78GB\n  [capture-loop] iter=100 t=13.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=5 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  [capture-loop] iter=150 t=19.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=24.7s)\n  [capture-node] freeze=3ms shot=296ms unfreeze=30ms saved=True\n  Node executed (3 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=25.3s)\n  [capture-node] freeze=7ms shot=256ms unfreeze=36ms saved=True\n  [capture-loop] iter=200 t=26.8s state={'complete': False, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=91% browser_rss=0.75GB\n  Node executed (4 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=31.0s)\n  [capture-node] freeze=7ms shot=253ms unfreeze=39ms saved=True\n  Frame 8 saved (frame_007.jpg, t=33.4s)\n  [capture-periodic] freeze=4ms shot=193ms unfreeze=77ms saved=True\n  [capture-loop] iter=250 t=33.8s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=8 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=89% browser_rss=0.75GB"}, {"file": "frame_009.jpg", "time": 38.28, "log": "Capturing execution frames: sharpen_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=4ms shot=220ms unfreeze=41ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.5s)\n  [capture-node] freeze=6ms shot=243ms unfreeze=39ms saved=True\n  Frame 4 saved (frame_003.jpg, t=5.8s)\n  [capture-periodic] freeze=3ms shot=279ms unfreeze=6ms saved=True\n  [capture-loop] iter=50 t=7.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.78GB\n  [capture-loop] iter=100 t=13.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=5 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  [capture-loop] iter=150 t=19.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=99% browser_rss=0.75GB\n  Node executed (2 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=24.7s)\n  [capture-node] freeze=3ms shot=296ms unfreeze=30ms saved=True\n  Node executed (3 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=25.3s)\n  [capture-node] freeze=7ms shot=256ms unfreeze=36ms saved=True\n  [capture-loop] iter=200 t=26.8s state={'complete': False, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=91% browser_rss=0.75GB\n  Node executed (4 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=31.0s)\n  [capture-node] freeze=7ms shot=253ms unfreeze=39ms saved=True\n  Frame 8 saved (frame_007.jpg, t=33.4s)\n  [capture-periodic] freeze=4ms shot=193ms unfreeze=77ms saved=True\n  [capture-loop] iter=250 t=33.8s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=8 ram=3.5/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=89% browser_rss=0.75GB\n  Node executed (5 total), capturing...\n  Frame 9 saved (frame_008.jpg, t=37.6s)\n  [capture-node] freeze=22ms shot=251ms unfreeze=74ms saved=True"}, {"file": "frame_010.jpg", "time": 41.999277114868164, "log": "Final screenshot"}], "total_time": 38.65}, "boolean_ops_all": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: boolean_ops_all.json"}, {"file": "frame_001.jpg", "time": 1.1, "log": "Capturing execution frames: boolean_ops_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 1.91, "log": "Capturing execution frames: boolean_ops_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.1s)\n  [capture-node] freeze=5ms shot=269ms unfreeze=19ms saved=True"}, {"file": "frame_003.jpg", "time": 2.48, "log": "Capturing execution frames: boolean_ops_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.1s)\n  [capture-node] freeze=5ms shot=269ms unfreeze=19ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=1.9s)\n  [capture-node] freeze=4ms shot=248ms unfreeze=18ms saved=True"}, {"file": "frame_004.jpg", "time": 5.959036111831665, "log": "Final screenshot"}], "total_time": 2.77}, "batch_remesh": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: batch_remesh.json"}, {"file": "frame_001.jpg", "time": 2.46, "log": "Capturing execution frames: batch_remesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 3.03, "log": "Capturing execution frames: batch_remesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-node] freeze=7ms shot=220ms unfreeze=30ms saved=True"}, {"file": "frame_003.jpg", "time": 3.99, "log": "Capturing execution frames: batch_remesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-node] freeze=7ms shot=220ms unfreeze=30ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.0s)\n  [capture-node] freeze=9ms shot=200ms unfreeze=16ms saved=True"}, {"file": "frame_004.jpg", "time": 4.62, "log": "Capturing execution frames: batch_remesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-node] freeze=7ms shot=220ms unfreeze=30ms saved=True\n  Node executed (2 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=3.0s)\n  [capture-node] freeze=9ms shot=200ms unfreeze=16ms saved=True\n  Node executed (3 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.0s)\n  [capture-node] freeze=4ms shot=280ms unfreeze=30ms saved=True"}, {"file": "frame_005.jpg", "time": 8.093362092971802, "log": "Final screenshot"}], "total_time": 4.86}, "depth_map_to_mesh": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: depth_map_to_mesh.json"}, {"file": "frame_001.jpg", "time": 2.54, "log": "Capturing execution frames: depth_map_to_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.85, "log": "Capturing execution frames: depth_map_to_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=7ms shot=228ms unfreeze=29ms saved=True"}, {"file": "frame_003.jpg", "time": 7.35, "log": "Capturing execution frames: depth_map_to_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=7ms shot=228ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=12ms shot=330ms unfreeze=31ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=9 ram=3.3/7.0GB (54%) swap=0.0/0.0GB (0%) cpu=73% browser_rss=0.76GB"}, {"file": "frame_004.jpg", "time": 14.56, "log": "Capturing execution frames: depth_map_to_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=7ms shot=228ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=12ms shot=330ms unfreeze=31ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=9 ram=3.3/7.0GB (54%) swap=0.0/0.0GB (0%) cpu=73% browser_rss=0.76GB\n  Frame 4 saved (frame_003.jpg, t=7.3s)\n  [capture-periodic] freeze=5ms shot=229ms unfreeze=27ms saved=True\n  [capture-loop] iter=100 t=13.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=11 ram=3.7/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.73GB"}, {"file": "frame_005.jpg", "time": 17.16, "log": "Capturing execution frames: depth_map_to_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=7ms shot=228ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=12ms shot=330ms unfreeze=31ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=9 ram=3.3/7.0GB (54%) swap=0.0/0.0GB (0%) cpu=73% browser_rss=0.76GB\n  Frame 4 saved (frame_003.jpg, t=7.3s)\n  [capture-periodic] freeze=5ms shot=229ms unfreeze=27ms saved=True\n  [capture-loop] iter=100 t=13.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=11 ram=3.7/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.73GB\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=14.6s)\n  [capture-node] freeze=19ms shot=400ms unfreeze=25ms saved=True"}, {"file": "frame_006.jpg", "time": 20.42, "log": "Capturing execution frames: depth_map_to_mesh.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=7ms shot=228ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.8s)\n  [capture-periodic] freeze=12ms shot=330ms unfreeze=31ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=9 ram=3.3/7.0GB (54%) swap=0.0/0.0GB (0%) cpu=73% browser_rss=0.76GB\n  Frame 4 saved (frame_003.jpg, t=7.3s)\n  [capture-periodic] freeze=5ms shot=229ms unfreeze=27ms saved=True\n  [capture-loop] iter=100 t=13.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=11 ram=3.7/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.73GB\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=14.6s)\n  [capture-node] freeze=19ms shot=400ms unfreeze=25ms saved=True\n  Frame 6 saved (frame_005.jpg, t=17.2s)\n  [capture-periodic] freeze=9ms shot=337ms unfreeze=43ms saved=True"}, {"file": "frame_007.jpg", "time": 24.474143981933594, "log": "Final screenshot"}], "total_time": 20.98}, "surface_reconstruction": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: surface_reconstruction.json"}, {"file": "frame_001.jpg", "time": 2.54, "log": "Capturing execution frames: surface_reconstruction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.74, "log": "Capturing execution frames: surface_reconstruction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=190ms unfreeze=24ms saved=True"}, {"file": "frame_003.jpg", "time": 5.86, "log": "Capturing execution frames: surface_reconstruction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=190ms unfreeze=24ms saved=True\n  Node executed (1 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-node] freeze=4ms shot=202ms unfreeze=6ms saved=True"}, {"file": "frame_004.jpg", "time": 9.329110860824585, "log": "Final screenshot"}], "total_time": 6.14}, "preview_mesh_threejs": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: preview_mesh_threejs.json"}, {"file": "frame_001.jpg", "time": 0.81, "log": "Capturing execution frames: preview_mesh_threejs.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 3.9288880825042725, "log": "Final screenshot"}], "total_time": 1.1}, "fix_normals_all": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: fix_normals_all.json"}, {"file": "frame_001.jpg", "time": 2.48, "log": "Capturing execution frames: fix_normals_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.9, "log": "Capturing execution frames: fix_normals_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=272ms unfreeze=32ms saved=True"}, {"file": "frame_003.jpg", "time": 7.23, "log": "Capturing execution frames: fix_normals_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=272ms unfreeze=32ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.9s)\n  [capture-periodic] freeze=5ms shot=194ms unfreeze=21ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.4/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=85% browser_rss=0.76GB"}, {"file": "frame_004.jpg", "time": 7.76, "log": "Capturing execution frames: fix_normals_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=272ms unfreeze=32ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.9s)\n  [capture-periodic] freeze=5ms shot=194ms unfreeze=21ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.4/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=85% browser_rss=0.76GB\n  Frame 4 saved (frame_003.jpg, t=7.2s)\n  [capture-periodic] freeze=5ms shot=164ms unfreeze=38ms saved=True"}, {"file": "frame_005.jpg", "time": 8.31, "log": "Capturing execution frames: fix_normals_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.5s)\n  [capture-periodic] freeze=6ms shot=272ms unfreeze=32ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.9s)\n  [capture-periodic] freeze=5ms shot=194ms unfreeze=21ms saved=True\n  [capture-loop] iter=50 t=7.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.4/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=85% browser_rss=0.76GB\n  Frame 4 saved (frame_003.jpg, t=7.2s)\n  [capture-periodic] freeze=5ms shot=164ms unfreeze=38ms saved=True\n  Node executed (1 total), capturing...\n  Frame 5 saved (frame_004.jpg, t=7.8s)\n  [capture-node] freeze=10ms shot=230ms unfreeze=4ms saved=True"}, {"file": "frame_006.jpg", "time": 11.796936750411987, "log": "Final screenshot"}], "total_time": 8.7}, "alpha_wrap": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: alpha_wrap.json"}, {"file": "frame_001.jpg", "time": 2.69, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 5.08, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True"}, {"file": "frame_003.jpg", "time": 10.05, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.1s)\n  [capture-periodic] freeze=5ms shot=242ms unfreeze=23ms saved=True\n  [capture-loop] iter=50 t=7.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=10 ram=3.7/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=56% browser_rss=0.74GB"}, {"file": "frame_004.jpg", "time": 12.38, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.1s)\n  [capture-periodic] freeze=5ms shot=242ms unfreeze=23ms saved=True\n  [capture-loop] iter=50 t=7.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=10 ram=3.7/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=56% browser_rss=0.74GB\n  Frame 4 saved (frame_003.jpg, t=10.1s)\n  [capture-periodic] freeze=9ms shot=256ms unfreeze=25ms saved=True"}, {"file": "frame_005.jpg", "time": 13.98, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.1s)\n  [capture-periodic] freeze=5ms shot=242ms unfreeze=23ms saved=True\n  [capture-loop] iter=50 t=7.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=10 ram=3.7/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=56% browser_rss=0.74GB\n  Frame 4 saved (frame_003.jpg, t=10.1s)\n  [capture-periodic] freeze=9ms shot=256ms unfreeze=25ms saved=True\n  Frame 5 saved (frame_004.jpg, t=12.4s)\n  [capture-periodic] freeze=9ms shot=261ms unfreeze=27ms saved=True"}, {"file": "frame_006.jpg", "time": 14.71, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.1s)\n  [capture-periodic] freeze=5ms shot=242ms unfreeze=23ms saved=True\n  [capture-loop] iter=50 t=7.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=10 ram=3.7/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=56% browser_rss=0.74GB\n  Frame 4 saved (frame_003.jpg, t=10.1s)\n  [capture-periodic] freeze=9ms shot=256ms unfreeze=25ms saved=True\n  Frame 5 saved (frame_004.jpg, t=12.4s)\n  [capture-periodic] freeze=9ms shot=261ms unfreeze=27ms saved=True\n  Node executed (1 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=14.0s)\n  [capture-node] freeze=13ms shot=374ms unfreeze=36ms saved=True"}, {"file": "frame_007.jpg", "time": 17.17, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.1s)\n  [capture-periodic] freeze=5ms shot=242ms unfreeze=23ms saved=True\n  [capture-loop] iter=50 t=7.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=10 ram=3.7/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=56% browser_rss=0.74GB\n  Frame 4 saved (frame_003.jpg, t=10.1s)\n  [capture-periodic] freeze=9ms shot=256ms unfreeze=25ms saved=True\n  Frame 5 saved (frame_004.jpg, t=12.4s)\n  [capture-periodic] freeze=9ms shot=261ms unfreeze=27ms saved=True\n  Node executed (1 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=14.0s)\n  [capture-node] freeze=13ms shot=374ms unfreeze=36ms saved=True\n  Node executed (2 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=14.7s)\n  [capture-node] freeze=9ms shot=209ms unfreeze=35ms saved=True\n  [capture-loop] iter=100 t=15.4s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=6 ram=3.7/7.0GB (59%) swap=0.0/0.0GB (0%) cpu=66% browser_rss=0.72GB"}, {"file": "frame_008.jpg", "time": 17.76, "log": "Capturing execution frames: alpha_wrap.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.7s)\n  [capture-periodic] freeze=9ms shot=295ms unfreeze=26ms saved=True\n  Frame 3 saved (frame_002.jpg, t=5.1s)\n  [capture-periodic] freeze=5ms shot=242ms unfreeze=23ms saved=True\n  [capture-loop] iter=50 t=7.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=10 ram=3.7/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=56% browser_rss=0.74GB\n  Frame 4 saved (frame_003.jpg, t=10.1s)\n  [capture-periodic] freeze=9ms shot=256ms unfreeze=25ms saved=True\n  Frame 5 saved (frame_004.jpg, t=12.4s)\n  [capture-periodic] freeze=9ms shot=261ms unfreeze=27ms saved=True\n  Node executed (1 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=14.0s)\n  [capture-node] freeze=13ms shot=374ms unfreeze=36ms saved=True\n  Node executed (2 total), capturing...\n  Frame 7 saved (frame_006.jpg, t=14.7s)\n  [capture-node] freeze=9ms shot=209ms unfreeze=35ms saved=True\n  [capture-loop] iter=100 t=15.4s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=6 ram=3.7/7.0GB (59%) swap=0.0/0.0GB (0%) cpu=66% browser_rss=0.72GB\n  Node executed (3 total), capturing...\n  Frame 8 saved (frame_007.jpg, t=17.2s)\n  [capture-node] freeze=9ms shot=237ms unfreeze=13ms saved=True"}, {"file": "frame_009.jpg", "time": 21.11699914932251, "log": "Final screenshot"}], "total_time": 18.04}, "reconstruct_all": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: reconstruct_all.json"}, {"file": "frame_001.jpg", "time": 1.01, "log": "Capturing execution frames: reconstruct_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 2.76, "log": "Capturing execution frames: reconstruct_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.0s)\n  [capture-node] freeze=10ms shot=180ms unfreeze=33ms saved=True"}, {"file": "frame_003.jpg", "time": 4.73, "log": "Capturing execution frames: reconstruct_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.0s)\n  [capture-node] freeze=10ms shot=180ms unfreeze=33ms saved=True\n  Node executed (3 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=2.8s)\n  [capture-node] freeze=9ms shot=281ms unfreeze=46ms saved=True"}, {"file": "frame_004.jpg", "time": 7.16, "log": "Capturing execution frames: reconstruct_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.0s)\n  [capture-node] freeze=10ms shot=180ms unfreeze=33ms saved=True\n  Node executed (3 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=2.8s)\n  [capture-node] freeze=9ms shot=281ms unfreeze=46ms saved=True\n  Node executed (4 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.7s)\n  [capture-node] freeze=16ms shot=329ms unfreeze=38ms saved=True"}, {"file": "frame_005.jpg", "time": 8.11, "log": "Capturing execution frames: reconstruct_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.0s)\n  [capture-node] freeze=10ms shot=180ms unfreeze=33ms saved=True\n  Node executed (3 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=2.8s)\n  [capture-node] freeze=9ms shot=281ms unfreeze=46ms saved=True\n  Node executed (4 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.7s)\n  [capture-node] freeze=16ms shot=329ms unfreeze=38ms saved=True\n  Frame 5 saved (frame_004.jpg, t=7.2s)\n  [capture-periodic] freeze=4ms shot=182ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=7.8s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=90% browser_rss=0.80GB"}, {"file": "frame_006.jpg", "time": 8.81, "log": "Capturing execution frames: reconstruct_all.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.0s)\n  [capture-node] freeze=10ms shot=180ms unfreeze=33ms saved=True\n  Node executed (3 total), capturing...\n  Frame 3 saved (frame_002.jpg, t=2.8s)\n  [capture-node] freeze=9ms shot=281ms unfreeze=46ms saved=True\n  Node executed (4 total), capturing...\n  Frame 4 saved (frame_003.jpg, t=4.7s)\n  [capture-node] freeze=16ms shot=329ms unfreeze=38ms saved=True\n  Frame 5 saved (frame_004.jpg, t=7.2s)\n  [capture-periodic] freeze=4ms shot=182ms unfreeze=4ms saved=True\n  [capture-loop] iter=50 t=7.8s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=90% browser_rss=0.80GB\n  Node executed (5 total), capturing...\n  Frame 6 saved (frame_005.jpg, t=8.1s)\n  [capture-node] freeze=5ms shot=300ms unfreeze=68ms saved=True"}, {"file": "frame_007.jpg", "time": 12.958006858825684, "log": "Final screenshot"}], "total_time": 9.29}, "normals": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: normals.json"}, {"file": "frame_001.jpg", "time": 1.37, "log": "Capturing execution frames: normals.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 2.16, "log": "Capturing execution frames: normals.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=1.4s)\n  [capture-node] freeze=33ms shot=195ms unfreeze=19ms saved=True"}, {"file": "frame_003.jpg", "time": 5.532688856124878, "log": "Final screenshot"}], "total_time": 2.4}, "transform": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: transform.json"}, {"file": "frame_001.jpg", "time": 0.65, "log": "Capturing execution frames: transform.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.073214054107666, "log": "Final screenshot"}], "total_time": 0.9}, "skeleton_extraction": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: skeleton_extraction.json"}, {"file": "frame_001.jpg", "time": 2.42, "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 4.69, "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=5ms shot=175ms unfreeze=29ms saved=True"}, {"file": "frame_003.jpg", "time": 7.02, "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=5ms shot=175ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=3ms shot=194ms unfreeze=28ms saved=True\n  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.80GB"}, {"file": "frame_004.jpg", "time": 9.34, "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=5ms shot=175ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=3ms shot=194ms unfreeze=28ms saved=True\n  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.80GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=7ms shot=232ms unfreeze=18ms saved=True"}, {"file": "frame_005.jpg", "time": 16.32, "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=5ms shot=175ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=3ms shot=194ms unfreeze=28ms saved=True\n  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.80GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=7ms shot=232ms unfreeze=18ms saved=True\n  Frame 5 saved (frame_004.jpg, t=9.3s)\n  [capture-periodic] freeze=4ms shot=193ms unfreeze=25ms saved=True\n  [capture-loop] iter=100 t=13.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=79% browser_rss=0.78GB"}, {"file": "frame_006.jpg", "time": 18.67, "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=5ms shot=175ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=3ms shot=194ms unfreeze=28ms saved=True\n  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.80GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=7ms shot=232ms unfreeze=18ms saved=True\n  Frame 5 saved (frame_004.jpg, t=9.3s)\n  [capture-periodic] freeze=4ms shot=193ms unfreeze=25ms saved=True\n  [capture-loop] iter=100 t=13.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=79% browser_rss=0.78GB\n  Frame 6 saved (frame_005.jpg, t=16.3s)\n  [capture-periodic] freeze=3ms shot=263ms unfreeze=26ms saved=True"}, {"file": "frame_007.jpg", "time": 20.67, "log": "Capturing execution frames: skeleton_extraction.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Frame 2 saved (frame_001.jpg, t=2.4s)\n  [capture-periodic] freeze=5ms shot=175ms unfreeze=29ms saved=True\n  Frame 3 saved (frame_002.jpg, t=4.7s)\n  [capture-periodic] freeze=3ms shot=194ms unfreeze=28ms saved=True\n  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=8 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=88% browser_rss=0.80GB\n  Frame 4 saved (frame_003.jpg, t=7.0s)\n  [capture-periodic] freeze=7ms shot=232ms unfreeze=18ms saved=True\n  Frame 5 saved (frame_004.jpg, t=9.3s)\n  [capture-periodic] freeze=4ms shot=193ms unfreeze=25ms saved=True\n  [capture-loop] iter=100 t=13.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=79% browser_rss=0.78GB\n  Frame 6 saved (frame_005.jpg, t=16.3s)\n  [capture-periodic] freeze=3ms shot=263ms unfreeze=26ms saved=True\n  Frame 7 saved (frame_006.jpg, t=18.7s)\n  [capture-periodic] freeze=4ms shot=190ms unfreeze=25ms saved=True\n  [capture-loop] iter=150 t=19.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.6/7.0GB (60%) swap=0.0/0.0GB (0%) cpu=91% browser_rss=0.78GB"}, {"file": "frame_008.jpg", "time": 24.099885940551758, "log": "Final screenshot"}], "total_time": 20.99}, "point_mesh_distance": {"frames": [{"file": "frame_000.jpg", "time": 0.0, "log": "Capturing execution frames: point_mesh_distance.json"}, {"file": "frame_001.jpg", "time": 0.76, "log": "Capturing execution frames: point_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution..."}, {"file": "frame_002.jpg", "time": 1.47, "log": "Capturing execution frames: point_mesh_distance.json\n  Frame 1 saved (frame_000.jpg, t=0.0s)\n  Validating workflow...\n  Queuing workflow for execution...\n  Node executed (1 total), capturing...\n  Frame 2 saved (frame_001.jpg, t=0.8s)\n  [capture-node] freeze=7ms shot=382ms unfreeze=24ms saved=True"}, {"file": "frame_003.jpg", "time": 5.017229080200195, "log": "Final screenshot"}], "total_time": 1.73}};
+
+        const inIframe = window !== window.top;
+        let currentWorkflow = null;
+        let playInterval = null;
+        let originalLogContent = '';
+        let currentFrameIndex = 0;
+        let currentFrames = [];
+        let currentTotalTime = 0;
+
+        function openLightboxByName(name) {
+            const w = workflowData[name];
+            if (w) openLightbox(w.src, w.title, w.status, w.duration, w.log, w.hardware);
+        }
+
+        function openLightbox(src, title, status, duration, logContent, hardware) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-title').textContent = title;
+            currentWorkflow = title;
+            originalLogContent = logContent;
+
+            const badge = document.getElementById('lightbox-badge');
+            badge.textContent = status;
+            badge.className = 'lightbox-badge ' + status;
+
+            document.getElementById('lightbox-duration').textContent = duration + 's';
+            document.getElementById('lightbox-log').textContent = logContent || '(No log available)';
+
+            const hwEl = document.getElementById('lightbox-hardware');
+            if (hardware) {
+                const parts = [];
+                if (hardware.os) parts.push(hardware.os);
+                if (hardware.cpu) parts.push(hardware.cpu);
+                if (hardware.gpu) parts.push(hardware.gpu);
+                hwEl.textContent = parts.join(' | ');
+            } else {
+                hwEl.textContent = status === 'skipped' ? '(Did not run on this machine)' : '';
+            }
+
+            const data = videoData[title];
+            const videoPlayer = document.getElementById('video-player');
+
+            if (data && data.frames && data.frames.length > 1) {
+                currentFrames = data.frames;
+                currentTotalTime = data.total_time || data.frames[data.frames.length - 1].time;
+                setupVideoSlider(data.frames, currentTotalTime);
+                updateVideoFrameByIndex(title, data.frames.length - 1);
+                videoPlayer.classList.add('active');
+            } else {
+                videoPlayer.classList.remove('active');
+            }
+
+            loadResourceGraph(title);
+
+            // Close image overlay if open
+            closeImgOverlay();
+
+            document.getElementById('lightbox').classList.add('active');
+            history.replaceState(null, '', '#' + encodeURIComponent(title));
+
+            // Notify parent frames for deep linking
+            if (inIframe) {
+                window.parent.postMessage({ type: 'comfytest-open', name: title }, '*');
+            }
+        }
+
+        function buildSliderRange(frames, totalTime) {
+            const range = { 'min': frames[0].time };
+            frames.forEach((frame, idx) => {
+                if (idx > 0 && idx < frames.length - 1) {
+                    const pct = (frame.time / totalTime * 100).toFixed(1) + '%';
+                    range[pct] = frame.time;
+                }
+            });
+            range['max'] = frames[frames.length - 1].time;
+            return range;
+        }
+
+        function setupVideoSlider(frames, totalTime) {
+            const sliderEl = document.getElementById('video-slider');
+
+            if (sliderEl.noUiSlider) {
+                sliderEl.noUiSlider.destroy();
+            }
+
+            const range = buildSliderRange(frames, totalTime);
+
+            noUiSlider.create(sliderEl, {
+                start: frames[frames.length - 1].time,
+                snap: true,
+                range: range,
+                pips: {
+                    mode: 'range',
+                    density: 100
+                }
+            });
+
+            sliderEl.noUiSlider.on('update', function(values) {
+                const time = parseFloat(values[0]);
+                const frameIdx = frames.findIndex(f => Math.abs(f.time - time) < 0.01);
+                if (frameIdx >= 0 && frameIdx !== currentFrameIndex) {
+                    currentFrameIndex = frameIdx;
+                    showFrame(currentWorkflow, frameIdx);
+                }
+            });
+        }
+
+        function showFrame(workflowName, frameIndex) {
+            const data = videoData[workflowName];
+            if (!data || !data.frames) return;
+
+            const frame = data.frames[frameIndex];
+            const img = document.getElementById('lightbox-img');
+
+            const isLastFrame = frameIndex === data.frames.length - 1;
+            if (isLastFrame && workflowData[workflowName] && workflowData[workflowName].src) {
+                img.src = workflowData[workflowName].src;
+            } else {
+                img.src = 'videos/' + workflowName + '/' + frame.file;
+            }
+
+            const counter = document.getElementById('video-frame-counter');
+            const totalTime = data.total_time || data.frames[data.frames.length - 1].time;
+            counter.textContent = frame.time.toFixed(1) + 's / ' + totalTime.toFixed(1) + 's';
+
+            const logEl = document.getElementById('lightbox-log');
+            if (frame.log) {
+                logEl.textContent = frame.log;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+        }
+
+        function updateVideoFrameByIndex(workflowName, frameIndex) {
+            currentFrameIndex = frameIndex;
+            showFrame(workflowName, frameIndex);
+
+            const sliderEl = document.getElementById('video-slider');
+            if (sliderEl.noUiSlider && currentFrames[frameIndex]) {
+                sliderEl.noUiSlider.set(currentFrames[frameIndex].time);
+            }
+        }
+
+        function toggleVideoPlay() {
+            const btn = document.getElementById('video-play-btn');
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+                btn.innerHTML = '&#9654; Play';
+            } else {
+                btn.innerHTML = '&#9632; Stop';
+                playInterval = setInterval(() => {
+                    if (!currentFrames.length) return;
+                    currentFrameIndex = (currentFrameIndex + 1) % currentFrames.length;
+                    updateVideoFrameByIndex(currentWorkflow, currentFrameIndex);
+                }, 500);
+            }
+        }
+
+        let resourceGraphState = null;
+
+        async function loadResourceGraph(workflowName) {
+            const graphContainer = document.getElementById('resource-graph');
+            const canvas = document.getElementById('resource-canvas');
+            const gpuLegend = document.getElementById('gpu-legend');
+
+            resourceGraphState = null;
+
+            try {
+                const csvResponse = await fetch('logs/' + workflowName + '_resources.csv');
+
+                if (!csvResponse.ok) {
+                    graphContainer.classList.remove('active');
+                    return;
+                }
+
+                const text = await csvResponse.text();
+                const allLines = text.trim().split('\n');
+
+                let totalRamGb = 32;
+                if (allLines[0].startsWith('#')) {
+                    const metaMatch = allLines[0].match(/total_ram_gb=([\d.]+)/);
+                    if (metaMatch) {
+                        totalRamGb = parseFloat(metaMatch[1]);
+                    }
+                }
+
+                const dataLines = allLines.slice(2);
+
+                if (dataLines.length < 2) {
+                    graphContainer.classList.remove('active');
+                    return;
+                }
+
+                const data = dataLines.map(line => {
+                    const [t, ram, vram] = line.split(',');
+                    return {
+                        t: parseFloat(t),
+                        ram: parseFloat(ram),
+                        vram: vram ? parseFloat(vram) : null
+                    };
+                });
+
+                const hasVram = data.some(d => d.vram !== null);
+                gpuLegend.style.display = hasVram ? 'flex' : 'none';
+
+                graphContainer.classList.add('active');
+                await new Promise(r => setTimeout(r, 10));
+
+                const ctx = canvas.getContext('2d');
+                const dpr = window.devicePixelRatio || 1;
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                ctx.scale(dpr, dpr);
+
+                const w = rect.width;
+                const h = rect.height;
+                const padding = { top: 10, right: 40, bottom: 20, left: 45 };
+                const graphW = w - padding.left - padding.right;
+                const graphH = h - padding.top - padding.bottom;
+
+                const maxRam = Math.max(...data.map(d => d.ram), 0.5);
+                const maxVram = hasVram ? Math.max(...data.filter(d => d.vram !== null).map(d => d.vram), 0.5) : 1;
+                const maxTime = data[data.length - 1].t;
+
+                resourceGraphState = { data, padding, w, h, graphW, graphH, maxRam, maxVram, maxTime, hasVram, dpr };
+
+                drawResourceGraph();
+            } catch (e) {
+                console.error('Resource graph error:', e);
+                graphContainer.classList.remove('active');
+            }
+        }
+
+        function drawResourceGraph(hoverX) {
+            if (!resourceGraphState) return;
+            const { data, padding, w, h, graphW, graphH, maxRam, maxVram, maxTime, hasVram, dpr } = resourceGraphState;
+
+            const canvas = document.getElementById('resource-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, w, h);
+
+            // Grid lines
+            ctx.strokeStyle = '#1c2d44';
+            ctx.lineWidth = 0.5;
+            for (let i = 1; i < 4; i++) {
+                const y = padding.top + (graphH * i / 4);
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(w - padding.right, y);
+                ctx.stroke();
+            }
+
+            // Axes
+            ctx.strokeStyle = '#243656';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, padding.top);
+            ctx.lineTo(padding.left, h - padding.bottom);
+            ctx.lineTo(w - padding.right, h - padding.bottom);
+            ctx.lineTo(w - padding.right, padding.top);
+            ctx.stroke();
+
+            // Left axis: RAM
+            ctx.fillStyle = '#3fb950';
+            ctx.font = '9px sans-serif';
+            ctx.textAlign = 'right';
+            const ramMax = Math.ceil(maxRam * 10) / 10;
+            ctx.fillText(ramMax.toFixed(1) + ' GB', padding.left - 3, padding.top + 4);
+            ctx.fillText('0', padding.left - 3, h - padding.bottom + 4);
+
+            // Right axis: VRAM (if present)
+            if (hasVram) {
+                ctx.fillStyle = '#d29922';
+                ctx.textAlign = 'left';
+                const vramMax = Math.ceil(maxVram * 10) / 10;
+                ctx.fillText(vramMax.toFixed(1) + ' GB', w - padding.right + 3, padding.top + 4);
+                ctx.fillText('0', w - padding.right + 3, h - padding.bottom + 4);
+            }
+
+            // Time labels
+            ctx.fillStyle = '#4a6282';
+            ctx.textAlign = 'center';
+            ctx.fillText('0s', padding.left, h - padding.bottom + 12);
+            ctx.fillText(maxTime.toFixed(0) + 's', w - padding.right, h - padding.bottom + 12);
+
+            function drawLine(values, maxVal, color) {
+                if (values.every(v => v === null || isNaN(v))) return;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                let started = false;
+                data.forEach((d, i) => {
+                    const val = values[i];
+                    if (val === null || isNaN(val)) return;
+                    const x = padding.left + (d.t / maxTime) * graphW;
+                    const y = padding.top + (1 - val / maxVal) * graphH;
+                    if (!started) { ctx.moveTo(x, y); started = true; }
+                    else { ctx.lineTo(x, y); }
+                });
+                ctx.stroke();
+            }
+
+            drawLine(data.map(d => d.ram), ramMax, '#3fb950');
+            if (hasVram) {
+                drawLine(data.map(d => d.vram), Math.ceil(maxVram * 10) / 10, '#d29922');
+            }
+
+            // Hover crosshair
+            if (hoverX !== undefined && hoverX >= padding.left && hoverX <= w - padding.right) {
+                const timeAtCursor = ((hoverX - padding.left) / graphW) * maxTime;
+                let closest = data[0], closestDist = Infinity;
+                for (const d of data) {
+                    const dist = Math.abs(d.t - timeAtCursor);
+                    if (dist < closestDist) { closestDist = dist; closest = d; }
+                }
+
+                const snapX = padding.left + (closest.t / maxTime) * graphW;
+
+                // Vertical line
+                ctx.strokeStyle = 'rgba(230,237,243,0.2)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(snapX, padding.top);
+                ctx.lineTo(snapX, h - padding.bottom);
+                ctx.stroke();
+
+                // Readout
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'left';
+                const readoutX = snapX + 6;
+                let readoutY = padding.top + 14;
+
+                ctx.fillStyle = '#8ba3c1';
+                ctx.fillText(closest.t.toFixed(1) + 's', readoutX, readoutY);
+                readoutY += 13;
+
+                ctx.fillStyle = '#3fb950';
+                ctx.fillText('RAM: ' + closest.ram.toFixed(2) + ' GB', readoutX, readoutY);
+                readoutY += 13;
+
+                if (hasVram && closest.vram !== null) {
+                    ctx.fillStyle = '#d29922';
+                    ctx.fillText('VRAM: ' + closest.vram.toFixed(2) + ' GB', readoutX, readoutY);
+                }
+            }
+        }
+
+        // Canvas hover handler
+        document.getElementById('resource-canvas').addEventListener('mousemove', function(e) {
+            if (!resourceGraphState) return;
+            const rect = this.getBoundingClientRect();
+            drawResourceGraph(e.clientX - rect.left);
+        });
+        document.getElementById('resource-canvas').addEventListener('mouseleave', function() {
+            drawResourceGraph();
+        });
+
+        function closeImgOverlay() {
+            const overlay = document.getElementById('img-overlay');
+            overlay.classList.remove('active', 'zoomed');
+        }
+
+        function closeLightbox() {
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+                document.getElementById('video-play-btn').innerHTML = '&#9654; Play';
+            }
+            closeImgOverlay();
+            document.getElementById('resource-graph').classList.remove('active');
+            document.getElementById('lightbox').classList.remove('active');
+            history.replaceState(null, '', window.location.pathname);
+
+            if (inIframe) {
+                window.parent.postMessage({ type: 'comfytest-close' }, '*');
+            }
+        }
+
+        document.getElementById('lightbox').onclick = (e) => {
+            if (e.target.id === 'lightbox') closeLightbox();
+        };
+
+        function navigateLightbox(delta) {
+            if (workflowNames.length === 0) return;
+            const idx = workflowNames.indexOf(currentWorkflow);
+            if (idx === -1) return;
+            const newIdx = (idx + delta + workflowNames.length) % workflowNames.length;
+            openLightboxByName(workflowNames[newIdx]);
+        }
+
+        function handleKey(key) {
+            const overlay = document.getElementById('img-overlay');
+            if (key === 'Escape') {
+                if (overlay.classList.contains('active')) {
+                    closeImgOverlay();
+                } else {
+                    closeLightbox();
+                }
+                return;
+            }
+            if (document.getElementById('lightbox').classList.contains('active') && !overlay.classList.contains('active')) {
+                if (key === 'ArrowLeft') { navigateLightbox(-1); }
+                if (key === 'ArrowRight') { navigateLightbox(1); }
+            }
+        }
+
+        document.onkeydown = (e) => {
+            if (['Escape', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                handleKey(e.key);
+            }
+        };
+
+        // Click lightbox image -> open in fullscreen overlay (fit mode)
+        document.getElementById('lightbox-img').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const overlay = document.getElementById('img-overlay');
+            const overlayImg = document.getElementById('img-overlay-content');
+            overlayImg.src = this.src;
+            overlay.classList.add('active');
+            overlay.classList.remove('zoomed');
+        });
+
+        // Click overlay image: fit -> zoomed -> close
+        document.getElementById('img-overlay-content').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const overlay = document.getElementById('img-overlay');
+            if (overlay.classList.contains('zoomed')) {
+                closeImgOverlay();
+            } else {
+                overlay.classList.add('zoomed');
+            }
+        });
+
+        // Click overlay background -> close overlay
+        document.getElementById('img-overlay').addEventListener('click', function(e) {
+            if (e.target === this) closeImgOverlay();
+        });
+
+        function openFromHash() {
+            const hash = decodeURIComponent(window.location.hash.slice(1));
+            if (hash && workflowData[hash]) {
+                const w = workflowData[hash];
+                openLightbox(w.src, w.title, w.status, w.duration, w.log, w.hardware);
+            }
+        }
+
+        window.addEventListener('hashchange', openFromHash);
+        window.addEventListener('load', openFromHash);
+
+        // Listen for messages from parent frames
+        window.addEventListener('message', function(e) {
+            if (!e.data || !e.data.type) return;
+            if (e.data.type === 'comfytest-open' && e.data.name) {
+                openLightboxByName(e.data.name);
+            }
+            if (e.data.type === 'comfytest-key') {
+                handleKey(e.data.key);
+            }
+        });
+
+        // Detect iframe: hide header and move meta chips into summary
+        if (inIframe) {
+            document.body.classList.add('in-iframe');
+            const chips = document.querySelector('.meta-chips');
+            const summary = document.querySelector('.summary');
+            if (chips && summary) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'summary-meta';
+                while (chips.firstChild) wrapper.appendChild(chips.firstChild);
+                summary.insertBefore(wrapper, summary.firstChild);
+            }
+        }
+    </script>
+</body>
+</html>

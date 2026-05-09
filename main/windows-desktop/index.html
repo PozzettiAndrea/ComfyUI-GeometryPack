@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PozzettiAndrea/ComfyUI-GeometryPack - Test Results</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1923;
+            color: #e6edf3;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #162033;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid #243656;
+        }
+
+        body.in-iframe header {
+            display: none;
+        }
+
+        body.in-iframe .container {
+            padding-top: 1.25rem;
+        }
+
+        body.in-iframe .summary-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 a {
+            color: #e6edf3;
+            text-decoration: none;
+        }
+
+        h1 a:hover { color: #58a6ff; }
+
+        .meta-chips {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.6rem;
+            background: #1c2d44;
+            border: 1px solid #243656;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            color: #8ba3c1;
+        }
+
+        .meta-chip svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Summary Section */
+        .summary {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            background: #1c2d44;
+            border-radius: 6px;
+            height: 10px;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .progress-fill {
+            background: #3fb950;
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.has-failures {
+            background: linear-gradient(90deg, #3fb950 0%, #3fb950 0%, #f85149 0%, #f85149 100%);
+            width: 100% !important;
+            border-radius: 6px;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #8ba3c1;
+            white-space: nowrap;
+            min-width: 3.5rem;
+            text-align: right;
+        }
+
+        .stats {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .stat-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .stat-pass {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+        }
+
+        .stat-fail {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+        }
+
+        .stat-total {
+            color: #8ba3c1;
+            font-size: 0.85rem;
+        }
+
+        /* Failed Section */
+        .failed-section {
+            background: rgba(248, 81, 73, 0.08);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .failed-section h2 {
+            color: #f85149;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .failed-item {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .failed-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .failed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .failed-name {
+            font-weight: 600;
+            color: #f85149;
+        }
+
+        .failed-duration {
+            color: #8ba3c1;
+            font-size: 0.8rem;
+        }
+
+        .failed-error {
+            background: #0f1923;
+            border: 1px solid #243656;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            font-size: 0.8rem;
+            color: #d29922;
+            margin-bottom: 0.5rem;
+        }
+
+        .log-link {
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .log-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Workflow Grid */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            color: #8ba3c1;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .view-controls {
+            display: flex;
+            gap: 0;
+            align-items: center;
+            border: 1px solid #243656;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            background: #1c2d44;
+            color: #8ba3c1;
+            border: none;
+            border-right: 1px solid #243656;
+            padding: 0.3rem 0.75rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .view-btn:last-child {
+            border-right: none;
+        }
+
+        .view-btn:hover {
+            background: #243656;
+            color: #e6edf3;
+        }
+
+        .view-btn.active {
+            background: #58a6ff;
+            color: #fff;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .workflow-grid.view-list {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .workflow-grid.view-list .workflow-card {
+            border-radius: 0;
+            border-bottom: 1px solid #243656;
+        }
+
+        .workflow-grid.view-list .workflow-card:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .workflow-grid.view-list .workflow-card:last-child {
+            border-radius: 0 0 8px 8px;
+            border-bottom: none;
+        }
+
+        .workflow-grid.view-list .workflow-card:only-child {
+            border-radius: 8px;
+        }
+
+        .workflow-grid.view-list .workflow-screenshot {
+            width: 100%;
+            height: auto;
+            aspect-ratio: auto;
+        }
+
+        .workflow-grid.view-list .workflow-info {
+            border-top: 1px solid #243656;
+            padding: 0.75rem 1rem;
+        }
+
+        .workflow-grid.view-list .workflow-name {
+            max-width: none;
+            font-size: 0.9rem;
+        }
+
+        .workflow-card {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+
+        .workflow-card:hover {
+            transform: translateY(-1px);
+            border-color: #4a6282;
+        }
+
+        .workflow-card.clickable {
+            cursor: pointer;
+        }
+
+        .workflow-card.failed {
+            border-color: #f85149;
+        }
+
+        .workflow-card.failed:hover {
+            border-color: #f85149;
+        }
+
+        .workflow-screenshot {
+            width: 100%;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            background: #0f1923;
+            display: block;
+        }
+
+        .workflow-screenshot.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a6282;
+            font-size: 0.8rem;
+        }
+
+        .workflow-info {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #243656;
+        }
+
+        .workflow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .workflow-name {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #e6edf3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 65%;
+        }
+
+        .workflow-badge {
+            padding: 0.15rem 0.5rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            flex-shrink: 0;
+        }
+
+        .workflow-badge.pass {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+        }
+
+        .workflow-badge.fail {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+        }
+
+        .workflow-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #4a6282;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(1, 4, 9, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #243656;
+            align-self: center;
+            cursor: zoom-in;
+        }
+
+        .img-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1002;
+            background: rgba(1, 4, 9, 0.95);
+            overflow: auto;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-overlay.active {
+            display: flex;
+        }
+
+        .img-overlay.zoomed {
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .img-overlay img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            cursor: zoom-in;
+        }
+
+        .img-overlay.zoomed img {
+            max-width: none;
+            max-height: none;
+            cursor: zoom-out;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            color: #e6edf3;
+            cursor: pointer;
+            opacity: 0.6;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+
+        .lightbox-close:hover {
+            opacity: 1;
+        }
+
+        .lightbox-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(22, 32, 51, 0.8);
+            border: 1px solid #243656;
+            color: #e6edf3;
+            font-size: 2.5rem;
+            width: 48px;
+            height: 64px;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0.6;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.15s;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .lightbox-nav:hover {
+            opacity: 1;
+        }
+
+        .lightbox-nav-left { left: 1rem; }
+        .lightbox-nav-right { right: 1rem; }
+
+        .lightbox-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .lightbox-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e6edf3;
+        }
+
+        .lightbox-hardware {
+            display: block;
+            font-size: 0.75rem;
+            color: #8ba3c1;
+            margin-top: 0.25rem;
+        }
+
+        .lightbox-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .lightbox-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .lightbox-badge.pass {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+        }
+
+        .lightbox-badge.fail {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+        }
+
+        .lightbox-duration {
+            color: #8ba3c1;
+            font-size: 0.85rem;
+        }
+
+        .lightbox-log {
+            background: #0f1923;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #8ba3c1;
+        }
+
+        .lightbox-log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .lightbox-log::-webkit-scrollbar-track {
+            background: #162033;
+            border-radius: 4px;
+        }
+
+        .lightbox-log::-webkit-scrollbar-thumb {
+            background: #243656;
+            border-radius: 4px;
+        }
+
+        .lightbox-log::-webkit-scrollbar-thumb:hover {
+            background: #4a6282;
+        }
+
+        /* Resource Graph */
+        .resource-graph {
+            display: none;
+            margin-top: 1rem;
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .resource-graph.active {
+            display: block;
+        }
+
+        .resource-graph-title {
+            font-size: 0.8rem;
+            color: #8ba3c1;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-graph canvas {
+            width: 100%;
+            height: 120px;
+            cursor: crosshair;
+        }
+
+        .resource-legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #8ba3c1;
+        }
+
+        .resource-legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .resource-legend .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .resource-legend .ram { background: #3fb950; }
+        .resource-legend .gpu { background: #d29922; }
+
+        /* Video Player */
+        .video-player {
+            display: none;
+            margin-top: 1rem;
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .video-player.active {
+            display: block;
+        }
+
+        .video-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .video-play-btn {
+            background: #58a6ff;
+            color: #fff;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .video-play-btn:hover {
+            background: #79b8ff;
+        }
+
+        .video-frame-counter {
+            color: #8ba3c1;
+            font-size: 0.8rem;
+        }
+
+        .video-slider-container {
+            padding: 15px 0;
+        }
+
+        /* noUiSlider customization */
+        #video-slider {
+            height: 6px;
+            background: #1c2d44;
+            border: none;
+            box-shadow: none;
+        }
+
+        #video-slider .noUi-connect {
+            background: #58a6ff;
+        }
+
+        #video-slider .noUi-handle {
+            width: 16px;
+            height: 16px;
+            background: #58a6ff;
+            border: none;
+            border-radius: 50%;
+            box-shadow: none;
+            top: -5px;
+            right: -8px;
+            cursor: pointer;
+        }
+
+        #video-slider .noUi-handle:before,
+        #video-slider .noUi-handle:after {
+            display: none;
+        }
+
+        /* Pips (tick marks) */
+        .noUi-pips {
+            color: #4a6282;
+        }
+
+        .noUi-marker {
+            background: #243656;
+            width: 2px;
+        }
+
+        .noUi-marker-large {
+            height: 12px;
+        }
+
+        .noUi-value {
+            display: none;
+        }
+
+        /* Models Section */
+        .models-section {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .models-total {
+            font-size: 0.8rem;
+            color: #8ba3c1;
+        }
+
+        .models-folder {
+            background: #162033;
+            border: 1px solid #243656;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .models-folder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            user-select: none;
+            list-style: none;
+        }
+
+        .models-folder-header::-webkit-details-marker {
+            display: none;
+        }
+
+        .models-folder-header::before {
+            content: '\25B6';
+            font-size: 0.6rem;
+            color: #4a6282;
+            margin-right: 0.5rem;
+            transition: transform 0.15s;
+        }
+
+        .models-folder[open] > .models-folder-header::before {
+            transform: rotate(90deg);
+        }
+
+        .models-folder-name {
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+
+        .models-folder-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .models-folder-size {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #8ba3c1;
+        }
+
+        .models-source-link {
+            font-size: 0.75rem;
+            color: #3fb950;
+            text-decoration: none;
+            padding: 0.15rem 0.5rem;
+            background: rgba(63, 185, 80, 0.1);
+            border: 1px solid rgba(63, 185, 80, 0.2);
+            border-radius: 2rem;
+        }
+
+        .models-source-link:hover {
+            background: rgba(63, 185, 80, 0.2);
+            text-decoration: none;
+        }
+
+        .models-file-list {
+            border-top: 1px solid #243656;
+            padding: 0.25rem 0;
+        }
+
+        .models-file {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.35rem 1rem 0.35rem 2rem;
+            font-size: 0.8rem;
+        }
+
+        .models-file:hover {
+            background: rgba(88, 166, 255, 0.05);
+        }
+
+        .models-file-path {
+            font-family: 'SFMono-Regular', 'Menlo', 'Monaco', monospace;
+            color: #8ba3c1;
+            word-break: break-all;
+        }
+
+        .models-file-size {
+            color: #4a6282;
+            white-space: nowrap;
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            color: #4a6282;
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .workflow-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .workflow-grid.view-list .workflow-card {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-grid.view-list .workflow-screenshot {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16/10;
+            }
+
+            .stats {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@15/dist/nouislider.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15/dist/nouislider.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1><a href="https://github.com/PozzettiAndrea/PozzettiAndrea/ComfyUI-GeometryPack">PozzettiAndrea/ComfyUI-GeometryPack</a> Test Results</h1>
+        <div class="meta-chips">
+            
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="summary">
+            <div class="progress-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span class="progress-label">0.0%</span>
+            </div>
+            <div class="stats">
+                <span class="stat-badge stat-pass">0 passed</span>
+                
+                <span class="stat-total">0/0 tests</span>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 class="section-title">Workflows</h2>
+            <div class="view-controls">
+                <button class="view-btn active" onclick="setView('grid')">Grid</button>
+                <button class="view-btn" onclick="setView('list')">List</button>
+            </div>
+        </div>
+        <div class="workflow-grid" id="workflow-grid">
+            
+            <div class="workflow-card clickable " onclick="openLightboxByName('system')">
+                
+                <img class="workflow-screenshot" src="screenshots/system_executed.png"
+                     alt="system" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="system">system</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+
+        
+
+        
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-nav lightbox-nav-left" onclick="navigateLightbox(-1)">&#8249;</button>
+        <button class="lightbox-nav lightbox-nav-right" onclick="navigateLightbox(1)">&#8250;</button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <video id="lightbox-video" controls preload="metadata" style="display:none; max-width:90vw; max-height:80vh; background:#000;"></video>
+            <div class="video-player" id="video-player">
+                <div class="video-slider-container">
+                    <div id="video-slider"></div>
+                </div>
+                <div class="video-controls">
+                    <span class="video-frame-counter" id="video-frame-counter">0.0s / 0.0s</span>
+                </div>
+            </div>
+            <div class="resource-graph" id="resource-graph">
+                <div class="resource-graph-title">Resource Usage</div>
+                <canvas id="resource-canvas"></canvas>
+                <div class="resource-legend">
+                    <span><span class="dot ram"></span> RAM (GB)</span>
+                    <span id="gpu-legend" style="display:none"><span class="dot gpu"></span> VRAM (GB)</span>
+                </div>
+            </div>
+            <div class="lightbox-info">
+                <div>
+                    <span class="lightbox-title" id="lightbox-title"></span>
+                    <span class="lightbox-hardware" id="lightbox-hardware"></span>
+                </div>
+                <div class="lightbox-meta">
+                    <span class="lightbox-badge" id="lightbox-badge"></span>
+                    <span class="lightbox-duration" id="lightbox-duration"></span>
+                </div>
+            </div>
+            <pre class="lightbox-log" id="lightbox-log"></pre>
+        </div>
+    </div>
+
+    <div class="img-overlay" id="img-overlay">
+        <img id="img-overlay-content" src="" alt="">
+    </div>
+
+    <footer>
+        Generated by <a href="https://github.com/PozzettiAndrea/comfy-test">comfy-test</a>
+    </footer>
+
+    <script>
+        function setView(mode) {
+            const grid = document.getElementById('workflow-grid');
+            grid.className = mode === 'list' ? 'workflow-grid view-list' : 'workflow-grid';
+            document.querySelectorAll('.view-controls .view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === mode);
+            });
+        }
+
+        const workflowData = {"system": {"src": "screenshots/system_executed.png", "title": "system", "status": "pass", "duration": "0.00", "log": "[2026-05-08 10:48:18.990] [SRV] [2026-05-08 10:48:18.990] [info]  setup plugin alembic.autogenerate.schemas\n[2026-05-08 10:48:18.990] [SRV] \n[2026-05-08 10:48:18.993] [SRV] [2026-05-08 10:48:18.993] [info]  setup plugin alembic.autogenerate.tables\n[2026-05-08 10:48:18.993] [SRV] setup plugin alembic.autogenerate.types\n[2026-05-08 10:48:18.993] [SRV] setup plugin alembic.autogenerate.constraints\n[2026-05-08 10:48:18.993] [SRV] setup plugin alembic.autogenerate.defaults\n[2026-05-08 10:48:18.993] [SRV] setup plugin alembic.autogenerate.comments\n[2026-05-08 10:48:18.993] [SRV] \n[2026-05-08 10:48:21.174] [SRV] [2026-05-08 10:48:21.174] [info]  Adding extra search path custom_nodes C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\n[2026-05-08 10:48:21.174] [SRV] \n[2026-05-08 10:48:21.176] [SRV] [2026-05-08 10:48:21.176] [info]  Adding extra search path download_model_base C:\\Users\\runneradmin\\Documents\\ComfyUI\\models\n[2026-05-08 10:48:21.176] [SRV] Adding extra search path custom_nodes C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\custom_nodes\n[2026-05-08 10:48:21.176] [SRV] Setting output directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\output\n[2026-05-08 10:48:21.176] [SRV] Setting input directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\input\n[2026-05-08 10:48:21.176] [SRV] Setting user directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-08 10:48:21.176] [SRV] \n[2026-05-08 10:48:25.100] [SRV] [2026-05-08 10:48:25.100] [info]  [START] Security scan\n[2026-05-08 10:48:25.100] [SRV] [DONE] Security scan\n[2026-05-08 10:48:25.100] [SRV] ** ComfyUI startup time: \n[2026-05-08 10:48:25.102] [SRV] [2026-05-08 10:48:25.102] [info]  2026-05-08 10:48:25.099\n[2026-05-08 10:48:25.102] [SRV] ** Platform: Windows\n[2026-05-08 10:48:25.102] [SRV] ** Python version: 3.12.11 (main, Aug 18 2025, 19:17:54) [MSC v.1944 64 bit (AMD64)]\n[2026-05-08 10:48:25.102] [SRV] ** Python executable: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Scripts\\python.exe\n[2026-05-08 10:48:25.102] [SRV] ** ComfyUI Path: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-08 10:48:25.102] [SRV] ** ComfyUI Base Folder Path: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-08 10:48:25.102] [SRV] \n[2026-05-08 10:48:25.109] [SRV] [2026-05-08 10:48:25.109] [info]  ** User directory: \n[2026-05-08 10:48:25.110] [SRV] [2026-05-08 10:48:25.110] [info]  C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-08 10:48:25.110] [SRV] ** ComfyUI-Manager config path: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\\__manager\\config.ini\n[2026-05-08 10:48:25.110] [SRV] ** Log path: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\\comfyui.log\n[2026-05-08 10:48:25.110] [SRV] \n[2026-05-08 10:48:26.228] [SRV] [2026-05-08 10:48:26.228] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-08 10:48:26.228] [SRV] \n[2026-05-08 10:48:26.230] [SRV] [2026-05-08 10:48:26.230] [info]  [PRE] ComfyUI-Manager\n[2026-05-08 10:48:26.230] [SRV] \n[2026-05-08 10:48:38.080] [SRV] [2026-05-08 10:48:38.080] [info]  Found comfy_kitchen backend cuda: {'available': False, 'disabled': True, 'unavailable_reason': 'CUDA not available on this system', 'capabilities': []}\n[2026-05-08 10:48:38.080] [SRV] \n[2026-05-08 10:48:38.081] [SRV] [2026-05-08 10:48:38.081] [info]  Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': \"ImportError: No module named 'triton'\", 'capabilities': []}\n[2026-05-08 10:48:38.081] [SRV] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}\n[2026-05-08 10:48:38.081] [SRV] \n[2026-05-08 10:48:38.130] [SRV] [2026-05-08 10:48:38.130] [info]  Checkpoint files will always be loaded safely.\n[2026-05-08 10:48:38.130] [SRV] \n[2026-05-08 10:48:38.217] [SRV] [2026-05-08 10:48:38.217] [info]  Total VRAM 16383 MB, total RAM 16383 MB\n[2026-05-08 10:48:38.217] [SRV] \n[2026-05-08 10:48:38.218] [SRV] [2026-05-08 10:48:38.218] [info]  pytorch version: 2.10.0+cpu\n[2026-05-08 10:48:38.218] [SRV] Set vram state to: DISABLED\n[2026-05-08 10:48:38.218] [SRV] Device: cpu\n[2026-05-08 10:48:38.218] [SRV] \n[2026-05-08 10:48:39.494] [SRV] [2026-05-08 10:48:39.494] [info]  Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention\n[2026-05-08 10:48:39.494] [SRV] \n[2026-05-08 10:48:47.082] [SRV] [2026-05-08 10:48:47.082] [info]  Python version: 3.12.11 (main, Aug 18 2025, 19:17:54) [MSC v.1944 64 bit (AMD64)]\n[2026-05-08 10:48:47.082] [SRV] \n[2026-05-08 10:48:47.085] [SRV] [2026-05-08 10:48:47.085] [info]  ComfyUI version: 0.20.1\n[2026-05-08 10:48:47.085] [SRV] comfy-aimdo version: 0.2.14\n[2026-05-08 10:48:47.085] [SRV] \n[2026-05-08 10:48:47.087] [SRV] [2026-05-08 10:48:47.087] [info]  comfy-kitchen version: 0.2.8\n[2026-05-08 10:48:47.087] [SRV] \n[2026-05-08 10:48:47.089] [SRV] [2026-05-08 10:48:47.089] [info]  [Prompt Server] web root: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\web_custom_versions\\desktop_app\n[2026-05-08 10:48:47.089] [SRV] \n[2026-05-08 10:48:47.091] [SRV] [2026-05-08 10:48:47.091] [info]  Asset seeder disabled\n[2026-05-08 10:48:47.091] [SRV] \n[2026-05-08 10:48:47.093] [SRV] [2026-05-08 10:48:47.093] [info]  [START] ComfyUI-Manager\n[2026-05-08 10:48:47.093] [SRV] \n[2026-05-08 10:48:48.430] [SRV] [2026-05-08 10:48:48.430] [info]  [ComfyUI-Manager] Using GitPython backend\n[2026-05-08 10:48:48.430] [SRV] \n[2026-05-08 10:48:48.555] [SRV] [2026-05-08 10:48:48.555] [info]  [ComfyUI-Manager] network_mode: public\n[2026-05-08 10:48:48.555] [SRV] \n[2026-05-08 10:48:48.565] [SRV] [2026-05-08 10:48:48.565] [info]  [ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.\n[2026-05-08 10:48:48.565] [SRV] \tTo use this feature, please run the following command:\n[2026-05-08 10:48:48.565] [SRV] \tC:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Scripts\\python.exe -m pip install matrix-nio\n[2026-05-08 10:48:48.565] [SRV] \n[2026-05-08 10:48:48.565] [SRV] \n[2026-05-08 10:48:53.704] [SRV] [2026-05-08 10:48:53.704] [info]  \n[2026-05-08 10:48:53.704] [SRV] Import times for custom nodes:\n[2026-05-08 10:48:53.704] [SRV] \n[2026-05-08 10:48:53.705] [SRV] [2026-05-08 10:48:53.705] [info]     0.0 seconds: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\custom_nodes\\websocket_image_save.py\n[2026-05-08 10:48:53.705] [SRV] \n[2026-05-08 10:48:53.705] [SRV] \n[2026-05-08 10:48:53.722] [SRV] [2026-05-08 10:48:53.722] [info]  Context impl SQLiteImpl.\n[2026-05-08 10:48:53.722] [SRV] \n[2026-05-08 10:48:53.723] [SRV] [2026-05-08 10:48:53.723] [info]  Will assume non-transactional DDL.\n[2026-05-08 10:48:53.723] [SRV] \n[2026-05-08 10:48:53.750] [SRV] [2026-05-08 10:48:53.750] [info]  Context impl SQLiteImpl.\n[2026-05-08 10:48:53.750] [SRV] \n[2026-05-08 10:48:53.752] [SRV] [2026-05-08 10:48:53.752] [info]  Will assume non-transactional DDL.\n[2026-05-08 10:48:53.752] [SRV] \n[2026-05-08 10:48:53.822] [SRV] [2026-05-08 10:48:53.822] [info]  Running upgrade  -> 0001_assets, Initial assets schema\n[2026-05-08 10:48:53.822] [SRV] Revision ID: 0001_assets\n[2026-05-08 10:48:53.822] [SRV] Revises: None\n[2026-05-08 10:48:53.822] [SRV] Create Date: 2025-12-10 00:00:00\n[2026-05-08 10:48:53.822] [SRV] \n[2026-05-08 10:48:54.511] [SRV] [2026-05-08 10:48:54.511] [info]  Running upgrade 0001_assets -> 0002_merge_to_asset_references, Merge AssetInfo and AssetCacheState into unified asset_references table.\n[2026-05-08 10:48:54.511] [SRV] \n[2026-05-08 10:48:55.117] [SRV] [2026-05-08 10:48:55.117] [info]  Running upgrade 0002_merge_to_asset_references -> 0003_add_metadata_job_id, Add system_metadata and job_id columns to asset_references.\n[2026-05-08 10:48:55.117] [SRV] Change preview_id FK from assets.id to asset_references.id.\n[2026-05-08 10:48:55.117] [SRV] \n[2026-05-08 10:48:55.250] [SRV] [2026-05-08 10:48:55.250] [info]  Database upgraded from None to 0003_add_metadata_job_id\n[2026-05-08 10:48:55.250] [SRV] \n[2026-05-08 10:48:55.383] [SRV] [2026-05-08 10:48:55.383] [info]  Starting server\n[2026-05-08 10:48:55.383] [SRV] \n[2026-05-08 10:48:55.383] [SRV] \n[2026-05-08 10:48:55.385] [SRV] [2026-05-08 10:48:55.385] [info]  To see the GUI go to: http://127.0.0.1:8000\n[2026-05-08 10:48:55.385] [SRV] \n[2026-05-08 10:50:11.801] [SRV] [2026-05-08 10:50:11.801] [error] \n[2026-05-08 10:50:11.801] [SRV]   0%|          | 0.00/55.3M [00:00<?, ?B/s]\n[2026-05-08 10:50:11.901] [SRV] [2026-05-08 10:50:11.901] [error] \n[2026-05-08 10:50:11.901] [SRV]  12%|\u00e2\u2013\u02c6\u00e2\u2013\ufffd        | 6.39M/55.3M [00:00<00:00, 63.8MB/s]\n[2026-05-08 10:50:12.029] [SRV] [2026-05-08 10:50:12.029] [error] \n[2026-05-08 10:50:12.029] [SRV]  23%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u017d       | 12.8M/55.3M [00:00<00:00, 55.3MB/s]\n[2026-05-08 10:50:12.144] [SRV] [2026-05-08 10:50:12.144] [error] \n[2026-05-08 10:50:12.144] [SRV]  34%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\ufffd      | 18.9M/55.3M [00:00<00:00, 54.0MB/s]\n[2026-05-08 10:50:12.295] [SRV] [2026-05-08 10:50:12.295] [error] \n[2026-05-08 10:50:12.295] [SRV]  46%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u0152     | 25.2M/55.3M [00:00<00:00, 48.3MB/s]\n[2026-05-08 10:50:12.395] [SRV] [2026-05-08 10:50:12.395] [error] \n[2026-05-08 10:50:12.395] [SRV]  66%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u2039   | 36.7M/55.3M [00:00<00:00, 68.6MB/s]\n[2026-05-08 10:50:12.516] [SRV] [2026-05-08 10:50:12.516] [error] \n[2026-05-08 10:50:12.516] [SRV]  80%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u2030  | 44.1M/55.3M [00:00<00:00, 66.1MB/s]\n[2026-05-08 10:50:12.701] [SRV] [2026-05-08 10:50:12.701] [error] \n[2026-05-08 10:50:12.701] [SRV]  95%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\ufffd| 52.4M/55.3M [00:00<00:00, 57.1MB/s]\n[2026-05-08 10:50:12.714] [SRV] [2026-05-08 10:50:12.714] [error] \n[2026-05-08 10:50:12.714] [SRV] 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 55.3M/55.3M [00:00<00:00, 60.6MB/s]\n[2026-05-08 10:50:12.716] [SRV] [2026-05-08 10:50:12.716] [error] \n[2026-05-08 10:50:12.716] [SRV] \n[2026-05-08 10:50:13.630] [SRV] [2026-05-08 10:50:13.630] [info]  Extracted zip file to C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\\comfyui-geometrypack\n[2026-05-08 10:50:13.630] [SRV] \n[2026-05-08 10:50:13.672] [SRV] [2026-05-08 10:50:13.672] [info]  Install: pip packages\n[2026-05-08 10:50:13.681] [SRV] [2026-05-08 10:50:13.681] [info]  \n[2026-05-08 10:50:13.681] [SRV] \n[2026-05-08 10:50:15.062] [SRV] [2026-05-08 10:50:15.062] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-08 10:50:15.062] [SRV] \n[2026-05-08 10:50:15.064] [SRV] [2026-05-08 10:50:15.064] [info]  Install: install script\n[2026-05-08 10:50:15.064] [SRV] \n[2026-05-08 10:50:18.108] [SRV] [2026-05-08 10:50:18.108] [info]  FETCH ComfyRegistry Data [DONE]\n[2026-05-08 10:50:18.108] [SRV] \n[2026-05-08 10:50:18.415] [SRV] [2026-05-08 10:50:18.415] [info]  [ComfyUI-Manager] default cache updated: https://api.comfy.org/nodes\n[2026-05-08 10:50:18.415] [SRV] \n[2026-05-08 10:50:18.450] [SRV] [2026-05-08 10:50:18.450] [info]  FETCH DATA from: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\\__manager\\cache\\1514988643_custom-node-list.json\n[2026-05-08 10:50:18.465] [SRV] [2026-05-08 10:50:18.465] [info]   [DONE]\n[2026-05-08 10:50:18.467] [SRV] [2026-05-08 10:50:18.467] [info]  \n[2026-05-08 10:50:18.467] [SRV] \n[2026-05-08 10:50:18.542] [SRV] [2026-05-08 10:50:18.542] [info]  [ComfyUI-Manager] All startup tasks have been completed.\n[2026-05-08 10:50:18.542] [SRV] \n[2026-05-08 10:50:18.549] [SRV] [2026-05-08 10:50:18.549] [info]  \n[2026-05-08 10:50:18.549] [SRV] Restarting... [Legacy Mode]\n[2026-05-08 10:50:18.549] [SRV] \n[2026-05-08 10:50:18.549] [SRV] \n[2026-05-08 10:50:18.549] [SRV] Command: ['\"C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\.venv\\\\Scripts\\\\python.exe\"', '\"C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Programs\\\\ComfyUI\\\\resources\\\\ComfyUI\\\\main.py\"', '--user-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\user', '--input-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\input', '--output-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\output', '--front-end-root', 'C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Programs\\\\ComfyUI\\\\resources\\\\ComfyUI\\\\web_custom_versions\\\\desktop_app', '--base-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI', '--database-url', 'sqlite:///C:/Users/runneradmin/Documents/ComfyUI/user/comfyui.db', '--extra-model-paths-config', 'C:\\\\Users\\\\runneradmin\\\\AppData\\\\Roaming\\\\ComfyUI\\\\extra_models_config.yaml', '--log-stdout', '--listen', '127.0.0.1', '--port', '8000', '--enable-manager', '--cpu']\n[2026-05-08 10:50:18.549] [SRV] \n[2026-05-08 10:50:19.337] [SRV] [2026-05-08 10:50:19.337] [info]  setup plugin alembic.autogenerate.schemas\n[2026-05-08 10:50:19.337] [SRV] \n[2026-05-08 10:50:19.339] [SRV] [2026-05-08 10:50:19.339] [info]  setup plugin alembic.autogenerate.tables\n[2026-05-08 10:50:19.339] [SRV] setup plugin alembic.autogenerate.types\n[2026-05-08 10:50:19.339] [SRV] setup plugin alembic.autogenerate.constraints\n[2026-05-08 10:50:19.339] [SRV] setup plugin alembic.autogenerate.defaults\n[2026-05-08 10:50:19.339] [SRV] setup plugin alembic.autogenerate.comments\n[2026-05-08 10:50:19.339] [SRV] \n[2026-05-08 10:50:19.962] [SRV] [2026-05-08 10:50:19.962] [info]  Adding extra search path custom_nodes C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\n[2026-05-08 10:50:19.962] [SRV] Adding extra search path download_model_base C:\\Users\\runneradmin\\Documents\\ComfyUI\\models\n[2026-05-08 10:50:19.962] [SRV] \n[2026-05-08 10:50:19.964] [SRV] [2026-05-08 10:50:19.964] [info]  Adding extra search path custom_nodes C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\custom_nodes\n[2026-05-08 10:50:19.964] [SRV] Setting output directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\output\n[2026-05-08 10:50:19.964] [SRV] Setting input directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\input\n[2026-05-08 10:50:19.964] [SRV] Setting user directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-08 10:50:19.964] [SRV] \n[2026-05-08 10:50:21.719] [SRV] [2026-05-08 10:50:21.719] [info]  [START] Security scan\n[2026-05-08 10:50:21.719] [SRV] [DONE] Security scan\n[2026-05-08 10:50:21.719] [SRV] ** ComfyUI startup time:\n[2026-05-08 10:50:21.720] [SRV] [2026-05-08 10:50:21.720] [info]   2026-05-08 10:50:21.717\n[2026-05-08 10:50:21.720] [SRV] ** Platform: Windows\n[2026-05-08 10:50:21.720] [SRV] ** Python version: 3.12.11 (main, Aug 18 2025, 19:17:54) [MSC v.1944 64 bit (AMD64)]\n[2026-05-08 10:50:21.720] [SRV] ** Python executable: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Scripts\\python.exe\n[2026-05-08 10:50:21.720] [SRV] ** ComfyUI Path: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-08 10:50:21.720] [SRV] ** ComfyUI Base Folder Path: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-08 10:50:21.720] [SRV] \n[2026-05-08 10:50:21.723] [SRV] [2026-05-08 10:50:21.723] [info]  ** User directory:\n[2026-05-08 10:50:21.724] [SRV] [2026-05-08 10:50:21.724] [info]   C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-08 10:50:21.724] [SRV] ** ComfyUI-Manager config path: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\\__manager\\config.ini\n[2026-05-08 10:50:21.724] [SRV] ** Log path: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\\comfyui.log\n[2026-05-08 10:50:21.724] [SRV] \n[2026-05-08 10:50:22.312] [SRV] [2026-05-08 10:50:22.312] [info]  \n[2026-05-08 10:50:22.312] [SRV] #######################################################################\n[2026-05-08 10:50:22.312] [SRV] [ComfyUI-Manager] Starting dependency installation/(de)activation for the extension\n[2026-05-08 10:50:22.312] [SRV] \n[2026-05-08 10:50:22.312] [SRV] \n[2026-05-08 10:50:22.313] [SRV] [2026-05-08 10:50:22.313] [info]  \n[2026-05-08 10:50:22.313] [SRV] ## ComfyUI-Manager: EXECUTE => ['C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\.venv\\\\Scripts\\\\python.exe', '-m', 'pip', 'install', 'comfy-env==0.3.75']\n[2026-05-08 10:50:22.313] [SRV] \n[2026-05-08 10:50:22.313] [SRV] ## Execute management script for 'C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\\comfyui-geometrypack'\n[2026-05-08 10:50:22.313] [SRV] \n[2026-05-08 10:50:24.503] [SRV] [2026-05-08 10:50:24.503] [info]   Collecting comfy-env==0.3.75\n[2026-05-08 10:50:24.503] [SRV] \n[2026-05-08 10:50:24.535] [SRV] [2026-05-08 10:50:24.535] [info]     Downloading comfy_env-0.3.75-py3-none-any.whl.metadata (7.1 kB)\n[2026-05-08 10:50:24.535] [SRV] \n[2026-05-08 10:50:24.580] [SRV] [2026-05-08 10:50:24.580] [info]   \n[2026-05-08 10:50:24.581] [SRV] [2026-05-08 10:50:24.581] [info]   \n[2026-05-08 10:50:24.652] [SRV] [2026-05-08 10:50:24.652] [info]   Collecting pre-commit (from comfy-env==0.3.75)\n[2026-05-08 10:50:24.652] [SRV] \n[2026-05-08 10:50:24.657] [SRV] [2026-05-08 10:50:24.657] [info]     Downloading pre_commit-4.6.0-py2.py3-none-any.whl.metadata (1.2 kB)\n[2026-05-08 10:50:24.657] [SRV] \n[2026-05-08 10:50:24.704] [SRV] [2026-05-08 10:50:24.704] [info]   \n[2026-05-08 10:50:24.737] [SRV] [2026-05-08 10:50:24.737] [info]   Collecting tomli-w>=1.0.0 (from comfy-env==0.3.75)\n[2026-05-08 10:50:24.737] [SRV] \n[2026-05-08 10:50:24.744] [SRV] [2026-05-08 10:50:24.744] [info]     Downloading tomli_w-1.2.0-py3-none-any.whl.metadata (5.7 kB)\n[2026-05-08 10:50:24.744] [SRV] \n[2026-05-08 10:50:24.807] [SRV] [2026-05-08 10:50:24.807] [info]   Collecting tomli>=2.0.0 (from comfy-env==0.3.75)\n[2026-05-08 10:50:24.807] [SRV] \n[2026-05-08 10:50:24.810] [SRV] [2026-05-08 10:50:24.810] [info]     Using cached tomli-2.4.1-cp312-cp312-win_amd64.whl.metadata (10 kB)\n[2026-05-08 10:50:24.810] [SRV] \n[2026-05-08 10:50:24.815] [SRV] [2026-05-08 10:50:24.815] [info]   \n[2026-05-08 10:50:24.868] [SRV] [2026-05-08 10:50:24.868] [info]   Collecting cfgv>=2.0.0 (from pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:24.868] [SRV] \n[2026-05-08 10:50:24.872] [SRV] [2026-05-08 10:50:24.872] [info]     Downloading cfgv-3.5.0-py2.py3-none-any.whl.metadata (8.9 kB)\n[2026-05-08 10:50:24.872] [SRV] \n[2026-05-08 10:50:24.981] [SRV] [2026-05-08 10:50:24.981] [info]   Collecting identify>=1.0.0 (from pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:24.981] [SRV] \n[2026-05-08 10:50:24.992] [SRV] [2026-05-08 10:50:24.992] [info]     Downloading identify-2.6.19-py2.py3-none-any.whl.metadata (4.4 kB)\n[2026-05-08 10:50:24.992] [SRV] \n[2026-05-08 10:50:25.061] [SRV] [2026-05-08 10:50:25.061] [info]   Collecting nodeenv>=0.11.1 (from pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:25.061] [SRV] \n[2026-05-08 10:50:25.068] [SRV] [2026-05-08 10:50:25.068] [info]     Downloading nodeenv-1.10.0-py2.py3-none-any.whl.metadata (24 kB)\n[2026-05-08 10:50:25.068] [SRV] \n[2026-05-08 10:50:25.248] [SRV] [2026-05-08 10:50:25.248] [info]   Collecting virtualenv>=20.10.0 (from pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:25.248] [SRV] \n[2026-05-08 10:50:25.253] [SRV] [2026-05-08 10:50:25.253] [info]     Downloading virtualenv-21.3.1-py3-none-any.whl.metadata (3.5 kB)\n[2026-05-08 10:50:25.253] [SRV] \n[2026-05-08 10:50:25.340] [SRV] [2026-05-08 10:50:25.340] [info]   Collecting distlib<1,>=0.3.7 (from virtualenv>=20.10.0->pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:25.340] [SRV] \n[2026-05-08 10:50:25.344] [SRV] [2026-05-08 10:50:25.344] [info]   \n[2026-05-08 10:50:25.346] [SRV] [2026-05-08 10:50:25.346] [info]    Downloading distlib-0.4.0-py2.py3-none-any.whl.metadata (5.2 kB)\n[2026-05-08 10:50:25.346] [SRV] \n[2026-05-08 10:50:25.445] [SRV] [2026-05-08 10:50:25.445] [info]   Collecting filelock<4,>=3.24.2 (from virtualenv>=20.10.0->pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:25.445] [SRV] \n[2026-05-08 10:50:25.450] [SRV] [2026-05-08 10:50:25.450] [info]     Downloading filelock-3.29.0-py3-none-any.whl.metadata (2.0 kB)\n[2026-05-08 10:50:25.450] [SRV] \n[2026-05-08 10:50:25.519] [SRV] [2026-05-08 10:50:25.519] [info]   Collecting platformdirs<5,>=3.9.1 (from virtualenv>=20.10.0->pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:25.519] [SRV] \n[2026-05-08 10:50:25.525] [SRV] [2026-05-08 10:50:25.525] [info]     Downloading platformdirs-4.9.6-py3-none-any.whl.metadata (4.7 kB)\n[2026-05-08 10:50:25.525] [SRV] \n[2026-05-08 10:50:25.605] [SRV] [2026-05-08 10:50:25.605] [info]   Collecting python-discovery>=1.2.2 (from virtualenv>=20.10.0->pre-commit->comfy-env==0.3.75)\n[2026-05-08 10:50:25.605] [SRV] \n[2026-05-08 10:50:25.617] [SRV] [2026-05-08 10:50:25.617] [info]     Downloading python_discovery-1.3.0-py3-none-any.whl.metadata (5.5 kB)\n[2026-05-08 10:50:25.617] [SRV] \n[2026-05-08 10:50:25.674] [SRV] [2026-05-08 10:50:25.674] [info]   Downloading comfy_env-0.3.75-py3-none-any.whl (120 kB)\n[2026-05-08 10:50:25.674] [SRV] \n[2026-05-08 10:50:25.712] [SRV] [2026-05-08 10:50:25.712] [info]   Using cached tomli-2.4.1-cp312-cp312-win_amd64.whl (108 kB)\n[2026-05-08 10:50:25.712] [SRV] \n[2026-05-08 10:50:25.717] [SRV] [2026-05-08 10:50:25.717] [info]   Downloading tomli_w-1.2.0-py3-none-any.whl (6.7 kB)\n[2026-05-08 10:50:25.717] [SRV] \n[2026-05-08 10:50:25.748] [SRV] [2026-05-08 10:50:25.748] [info]   Downloading pre_commit-4.6.0-py2.py3-none-any.whl (226 kB)\n[2026-05-08 10:50:25.748] [SRV] \n[2026-05-08 10:50:25.794] [SRV] [2026-05-08 10:50:25.794] [info]   Downloading cfgv-3.5.0-py2.py3-none-any.whl (7.4 kB)\n[2026-05-08 10:50:25.794] [SRV] \n[2026-05-08 10:50:25.827] [SRV] [2026-05-08 10:50:25.827] [info]   Downloading identify-2.6.19-py2.py3-none-any.whl (99 kB)\n[2026-05-08 10:50:25.827] [SRV] \n[2026-05-08 10:50:25.866] [SRV] [2026-05-08 10:50:25.866] [info]   Downloading nodeenv-1.10.0-py2.py3-none-any.whl (23 kB)\n[2026-05-08 10:50:25.866] [SRV] \n[2026-05-08 10:50:25.903] [SRV] [2026-05-08 10:50:25.903] [info]   Downloading virtualenv-21.3.1-py3-none-any.whl (7.6 MB)\n[2026-05-08 10:50:25.903] [SRV] \n[2026-05-08 10:50:25.972] [SRV] [2026-05-08 10:50:25.972] [info]      ---------------------------------------- 7.6/7.6 MB 118.3 MB/s eta 0:00:00\n[2026-05-08 10:50:25.972] [SRV] \n[2026-05-08 10:50:25.977] [SRV] [2026-05-08 10:50:25.977] [info]   Downloading distlib-0.4.0-py2.py3-none-any.whl (469 kB)\n[2026-05-08 10:50:25.977] [SRV] \n[2026-05-08 10:50:26.009] [SRV] [2026-05-08 10:50:26.009] [info]   Downloading filelock-3.29.0-py3-none-any.whl (39 kB)\n[2026-05-08 10:50:26.009] [SRV] \n[2026-05-08 10:50:26.045] [SRV] [2026-05-08 10:50:26.045] [info]   Downloading platformdirs-4.9.6-py3-none-any.whl (21 kB)\n[2026-05-08 10:50:26.045] [SRV] \n[2026-05-08 10:50:26.076] [SRV] [2026-05-08 10:50:26.076] [info]   Downloading python_discovery-1.3.0-py3-none-any.whl (33 kB)\n[2026-05-08 10:50:26.076] [SRV] \n[2026-05-08 10:50:26.372] [SRV] [2026-05-08 10:50:26.372] [info]   Installing collected packages: distlib, tomli-w, tomli, platformdirs, nodeenv, identify, filelock, cfgv, python-discovery, virtualenv, pre-commit, comfy-env\n[2026-05-08 10:50:26.372] [SRV] \n[2026-05-08 10:50:26.871] [SRV] [2026-05-08 10:50:26.871] [info]     Attempting uninstall: filelock\n[2026-05-08 10:50:26.871] [SRV] \n[2026-05-08 10:50:26.877] [SRV] [2026-05-08 10:50:26.877] [info]       Found existing installation: filelock 3.20.3\n[2026-05-08 10:50:26.877] [SRV] \n[2026-05-08 10:50:26.883] [SRV] [2026-05-08 10:50:26.883] [info]       Uninstalling filelock-3.20.3:\n[2026-05-08 10:50:26.883] [SRV] \n[2026-05-08 10:50:26.896] [SRV] [2026-05-08 10:50:26.896] [info]         Successfully uninstalled filelock-3.20.3\n[2026-05-08 10:50:26.896] [SRV] \n[2026-05-08 10:50:28.543] [SRV] [2026-05-08 10:50:28.543] [info]   Successfully installed cfgv-3.5.0 comfy-env-0.3.75 distlib-0.4.0 filelock-3.29.0 identify-2.6.19 nodeenv-1.10.0 platformdirs-4.9.6 pre-commit-4.6.0 python-discovery-1.3.0 tomli-2.4.1 tomli-w-1.2.0 virtualenv-21.3.1\n[2026-05-08 10:50:28.543] [SRV] \n[2026-05-08 10:50:29.015] [SRV] [2026-05-08 10:50:29.015] [error] [!]\n[2026-05-08 10:50:29.017] [SRV] [2026-05-08 10:50:29.017] [error]  \n[2026-05-08 10:50:29.017] [SRV] [!] [notice] A new release of pip is available: 25.0.1 -> 26.1.1\n[2026-05-08 10:50:29.017] [SRV] [!] [notice] To update, run: python.exe -m pip install --upgrade pip\n[2026-05-08 10:50:29.017] [SRV] \n[2026-05-08 10:50:29.192] [SRV] [2026-05-08 10:50:29.192] [info]  \n[2026-05-08 10:50:29.192] [SRV] ## ComfyUI-Manager: EXECUTE => ['C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\.venv\\\\Scripts\\\\python.exe', '-m', 'pip', 'install', 'comfy-3d-viewers==0.2.44']\n[2026-05-08 10:50:29.192] [SRV] \n[2026-05-08 10:50:29.192] [SRV] ## Execute management script for 'C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\\comfyui-geometrypack'\n[2026-05-08 10:50:29.192] [SRV] \n[2026-05-08 10:50:33.527] [SRV] [2026-05-08 10:50:33.527] [info]   Collecting comfy-3d-viewers==0.2.44\n[2026-05-08 10:50:33.527] [SRV] \n[2026-05-08 10:50:33.555] [SRV] [2026-05-08 10:50:33.555] [info]     Downloading comfy_3d_viewers-0.2.44-py3-none-any.whl.metadata (2.2 kB)\n[2026-05-08 10:50:33.555] [SRV] \n[2026-05-08 10:50:33.602] [SRV] [2026-05-08 10:50:33.602] [info]   Downloading comfy_3d_viewers-0.2.44-py3-none-any.whl (1.3 MB)\n[2026-05-08 10:50:33.602] [SRV] \n[2026-05-08 10:50:33.698] [SRV] [2026-05-08 10:50:33.698] [info]      ---------------------------------------- 1.3/1.3 MB 16.0 MB/s eta 0:00:00\n[2026-05-08 10:50:33.698] [SRV] \n[2026-05-08 10:50:33.983] [SRV] [2026-05-08 10:50:33.983] [info]   Installing collected packages: comfy-3d-viewers\n[2026-05-08 10:50:33.983] [SRV] \n[2026-05-08 10:50:34.238] [SRV] [2026-05-08 10:50:34.238] [info]   Successfully installed comfy-3d-viewers-0.2.44\n[2026-05-08 10:50:34.238] [SRV] \n[2026-05-08 10:50:34.548] [SRV] [2026-05-08 10:50:34.548] [error] [!]\n[2026-05-08 10:50:34.549] [SRV] [2026-05-08 10:50:34.549] [error]  \n[2026-05-08 10:50:34.549] [SRV] [!] [notice] A new release of pip is available: 25.0.1 -> 26.1.1\n[2026-05-08 10:50:34.549] [SRV] [!] [notice] To update, run: python.exe -m pip install --upgrade pip\n[2026-05-08 10:50:34.549] [SRV] \n[2026-05-08 10:50:34.636] [SRV] [2026-05-08 10:50:34.636] [info]  \n[2026-05-08 10:50:34.636] [SRV] ## ComfyUI-Manager: EXECUTE => ['C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\.venv\\\\Scripts\\\\python.exe', '-m', 'pip', 'install', 'trimesh[easy]>=4.0.0']\n[2026-05-08 10:50:34.636] [SRV] \n[2026-05-08 10:50:34.636] [SRV] ## Execute management script for 'C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\\comfyui-geometrypack'\n[2026-05-08 10:50:34.636] [SRV] \n[2026-05-08 10:50:36.834] [SRV] [2026-05-08 10:50:36.834] [info]   Collecting trimesh>=4.0.0 (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:36.834] [SRV] \n[2026-05-08 10:50:36.861] [SRV] [2026-05-08 10:50:36.861] [info]     Downloading trimesh-4.12.2-py3-none-any.whl.metadata (13 kB)\n[2026-05-08 10:50:36.861] [SRV] \n[2026-05-08 10:50:36.909] [SRV] [2026-05-08 10:50:36.909] [info]   \n[2026-05-08 10:50:36.964] [SRV] [2026-05-08 10:50:36.964] [info]   Collecting colorlog (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:36.964] [SRV] \n[2026-05-08 10:50:36.970] [SRV] [2026-05-08 10:50:36.970] [info]     Downloading colorlog-6.10.1-py3-none-any.whl.metadata (11 kB)\n[2026-05-08 10:50:36.970] [SRV] \n[2026-05-08 10:50:37.080] [SRV] [2026-05-08 10:50:37.080] [info]   Collecting manifold3d>=2.3.0 (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:37.080] [SRV] \n[2026-05-08 10:50:37.087] [SRV] [2026-05-08 10:50:37.087] [info]     Downloading manifold3d-3.4.1-cp312-cp312-win_amd64.whl.metadata (19 kB)\n[2026-05-08 10:50:37.087] [SRV] \n[2026-05-08 10:50:37.139] [SRV] [2026-05-08 10:50:37.139] [info]   \n[2026-05-08 10:50:37.438] [SRV] [2026-05-08 10:50:37.438] [info]   Collecting lxml (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:37.438] [SRV] \n[2026-05-08 10:50:37.445] [SRV] [2026-05-08 10:50:37.445] [info]     Downloading lxml-6.1.0-cp312-cp312-win_amd64.whl.metadata (4.1 kB)\n[2026-05-08 10:50:37.445] [SRV] \n[2026-05-08 10:50:37.546] [SRV] [2026-05-08 10:50:37.546] [info]   Collecting jsonschema (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:37.546] [SRV] \n[2026-05-08 10:50:37.552] [SRV] [2026-05-08 10:50:37.552] [info]     Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)\n[2026-05-08 10:50:37.552] [SRV] \n[2026-05-08 10:50:37.598] [SRV] [2026-05-08 10:50:37.598] [info]   \n[2026-05-08 10:50:37.648] [SRV] [2026-05-08 10:50:37.648] [info]   Collecting svg.path (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:37.648] [SRV] \n[2026-05-08 10:50:37.654] [SRV] [2026-05-08 10:50:37.654] [info]     Downloading svg_path-7.0-py2.py3-none-any.whl.metadata (14 kB)\n[2026-05-08 10:50:37.654] [SRV] \n[2026-05-08 10:50:37.733] [SRV] [2026-05-08 10:50:37.733] [info]   Collecting pycollada (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:37.733] [SRV] \n[2026-05-08 10:50:37.742] [SRV] [2026-05-08 10:50:37.742] [info]     Downloading pycollada-0.9.3-py3-none-any.whl.metadata (1.7 kB)\n[2026-05-08 10:50:37.742] [SRV] \n[2026-05-08 10:50:37.967] [SRV] [2026-05-08 10:50:37.967] [info]   Collecting shapely (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:37.967] [SRV] \n[2026-05-08 10:50:37.977] [SRV] [2026-05-08 10:50:37.977] [info]     Downloading shapely-2.1.2-cp312-cp312-win_amd64.whl.metadata (7.1 kB)\n[2026-05-08 10:50:37.977] [SRV] \n[2026-05-08 10:50:38.154] [SRV] [2026-05-08 10:50:38.154] [info]   Collecting xxhash (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:38.154] [SRV] \n[2026-05-08 10:50:38.163] [SRV] [2026-05-08 10:50:38.163] [info]     Downloading xxhash-3.7.0-cp312-cp312-win_amd64.whl.metadata (13 kB)\n[2026-05-08 10:50:38.163] [SRV] \n[2026-05-08 10:50:38.240] [SRV] [2026-05-08 10:50:38.240] [info]   Collecting rtree (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:38.240] [SRV] \n[2026-05-08 10:50:38.248] [SRV] [2026-05-08 10:50:38.248] [info]     Downloading rtree-1.4.1-py3-none-win_amd64.whl.metadata (2.2 kB)\n[2026-05-08 10:50:38.248] [SRV] \n[2026-05-08 10:50:38.295] [SRV] [2026-05-08 10:50:38.295] [info]   \n[2026-05-08 10:50:38.297] [SRV] [2026-05-08 10:50:38.297] [info]   \n[2026-05-08 10:50:38.371] [SRV] [2026-05-08 10:50:38.371] [info]   Collecting embreex (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:38.371] [SRV] \n[2026-05-08 10:50:38.379] [SRV] [2026-05-08 10:50:38.379] [info]     Downloading embreex-4.4.0-cp312-cp312-win_amd64.whl.metadata (3.0 kB)\n[2026-05-08 10:50:38.379] [SRV] \n[2026-05-08 10:50:38.419] [SRV] [2026-05-08 10:50:38.419] [info]   \n[2026-05-08 10:50:38.504] [SRV] [2026-05-08 10:50:38.504] [info]   Collecting vhacdx (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:38.504] [SRV] \n[2026-05-08 10:50:38.513] [SRV] [2026-05-08 10:50:38.513] [info]     Downloading vhacdx-0.0.10-cp312-cp312-win_amd64.whl.metadata (1.1 kB)\n[2026-05-08 10:50:38.513] [SRV] \n[2026-05-08 10:50:38.621] [SRV] [2026-05-08 10:50:38.621] [info]   Collecting mapbox_earcut>=1.0.2 (from trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:38.621] [SRV] \n[2026-05-08 10:50:38.629] [SRV] [2026-05-08 10:50:38.629] [info]     Downloading mapbox_earcut-2.0.0-cp312-cp312-win_amd64.whl.metadata (2.5 kB)\n[2026-05-08 10:50:38.629] [SRV] \n[2026-05-08 10:50:38.673] [SRV] [2026-05-08 10:50:38.673] [info]   \n[2026-05-08 10:50:38.678] [SRV] [2026-05-08 10:50:38.678] [info]   \n[2026-05-08 10:50:38.680] [SRV] [2026-05-08 10:50:38.680] [info]    \n[2026-05-08 10:50:38.681] [SRV] [2026-05-08 10:50:38.681] [info]   \n[2026-05-08 10:50:38.683] [SRV] [2026-05-08 10:50:38.683] [info]   \n[2026-05-08 10:50:38.685] [SRV] [2026-05-08 10:50:38.685] [info]   \n[2026-05-08 10:50:38.732] [SRV] [2026-05-08 10:50:38.732] [info]   Collecting jsonschema-specifications>=2023.03.6 (from jsonschema->trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:38.732] [SRV] \n[2026-05-08 10:50:38.738] [SRV] [2026-05-08 10:50:38.738] [info]     Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)\n[2026-05-08 10:50:38.738] [SRV] \n[2026-05-08 10:50:38.849] [SRV] [2026-05-08 10:50:38.849] [info]   Collecting referencing>=0.28.4 (from jsonschema->trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:38.849] [SRV] \n[2026-05-08 10:50:38.855] [SRV] [2026-05-08 10:50:38.855] [info]     Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)\n[2026-05-08 10:50:38.855] [SRV] \n[2026-05-08 10:50:39.224] [SRV] [2026-05-08 10:50:39.224] [info]   Collecting rpds-py>=0.25.0 (from jsonschema->trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:39.224] [SRV] \n[2026-05-08 10:50:39.232] [SRV] [2026-05-08 10:50:39.232] [info]     Downloading rpds_py-0.30.0-cp312-cp312-win_amd64.whl.metadata (4.2 kB)\n[2026-05-08 10:50:39.232] [SRV] \n[2026-05-08 10:50:39.339] [SRV] [2026-05-08 10:50:39.339] [info]   Collecting python-dateutil (from pycollada->trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:39.339] [SRV] \n[2026-05-08 10:50:39.345] [SRV] [2026-05-08 10:50:39.345] [info]     Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)\n[2026-05-08 10:50:39.345] [SRV] \n[2026-05-08 10:50:39.437] [SRV] [2026-05-08 10:50:39.437] [info]   \n[2026-05-08 10:50:39.502] [SRV] [2026-05-08 10:50:39.502] [info]   Collecting six>=1.5 (from python-dateutil->pycollada->trimesh[easy]>=4.0.0)\n[2026-05-08 10:50:39.502] [SRV] \n[2026-05-08 10:50:39.508] [SRV] [2026-05-08 10:50:39.508] [info]     Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)\n[2026-05-08 10:50:39.508] [SRV] \n[2026-05-08 10:50:39.564] [SRV] [2026-05-08 10:50:39.564] [info]   \n[2026-05-08 10:50:39.566] [SRV] [2026-05-08 10:50:39.566] [info]  Downloading trimesh-4.12.2-py3-none-any.whl (741 kB)\n[2026-05-08 10:50:39.566] [SRV] \n[2026-05-08 10:50:39.615] [SRV] [2026-05-08 10:50:39.615] [info]      --------------------------------------- 741.0/741.0 kB 15.4 MB/s eta 0:00:00\n[2026-05-08 10:50:39.615] [SRV] \n[2026-05-08 10:50:39.624] [SRV] [2026-05-08 10:50:39.624] [info]   Downloading manifold3d-3.4.1-cp312-cp312-win_amd64.whl (983 kB)\n[2026-05-08 10:50:39.624] [SRV] \n[2026-05-08 10:50:39.662] [SRV] [2026-05-08 10:50:39.662] [info]      --------------------------------------- 983.3/983.3 kB 23.3 MB/s eta 0:00:00\n[2026-05-08 10:50:39.662] [SRV] \n[2026-05-08 10:50:39.670] [SRV] [2026-05-08 10:50:39.670] [info]   Downloading mapbox_earcut-2.0.0-cp312-cp312-win_amd64.whl (56 kB)\n[2026-05-08 10:50:39.670] [SRV] \n[2026-05-08 10:50:39.737] [SRV] [2026-05-08 10:50:39.737] [info]   Downloading colorlog-6.10.1-py3-none-any.whl (11 kB)\n[2026-05-08 10:50:39.737] [SRV] \n[2026-05-08 10:50:39.789] [SRV] [2026-05-08 10:50:39.789] [info]   Downloading embreex-4.4.0-cp312-cp312-win_amd64.whl (13.1 MB)\n[2026-05-08 10:50:39.789] [SRV] \n[2026-05-08 10:50:39.896] [SRV] [2026-05-08 10:50:39.896] [info]      ---------------------------------------- 13.1/13.1 MB 136.8 MB/s eta 0:00:00\n[2026-05-08 10:50:39.896] [SRV] \n[2026-05-08 10:50:39.902] [SRV] [2026-05-08 10:50:39.902] [info]   Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)\n[2026-05-08 10:50:39.902] [SRV] \n[2026-05-08 10:50:39.956] [SRV] [2026-05-08 10:50:39.956] [info]   Downloading lxml-6.1.0-cp312-cp312-win_amd64.whl (4.0 MB)\n[2026-05-08 10:50:39.956] [SRV] \n[2026-05-08 10:50:40.009] [SRV] [2026-05-08 10:50:40.009] [info]      ---------------------------------------- 4.0/4.0 MB 79.5 MB/s eta 0:00:00\n[2026-05-08 10:50:40.009] [SRV] \n[2026-05-08 10:50:40.016] [SRV] [2026-05-08 10:50:40.016] [info]   Downloading pycollada-0.9.3-py3-none-any.whl (129 kB)\n[2026-05-08 10:50:40.016] [SRV] \n[2026-05-08 10:50:40.059] [SRV] [2026-05-08 10:50:40.059] [info]   Downloading rtree-1.4.1-py3-none-win_amd64.whl (389 kB)\n[2026-05-08 10:50:40.059] [SRV] \n[2026-05-08 10:50:40.119] [SRV] [2026-05-08 10:50:40.119] [info]   Downloading shapely-2.1.2-cp312-cp312-win_amd64.whl (1.7 MB)\n[2026-05-08 10:50:40.119] [SRV] \n[2026-05-08 10:50:40.171] [SRV] [2026-05-08 10:50:40.171] [info]      ---------------------------------------- 1.7/1.7 MB 31.8 MB/s eta 0:00:00\n[2026-05-08 10:50:40.171] [SRV] \n[2026-05-08 10:50:40.177] [SRV] [2026-05-08 10:50:40.177] [info]   Downloading svg_path-7.0-py2.py3-none-any.whl (18 kB)\n[2026-05-08 10:50:40.177] [SRV] \n[2026-05-08 10:50:40.228] [SRV] [2026-05-08 10:50:40.228] [info]   Downloading vhacdx-0.0.10-cp312-cp312-win_amd64.whl (195 kB)\n[2026-05-08 10:50:40.228] [SRV] \n[2026-05-08 10:50:40.268] [SRV] [2026-05-08 10:50:40.268] [info]   Downloading xxhash-3.7.0-cp312-cp312-win_amd64.whl (31 kB)\n[2026-05-08 10:50:40.268] [SRV] \n[2026-05-08 10:50:40.310] [SRV] [2026-05-08 10:50:40.310] [info]   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)\n[2026-05-08 10:50:40.310] [SRV] \n[2026-05-08 10:50:40.342] [SRV] [2026-05-08 10:50:40.342] [info]   Downloading referencing-0.37.0-py3-none-any.whl (26 kB)\n[2026-05-08 10:50:40.342] [SRV] \n[2026-05-08 10:50:40.400] [SRV] [2026-05-08 10:50:40.400] [info]   Downloading rpds_py-0.30.0-cp312-cp312-win_amd64.whl (240 kB)\n[2026-05-08 10:50:40.400] [SRV] \n[2026-05-08 10:50:40.435] [SRV] [2026-05-08 10:50:40.435] [info]   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)\n[2026-05-08 10:50:40.435] [SRV] \n[2026-05-08 10:50:40.476] [SRV] [2026-05-08 10:50:40.476] [info]   Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)\n[2026-05-08 10:50:40.476] [SRV] \n[2026-05-08 10:50:40.878] [SRV] [2026-05-08 10:50:40.878] [info]   Installing collected packages: xxhash, vhacdx, trimesh, svg.path, six, shapely, rtree, rpds-py, mapbox_earcut, manifold3d, lxml, embreex, colorlog, referencing, python-dateutil, pycollada, jsonschema-specifications, jsonschema\n[2026-05-08 10:50:40.878] [SRV] \n[2026-05-08 10:50:44.674] [SRV] [2026-05-08 10:50:44.674] [info]   Successfully installed colorlog-6.10.1 embreex-4.4.0 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 lxml-6.1.0 manifold3d-3.4.1 mapbox_earcut-2.0.0 pycollada-0.9.3 python-dateutil-2.9.0.post0 referencing-0.37.0 rpds-py-0.30.0 rtree-1.4.1 shapely-2.1.2 six-1.17.0 svg.path-7.0 trimesh-4.12.2 vhacdx-0.0.10 xxhash-3.7.0\n[2026-05-08 10:50:44.674] [SRV] \n[2026-05-08 10:50:44.981] [SRV] [2026-05-08 10:50:44.981] [error] [!] \n[2026-05-08 10:50:44.982] [SRV] [2026-05-08 10:50:44.982] [error] \n[2026-05-08 10:50:44.982] [SRV] [!] [notice] A new release of pip is available: 25.0.1 -> 26.1.1\n[2026-05-08 10:50:44.982] [SRV] [!] [notice] To update, run: python.exe -m pip install --upgrade pip\n[2026-05-08 10:50:44.982] [SRV] \n[2026-05-08 10:50:45.131] [SRV] [2026-05-08 10:50:45.131] [info]  \n[2026-05-08 10:50:45.131] [SRV] ## ComfyUI-Manager: EXECUTE => ['C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\.venv\\\\Scripts\\\\python.exe', 'install.py']\n[2026-05-08 10:50:45.132] [SRV] [2026-05-08 10:50:45.132] [info]  \n[2026-05-08 10:50:45.132] [SRV] \n[2026-05-08 10:50:45.132] [SRV] ## Execute management script for 'C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\\comfyui-geometrypack'\n[2026-05-08 10:50:45.132] [SRV] \n[2026-05-08 10:50:45.500] [SRV] [2026-05-08 10:50:45.500] [info]   [comfy-env] Enabled Windows long path support\n[2026-05-08 10:50:45.500] [SRV] \n[2026-05-08 10:50:45.540] [SRV] [2026-05-08 10:50:45.540] [error] [!] \n[2026-05-08 10:50:45.542] [SRV] [2026-05-08 10:50:45.542] [error] [comfy-env] pixi not found, downloading...\n[2026-05-08 10:50:45.542] [SRV] \n[2026-05-08 10:50:46.976] [SRV] [2026-05-08 10:50:46.976] [error] [!]\n[2026-05-08 10:50:46.977] [SRV] [2026-05-08 10:50:46.977] [error]  [comfy-env] pixi installed: C:\\Users\\runneradmin\\.pixi\\bin\\pixi.exe\n[2026-05-08 10:50:46.977] [SRV] \n[2026-05-08 10:50:46.993] [SRV] [2026-05-08 10:50:46.993] [info]   [comfy-env] Workspace: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.ce\n[2026-05-08 10:50:46.993] [SRV]  \n[2026-05-08 10:50:46.994] [SRV] [2026-05-08 10:50:46.994] [info]  [comfy-env] ComfyUI: C:\\Users\\runneradmin\\Documents\\ComfyUI\n[2026-05-08 10:50:46.994] [SRV]  [comfy-env] Found 3 node config(s):\n[2026-05-08 10:50:46.994] [SRV]    - geometrypack-blender <- custom_nodes\\comfyui-geometrypack\\nodes\\blender\\comfy-env.toml (python=3.11)\n[2026-05-08 10:50:46.994] [SRV]    - geometrypack-gpu <- custom_nodes\\comfyui-geometrypack\\nodes\\gpu\\comfy-env.toml (python=host)\n[2026-05-08 10:50:46.994] [SRV]    - geometrypack-main <- custom_nodes\\comfyui-geometrypack\\nodes\\main\\comfy-env.toml (python=host)\n[2026-05-08 10:50:46.994] [SRV] \n[2026-05-08 10:50:46.999] [SRV] [2026-05-08 10:50:46.999] [info]   [comfy-env] Bootstrap interpreter has python 3.12 + torch 2.10.0 (cpu). Looking for cuda-only wheels matching cpu/torch2.10/cp312.\n[2026-05-08 10:50:46.999] [SRV] \n[2026-05-08 10:50:49.182] [SRV] [2026-05-08 10:50:49.182] [info]   [comfy-env] GPU: No GPU detected\n[2026-05-08 10:50:49.182] [SRV] \n[2026-05-08 10:50:49.184] [SRV] [2026-05-08 10:50:49.184] [info]   [comfy-env] No CUDA detected -- pinning comfyui torch to CPU index\n[2026-05-08 10:50:49.184] [SRV]  [comfy-env] Root conda deps from comfyui-geometrypack: ['av', 'ffmpeg']\n[2026-05-08 10:50:49.184] [SRV] \n[2026-05-08 10:50:49.185] [SRV] [2026-05-08 10:50:49.185] [info]   [comfy-env] Desktop app detected: source=C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI, data=C:\\Users\\runneradmin\\Documents\\ComfyUI\n[2026-05-08 10:50:49.185] [SRV] \n[2026-05-08 10:50:49.188] [SRV] [2026-05-08 10:50:49.188] [info]   [comfy-env] Comfyui feature pin: torch ==2.10.0, torchvision ==0.25.*, torchaudio ==2.10.*\n[2026-05-08 10:50:49.188] [SRV] \n[2026-05-08 10:50:49.189] [SRV] [2026-05-08 10:50:49.189] [info]   [comfy-env] Root conda deps injected into comfyui feature: ['av', 'ffmpeg']\n[2026-05-08 10:50:49.189] [SRV] \n[2026-05-08 10:50:49.192] [SRV] [2026-05-08 10:50:49.192] [info]   Generated C:\\Users\\runneradmin\\Documents\\ComfyUI\\.ce\\pixi.toml\n[2026-05-08 10:50:49.192] [SRV] \n[2026-05-08 10:50:49.196] [SRV] [2026-05-08 10:50:49.196] [info]   [comfy-env] Patched C:\\Users\\runneradmin\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\Lib\\platform.py for conda-forge compat\n[2026-05-08 10:50:49.196] [SRV] \n[2026-05-08 10:50:49.197] [SRV] [2026-05-08 10:50:49.197] [info]   [comfy-env] Installing 3 environment(s):\n[2026-05-08 10:50:49.197] [SRV]    - geometrypack-blender (python=3.11, 2 pypi deps)\n[2026-05-08 10:50:49.197] [SRV]    - geometrypack-gpu (python=host, 2 pypi deps, 1 cuda wheels)\n[2026-05-08 10:50:49.197] [SRV]    - geometrypack-main (python=host, 12 pypi deps)\n[2026-05-08 10:50:49.197] [SRV] \n[2026-05-08 10:50:49.198] [SRV] [2026-05-08 10:50:49.198] [info]   [comfy-env] Running `pixi install --all`...\n[2026-05-08 10:50:49.198] [SRV] \n[2026-05-08 10:51:18.512] [SRV] [2026-05-08 10:51:18.512] [info]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`\n[2026-05-08 10:51:18.512] [SRV]    \t- Scripts/.librsvg-pre-unlink.bat\n[2026-05-08 10:51:18.512] [SRV] \n[2026-05-08 10:51:18.514] [SRV] [2026-05-08 10:51:18.514] [info]     To enable them, run:\n[2026-05-08 10:51:18.514] [SRV]    \tpixi config set --local run-post-link-scripts insecure\n[2026-05-08 10:51:18.514] [SRV]    More info:\n[2026-05-08 10:51:18.514] [SRV]    \thttps://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts\n[2026-05-08 10:51:18.514] [SRV] \n[2026-05-08 10:51:41.827] [SRV] [2026-05-08 10:51:41.827] [info]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`\n[2026-05-08 10:51:41.827] [SRV] \n[2026-05-08 10:51:41.828] [SRV] [2026-05-08 10:51:41.828] [info]     \t- Scripts/.librsvg-pre-unlink.bat\n[2026-05-08 10:51:41.828] [SRV]    To enable them, run:\n[2026-05-08 10:51:41.828] [SRV]    \tpixi config set --local run-post-link-scripts insecure\n[2026-05-08 10:51:41.828] [SRV]    More info:\n[2026-05-08 10:51:41.828] [SRV]    \thttps://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts\n[2026-05-08 10:51:41.828] [SRV] \n[2026-05-08 10:52:02.660] [SRV] [2026-05-08 10:52:02.660] [info]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`\n[2026-05-08 10:52:02.660] [SRV]  \n[2026-05-08 10:52:02.662] [SRV] [2026-05-08 10:52:02.662] [info]    \t- Scripts/.librsvg-pre-unlink.bat\n[2026-05-08 10:52:02.662] [SRV]    To enable them, run:\n[2026-05-08 10:52:02.662] [SRV]    \tpixi config set --local run-post-link-scripts insecure\n[2026-05-08 10:52:02.662] [SRV]    More info:\n[2026-05-08 10:52:02.662] [SRV]    \thttps://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts\n[2026-05-08 10:52:02.662] [SRV] \n[2026-05-08 10:56:45.758] [SRV] [2026-05-08 10:56:45.758] [info]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`\n[2026-05-08 10:56:45.758] [SRV]  \n[2026-05-08 10:56:45.760] [SRV] [2026-05-08 10:56:45.760] [info]    \t- Scripts/.librsvg-pre-unlink.bat\n[2026-05-08 10:56:45.760] [SRV]    To enable them, run:\n[2026-05-08 10:56:45.760] [SRV]    \tpixi config set --local run-post-link-scripts insecure\n[2026-05-08 10:56:45.760] [SRV]    More info:\n[2026-05-08 10:56:45.760] [SRV]    \thttps://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts\n[2026-05-08 10:56:45.760] [SRV] \n[2026-05-08 10:57:25.109] [SRV] [2026-05-08 10:57:25.109] [info]     The following environments have been installed: default, comfyui, geometrypack-blender, geometrypack-gpu, geometrypack-main.\n[2026-05-08 10:57:25.109] [SRV] \n[2026-05-08 10:57:25.197] [SRV] [2026-05-08 10:57:25.197] [info]   [comfy-env] Note: env `default` is on disk but no node declares it in this run. Leaving as-is. Remove via `pixi clean --environment default` if intended.\n[2026-05-08 10:57:25.197] [SRV]  [comfy-env] Install log: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.ce\\install.log\n[2026-05-08 10:57:25.197] [SRV] \n[2026-05-08 10:57:25.198] [SRV] [2026-05-08 10:57:25.198] [info]   \n[2026-05-08 10:57:25.198] [SRV]  Installation complete!\n[2026-05-08 10:57:25.198] [SRV] \n[2026-05-08 10:57:25.627] [SRV] [2026-05-08 10:57:25.627] [info]  \n[2026-05-08 10:57:25.627] [SRV] [ComfyUI-Manager] Startup script completed.\n[2026-05-08 10:57:25.627] [SRV] #######################################################################\n[2026-05-08 10:57:25.627] [SRV] \n[2026-05-08 10:57:25.627] [SRV] \n[2026-05-08 10:57:26.218] [SRV] [2026-05-08 10:57:26.218] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-08 10:57:26.218] [SRV] \n[2026-05-08 10:57:26.219] [SRV] [2026-05-08 10:57:26.219] [info]  [ComfyUI-Manager] Restarting to reapply dependency installation.\n[2026-05-08 10:57:26.219] [SRV] Command: ['\"C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\.venv\\\\Scripts\\\\python.exe\"', '\"C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Programs\\\\ComfyUI\\\\resources\\\\ComfyUI\\\\main.py\"', '--user-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\user', '--input-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\input', '--output-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\output', '--front-end-root', 'C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Programs\\\\ComfyUI\\\\resources\\\\ComfyUI\\\\web_custom_versions\\\\desktop_app', '--base-directory', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI', '--database-url', 'sqlite:///C:/Users/runneradmin/Documents/ComfyUI/user/comfyui.db', '--extra-model-paths-config', 'C:\\\\Users\\\\runneradmin\\\\AppData\\\\Roaming\\\\ComfyUI\\\\extra_models_config.yaml', '--log-stdout', '--listen', '127.0.0.1', '--port', '8000', '--enable-manager', '--cpu']\n[2026-05-08 10:57:26.219] [SRV] --------------------------------------------------------------------------\n[2026-05-08 10:57:26.219] [SRV] \n[2026-05-08 10:57:26.219] [SRV] \n[2026-05-08 10:57:26.811] [SRV] [2026-05-08 10:57:26.811] [info]  setup plugin alembic.autogenerate.schemas\n[2026-05-08 10:57:26.811] [SRV] setup plugin alembic.autogenerate.tables\n[2026-05-08 10:57:26.811] [SRV] \n[2026-05-08 10:57:26.813] [SRV] [2026-05-08 10:57:26.813] [info]  setup plugin alembic.autogenerate.types\n[2026-05-08 10:57:26.813] [SRV] setup plugin alembic.autogenerate.constraints\n[2026-05-08 10:57:26.813] [SRV] setup plugin alembic.autogenerate.defaults\n[2026-05-08 10:57:26.813] [SRV] setup plugin alembic.autogenerate.comments\n[2026-05-08 10:57:26.813] [SRV] \n[2026-05-08 10:57:27.329] [SRV] [2026-05-08 10:57:27.329] [info]  Adding extra search path custom_nodes C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\n[2026-05-08 10:57:27.329] [SRV] Adding extra search path download_model_base C:\\Users\\runneradmin\\Documents\\ComfyUI\\models\n[2026-05-08 10:57:27.329] [SRV] \n[2026-05-08 10:57:27.330] [SRV] [2026-05-08 10:57:27.330] [info]  Adding extra search path custom_nodes C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\custom_nodes\n[2026-05-08 10:57:27.330] [SRV] Setting output directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\output\n[2026-05-08 10:57:27.330] [SRV] Setting input directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\input\n[2026-05-08 10:57:27.330] [SRV] Setting user directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-08 10:57:27.330] [SRV] \n[2026-05-08 10:57:28.926] [SRV] [2026-05-08 10:57:28.926] [info]  [START] Security scan\n[2026-05-08 10:57:28.926] [SRV] [DONE] Security scan\n[2026-05-08 10:57:28.926] [SRV] ** ComfyUI startup time: 2026-05-08 10:57:28.925\n[2026-05-08 10:57:28.928] [SRV] [2026-05-08 10:57:28.928] [info]  \n[2026-05-08 10:57:28.928] [SRV] ** Platform: Windows\n[2026-05-08 10:57:28.928] [SRV] ** Python version: 3.12.11 (main, Aug 18 2025, 19:17:54) [MSC v.1944 64 bit (AMD64)]\n[2026-05-08 10:57:28.928] [SRV] ** Python executable: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Scripts\\python.exe\n[2026-05-08 10:57:28.928] [SRV] ** ComfyUI Path: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-08 10:57:28.928] [SRV] ** ComfyUI Base Folder Path:\n[2026-05-08 10:57:28.929] [SRV] [2026-05-08 10:57:28.929] [info]   C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-08 10:57:28.929] [SRV] \n[2026-05-08 10:57:28.931] [SRV] [2026-05-08 10:57:28.931] [info]  ** User directory:\n[2026-05-08 10:57:28.932] [SRV] [2026-05-08 10:57:28.932] [info]   C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-08 10:57:28.932] [SRV] ** ComfyUI-Manager config path: C:\\Users\\runneradmin\\Documents\\C\n... (truncated)", "hardware": null}};
+        const workflowNames = Object.keys(workflowData);
+        const videoData = {"system": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "pass"}};
+
+        const inIframe = window !== window.top;
+        let currentWorkflow = null;
+        let playInterval = null;
+        let originalLogContent = '';
+        let currentFrameIndex = 0;
+        let currentFrames = [];
+        let currentTotalTime = 0;
+
+        function openLightboxByName(name) {
+            const w = workflowData[name];
+            if (w) openLightbox(w.src, w.title, w.status, w.duration, w.log, w.hardware);
+        }
+
+        function openLightbox(src, title, status, duration, logContent, hardware) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-title').textContent = title;
+            currentWorkflow = title;
+            originalLogContent = logContent;
+
+            const badge = document.getElementById('lightbox-badge');
+            badge.textContent = status;
+            badge.className = 'lightbox-badge ' + status;
+
+            document.getElementById('lightbox-duration').textContent = duration + 's';
+            document.getElementById('lightbox-log').textContent = logContent || '(No log available)';
+
+            const hwEl = document.getElementById('lightbox-hardware');
+            if (hardware) {
+                const parts = [];
+                if (hardware.os) parts.push(hardware.os);
+                if (hardware.cpu) parts.push(hardware.cpu);
+                if (hardware.gpu) parts.push(hardware.gpu);
+                hwEl.textContent = parts.join(' | ');
+            } else {
+                hwEl.textContent = status === 'skipped' ? '(Did not run on this machine)' : '';
+            }
+
+            const data = videoData[title];
+            const videoPlayer = document.getElementById('video-player');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxVideo = document.getElementById('lightbox-video');
+
+            // Reset both modes; the branch below activates one.
+            videoPlayer.classList.remove('active');
+            lightboxVideo.style.display = 'none';
+            lightboxVideo.removeAttribute('src');
+            lightboxImg.style.display = '';
+
+            if (data && data.mp4) {
+                // Playable mp4 (desktop runs). Show <video>, hide the
+                // frame-slideshow img + slider.
+                lightboxVideo.src = 'videos/' + encodeURIComponent(title) + '/' + data.mp4;
+                lightboxVideo.style.display = '';
+                lightboxImg.style.display = 'none';
+            } else if (data && data.frames && data.frames.length > 1) {
+                currentFrames = data.frames;
+                currentTotalTime = data.total_time || data.frames[data.frames.length - 1].time;
+                setupVideoSlider(data.frames, currentTotalTime);
+                updateVideoFrameByIndex(title, data.frames.length - 1);
+                videoPlayer.classList.add('active');
+            }
+
+            loadResourceGraph(title);
+
+            // Close image overlay if open
+            closeImgOverlay();
+
+            document.getElementById('lightbox').classList.add('active');
+            history.replaceState(null, '', '#' + encodeURIComponent(title));
+
+            // Notify parent frames for deep linking
+            if (inIframe) {
+                window.parent.postMessage({ type: 'comfytest-open', name: title }, '*');
+            }
+        }
+
+        function buildSliderRange(frames, totalTime) {
+            const range = { 'min': frames[0].time };
+            frames.forEach((frame, idx) => {
+                if (idx > 0 && idx < frames.length - 1) {
+                    const pct = (frame.time / totalTime * 100).toFixed(1) + '%';
+                    range[pct] = frame.time;
+                }
+            });
+            range['max'] = frames[frames.length - 1].time;
+            return range;
+        }
+
+        function setupVideoSlider(frames, totalTime) {
+            const sliderEl = document.getElementById('video-slider');
+
+            if (sliderEl.noUiSlider) {
+                sliderEl.noUiSlider.destroy();
+            }
+
+            const range = buildSliderRange(frames, totalTime);
+
+            noUiSlider.create(sliderEl, {
+                start: frames[frames.length - 1].time,
+                snap: true,
+                range: range,
+                pips: {
+                    mode: 'range',
+                    density: 100
+                }
+            });
+
+            sliderEl.noUiSlider.on('update', function(values) {
+                const time = parseFloat(values[0]);
+                const frameIdx = frames.findIndex(f => Math.abs(f.time - time) < 0.01);
+                if (frameIdx >= 0 && frameIdx !== currentFrameIndex) {
+                    currentFrameIndex = frameIdx;
+                    showFrame(currentWorkflow, frameIdx);
+                }
+            });
+        }
+
+        function showFrame(workflowName, frameIndex) {
+            const data = videoData[workflowName];
+            if (!data || !data.frames) return;
+
+            const frame = data.frames[frameIndex];
+            const img = document.getElementById('lightbox-img');
+
+            const isLastFrame = frameIndex === data.frames.length - 1;
+            if (isLastFrame && workflowData[workflowName] && workflowData[workflowName].src) {
+                img.src = workflowData[workflowName].src;
+            } else {
+                img.src = 'videos/' + workflowName + '/' + frame.file;
+            }
+
+            const counter = document.getElementById('video-frame-counter');
+            const totalTime = data.total_time || data.frames[data.frames.length - 1].time;
+            counter.textContent = frame.time.toFixed(1) + 's / ' + totalTime.toFixed(1) + 's';
+
+            const logEl = document.getElementById('lightbox-log');
+            if (frame.log) {
+                logEl.textContent = frame.log;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+        }
+
+        function updateVideoFrameByIndex(workflowName, frameIndex) {
+            currentFrameIndex = frameIndex;
+            showFrame(workflowName, frameIndex);
+
+            const sliderEl = document.getElementById('video-slider');
+            if (sliderEl.noUiSlider && currentFrames[frameIndex]) {
+                sliderEl.noUiSlider.set(currentFrames[frameIndex].time);
+            }
+        }
+
+        function toggleVideoPlay() {
+            const btn = document.getElementById('video-play-btn');
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+                btn.innerHTML = '&#9654; Play';
+            } else {
+                btn.innerHTML = '&#9632; Stop';
+                playInterval = setInterval(() => {
+                    if (!currentFrames.length) return;
+                    currentFrameIndex = (currentFrameIndex + 1) % currentFrames.length;
+                    updateVideoFrameByIndex(currentWorkflow, currentFrameIndex);
+                }, 500);
+            }
+        }
+
+        let resourceGraphState = null;
+
+        async function loadResourceGraph(workflowName) {
+            const graphContainer = document.getElementById('resource-graph');
+            const canvas = document.getElementById('resource-canvas');
+            const gpuLegend = document.getElementById('gpu-legend');
+
+            resourceGraphState = null;
+
+            try {
+                const csvResponse = await fetch('logs/' + workflowName + '_resources.csv');
+
+                if (!csvResponse.ok) {
+                    graphContainer.classList.remove('active');
+                    return;
+                }
+
+                const text = await csvResponse.text();
+                const allLines = text.trim().split('\n');
+
+                let totalRamGb = 32;
+                if (allLines[0].startsWith('#')) {
+                    const metaMatch = allLines[0].match(/total_ram_gb=([\d.]+)/);
+                    if (metaMatch) {
+                        totalRamGb = parseFloat(metaMatch[1]);
+                    }
+                }
+
+                const dataLines = allLines.slice(2);
+
+                if (dataLines.length < 2) {
+                    graphContainer.classList.remove('active');
+                    return;
+                }
+
+                const data = dataLines.map(line => {
+                    const [t, ram, vram] = line.split(',');
+                    return {
+                        t: parseFloat(t),
+                        ram: parseFloat(ram),
+                        vram: vram ? parseFloat(vram) : null
+                    };
+                });
+
+                const hasVram = data.some(d => d.vram !== null);
+                gpuLegend.style.display = hasVram ? 'flex' : 'none';
+
+                graphContainer.classList.add('active');
+                await new Promise(r => setTimeout(r, 10));
+
+                const ctx = canvas.getContext('2d');
+                const dpr = window.devicePixelRatio || 1;
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                ctx.scale(dpr, dpr);
+
+                const w = rect.width;
+                const h = rect.height;
+                const padding = { top: 10, right: 40, bottom: 20, left: 45 };
+                const graphW = w - padding.left - padding.right;
+                const graphH = h - padding.top - padding.bottom;
+
+                const maxRam = Math.max(...data.map(d => d.ram), 0.5);
+                const maxVram = hasVram ? Math.max(...data.filter(d => d.vram !== null).map(d => d.vram), 0.5) : 1;
+                const maxTime = data[data.length - 1].t;
+
+                resourceGraphState = { data, padding, w, h, graphW, graphH, maxRam, maxVram, maxTime, hasVram, dpr };
+
+                drawResourceGraph();
+            } catch (e) {
+                console.error('Resource graph error:', e);
+                graphContainer.classList.remove('active');
+            }
+        }
+
+        function drawResourceGraph(hoverX) {
+            if (!resourceGraphState) return;
+            const { data, padding, w, h, graphW, graphH, maxRam, maxVram, maxTime, hasVram, dpr } = resourceGraphState;
+
+            const canvas = document.getElementById('resource-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, w, h);
+
+            // Grid lines
+            ctx.strokeStyle = '#1c2d44';
+            ctx.lineWidth = 0.5;
+            for (let i = 1; i < 4; i++) {
+                const y = padding.top + (graphH * i / 4);
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(w - padding.right, y);
+                ctx.stroke();
+            }
+
+            // Axes
+            ctx.strokeStyle = '#243656';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, padding.top);
+            ctx.lineTo(padding.left, h - padding.bottom);
+            ctx.lineTo(w - padding.right, h - padding.bottom);
+            ctx.lineTo(w - padding.right, padding.top);
+            ctx.stroke();
+
+            // Left axis: RAM
+            ctx.fillStyle = '#3fb950';
+            ctx.font = '9px sans-serif';
+            ctx.textAlign = 'right';
+            const ramMax = Math.ceil(maxRam * 10) / 10;
+            ctx.fillText(ramMax.toFixed(1) + ' GB', padding.left - 3, padding.top + 4);
+            ctx.fillText('0', padding.left - 3, h - padding.bottom + 4);
+
+            // Right axis: VRAM (if present)
+            if (hasVram) {
+                ctx.fillStyle = '#d29922';
+                ctx.textAlign = 'left';
+                const vramMax = Math.ceil(maxVram * 10) / 10;
+                ctx.fillText(vramMax.toFixed(1) + ' GB', w - padding.right + 3, padding.top + 4);
+                ctx.fillText('0', w - padding.right + 3, h - padding.bottom + 4);
+            }
+
+            // Time labels
+            ctx.fillStyle = '#4a6282';
+            ctx.textAlign = 'center';
+            ctx.fillText('0s', padding.left, h - padding.bottom + 12);
+            ctx.fillText(maxTime.toFixed(0) + 's', w - padding.right, h - padding.bottom + 12);
+
+            function drawLine(values, maxVal, color) {
+                if (values.every(v => v === null || isNaN(v))) return;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                let started = false;
+                data.forEach((d, i) => {
+                    const val = values[i];
+                    if (val === null || isNaN(val)) return;
+                    const x = padding.left + (d.t / maxTime) * graphW;
+                    const y = padding.top + (1 - val / maxVal) * graphH;
+                    if (!started) { ctx.moveTo(x, y); started = true; }
+                    else { ctx.lineTo(x, y); }
+                });
+                ctx.stroke();
+            }
+
+            drawLine(data.map(d => d.ram), ramMax, '#3fb950');
+            if (hasVram) {
+                drawLine(data.map(d => d.vram), Math.ceil(maxVram * 10) / 10, '#d29922');
+            }
+
+            // Hover crosshair
+            if (hoverX !== undefined && hoverX >= padding.left && hoverX <= w - padding.right) {
+                const timeAtCursor = ((hoverX - padding.left) / graphW) * maxTime;
+                let closest = data[0], closestDist = Infinity;
+                for (const d of data) {
+                    const dist = Math.abs(d.t - timeAtCursor);
+                    if (dist < closestDist) { closestDist = dist; closest = d; }
+                }
+
+                const snapX = padding.left + (closest.t / maxTime) * graphW;
+
+                // Vertical line
+                ctx.strokeStyle = 'rgba(230,237,243,0.2)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(snapX, padding.top);
+                ctx.lineTo(snapX, h - padding.bottom);
+                ctx.stroke();
+
+                // Readout
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'left';
+                const readoutX = snapX + 6;
+                let readoutY = padding.top + 14;
+
+                ctx.fillStyle = '#8ba3c1';
+                ctx.fillText(closest.t.toFixed(1) + 's', readoutX, readoutY);
+                readoutY += 13;
+
+                ctx.fillStyle = '#3fb950';
+                ctx.fillText('RAM: ' + closest.ram.toFixed(2) + ' GB', readoutX, readoutY);
+                readoutY += 13;
+
+                if (hasVram && closest.vram !== null) {
+                    ctx.fillStyle = '#d29922';
+                    ctx.fillText('VRAM: ' + closest.vram.toFixed(2) + ' GB', readoutX, readoutY);
+                }
+            }
+        }
+
+        // Canvas hover handler
+        document.getElementById('resource-canvas').addEventListener('mousemove', function(e) {
+            if (!resourceGraphState) return;
+            const rect = this.getBoundingClientRect();
+            drawResourceGraph(e.clientX - rect.left);
+        });
+        document.getElementById('resource-canvas').addEventListener('mouseleave', function() {
+            drawResourceGraph();
+        });
+
+        function closeImgOverlay() {
+            const overlay = document.getElementById('img-overlay');
+            overlay.classList.remove('active', 'zoomed');
+        }
+
+        function closeLightbox() {
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+                document.getElementById('video-play-btn').innerHTML = '&#9654; Play';
+            }
+            closeImgOverlay();
+            document.getElementById('resource-graph').classList.remove('active');
+            document.getElementById('lightbox').classList.remove('active');
+            history.replaceState(null, '', window.location.pathname);
+
+            if (inIframe) {
+                window.parent.postMessage({ type: 'comfytest-close' }, '*');
+            }
+        }
+
+        document.getElementById('lightbox').onclick = (e) => {
+            if (e.target.id === 'lightbox') closeLightbox();
+        };
+
+        function navigateLightbox(delta) {
+            if (workflowNames.length === 0) return;
+            const idx = workflowNames.indexOf(currentWorkflow);
+            if (idx === -1) return;
+            const newIdx = (idx + delta + workflowNames.length) % workflowNames.length;
+            openLightboxByName(workflowNames[newIdx]);
+        }
+
+        function handleKey(key) {
+            const overlay = document.getElementById('img-overlay');
+            if (key === 'Escape') {
+                if (overlay.classList.contains('active')) {
+                    closeImgOverlay();
+                } else {
+                    closeLightbox();
+                }
+                return;
+            }
+            if (document.getElementById('lightbox').classList.contains('active') && !overlay.classList.contains('active')) {
+                if (key === 'ArrowLeft') { navigateLightbox(-1); }
+                if (key === 'ArrowRight') { navigateLightbox(1); }
+            }
+        }
+
+        document.onkeydown = (e) => {
+            if (['Escape', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                handleKey(e.key);
+            }
+        };
+
+        // Click lightbox image -> open in fullscreen overlay (fit mode)
+        document.getElementById('lightbox-img').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const overlay = document.getElementById('img-overlay');
+            const overlayImg = document.getElementById('img-overlay-content');
+            overlayImg.src = this.src;
+            overlay.classList.add('active');
+            overlay.classList.remove('zoomed');
+        });
+
+        // Click overlay image: fit -> zoomed -> close
+        document.getElementById('img-overlay-content').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const overlay = document.getElementById('img-overlay');
+            if (overlay.classList.contains('zoomed')) {
+                closeImgOverlay();
+            } else {
+                overlay.classList.add('zoomed');
+            }
+        });
+
+        // Click overlay background -> close overlay
+        document.getElementById('img-overlay').addEventListener('click', function(e) {
+            if (e.target === this) closeImgOverlay();
+        });
+
+        function openFromHash() {
+            const hash = decodeURIComponent(window.location.hash.slice(1));
+            if (hash && workflowData[hash]) {
+                const w = workflowData[hash];
+                openLightbox(w.src, w.title, w.status, w.duration, w.log, w.hardware);
+            }
+        }
+
+        window.addEventListener('hashchange', openFromHash);
+        window.addEventListener('load', openFromHash);
+
+        // Listen for messages from parent frames
+        window.addEventListener('message', function(e) {
+            if (!e.data || !e.data.type) return;
+            if (e.data.type === 'comfytest-open' && e.data.name) {
+                openLightboxByName(e.data.name);
+            }
+            if (e.data.type === 'comfytest-key') {
+                handleKey(e.data.key);
+            }
+        });
+
+        // Detect iframe: hide header and move meta chips into summary
+        if (inIframe) {
+            document.body.classList.add('in-iframe');
+            const chips = document.querySelector('.meta-chips');
+            const summary = document.querySelector('.summary');
+            if (chips && summary) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'summary-meta';
+                while (chips.firstChild) wrapper.appendChild(chips.firstChild);
+                summary.insertBefore(wrapper, summary.firstChild);
+            }
+        }
+    </script>
+</body>
+</html>
