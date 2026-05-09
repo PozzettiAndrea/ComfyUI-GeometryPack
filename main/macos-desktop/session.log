@@ -1,0 +1,184 @@
+[   0s] CDP targets: 1
+[   0s]   page: file:///Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/desktop-ui/index.html#/welcome | ComfyUI
+[   0s] Main page: file:///Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/desktop-ui/index.html#/welcome | ComfyUI
+[   1s] Buttons: ['Get Started']
+[   1s]   wizard: COMFY_TEST_GPU=0 platform=darwin preferred=['Apple Silicon', 'MPS', 'M4', 'M3', 'M2', 'M1']
+[   2s]   clicked [BTN|Get Started]
+[   3s]   url: file:///Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/desktop-ui/index.html#/welcome -> file:///Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/desktop-ui/index.html#/install
+[   4s]   clicked [BTN|Next]
+[  10s]   clicked [BTN|Next]
+[  12s]   clicked [BTN|Install]
+[  14s]   url: file:///Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/desktop-ui/index.html#/install -> file:///Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/desktop-ui/index.html#/server-start
+[ 101s]   /system_stats up after 100s
+[ 101s]   app: waiting for backend stability (continuous /system_stats up for 30s)
+[ 101s]   app: /system_stats up; awaiting 30s of stability
+[ 132s]   app: backend stable for 30s; proceeding
+[ 132s]   capturing canvas load...
+[ 140s]   post: waiting for Cloud upsell
+[ 141s]   post: clicked Cloud upsell via [button:has-text("Continue Locally"):visible]
+[ 143s]   post: waiting for Close Templates
+[ 152s]   post: Close Templates not found, skipping
+[ 152s]   post: pressed Escape (Close Templates fallback)
+[ 154s]   post: waiting for Extensions
+[ 154s]   post: clicked Extensions via [button[aria-label="Extensions"]:visible]
+[ 157s]   ext: node meta = display='GeometryPack' publisher='pznodes' version='0.2.10'
+[ 160s]   ext: searching "GeometryPack"
+[ 164s]   ext: clicking GeometryPack by pznodes tile
+[ 168s]   ext: scrolling to + opening version selector
+[ 172s]   ext: selected 0.2.10
+[ 173s]   ext: clicking right-panel Install
+[ 176s]   ext: clicked Install (last of 4 visible)
+[ 184s]   ext: waiting for "Apply Changes" toast
+[ 263s]   ext: clicked Apply Changes
+[ 268s]   app: Apply Changes already triggered in-app restart, skipping pkill
+[ 273s]   app: relaunching with CDP
+[ 273s]   app: waiting for CDP
+[ 273s]   app: CDP up after 1s
+[ 273s]   app: reconnecting Playwright
+[ 274s]   app: attached to http://127.0.0.1:8000/
+[ 308s]   app: server ready after 15s
+[ 308s]   app: waiting for main canvas (window.app.graph)
+[ 308s]   app: canvas ready after 1s (http://127.0.0.1:8000/)
+[ 314s]   app: forcing renderer reload to refresh node-pack manifest
+[ 316s]   app: canvas re-ready after reload in 2s
+[ 319s]   ext: closing Nodes Manager dialog
+[ 319s]   ext: dismissing What's New popup
+[ 320s]   ext: closed What's New popup
+[ 322s]   ext: dismissing Node Pack Issues modal (if present)
+[ 322s]   ext: closed Node Pack Issues modal
+[ 325s]   ext: opening Templates sidebar
+[ 325s]   ext: clicked Templates
+[ 330s]   ext: locating "comfyui-geometrypack" section in Templates panel
+[ 332s]   ext: clicked comfyui-geometrypack section
+[ 334s]   ext: fetching comfy-test.toml from https://raw.githubusercontent.com/PozzettiAndrea/ComfyUI-GeometryPack/dev/comfy-test.toml
+[ 334s]   ext: cpu spec = exclude ['remeshing_gpu', 'fill_holes_all', 'remeshing_all', 'uv_unwrap_all']
+[ 334s]   ext: picking first matching comfyui-geometrypack template
+[ 334s]   ext: 23 visible cards
+[ 337s]   ext: clicked template sharpen
+[ 342s]   ext: installing WS execution listener
+[ 342s]   ext: clicking Run
+[ 343s]   ext: clicked Run
+[ 343s]   ext: waiting for execution_success / execution_error
+[ 366s]   ext: WS events=24 elapsed=23s
+[ 366s]     ws: {'type': 'progress_state', 'ts': 1778339043911}
+[ 366s]     ws: {'type': 'executing', 'ts': 1778339043911}
+[ 366s]     ws: {'type': 'executed', 'ts': 1778339047538}
+[ 366s]     ws: {'type': 'progress_state', 'ts': 1778339047539}
+[ 366s]     ws: {'type': 'progress_state', 'ts': 1778339047541}
+[ 366s]     ws: {'type': 'progress_state', 'ts': 1778339047547}
+[ 366s]     ws: {'type': 'executing', 'ts': 1778339047548}
+[ 366s]     ws: {'type': 'progress_state', 'ts': 1778339047694}
+[ 366s]     ws: {'type': 'progress_state', 'ts': 1778339047697}
+[ 366s]     ws: {'type': 'executing', 'ts': 1778339047698}
+[ 366s]     ws: {'type': 'executed', 'ts': 1778339047983}
+[ 366s]     ws: {'type': 'progress_state', 'ts': 1778339048777}
+[ 366s]     ws: {'type': 'execution_success', 'ts': 1778339048787}
+[ 366s]     ws: {'type': 'status', 'ts': 1778339048814}
+[ 366s]     ws: {'type': 'executing', 'ts': 1778339048815}
+[ 366s]   ext: execution_success after 23s
+[ 371s]   ext: fetching comfy-test.toml from https://raw.githubusercontent.com/PozzettiAndrea/ComfyUI-GeometryPack/dev/comfy-test.toml
+[ 371s]   ext: cpu spec = exclude ['remeshing_gpu', 'fill_holes_all', 'remeshing_all', 'uv_unwrap_all']
+[ 371s]   loop: workflows/ fetch failed (HTTP Error 403: rate limit exceeded)
+[ 371s]   loop: spec=exclude items=['remeshing_gpu', 'fill_holes_all', 'remeshing_all', 'uv_unwrap_all'] -> 0 workflow(s) []
+[ 371s]   loop: matching=0 first_ran='sharpen' remaining=0 -> []
+[ 371s] Captured 385 frames
+[ 371s] Wrote /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/results.json (1 workflow(s))
+ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers
+  built with Apple clang version 13.1.6 (clang-1316.0.21.2.5)
+  configuration: --prefix=/Volumes/tempdisk/sw --extra-cflags=-fno-stack-check --arch=arm64 --cc=/usr/bin/clang --enable-gpl --enable-libvmaf --enable-libopenjpeg --enable-libopus --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx --enable-libwebp --enable-libass --enable-libfreetype --enable-fontconfig --enable-libtheora --enable-libvorbis --enable-libsnappy --enable-libaom --enable-libvidstab --enable-libzimg --enable-libsvtav1 --enable-libharfbuzz --enable-libkvazaar --pkg-config-flags=--static --enable-ffplay --enable-postproc --enable-neon --enable-runtime-cpudetect --disable-indev=qtkit --disable-indev=x11grab_xcb
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.100 / 61. 19.100
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, image2, from '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/debug/electron_inspect/frames/frame_%06d.png':
+  Duration: 00:01:17.00, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/bt709/iec61966-2-1), 1024x653, 5 fps, 5 tbr, 5 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0x13a005590] using cpu capabilities: ARMv8 NEON
+[libx264 @ 0x13a005590] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x13a005590] 264 - core 164 r3190 7ed753b - H.264/MPEG-4 AVC codec - Copyleft 2003-2024 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=4 lookahead_threads=1 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=5 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/debug/electron_inspect/driver.mp4':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, unknown/bt709/iec61966-2-1, progressive), 1024x654, q=2-31, 5 fps, 10240 tbn
+      Metadata:
+        encoder         : Lavc61.19.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+frame=   32 fps=0.0 q=23.0 size=       0KiB time=00:00:06.00 bitrate=   0.1kbits/s speed=9.97x    frame=   97 fps= 83 q=23.0 size=     256KiB time=00:00:19.00 bitrate= 110.4kbits/s speed=16.3x    frame=  184 fps=108 q=23.0 size=     512KiB time=00:00:36.40 bitrate= 115.2kbits/s speed=21.4x    frame=  302 fps=129 q=23.0 size=     512KiB time=00:01:00.00 bitrate=  69.9kbits/s speed=25.6x    [out#0/mp4 @ 0x600001b30000] video:1040KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.508886%
+frame=  385 fps=144 q=-1.0 Lsize=    1045KiB time=00:01:16.60 bitrate= 111.8kbits/s speed=28.6x    
+[libx264 @ 0x13a005590] frame I:10    Avg QP: 9.29  size: 41814
+[libx264 @ 0x13a005590] frame P:108   Avg QP:16.52  size:  4307
+[libx264 @ 0x13a005590] frame B:267   Avg QP:22.23  size:   677
+[libx264 @ 0x13a005590] consecutive B-frames:  5.2%  5.2%  5.5% 84.2%
+[libx264 @ 0x13a005590] mb I  I16..4: 55.5% 17.2% 27.2%
+[libx264 @ 0x13a005590] mb P  I16..4:  2.7%  2.2%  3.0%  P16..4:  2.3%  0.8%  0.6%  0.0%  0.0%    skip:88.4%
+[libx264 @ 0x13a005590] mb B  I16..4:  0.2%  0.3%  0.2%  B16..8:  2.9%  0.5%  0.2%  direct: 0.1%  skip:95.7%  L0:49.3% L1:47.5% BI: 3.2%
+[libx264 @ 0x13a005590] 8x8 transform intra:24.6% inter:48.3%
+[libx264 @ 0x13a005590] coded y,uvDC,uvAC intra: 36.5% 15.2% 12.5% inter: 0.9% 0.6% 0.2%
+[libx264 @ 0x13a005590] i16 v,h,dc,p: 68% 30%  1%  1%
+[libx264 @ 0x13a005590] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 32% 20% 36%  1%  2%  1%  2%  2%  3%
+[libx264 @ 0x13a005590] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 36% 30% 17%  2%  3%  3%  4%  3%  3%
+[libx264 @ 0x13a005590] i8c dc,h,v,p: 81% 11%  5%  2%
+[libx264 @ 0x13a005590] Weighted P-Frames: Y:2.8% UV:2.8%
+[libx264 @ 0x13a005590] ref P L0: 66.2%  3.1% 17.4% 13.4%
+[libx264 @ 0x13a005590] ref B L0: 72.0% 18.8%  9.2%
+[libx264 @ 0x13a005590] ref B L1: 92.4%  7.6%
+[libx264 @ 0x13a005590] kb/s:110.56
+[ 374s] Wrote /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/debug/electron_inspect/driver.mp4
+ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers
+  built with Apple clang version 13.1.6 (clang-1316.0.21.2.5)
+  configuration: --prefix=/Volumes/tempdisk/sw --extra-cflags=-fno-stack-check --arch=arm64 --cc=/usr/bin/clang --enable-gpl --enable-libvmaf --enable-libopenjpeg --enable-libopus --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-libvpx --enable-libwebp --enable-libass --enable-libfreetype --enable-fontconfig --enable-libtheora --enable-libvorbis --enable-libsnappy --enable-libaom --enable-libvidstab --enable-libzimg --enable-libsvtav1 --enable-libharfbuzz --enable-libkvazaar --pkg-config-flags=--static --enable-ffplay --enable-postproc --enable-neon --enable-runtime-cpudetect --disable-indev=qtkit --disable-indev=x11grab_xcb
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.100 / 61. 19.100
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, image2, from '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/debug/electron_inspect/frames/frame_%06d.png':
+  Duration: 00:00:08.20, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/bt709/iec61966-2-1), 1024x653, 5 fps, 5 tbr, 5 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0x1440071d0] using cpu capabilities: ARMv8 NEON
+[libx264 @ 0x1440071d0] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x1440071d0] 264 - core 164 r3190 7ed753b - H.264/MPEG-4 AVC codec - Copyleft 2003-2024 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=4 lookahead_threads=1 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=5 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/videos/sharpen/driver.mp4':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, unknown/bt709/iec61966-2-1, progressive), 1024x654, q=2-31, 5 fps, 10240 tbn
+      Metadata:
+        encoder         : Lavc61.19.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[out#0/mp4 @ 0x600000ef4000] video:73KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 1.824670%
+frame=   41 fps=0.0 q=-1.0 Lsize=      74KiB time=00:00:07.80 bitrate=  77.6kbits/s speed=29.3x    
+[libx264 @ 0x1440071d0] frame I:1     Avg QP: 8.05  size: 35465
+[libx264 @ 0x1440071d0] frame P:10    Avg QP:16.45  size:  3564
+[libx264 @ 0x1440071d0] frame B:30    Avg QP:22.59  size:    82
+[libx264 @ 0x1440071d0] consecutive B-frames:  2.4%  0.0%  0.0% 97.6%
+[libx264 @ 0x1440071d0] mb I  I16..4: 70.2%  5.1% 24.7%
+[libx264 @ 0x1440071d0] mb P  I16..4:  1.6%  1.2%  1.3%  P16..4:  1.3%  0.3%  0.1%  0.0%  0.0%    skip:94.3%
+[libx264 @ 0x1440071d0] mb B  I16..4:  0.2%  0.0%  0.0%  B16..8:  1.6%  0.0%  0.0%  direct: 0.0%  skip:98.1%  L0:44.8% L1:55.2% BI: 0.0%
+[libx264 @ 0x1440071d0] 8x8 transform intra:11.8% inter:37.5%
+[libx264 @ 0x1440071d0] coded y,uvDC,uvAC intra: 16.1% 14.7% 11.5% inter: 0.1% 0.1% 0.1%
+[libx264 @ 0x1440071d0] i16 v,h,dc,p: 65% 35%  0%  0%
+[libx264 @ 0x1440071d0] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 39% 16% 44%  0%  0%  0%  0%  0%  0%
+[libx264 @ 0x1440071d0] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 27% 29% 23%  3%  3%  3%  4%  3%  4%
+[libx264 @ 0x1440071d0] i8c dc,h,v,p: 75% 16%  7%  1%
+[libx264 @ 0x1440071d0] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x1440071d0] ref P L0: 61.6%  2.9% 29.4%  6.2%
+[libx264 @ 0x1440071d0] ref B L0: 81.1% 17.2%  1.7%
+[libx264 @ 0x1440071d0] ref B L1: 95.4%  4.6%
+[libx264 @ 0x1440071d0] kb/s:71.78
+[ 375s]   videos/sharpen/driver.mp4 placed (frames 345..385)
+[ 375s]   removed /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/comfy-test-logs/debug/electron_inspect/frames after successful encode
