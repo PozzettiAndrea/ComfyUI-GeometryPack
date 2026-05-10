@@ -113,7 +113,7 @@
         }
 
         .progress-fill.has-failures {
-            background: linear-gradient(90deg, #3fb950 0%, #3fb950 0%, #f85149 0%, #f85149 100%);
+            background: linear-gradient(90deg, #3fb950 0%, #3fb950 70.0%, #f85149 70.0%, #f85149 100%);
             width: 100% !important;
             border-radius: 6px;
         }
@@ -924,7 +924,7 @@
     <header>
         <h1><a href="https://github.com/PozzettiAndrea/PozzettiAndrea/ComfyUI-GeometryPack">PozzettiAndrea/ComfyUI-GeometryPack</a> Test Results</h1>
         <div class="meta-chips">
-            
+            <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 110 16A8 8 0 018 0zm.5 4.5a.5.5 0 00-1 0v3.793L5.854 9.854a.5.5 0 10.708.708l1.853-1.854a.5.5 0 00.085-.094V4.5z"/></svg> 2026-05-10 03:56 UTC</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M2.5 4a.5.5 0 100 1 .5.5 0 000-1zM4 4.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zM2.5 7a.5.5 0 100 1 .5.5 0 000-1zM4 7.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7A.5.5 0 014 7.5zM2.5 10a.5.5 0 100 1 .5.5 0 000-1zM4 10.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5z"/></svg> Windows-2025Server-10.0.26100-SP0</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M5 0a.5.5 0 01.5.5V2h1V.5a.5.5 0 011 0V2h1V.5a.5.5 0 011 0V2h.5A2.5 2.5 0 0112.5 4.5H14v1h-1.5v1H14v1h-1.5v1H14v1h-1.5A2.5 2.5 0 0110 12h-.5v1.5a.5.5 0 01-1 0V12h-1v1.5a.5.5 0 01-1 0V12H6v1.5a.5.5 0 01-1 0V12h-.5A2.5 2.5 0 012 9.5H.5v-1H2v-1H.5v-1H2v-1H.5v-1H2A2.5 2.5 0 014.5 2V.5A.5.5 0 015 0zm-.5 4A1.5 1.5 0 003 5.5v4A1.5 1.5 0 004.5 11h6a1.5 1.5 0 001.5-1.5v-4A1.5 1.5 0 0010.5 4h-6z"/></svg> AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD</span>
         </div>
     </header>
 
@@ -932,14 +932,14 @@
         <div class="summary">
             <div class="progress-wrapper">
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
+                    <div class="progress-fill has-failures" style="width: 70.0%"></div>
                 </div>
-                <span class="progress-label">0.0%</span>
+                <span class="progress-label">70.0%</span>
             </div>
             <div class="stats">
-                <span class="stat-badge stat-pass">0 passed</span>
-                
-                <span class="stat-total">0/0 tests</span>
+                <span class="stat-badge stat-pass">21 passed</span>
+                <span class="stat-badge stat-fail">8 failed</span>
+                <span class="stat-total">21/30 tests</span>
             </div>
         </div>
 
@@ -952,23 +952,6 @@
         </div>
         <div class="workflow-grid" id="workflow-grid">
             
-            <div class="workflow-card clickable " onclick="openLightboxByName('system')">
-                
-                <img class="workflow-screenshot" src="screenshots/system_executed.png"
-                     alt="system" loading="lazy">
-            
-                <div class="workflow-info">
-                    <div class="workflow-header">
-                        <span class="workflow-name" title="system">system</span>
-                        <span class="workflow-badge pass">pass</span>
-                    </div>
-                    <div class="workflow-meta">
-                        <span>0.00s</span>
-                    </div>
-                </div>
-            </div>
-        
-
             <div class="workflow-card clickable " onclick="openLightboxByName('alpha_wrap')">
                 
                 <img class="workflow-screenshot" src="screenshots/alpha_wrap_executed.png"
@@ -980,7 +963,7 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>16.00s</span>
+                        <span>17.00s</span>
                     </div>
                 </div>
             </div>
@@ -997,7 +980,7 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>26.00s</span>
+                        <span>19.00s</span>
                     </div>
                 </div>
             </div>
@@ -1014,7 +997,24 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>8.00s</span>
+                        <span>9.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('boolean_ops_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/boolean_ops_all_executed.png"
+                     alt="boolean_ops_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="boolean_ops_all">boolean_ops_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.00s</span>
                     </div>
                 </div>
             </div>
@@ -1037,6 +1037,23 @@
             </div>
         
 
+            <div class="workflow-card clickable " onclick="openLightboxByName('decimate_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/decimate_all_executed.png"
+                     alt="decimate_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="decimate_all">decimate_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>16.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
             <div class="workflow-card clickable " onclick="openLightboxByName('depth_map_to_mesh')">
                 
                 <img class="workflow-screenshot" src="screenshots/depth_map_to_mesh_executed.png"
@@ -1054,6 +1071,23 @@
             </div>
         
 
+            <div class="workflow-card clickable " onclick="openLightboxByName('fix_normals_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/fix_normals_all_executed.png"
+                     alt="fix_normals_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="fix_normals_all">fix_normals_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
             <div class="workflow-card clickable " onclick="openLightboxByName('fix_self_intersection')">
                 
                 <img class="workflow-screenshot" src="screenshots/fix_self_intersection_executed.png"
@@ -1065,7 +1099,7 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>9.00s</span>
+                        <span>8.00s</span>
                     </div>
                 </div>
             </div>
@@ -1099,7 +1133,7 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>22.00s</span>
+                        <span>16.00s</span>
                     </div>
                 </div>
             </div>
@@ -1150,7 +1184,24 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>10.00s</span>
+                        <span>8.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('reconstruct_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/reconstruct_all_executed.png"
+                     alt="reconstruct_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="reconstruct_all">reconstruct_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>19.00s</span>
                     </div>
                 </div>
             </div>
@@ -1167,7 +1218,7 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>9.00s</span>
+                        <span>8.00s</span>
                     </div>
                 </div>
             </div>
@@ -1207,7 +1258,7 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('sMOOth')">
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('sMOOth')">
                 
                 <img class="workflow-screenshot" src="screenshots/sMOOth_executed.png"
                      alt="sMOOth" loading="lazy">
@@ -1215,10 +1266,10 @@
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="sMOOth">sMOOth</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>6.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
@@ -1235,7 +1286,24 @@
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>8.00s</span>
+                        <span>7.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('sharpen_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/sharpen_all_executed.png"
+                     alt="sharpen_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="sharpen_all">sharpen_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>75.00s</span>
                     </div>
                 </div>
             </div>
@@ -1258,7 +1326,24 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_extraction')">
+            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/skeleton_all_executed.png"
+                     alt="skeleton_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="skeleton_all">skeleton_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>20.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('skeleton_extraction')">
                 
                 <img class="workflow-screenshot" src="screenshots/skeleton_extraction_executed.png"
                      alt="skeleton_extraction" loading="lazy">
@@ -1266,16 +1351,33 @@
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="skeleton_extraction">skeleton_extraction</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>13.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('surface_reconstruction')">
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('smooth_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/smooth_all_executed.png"
+                     alt="smooth_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="smooth_all">smooth_all</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('surface_reconstruction')">
                 
                 <img class="workflow-screenshot" src="screenshots/surface_reconstruction_executed.png"
                      alt="surface_reconstruction" loading="lazy">
@@ -1283,16 +1385,16 @@
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="surface_reconstruction">surface_reconstruction</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>17.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('test_loading')">
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('test_loading')">
                 
                 <img class="workflow-screenshot" src="screenshots/test_loading_executed.png"
                      alt="test_loading" loading="lazy">
@@ -1300,16 +1402,16 @@
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="test_loading">test_loading</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>8.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('transform')">
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('transform')">
                 
                 <img class="workflow-screenshot" src="screenshots/transform_executed.png"
                      alt="transform" loading="lazy">
@@ -1317,16 +1419,16 @@
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="transform">transform</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>6.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('uv_unwrap')">
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('uv_unwrap')">
                 
                 <img class="workflow-screenshot" src="screenshots/uv_unwrap_executed.png"
                      alt="uv_unwrap" loading="lazy">
@@ -1334,16 +1436,16 @@
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="uv_unwrap">uv_unwrap</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>15.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('view_texture')">
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('view_texture')">
                 
                 <img class="workflow-screenshot" src="screenshots/view_texture_executed.png"
                      alt="view_texture" loading="lazy">
@@ -1351,10 +1453,10 @@
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="view_texture">view_texture</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>7.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
@@ -1362,6 +1464,75 @@
         </div>
 
         
+        <div class="failed-section">
+            <h2>Failed Tests</h2>
+            
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">sMOOth</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card sMOOth not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">skeleton_extraction</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card skeleton_extraction not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">smooth_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card smooth_all not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">surface_reconstruction</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card surface_reconstruction not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">test_loading</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card test_loading not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">transform</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card transform not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">uv_unwrap</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card uv_unwrap not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">view_texture</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card view_texture not found in section</div>
+            </div>
+        
+        </div>
+    
 
         
     </div>
@@ -1420,9 +1591,9 @@
             });
         }
 
-        const workflowData = {"system": {"src": "screenshots/system_executed.png", "title": "system", "status": "pass", "duration": "0.00", "log": "[2026-05-09 16:59:43.908] [SRV] [2026-05-09 16:59:43.908] [info]  setup plugin alembic.autogenerate.schemas\n[2026-05-09 16:59:43.908] [SRV] \n[2026-05-09 16:59:43.910] [SRV] [2026-05-09 16:59:43.910] [info]  setup plugin alembic.autogenerate.tables\n[2026-05-09 16:59:43.910] [SRV] setup plugin alembic.autogenerate.types\n[2026-05-09 16:59:43.910] [SRV] setup plugin alembic.autogenerate.constraints\n[2026-05-09 16:59:43.910] [SRV] setup plugin alembic.autogenerate.defaults\n[2026-05-09 16:59:43.910] [SRV] setup plugin alembic.autogenerate.comments\n[2026-05-09 16:59:43.910] [SRV] \n[2026-05-09 16:59:44.353] [SRV] [2026-05-09 16:59:44.353] [info]  Adding extra search path custom_nodes C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\n[2026-05-09 16:59:44.353] [SRV] Adding extra search path download_model_base C:\\Users\\runneradmin\\Documents\\ComfyUI\\models\n[2026-05-09 16:59:44.353] [SRV] \n[2026-05-09 16:59:44.354] [SRV] [2026-05-09 16:59:44.354] [info]  Adding extra search path custom_nodes C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\custom_nodes\n[2026-05-09 16:59:44.354] [SRV] Setting output directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\output\n[2026-05-09 16:59:44.354] [SRV] Setting input directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\input\n[2026-05-09 16:59:44.354] [SRV] Setting user directory to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-09 16:59:44.354] [SRV] \n[2026-05-09 16:59:45.931] [SRV] [2026-05-09 16:59:45.931] [info]  [START] Security scan\n[2026-05-09 16:59:45.931] [SRV] [DONE] Security scan\n[2026-05-09 16:59:45.931] [SRV] ** ComfyUI startup time: \n[2026-05-09 16:59:45.932] [SRV] [2026-05-09 16:59:45.932] [info]  2026-05-09 16:59:45.930\n[2026-05-09 16:59:45.932] [SRV] ** Platform: Windows\n[2026-05-09 16:59:45.932] [SRV] ** Python version: 3.12.11 (main, Aug 18 2025, 19:17:54) [MSC v.1944 64 bit (AMD64)]\n[2026-05-09 16:59:45.932] [SRV] ** Python executable: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Scripts\\python.exe\n[2026-05-09 16:59:45.932] [SRV] ** ComfyUI Path: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-09 16:59:45.932] [SRV] ** ComfyUI Base Folder Path: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-09 16:59:45.932] [SRV] \n[2026-05-09 16:59:45.933] [SRV] [2026-05-09 16:59:45.933] [info]  ** User directory: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\n[2026-05-09 16:59:45.933] [SRV] ** ComfyUI-Manager config path: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\\__manager\\config.ini\n[2026-05-09 16:59:45.933] [SRV] \n[2026-05-09 16:59:45.934] [SRV] [2026-05-09 16:59:45.934] [info]  ** Log path: C:\\Users\\runneradmin\\Documents\\ComfyUI\\user\\comfyui.log\n[2026-05-09 16:59:45.934] [SRV] \n[2026-05-09 16:59:47.051] [SRV] [2026-05-09 16:59:47.051] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-09 16:59:47.051] [SRV] \n[2026-05-09 16:59:47.053] [SRV] [2026-05-09 16:59:47.053] [info]  [PRE] ComfyUI-Manager\n[2026-05-09 16:59:47.053] [SRV] \n[2026-05-09 16:59:47.401] [SRV] [2026-05-09 16:59:47.401] [error] [comfy-env] comfyui-geometrypack: 1 isolation env(s):\n[2026-05-09 16:59:47.402] [SRV] [2026-05-09 16:59:47.402] [error] \n[2026-05-09 16:59:47.402] [SRV] [comfy-env]   nodes -> C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\\comfyui-geometrypack\\nodes\n[2026-05-09 16:59:47.402] [SRV] [comfy-env] prestartup complete\n[2026-05-09 16:59:47.403] [SRV] [2026-05-09 16:59:47.403] [error] \n[2026-05-09 16:59:47.403] [SRV] \n[2026-05-09 16:59:50.164] [SRV] [2026-05-09 16:59:50.164] [info]  Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}\n[2026-05-09 16:59:50.164] [SRV] \n[2026-05-09 16:59:50.166] [SRV] [2026-05-09 16:59:50.166] [info]  Found comfy_kitchen backend cuda: {'available': False, 'disabled': True, 'unavailable_reason': 'CUDA not available on this system', 'capabilities': []}\n[2026-05-09 16:59:50.166] [SRV] Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': \"ImportError: No module named 'triton'\", 'capabilities': []}\n[2026-05-09 16:59:50.166] [SRV] \n[2026-05-09 16:59:50.171] [SRV] [2026-05-09 16:59:50.171] [info]  Checkpoint files will always be loaded safely.\n[2026-05-09 16:59:50.171] [SRV] \n[2026-05-09 16:59:50.186] [SRV] [2026-05-09 16:59:50.186] [info]  Total VRAM 16379 MB, total RAM 16379 MB\n[2026-05-09 16:59:50.186] [SRV] \n[2026-05-09 16:59:50.187] [SRV] [2026-05-09 16:59:50.187] [info]  pytorch version: 2.10.0+cpu\n[2026-05-09 16:59:50.187] [SRV] Set vram state to: DISABLED\n[2026-05-09 16:59:50.187] [SRV] Device: cpu\n[2026-05-09 16:59:50.187] [SRV] \n[2026-05-09 16:59:50.519] [SRV] [2026-05-09 16:59:50.519] [info]  Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention\n[2026-05-09 16:59:50.519] [SRV] \n[2026-05-09 16:59:53.273] [SRV] [2026-05-09 16:59:53.273] [info]  Python version: 3.12.11 (main, Aug 18 2025, 19:17:54) [MSC v.1944 64 bit (AMD64)]\n[2026-05-09 16:59:53.273] [SRV] \n[2026-05-09 16:59:53.274] [SRV] [2026-05-09 16:59:53.274] [info]  ComfyUI version: 0.20.1\n[2026-05-09 16:59:53.274] [SRV] comfy-aimdo version: 0.2.14\n[2026-05-09 16:59:53.274] [SRV] \n[2026-05-09 16:59:53.276] [SRV] [2026-05-09 16:59:53.276] [info]  comfy-kitchen version: 0.2.8\n[2026-05-09 16:59:53.276] [SRV] \n[2026-05-09 16:59:53.278] [SRV] [2026-05-09 16:59:53.278] [info]  [Prompt Server] web root: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\web_custom_versions\\desktop_app\n[2026-05-09 16:59:53.278] [SRV] \n[2026-05-09 16:59:53.280] [SRV] [2026-05-09 16:59:53.280] [info]  Asset seeder disabled\n[2026-05-09 16:59:53.280] [SRV] \n[2026-05-09 16:59:53.281] [SRV] [2026-05-09 16:59:53.281] [info]  [START] ComfyUI-Manager\n[2026-05-09 16:59:53.281] [SRV] \n[2026-05-09 16:59:53.420] [SRV] [2026-05-09 16:59:53.420] [info]  [ComfyUI-Manager] Using GitPython backend\n[2026-05-09 16:59:53.420] [SRV] \n[2026-05-09 16:59:53.489] [SRV] [2026-05-09 16:59:53.489] [info]  [ComfyUI-Manager] network_mode: public\n[2026-05-09 16:59:53.489] [SRV] \n[2026-05-09 16:59:53.492] [SRV] [2026-05-09 16:59:53.492] [info]  [ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.\n[2026-05-09 16:59:53.492] [SRV] \tTo use this feature, please run the following command:\n[2026-05-09 16:59:53.492] [SRV] \tC:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Scripts\\python.exe -m pip install matrix-nio\n[2026-05-09 16:59:53.492] [SRV] \n[2026-05-09 16:59:53.492] [SRV] \n[2026-05-09 16:59:55.187] [SRV] [2026-05-09 16:59:55.187] [info]  loading...\n[2026-05-09 16:59:55.187] [SRV] \n[2026-05-09 16:59:55.189] [SRV] [2026-05-09 16:59:55.189] [info]  calling register_nodes\n[2026-05-09 16:59:55.189] [SRV] \n[2026-05-09 16:59:55.194] [SRV] [2026-05-09 16:59:55.194] [error] [comfy-env] Version: 0.3.78\n[2026-05-09 16:59:55.195] [SRV] [2026-05-09 16:59:55.195] [error] \n[2026-05-09 16:59:55.195] [SRV] \n[2026-05-09 16:59:58.709] [SRV] [2026-05-09 16:59:58.709] [info]  [comfy-env] Removed stale temp dir: C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\comfyui_pvenv_fa5k2_w_\n[2026-05-09 16:59:58.709] [SRV] \n[2026-05-09 16:59:59.090] [SRV] [2026-05-09 16:59:59.090] [error] [comfy-env] register_nodes: comfyui-geometrypack\n[2026-05-09 16:59:59.091] [SRV] [2026-05-09 16:59:59.091] [error] \n[2026-05-09 16:59:59.091] [SRV] \n[2026-05-09 16:59:59.111] [SRV] [2026-05-09 16:59:59.111] [error] [comfy-env] ComfyUI source dir: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\n[2026-05-09 16:59:59.112] [SRV] [2026-05-09 16:59:59.112] [error] \n[2026-05-09 16:59:59.112] [SRV] \n[2026-05-09 16:59:59.117] [SRV] [2026-05-09 16:59:59.117] [error] [comfy-env] Scanning nodes metadata (isolation root)...\n[2026-05-09 16:59:59.118] [SRV] [2026-05-09 16:59:59.118] [error] \n[2026-05-09 16:59:59.118] [SRV] \n[2026-05-09 16:59:59.159] [SRV] [2026-05-09 16:59:59.159] [error] [comfy-env] Cache hit for nodes: 125 nodes\n[2026-05-09 16:59:59.160] [SRV] [2026-05-09 16:59:59.160] [error] \n[2026-05-09 16:59:59.160] [SRV] [comfy-env] Scanned nodes root: 125 nodes (0.0s)\n[2026-05-09 16:59:59.162] [SRV] [2026-05-09 16:59:59.162] [error] \n[2026-05-09 16:59:59.162] [SRV] \n[2026-05-09 16:59:59.165] [SRV] [2026-05-09 16:59:59.165] [error] [comfy-env] Imported nodes root: 125 nodes (isolation)\n[2026-05-09 16:59:59.167] [SRV] [2026-05-09 16:59:59.167] [error] \n[2026-05-09 16:59:59.167] [SRV] [comfy-env] Registered 125 total nodes\n[2026-05-09 16:59:59.168] [SRV] [2026-05-09 16:59:59.168] [error] \n[2026-05-09 16:59:59.168] [SRV] \n[2026-05-09 16:59:59.171] [SRV] [2026-05-09 16:59:59.171] [info]  \n[2026-05-09 16:59:59.171] [SRV] Import times for custom nodes:\n[2026-05-09 16:59:59.171] [SRV] \n[2026-05-09 16:59:59.173] [SRV] [2026-05-09 16:59:59.173] [info]     0.0 seconds: C:\\Users\\runneradmin\\AppData\\Local\\Programs\\ComfyUI\\resources\\ComfyUI\\custom_nodes\\websocket_image_save.py\n[2026-05-09 16:59:59.173] [SRV]    4.0 seconds: C:\\Users\\runneradmin\\Documents\\ComfyUI\\custom_nodes\\comfyui-geometrypack\n[2026-05-09 16:59:59.173] [SRV] \n[2026-05-09 16:59:59.173] [SRV] \n[2026-05-09 16:59:59.177] [SRV] [2026-05-09 16:59:59.177] [info]  Context impl SQLiteImpl.\n[2026-05-09 16:59:59.177] [SRV] \n[2026-05-09 16:59:59.179] [SRV] [2026-05-09 16:59:59.179] [info]  Will assume non-transactional DDL.\n[2026-05-09 16:59:59.179] [SRV] \n[2026-05-09 16:59:59.185] [SRV] [2026-05-09 16:59:59.185] [error] Failed to initialize database. Please ensure you have installed the latest requirements. If the error persists, please report this as in future the database will be required: Could not acquire lock on database 'C:/Users/runneradmin/Documents/ComfyUI/user/comfyui.db'. Another ComfyUI process may already be using it. Use --database-url to specify a separate database file.\n[2026-05-09 16:59:59.185] [SRV] \n[2026-05-09 16:59:59.279] [SRV] [2026-05-09 16:59:59.279] [info]  Starting server\n[2026-05-09 16:59:59.279] [SRV] \n[2026-05-09 16:59:59.279] [SRV] \n[2026-05-09 16:59:59.280] [SRV] [2026-05-09 16:59:59.280] [info]  To see the GUI go to: http://127.0.0.1:8001\n[2026-05-09 16:59:59.280] [SRV] \n[2026-05-09 17:00:02.440] [SRV] [2026-05-09 17:00:02.440] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 17:00:02.440] [SRV] \n[2026-05-09 17:00:02.620] [SRV] [2026-05-09 17:00:02.620] [info]  FETCH DATA from: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Lib\\site-packages\\comfyui_manager\\custom-node-list.json\n[2026-05-09 17:00:02.660] [SRV] [2026-05-09 17:00:02.660] [info]   [DONE]\n[2026-05-09 17:00:02.660] [SRV] \n[2026-05-09 17:00:05.888] [SRV] [2026-05-09 17:00:05.888] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 17:00:05.888] [SRV] \n[2026-05-09 17:00:06.046] [SRV] [2026-05-09 17:00:06.046] [info]  FETCH DATA from: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.venv\\Lib\\site-packages\\comfyui_manager\\custom-node-list.json\n[2026-05-09 17:00:06.074] [SRV] [2026-05-09 17:00:06.074] [info]   [DONE]\n[2026-05-09 17:00:06.075] [SRV] [2026-05-09 17:00:06.075] [info]  \n[2026-05-09 17:00:06.075] [SRV] \n[2026-05-09 17:00:26.202] [SRV] [2026-05-09 17:00:26.202] [info]  got prompt\n[2026-05-09 17:00:26.202] [SRV] \n[2026-05-09 17:00:26.223] [SRV] [2026-05-09 17:00:26.223] [info]  [comfyui-geometrypack] python: C:\\Users\\runneradmin\\Documents\\ComfyUI\\.ce\\.pixi\\envs\\geometrypack-nodes\\python.exe\n[2026-05-09 17:00:26.225] [SRV] [2026-05-09 17:00:26.225] [info]  \n[2026-05-09 17:00:26.225] [SRV] [comfyui-geometrypack] sys_path sent to worker: ['C:\\\\Users\\\\runneradmin\\\\AppData\\\\Local\\\\Programs\\\\ComfyUI\\\\resources\\\\ComfyUI', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\custom_nodes\\\\comfyui-geometrypack', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\.ce\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\site-packages', 'C:\\\\Users\\\\runneradmin\\\\Documents\\\\ComfyUI\\\\custom_nodes\\\\comfyui-geometrypack']\n[2026-05-09 17:00:26.225] [SRV] \n[2026-05-09 17:00:31.691] [SRV] [2026-05-09 17:00:31.691] [error] [worker:comfyui-geometrypack] INFO: Found mesh in input folder: 3d/mount_textured.glb\n[2026-05-09 17:00:31.692] [SRV] [2026-05-09 17:00:31.692] [error] \n[2026-05-09 17:00:31.692] [SRV] \n[2026-05-09 17:00:31.698] [SRV] [2026-05-09 17:00:31.698] [error] [worker:comfyui-geometrypack] INFO: Loading: C:\\Users\\runneradmin\\Documents\\ComfyUI\\input\\3d/mount_textured.glb\n[2026-05-09 17:00:31.698] [SRV] \n[2026-05-09 17:00:31.714] [SRV] [2026-05-09 17:00:31.714] [error] [worker:comfyui-geometrypack] INFO: Converting Scene to single mesh (scene has 2 geometries)\n[2026-05-09 17:00:31.714] [SRV] \n[2026-05-09 17:00:31.790] [SRV] [2026-05-09 17:00:31.790] [error] [worker:comfyui-geometrypack] INFO: Initial mesh: 3604 vertices, 6964 faces\n[2026-05-09 17:00:31.790] [SRV] \n[2026-05-09 17:00:31.799] [SRV] [2026-05-09 17:00:31.799] [error] [worker:comfyui-geometrypack] INFO: Successfully loaded: 3604 vertices, 6964 faces\n[2026-05-09 17:00:31.800] [SRV] [2026-05-09 17:00:31.800] [error] \n[2026-05-09 17:00:31.800] [SRV] \n[2026-05-09 17:00:31.803] [SRV] [2026-05-09 17:00:31.803] [error] [worker:comfyui-geometrypack] INFO: Loaded: 3604 vertices, 6964 faces\n[2026-05-09 17:00:31.803] [SRV] \n[2026-05-09 17:00:32.572] [SRV] [2026-05-09 17:00:32.572] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...\n[2026-05-09 17:00:32.575] [SRV] [2026-05-09 17:00:32.575] [error] \n[2026-05-09 17:00:32.575] [SRV] [comfyui-geometrypack] Health check: ok\n[2026-05-09 17:00:32.575] [SRV] \n[2026-05-09 17:00:32.696] [SRV] [2026-05-09 17:00:32.696] [error] [worker:comfyui-geometrypack] INFO: Preparing preview: Mesh - 3604 vertices, 6964 faces\n[2026-05-09 17:00:32.696] [SRV] [worker:comfyui-geometrypack] INFO: Mode: texture\n[2026-05-09 17:00:32.696] [SRV] [worker:comfyui-geometrypack] INFO: Visual data - has_visual: True, kind: texture, texture: True, vertex_colors: False\n[2026-05-09 17:00:32.696] [SRV] [worker:comfyui-geometrypack] INFO: Using texture mode - GLB export\n[2026-05-09 17:00:32.696] [SRV] [worker:comfyui-geometrypack] INFO: Set alphaMode to OPAQUE for texture mode\n[2026-05-09 17:00:32.696] [SRV] \n[2026-05-09 17:00:32.910] [SRV] [2026-05-09 17:00:32.910] [error] [worker:comfyui-geometrypack] INFO: Exported GLB to: C:\\Users\\runneradmin\\Documents\\ComfyUI\\output\\preview_vtk_91e0bc42.glb\n[2026-05-09 17:00:32.910] [SRV] \n[2026-05-09 17:00:32.918] [SRV] [2026-05-09 17:00:32.918] [error] [worker:comfyui-geometrypack] INFO: Texture mode info: watertight=False, volume=None, area=720.728733148043, texture=True, vertex_colors=False\n[2026-05-09 17:00:32.918] [SRV] \n[2026-05-09 17:00:32.936] [SRV] [2026-05-09 17:00:32.936] [info]  Prompt executed in 6.73 seconds\n[2026-05-09 17:00:32.936] [SRV] ", "hardware": null}, "alpha_wrap": {"src": "screenshots/alpha_wrap_executed.png", "title": "alpha_wrap", "status": "pass", "duration": "16.00", "log": "", "hardware": null}, "batch_remesh": {"src": "screenshots/batch_remesh_executed.png", "title": "batch_remesh", "status": "pass", "duration": "26.00", "log": "", "hardware": null}, "boolean_ops": {"src": "screenshots/boolean_ops_executed.png", "title": "boolean_ops", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "decimate": {"src": "screenshots/decimate_executed.png", "title": "decimate", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "depth_map_to_mesh": {"src": "screenshots/depth_map_to_mesh_executed.png", "title": "depth_map_to_mesh", "status": "timeout", "duration": "600.00", "log": "", "hardware": null}, "fix_self_intersection": {"src": "screenshots/fix_self_intersection_executed.png", "title": "fix_self_intersection", "status": "pass", "duration": "9.00", "log": "", "hardware": null}, "mesh_info": {"src": "screenshots/mesh_info_executed.png", "title": "mesh_info", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "mesh_mesh_distance": {"src": "screenshots/mesh_mesh_distance_executed.png", "title": "mesh_mesh_distance", "status": "pass", "duration": "22.00", "log": "", "hardware": null}, "normals": {"src": "screenshots/normals_executed.png", "title": "normals", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "point_mesh_distance": {"src": "screenshots/point_mesh_distance_executed.png", "title": "point_mesh_distance", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "preview_mesh_threejs": {"src": "screenshots/preview_mesh_threejs_executed.png", "title": "preview_mesh_threejs", "status": "pass", "duration": "10.00", "log": "", "hardware": null}, "refine_mesh": {"src": "screenshots/refine_mesh_executed.png", "title": "refine_mesh", "status": "pass", "duration": "9.00", "log": "", "hardware": null}, "remesh_intersections": {"src": "screenshots/remesh_intersections_executed.png", "title": "remesh_intersections", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "remeshing": {"src": "screenshots/remeshing_executed.png", "title": "remeshing", "status": "pass", "duration": "48.00", "log": "", "hardware": null}, "sMOOth": {"src": "screenshots/sMOOth_executed.png", "title": "sMOOth", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "sharpen": {"src": "screenshots/sharpen_executed.png", "title": "sharpen", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "side_by_side_viewer": {"src": "screenshots/side_by_side_viewer_executed.png", "title": "side_by_side_viewer", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "skeleton_extraction": {"src": "screenshots/skeleton_extraction_executed.png", "title": "skeleton_extraction", "status": "pass", "duration": "13.00", "log": "", "hardware": null}, "surface_reconstruction": {"src": "screenshots/surface_reconstruction_executed.png", "title": "surface_reconstruction", "status": "pass", "duration": "17.00", "log": "", "hardware": null}, "test_loading": {"src": "screenshots/test_loading_executed.png", "title": "test_loading", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "transform": {"src": "screenshots/transform_executed.png", "title": "transform", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "uv_unwrap": {"src": "screenshots/uv_unwrap_executed.png", "title": "uv_unwrap", "status": "pass", "duration": "15.00", "log": "", "hardware": null}, "view_texture": {"src": "screenshots/view_texture_executed.png", "title": "view_texture", "status": "pass", "duration": "7.00", "log": "", "hardware": null}};
+        const workflowData = {"alpha_wrap": {"src": "screenshots/alpha_wrap_executed.png", "title": "alpha_wrap", "status": "pass", "duration": "17.00", "log": "", "hardware": null}, "batch_remesh": {"src": "screenshots/batch_remesh_executed.png", "title": "batch_remesh", "status": "pass", "duration": "19.00", "log": "", "hardware": null}, "boolean_ops": {"src": "screenshots/boolean_ops_executed.png", "title": "boolean_ops", "status": "pass", "duration": "9.00", "log": "", "hardware": null}, "boolean_ops_all": {"src": "screenshots/boolean_ops_all_executed.png", "title": "boolean_ops_all", "status": "pass", "duration": "10.00", "log": "", "hardware": null}, "decimate": {"src": "screenshots/decimate_executed.png", "title": "decimate", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "decimate_all": {"src": "screenshots/decimate_all_executed.png", "title": "decimate_all", "status": "pass", "duration": "16.00", "log": "", "hardware": null}, "depth_map_to_mesh": {"src": "screenshots/depth_map_to_mesh_executed.png", "title": "depth_map_to_mesh", "status": "timeout", "duration": "600.00", "log": "", "hardware": null}, "fix_normals_all": {"src": "screenshots/fix_normals_all_executed.png", "title": "fix_normals_all", "status": "pass", "duration": "10.00", "log": "", "hardware": null}, "fix_self_intersection": {"src": "screenshots/fix_self_intersection_executed.png", "title": "fix_self_intersection", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "mesh_info": {"src": "screenshots/mesh_info_executed.png", "title": "mesh_info", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "mesh_mesh_distance": {"src": "screenshots/mesh_mesh_distance_executed.png", "title": "mesh_mesh_distance", "status": "pass", "duration": "16.00", "log": "", "hardware": null}, "normals": {"src": "screenshots/normals_executed.png", "title": "normals", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "point_mesh_distance": {"src": "screenshots/point_mesh_distance_executed.png", "title": "point_mesh_distance", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "preview_mesh_threejs": {"src": "screenshots/preview_mesh_threejs_executed.png", "title": "preview_mesh_threejs", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "reconstruct_all": {"src": "screenshots/reconstruct_all_executed.png", "title": "reconstruct_all", "status": "pass", "duration": "19.00", "log": "", "hardware": null}, "refine_mesh": {"src": "screenshots/refine_mesh_executed.png", "title": "refine_mesh", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "remesh_intersections": {"src": "screenshots/remesh_intersections_executed.png", "title": "remesh_intersections", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "remeshing": {"src": "screenshots/remeshing_executed.png", "title": "remeshing", "status": "pass", "duration": "48.00", "log": "", "hardware": null}, "sMOOth": {"src": "screenshots/sMOOth_executed.png", "title": "sMOOth", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "sharpen": {"src": "screenshots/sharpen_executed.png", "title": "sharpen", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "sharpen_all": {"src": "screenshots/sharpen_all_executed.png", "title": "sharpen_all", "status": "pass", "duration": "75.00", "log": "", "hardware": null}, "side_by_side_viewer": {"src": "screenshots/side_by_side_viewer_executed.png", "title": "side_by_side_viewer", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "skeleton_all": {"src": "screenshots/skeleton_all_executed.png", "title": "skeleton_all", "status": "pass", "duration": "20.00", "log": "", "hardware": null}, "skeleton_extraction": {"src": "screenshots/skeleton_extraction_executed.png", "title": "skeleton_extraction", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "smooth_all": {"src": "screenshots/smooth_all_executed.png", "title": "smooth_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "surface_reconstruction": {"src": "screenshots/surface_reconstruction_executed.png", "title": "surface_reconstruction", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "test_loading": {"src": "screenshots/test_loading_executed.png", "title": "test_loading", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "transform": {"src": "screenshots/transform_executed.png", "title": "transform", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "uv_unwrap": {"src": "screenshots/uv_unwrap_executed.png", "title": "uv_unwrap", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "view_texture": {"src": "screenshots/view_texture_executed.png", "title": "view_texture", "status": "fail", "duration": "0.00", "log": "", "hardware": null}};
         const workflowNames = Object.keys(workflowData);
-        const videoData = {"sMOOth": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "fix_self_intersection": {"mp4": "driver.mp4", "duration_seconds": 9, "status": "pass"}, "uv_unwrap": {"mp4": "driver.mp4", "duration_seconds": 15, "status": "pass"}, "remeshing": {"mp4": "driver.mp4", "duration_seconds": 48, "status": "pass"}, "boolean_ops": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "batch_remesh": {"mp4": "driver.mp4", "duration_seconds": 26, "status": "pass"}, "mesh_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 22, "status": "pass"}, "normals": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "depth_map_to_mesh": {"mp4": "driver.mp4", "duration_seconds": 600, "status": "timeout"}, "alpha_wrap": {"mp4": "driver.mp4", "duration_seconds": 16, "status": "pass"}, "test_loading": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "mesh_info": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "skeleton_extraction": {"mp4": "driver.mp4", "duration_seconds": 13, "status": "pass"}, "refine_mesh": {"mp4": "driver.mp4", "duration_seconds": 9, "status": "pass"}, "decimate": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "point_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "side_by_side_viewer": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "transform": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "surface_reconstruction": {"mp4": "driver.mp4", "duration_seconds": 17, "status": "pass"}, "sharpen": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "preview_mesh_threejs": {"mp4": "driver.mp4", "duration_seconds": 10, "status": "pass"}, "remesh_intersections": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "view_texture": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}};
+        const videoData = {"sMOOth": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "fix_self_intersection": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "skeleton_all": {"mp4": "driver.mp4", "duration_seconds": 20, "status": "pass"}, "reconstruct_all": {"mp4": "driver.mp4", "duration_seconds": 19, "status": "pass"}, "uv_unwrap": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "remeshing": {"mp4": "driver.mp4", "duration_seconds": 48, "status": "pass"}, "boolean_ops": {"mp4": "driver.mp4", "duration_seconds": 9, "status": "pass"}, "batch_remesh": {"mp4": "driver.mp4", "duration_seconds": 19, "status": "pass"}, "mesh_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 16, "status": "pass"}, "normals": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "depth_map_to_mesh": {"mp4": "driver.mp4", "duration_seconds": 600, "status": "timeout"}, "alpha_wrap": {"mp4": "driver.mp4", "duration_seconds": 17, "status": "pass"}, "test_loading": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "mesh_info": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "smooth_all": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "skeleton_extraction": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "refine_mesh": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "decimate": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "point_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "boolean_ops_all": {"mp4": "driver.mp4", "duration_seconds": 10, "status": "pass"}, "side_by_side_viewer": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "decimate_all": {"mp4": "driver.mp4", "duration_seconds": 16, "status": "pass"}, "transform": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "surface_reconstruction": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "sharpen": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "preview_mesh_threejs": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "sharpen_all": {"mp4": "driver.mp4", "duration_seconds": 75, "status": "pass"}, "remesh_intersections": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "view_texture": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "fix_normals_all": {"mp4": "driver.mp4", "duration_seconds": 10, "status": "pass"}};
 
         const inIframe = window !== window.top;
         let currentWorkflow = null;
