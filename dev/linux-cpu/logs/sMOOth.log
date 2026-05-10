@@ -16,22 +16,22 @@ Capturing execution frames: sMOOth.json
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-1.264590737186599,0.4315551722479547,-0.956898
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-1.264590737186599,0.4315551722479547,-0.956898
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-1.264590737186599,0.4315551722479547,-0.956898
+  [ComfyUI]   Node 3: GeomPackLoadMesh
+  [ComfyUI]   Node 3: GeomPackLoadMesh
+  [ComfyUI]   Node 3: GeomPackLoadMesh
+  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI]   Node 5: GeomPackSmoothMesh
+  [ComfyUI]   Node 5: GeomPackSmoothMesh
+  [ComfyUI]   Node 5: GeomPackSmoothMesh
+  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 1, "backend.mu": -0.8, "trimesh": ["3", 0]}
+  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 1, "backend.mu": -0.8, "trimesh": ["3", 0]}
+  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 1, "backend.mu": -0.8, "trimesh": ["3", 0]}
   Queuing workflow for execution...
-  [ComfyUI]   Node 3: GeomPackLoadMesh
-  [ComfyUI]   Node 3: GeomPackLoadMesh
-  [ComfyUI]   Node 3: GeomPackLoadMesh
-  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
-  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
-  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
-  [ComfyUI]   Node 5: GeomPackSmoothMesh
-  [ComfyUI]   Node 5: GeomPackSmoothMesh
-  [ComfyUI]   Node 5: GeomPackSmoothMesh
-  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 1, "backend.mu": -0.8, "trimesh": ["3", 0]}
-  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 1, "backend.mu": -0.8, "trimesh": ["3", 0]}
-  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 1, "backend.mu": -0.8, "trimesh": ["3", 0]}
-  [ComfyUI] Generated prompt_id: 67351383-3b91-4032-89f8-75715d898c19
-  [ComfyUI] Generated prompt_id: 67351383-3b91-4032-89f8-75715d898c19
-  [ComfyUI] Generated prompt_id: 67351383-3b91-4032-89f8-75715d898c19
+  [ComfyUI] Generated prompt_id: 68b14c10-110b-4f60-9992-4a16e9371f09
+  [ComfyUI] Generated prompt_id: 68b14c10-110b-4f60-9992-4a16e9371f09
+  [ComfyUI] Generated prompt_id: 68b14c10-110b-4f60-9992-4a16e9371f09
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
@@ -56,39 +56,9 @@ Capturing execution frames: sMOOth.json
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/tmp/comfyui_pvenv_tnw8pasn/persistent_worker.py', 'abstract://comfy_worker_d1d8ea262c49']...
-  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/tmp/comfyui_pvenv_tnw8pasn/persistent_worker.py', 'abstract://comfy_worker_d1d8ea262c49']...
-  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/tmp/comfyui_pvenv_tnw8pasn/persistent_worker.py', 'abstract://comfy_worker_d1d8ea262c49']...
-  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_d1d8ea262c49 (abstract, no filesystem path)
-  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_d1d8ea262c49 (abstract, no filesystem path)
-  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_d1d8ea262c49 (abstract, no filesystem path)
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI]  Closed: Sun May 10 20:11:19 2026
-  [ComfyUI]  Closed: Sun May 10 20:11:19 2026
-  [ComfyUI]  Closed: Sun May 10 20:11:19 2026
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] worker started/confirmed
@@ -104,14 +74,12 @@ Capturing execution frames: sMOOth.json
   [ComfyUI] [SubprocessWorker] call_id=112 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=112 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=112 sending call_method
-  Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=2ms shot=83ms unfreeze=4ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/input/3d/cow.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/input/3d/cow.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/input/3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/input/3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/input/3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/input/3d/cow.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
@@ -124,9 +92,9 @@ Capturing execution frames: sMOOth.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (2.44s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (2.44s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (2.44s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.03s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
@@ -214,9 +182,9 @@ Capturing execution frames: sMOOth.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.02s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.02s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.02s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
@@ -271,12 +239,12 @@ Capturing execution frames: sMOOth.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/output/preview_dual_1_9bff786c.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/output/preview_dual_1_9bff786c.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/output/preview_dual_1_9bff786c.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/output/preview_dual_2_9bff786c.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/output/preview_dual_2_9bff786c.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2004/ComfyUI/output/preview_dual_2_9bff786c.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/output/preview_dual_1_80862743.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/output/preview_dual_1_80862743.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/output/preview_dual_1_80862743.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/output/preview_dual_2_80862743.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/output/preview_dual_2_80862743.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2039/ComfyUI/output/preview_dual_2_80862743.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
@@ -286,17 +254,17 @@ Capturing execution frames: sMOOth.json
   [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.02s): result: NodeOutput
   [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.02s): result: NodeOutput
   [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.02s): result: NodeOutput
-  [ComfyUI] Prompt executed in 2.61 seconds
-  [ComfyUI] Prompt executed in 2.61 seconds
-  [ComfyUI] Prompt executed in 2.61 seconds
+  [ComfyUI] Prompt executed in 0.08 seconds
+  [ComfyUI] Prompt executed in 0.08 seconds
+  [ComfyUI] Prompt executed in 0.08 seconds
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=2.9s)
-  [capture-node] freeze=106ms shot=267ms unfreeze=0ms saved=True
-  Execution complete (t=2.9s)
-  Captured 3 unique frames over 3.34s
+  Frame 2 saved (frame_001.jpg, t=0.5s)
+  [capture-node] freeze=114ms shot=307ms unfreeze=0ms saved=True
+  Execution complete (t=0.5s)
+  Captured 2 unique frames over 0.94s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177844, canvas=370x485, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41899/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177844, canvas=370x485, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: sMOOth_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 4 video frames
+    Captured 3 video frames
