@@ -1,17 +1,197 @@
 Capturing execution frames: normals.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Prompt has 4 nodes
+  [ComfyUI] Prompt has 4 nodes
+  [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI]   Node 2: GeomPackCheckNormals
+  [ComfyUI]   Node 2: GeomPackCheckNormals
   Queuing workflow for execution...
+  [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["1", 0]}
+  [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["1", 0]}
+  [ComfyUI]   Node 3: GeomPackComputeNormals
+  [ComfyUI]   Node 3: GeomPackComputeNormals
+  [ComfyUI]     Inputs: {"smooth_vertex_normals": "true", "trimesh": ["1", 0]}
+  [ComfyUI]     Inputs: {"smooth_vertex_normals": "true", "trimesh": ["1", 0]}
+  [ComfyUI]   Node 7: GeomPackPreviewMeshVTK
+  [ComfyUI]   Node 7: GeomPackPreviewMeshVTK
+  [ComfyUI]     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}", "trimesh": ["
+  [ComfyUI]     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}", "trimesh": ["
+  [ComfyUI] Generated prompt_id: 562949bd-21aa-4214-bf53-d0e895387bef
+  [ComfyUI] Generated prompt_id: 562949bd-21aa-4214-bf53-d0e895387bef
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] got prompt
+  [ComfyUI] got prompt
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=76 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=76 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0302/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0302/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.22s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.22s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackCheckNormals: trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackCheckNormals: trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair.check_normals.CheckNormalsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair.check_normals.CheckNormalsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=77 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=77 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh with 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh with 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Winding: True, Watertight: True, Degenerate: 1
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Winding: True, Watertight: True, Degenerate: 1
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackCheckNormals done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCheckNormals done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackComputeNormals: smooth_vertex_normals: 'true', trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackComputeNormals: smooth_vertex_normals: 'true', trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair.compute_normals.ComputeNormalsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair.compute_normals.ComputeNormalsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=78 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=78 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh with 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh with 56203 vertices, 112402 faces
   Node executed (1 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=0.6s)
-  [capture-node] freeze=2ms shot=101ms unfreeze=4ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Computed smooth vertex normals
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Computed smooth vertex normals
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackComputeNormals done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackComputeNormals done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshVTK: mode: 'fields', trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshVTK: mode: 'fields', trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_vtk.PreviewMeshVTKNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_vtk.PreviewMeshVTKNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=79 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=79 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Visual data - has_visual: True, kind: None, texture: False, vertex_colors: False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Visual data - has_visual: True, kind: None, texture: False, vertex_colors: False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP export
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP export
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0302/ComfyUI/output/preview_vtk_ac4a4d15.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0302/ComfyUI/output/preview_vtk_ac4a4d15.vtp
+  Frame 2 saved (frame_001.jpg, t=0.7s)
+  [capture-node] freeze=2ms shot=89ms unfreeze=3ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_x (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_x (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_y (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_y (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_z (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_z (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_magnitude (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: normal_magnitude (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0302/ComfyUI/output/preview_vtk_ac4a4d15.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0302/ComfyUI/output/preview_vtk_ac4a4d15.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Vertex attributes: ['normal_x', 'normal_y', 'normal_z', 'normal_magnitude']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Vertex attributes: ['normal_x', 'normal_y', 'normal_z', 'normal_magnitude']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Face attributes: ['stl']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Face attributes: ['stl']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=True, volume=279628.2991519195, area=29684.951065464225, fields=['normal_x', 'normal_y', 'normal_z', 'normal_magnitude', 'face.stl']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=True, volume=279628.2991519195, area=29684.951065464225, fields=['normal_x', 'normal_y', 'normal_z', 'normal_magnitude', 'face.stl']
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshVTK done (0.69s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshVTK done (0.69s): result: NodeOutput
+  [ComfyUI] Prompt executed in 1.12 seconds
+  [ComfyUI] Prompt executed in 1.12 seconds
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=1.4s)
-  [capture-node] freeze=25ms shot=713ms unfreeze=0ms saved=True
-  Execution complete (t=1.4s)
-  Captured 3 unique frames over 2.14s
+  Frame 3 saved (frame_002.jpg, t=1.5s)
+  [capture-node] freeze=663ms shot=120ms unfreeze=0ms saved=True
+  Execution complete (t=1.5s)
+  Captured 3 unique frames over 2.32s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17783435, canvas=486x348, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41882/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1778382, canvas=486x348, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: normals_executed.png
   [timing] final_screenshot: 0.2s
