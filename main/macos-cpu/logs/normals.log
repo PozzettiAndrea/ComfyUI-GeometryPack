@@ -1,18 +1,7 @@
 Capturing execution frames: normals.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Node executed (1 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=0.8s)
-  [capture-node] freeze=4ms shot=186ms unfreeze=3ms saved=True
-  Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=1.3s)
-  [capture-node] freeze=234ms shot=165ms unfreeze=0ms saved=True
-  Execution complete (t=1.3s)
-  Captured 3 unique frames over 1.71s
-  [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=17783471, canvas=486x348, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: normals_executed.png
-  [timing] final_screenshot: 0.3s
-    Captured 4 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 4 nodes, missing class_type: [1,2,3,7], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 4 nodes, missing class_type: [1,2,3,7], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}

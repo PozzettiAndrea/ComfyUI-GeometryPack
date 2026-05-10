@@ -1,16 +1,17 @@
 {
-  "timestamp": "2026-05-09T16:57:27.186921+00:00",
+  "timestamp": "2026-05-10T14:57:35.234300+00:00",
   "platform": "linux",
   "hardware": {
     "os": "Linux-6.8.0-107-generic-x86_64-with-glibc2.35",
     "cpu": "AMD Ryzen 5 3600 6-Core Processor",
     "gpu": "NVIDIA GeForce RTX 5060"
   },
-  "commit_hash": "fb2170cb1254be0a131d221c17a78fec9cc204af",
+  "commit_hash": "d5240c61c880b2b07e9caf73047b2e97d46e4605",
+  "run_url": null,
   "success": true,
   "summary": {
-    "total": 23,
-    "passed": 0,
+    "total": 33,
+    "passed": 3,
     "failed": 0
   },
   "workflows": [
@@ -36,6 +37,13 @@
       "hardware": null
     },
     {
+      "name": "boolean_ops_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "decimate",
       "status": "skipped",
       "duration_seconds": 0,
@@ -43,7 +51,44 @@
       "hardware": null
     },
     {
+      "name": "decimate_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "depth_map_to_mesh",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
+      "name": "fill_holes_all",
+      "status": "pass",
+      "duration_seconds": 14.73,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.8.0-107-generic-x86_64-with-glibc2.35",
+        "cpu": "AMD Ryzen 5 3600 6-Core Processor",
+        "gpu": "NVIDIA GeForce RTX 5060"
+      },
+      "resources": {
+        "ram": {
+          "peak": 2.3,
+          "avg": 1.65
+        },
+        "total_ram_gb": 31.3,
+        "samples": 15,
+        "vram": {
+          "peak": 0.32,
+          "avg": 0.19
+        }
+      }
+    },
+    {
+      "name": "fix_normals_all",
       "status": "skipped",
       "duration_seconds": 0,
       "error": "Not configured for GPU runner",
@@ -92,6 +137,13 @@
       "hardware": null
     },
     {
+      "name": "reconstruct_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "refine_mesh",
       "status": "skipped",
       "duration_seconds": 0,
@@ -113,6 +165,29 @@
       "hardware": null
     },
     {
+      "name": "remeshing_all",
+      "status": "pass",
+      "duration_seconds": 159.92,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.8.0-107-generic-x86_64-with-glibc2.35",
+        "cpu": "AMD Ryzen 5 3600 6-Core Processor",
+        "gpu": "NVIDIA GeForce RTX 5060"
+      },
+      "resources": {
+        "ram": {
+          "peak": 3.4,
+          "avg": 3.25
+        },
+        "total_ram_gb": 31.3,
+        "samples": 155,
+        "vram": {
+          "peak": 0.83,
+          "avg": 0.4
+        }
+      }
+    },
+    {
       "name": "sMOOth",
       "status": "skipped",
       "duration_seconds": 0,
@@ -127,6 +202,13 @@
       "hardware": null
     },
     {
+      "name": "sharpen_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "side_by_side_viewer",
       "status": "skipped",
       "duration_seconds": 0,
@@ -134,7 +216,21 @@
       "hardware": null
     },
     {
+      "name": "skeleton_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "skeleton_extraction",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
+      "name": "smooth_all",
       "status": "skipped",
       "duration_seconds": 0,
       "error": "Not configured for GPU runner",
@@ -167,6 +263,29 @@
       "duration_seconds": 0,
       "error": "Not configured for GPU runner",
       "hardware": null
+    },
+    {
+      "name": "uv_unwrap_all",
+      "status": "pass",
+      "duration_seconds": 25.0,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.8.0-107-generic-x86_64-with-glibc2.35",
+        "cpu": "AMD Ryzen 5 3600 6-Core Processor",
+        "gpu": "NVIDIA GeForce RTX 5060"
+      },
+      "resources": {
+        "ram": {
+          "peak": 3.36,
+          "avg": 3.34
+        },
+        "total_ram_gb": 31.3,
+        "samples": 25,
+        "vram": {
+          "peak": 0.41,
+          "avg": 0.38
+        }
+      }
     },
     {
       "name": "view_texture",

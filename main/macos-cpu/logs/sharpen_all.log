@@ -1,44 +1,7 @@
 Capturing execution frames: sharpen_all.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Frame 2 saved (frame_001.jpg, t=2.4s)
-  [capture-periodic] freeze=3ms shot=260ms unfreeze=27ms saved=True
-  Frame 3 saved (frame_002.jpg, t=4.8s)
-  [capture-periodic] freeze=2ms shot=191ms unfreeze=29ms saved=True
-  Node executed (1 total), capturing...
-  Frame 4 saved (frame_003.jpg, t=5.9s)
-  [capture-node] freeze=4ms shot=185ms unfreeze=3ms saved=True
-  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (64%) swap=0.0/0.0GB (0%) cpu=85% browser_rss=0.87GB
-  [capture-loop] iter=100 t=12.5s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (64%) swap=0.0/0.0GB (0%) cpu=96% browser_rss=0.88GB
-  [capture-loop] iter=150 t=18.8s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (64%) swap=0.0/0.0GB (0%) cpu=98% browser_rss=0.77GB
-  Node executed (2 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=22.6s)
-  [capture-node] freeze=7ms shot=189ms unfreeze=3ms saved=True
-  Node executed (4 total), capturing...
-  Frame 6 saved (frame_005.jpg, t=23.1s)
-  [capture-node] freeze=3ms shot=182ms unfreeze=3ms saved=True
-  Node executed (5 total), capturing...
-  Frame 7 saved (frame_006.jpg, t=24.8s)
-  [capture-node] freeze=4ms shot=227ms unfreeze=3ms saved=True
-  Node executed (7 total), capturing...
-  Frame 8 saved (frame_007.jpg, t=25.4s)
-  [capture-node] freeze=75ms shot=299ms unfreeze=20ms saved=True
-  [capture-loop] iter=200 t=26.5s state={'complete': False, 'error': None, 'executedCount': 7, 'wsState': 1} eval_ms=3 ram=3.5/7.0GB (64%) swap=0.0/0.0GB (0%) cpu=94% browser_rss=0.83GB
-  Frame 9 saved (frame_008.jpg, t=27.8s)
-  [capture-periodic] freeze=2ms shot=205ms unfreeze=14ms saved=True
-  Node executed (8 total), capturing...
-  Frame 10 saved (frame_009.jpg, t=29.9s)
-  [capture-node] freeze=133ms shot=362ms unfreeze=144ms saved=True
-  Node executed (9 total), capturing...
-  Frame 11 saved (frame_010.jpg, t=30.8s)
-  [capture-node] freeze=3ms shot=210ms unfreeze=0ms saved=True
-  Execution complete (t=30.8s)
-  Captured 11 unique frames over 31.06s
-  [debug] iframes: 2
-  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177834, canvas=368x195, rafFrozen=True
-  [debug]   iframe[1]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=177834, canvas=368x195, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: sharpen_all_executed.png
-  [timing] final_screenshot: 0.5s
-    Captured 12 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 10 nodes, missing class_type: [1,2,4,5,6,8,9,10,11,15], sample: {"inputs":{"UNKNOWN":"3d/noisy/Fandisk0.3/Noisy.obj"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 10 nodes, missing class_type: [1,2,4,5,6,8,9,10,11,15], sample: {"inputs":{"UNKNOWN":"3d/noisy/Fandisk0.3/Noisy.obj"},"_meta":{}}

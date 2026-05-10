@@ -1,25 +1,7 @@
 Capturing execution frames: remeshing.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Frame 2 saved (frame_001.jpg, t=2.3s)
-  [capture-periodic] freeze=3ms shot=327ms unfreeze=5ms saved=True
-  Frame 3 saved (frame_002.jpg, t=4.7s)
-  [capture-periodic] freeze=4ms shot=189ms unfreeze=15ms saved=True
-  [capture-loop] iter=50 t=6.3s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.6/7.0GB (62%) swap=0.0/0.0GB (0%) cpu=83% browser_rss=0.75GB
-  [capture-loop] iter=100 t=12.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.6/7.0GB (62%) swap=0.0/0.0GB (0%) cpu=96% browser_rss=0.69GB
-  [capture-loop] iter=150 t=18.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=3.6/7.0GB (62%) swap=0.0/0.0GB (0%) cpu=85% browser_rss=0.68GB
-  Node executed (1 total), capturing...
-  Frame 4 saved (frame_003.jpg, t=18.6s)
-  [capture-node] freeze=4ms shot=247ms unfreeze=27ms saved=True
-  Node executed (2 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=19.2s)
-  [capture-node] freeze=57ms shot=493ms unfreeze=0ms saved=True
-  Execution complete (t=19.2s)
-  Captured 5 unique frames over 19.79s
-  [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778347, canvas=370x485, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: remeshing_executed.png
-  [timing] final_screenshot: 0.4s
-    Captured 6 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 3 nodes, missing class_type: [1,25,27], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 3 nodes, missing class_type: [1,25,27], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}

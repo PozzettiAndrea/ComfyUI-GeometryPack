@@ -1,28 +1,40 @@
 {
+  "timestamp": "2026-05-10T03:56:03.895781+00:00",
+  "platform": "windows_desktop",
+  "hardware": {
+    "os": "Windows-2025Server-10.0.26100-SP0",
+    "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+  },
+  "commit_hash": "819d38de74687cf803ab440583a00873951d07f0",
+  "success": false,
+  "summary": {
+    "total": 30,
+    "passed": 21,
+    "failed": 8
+  },
   "workflows": [
-    {
-      "name": "system",
-      "status": "pass",
-      "duration_seconds": 0,
-      "error": null,
-      "hardware": null
-    },
     {
       "name": "alpha_wrap",
       "status": "pass",
-      "duration_seconds": 16,
+      "duration_seconds": 17,
       "error": null
     },
     {
       "name": "batch_remesh",
       "status": "pass",
-      "duration_seconds": 26,
+      "duration_seconds": 19,
       "error": null
     },
     {
       "name": "boolean_ops",
       "status": "pass",
-      "duration_seconds": 8,
+      "duration_seconds": 9,
+      "error": null
+    },
+    {
+      "name": "boolean_ops_all",
+      "status": "pass",
+      "duration_seconds": 10,
       "error": null
     },
     {
@@ -32,15 +44,27 @@
       "error": null
     },
     {
+      "name": "decimate_all",
+      "status": "pass",
+      "duration_seconds": 16,
+      "error": null
+    },
+    {
       "name": "depth_map_to_mesh",
       "status": "timeout",
       "duration_seconds": 600,
       "error": "no execution_success/error in 10min"
     },
     {
+      "name": "fix_normals_all",
+      "status": "pass",
+      "duration_seconds": 10,
+      "error": null
+    },
+    {
       "name": "fix_self_intersection",
       "status": "pass",
-      "duration_seconds": 9,
+      "duration_seconds": 8,
       "error": null
     },
     {
@@ -52,7 +76,7 @@
     {
       "name": "mesh_mesh_distance",
       "status": "pass",
-      "duration_seconds": 22,
+      "duration_seconds": 16,
       "error": null
     },
     {
@@ -70,13 +94,19 @@
     {
       "name": "preview_mesh_threejs",
       "status": "pass",
-      "duration_seconds": 10,
+      "duration_seconds": 8,
+      "error": null
+    },
+    {
+      "name": "reconstruct_all",
+      "status": "pass",
+      "duration_seconds": 19,
       "error": null
     },
     {
       "name": "refine_mesh",
       "status": "pass",
-      "duration_seconds": 9,
+      "duration_seconds": 8,
       "error": null
     },
     {
@@ -93,14 +123,20 @@
     },
     {
       "name": "sMOOth",
-      "status": "pass",
-      "duration_seconds": 6,
-      "error": null
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card sMOOth not found in section"
     },
     {
       "name": "sharpen",
       "status": "pass",
-      "duration_seconds": 8,
+      "duration_seconds": 7,
+      "error": null
+    },
+    {
+      "name": "sharpen_all",
+      "status": "pass",
+      "duration_seconds": 75,
       "error": null
     },
     {
@@ -110,40 +146,52 @@
       "error": null
     },
     {
-      "name": "skeleton_extraction",
+      "name": "skeleton_all",
       "status": "pass",
-      "duration_seconds": 13,
+      "duration_seconds": 20,
       "error": null
+    },
+    {
+      "name": "skeleton_extraction",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card skeleton_extraction not found in section"
+    },
+    {
+      "name": "smooth_all",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card smooth_all not found in section"
     },
     {
       "name": "surface_reconstruction",
-      "status": "pass",
-      "duration_seconds": 17,
-      "error": null
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card surface_reconstruction not found in section"
     },
     {
       "name": "test_loading",
-      "status": "pass",
-      "duration_seconds": 8,
-      "error": null
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card test_loading not found in section"
     },
     {
       "name": "transform",
-      "status": "pass",
-      "duration_seconds": 6,
-      "error": null
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card transform not found in section"
     },
     {
       "name": "uv_unwrap",
-      "status": "pass",
-      "duration_seconds": 15,
-      "error": null
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card uv_unwrap not found in section"
     },
     {
       "name": "view_texture",
-      "status": "pass",
-      "duration_seconds": 7,
-      "error": null
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card view_texture not found in section"
     }
   ]
 }

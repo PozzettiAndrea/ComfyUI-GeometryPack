@@ -1,17 +1,381 @@
 Capturing execution frames: skeleton_extraction.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Prompt has 4 nodes
+  [ComfyUI] Prompt has 4 nodes
+  [ComfyUI] Prompt has 4 nodes
+  [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI]   Node 3: GeomPackMeshFromSkeleton
+  [ComfyUI]   Node 3: GeomPackMeshFromSkeleton
+  [ComfyUI]   Node 3: GeomPackMeshFromSkeleton
+  [ComfyUI]     Inputs: {"joint_radius": 0.02, "bone_radius": 0.01, "skeleton": ["6", 0]}
+  [ComfyUI]     Inputs: {"joint_radius": 0.02, "bone_radius": 0.01, "skeleton": ["6", 0]}
+  [ComfyUI]     Inputs: {"joint_radius": 0.02, "bone_radius": 0.01, "skeleton": ["6", 0]}
+  [ComfyUI]   Node 5: GeomPackPreviewMeshDual
+  [ComfyUI]   Node 5: GeomPackPreviewMeshDual
+  [ComfyUI]   Node 5: GeomPackPreviewMeshDual
+  [ComfyUI]     Inputs: {"layout": "overlay", "mode": "fields", "opacity_1": 0.5, "opacity_2": 0.5, "preview_dual": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[1.3662524844520427,1.1685429744811375,-2.017582
+  [ComfyUI]     Inputs: {"layout": "overlay", "mode": "fields", "opacity_1": 0.5, "opacity_2": 0.5, "preview_dual": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[1.3662524844520427,1.1685429744811375,-2.017582
+  [ComfyUI]     Inputs: {"layout": "overlay", "mode": "fields", "opacity_1": 0.5, "opacity_2": 0.5, "preview_dual": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[1.3662524844520427,1.1685429744811375,-2.017582
   Queuing workflow for execution...
-  Frame 2 saved (frame_001.jpg, t=2.3s)
-  [capture-periodic] freeze=2ms shot=92ms unfreeze=4ms saved=True
+  [ComfyUI]   Node 6: GeomPackExtractSkeleton
+  [ComfyUI]   Node 6: GeomPackExtractSkeleton
+  [ComfyUI]   Node 6: GeomPackExtractSkeleton
+  [ComfyUI]     Inputs: {"fix_mesh": "wavefront", "normalize": false, "backend": "wavefront", "backend.waves": 1, "backend.step_size": 1, "trimesh": ["1", 0]}
+  [ComfyUI]     Inputs: {"fix_mesh": "wavefront", "normalize": false, "backend": "wavefront", "backend.waves": 1, "backend.step_size": 1, "trimesh": ["1", 0]}
+  [ComfyUI]     Inputs: {"fix_mesh": "wavefront", "normalize": false, "backend": "wavefront", "backend.waves": 1, "backend.step_size": 1, "trimesh": ["1", 0]}
+  [ComfyUI] Generated prompt_id: 929a9bd3-cd8c-4c6c-8423-d02412453682
+  [ComfyUI] Generated prompt_id: 929a9bd3-cd8c-4c6c-8423-d02412453682
+  [ComfyUI] Generated prompt_id: 929a9bd3-cd8c-4c6c-8423-d02412453682
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] got prompt
+  [ComfyUI] got prompt
+  [ComfyUI] got prompt
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/cow.off'
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/cow.off'
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/cow.off'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=156 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=156 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=156 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/input/3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/input/3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/input/3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 2761 vertices, 5520 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackExtractSkeleton: fix_mesh: True, normalize: False, backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackExtractSkeleton: fix_mesh: True, normalize: False, backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackExtractSkeleton: fix_mesh: True, normalize: False, backend: dict, trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.extract_skeleton.ExtractSkeleton.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.extract_skeleton.ExtractSkeleton.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.extract_skeleton.ExtractSkeleton.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=157 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=157 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=157 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Extract Skeleton dispatch: wavefront -> GeomPackSkeleton_Wavefront
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Extract Skeleton dispatch: wavefront -> GeomPackSkeleton_Wavefront
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Extract Skeleton dispatch: wavefront -> GeomPackSkeleton_Wavefront
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackExtractSkeleton done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackExtractSkeleton done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackExtractSkeleton done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackSkeleton_Wavefront: trimesh: Trimesh, fix_mesh: True, normalize: False, waves: 1, step_size: 1.0
+  [ComfyUI] [comfy-env] Running GeomPackSkeleton_Wavefront: trimesh: Trimesh, fix_mesh: True, normalize: False, waves: 1, step_size: 1.0
+  [ComfyUI] [comfy-env] Running GeomPackSkeleton_Wavefront: trimesh: Trimesh, fix_mesh: True, normalize: False, waves: 1, step_size: 1.0
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.backends.wavefront.SkeletonWavefrontNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.backends.wavefront.SkeletonWavefrontNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.backends.wavefront.SkeletonWavefrontNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=158 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=158 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=158 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: wavefront
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: wavefront
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: wavefront
+  [ComfyUI] 
+  [ComfyUI] 
+  [ComfyUI] 
+  [ComfyUI] Skeletonizing:   0%|          | 0/2761 [00:00<?, ?it/s]
+  [ComfyUI] Skeletonizing:   0%|          | 0/2761 [00:00<?, ?it/s]
+  [ComfyUI] Skeletonizing:   0%|          | 0/2761 [00:00<?, ?it/s]
+  [ComfyUI] Skeletonizing: 100%|██████████| 2761/2761 [00:00<00:00, 320070.57it/s]
+  [ComfyUI] Skeletonizing: 100%|██████████| 2761/2761 [00:00<00:00, 320070.57it/s]
+  [ComfyUI] Skeletonizing: 100%|██████████| 2761/2761 [00:00<00:00, 320070.57it/s]
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackSkeleton_Wavefront done (0.07s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSkeleton_Wavefront done (0.07s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSkeleton_Wavefront done (0.07s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackMeshFromSkeleton: joint_radius: 0.02, bone_radius: 0.01, skeleton: dict
+  [ComfyUI] [comfy-env] Running GeomPackMeshFromSkeleton: joint_radius: 0.02, bone_radius: 0.01, skeleton: dict
+  [ComfyUI] [comfy-env] Running GeomPackMeshFromSkeleton: joint_radius: 0.02, bone_radius: 0.01, skeleton: dict
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.mesh_from_skeleton.SkeletonToMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.mesh_from_skeleton.SkeletonToMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.skeleton.mesh_from_skeleton.SkeletonToMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=159 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=159 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=159 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'parent_pid', 'fd', 'storage_size']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'parent_pid', 'fd', 'storage_size']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'parent_pid', 'fd', 'storage_size']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[96, 3]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[96, 3]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[96, 3]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([96, 3])
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([96, 3])
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([96, 3])
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'parent_pid', 'fd', 'storage_size']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'parent_pid', 'fd', 'storage_size']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'parent_pid', 'fd', 'storage_size']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[95, 2]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[95, 2]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[95, 2]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([95, 2])
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([95, 2])
+  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([95, 2])
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Creating solid mesh: 96 joints, 95 bones
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Creating solid mesh: 96 joints, 95 bones
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Creating solid mesh: 96 joints, 95 bones
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Skeleton metadata: scale=0.515, normalized=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Skeleton metadata: scale=0.515, normalized=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Skeleton metadata: scale=0.515, normalized=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input skeleton bounding box:
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input skeleton bounding box:
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input skeleton bounding box:
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Min: [-0.512, -0.315, -0.154]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Min: [-0.512, -0.315, -0.154]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Min: [-0.512, -0.315, -0.154]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Max: [0.519, 0.320, 0.138]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Max: [0.519, 0.320, 0.138]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Max: [0.519, 0.320, 0.138]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Size: [1.031, 0.635, 0.292]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Size: [1.031, 0.635, 0.292]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Size: [1.031, 0.635, 0.292]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Center: [0.003, 0.002, -0.008]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Center: [0.003, 0.002, -0.008]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Center: [0.003, 0.002, -0.008]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created mesh: 11118 vertices, 21472 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created mesh: 11118 vertices, 21472 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created mesh: 11118 vertices, 21472 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output mesh bounding box:
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output mesh bounding box:
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output mesh bounding box:
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Min: [-0.531, -0.334, -0.174]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Min: [-0.531, -0.334, -0.174]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Min: [-0.531, -0.334, -0.174]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Max: [0.538, 0.339, 0.158]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Max: [0.538, 0.339, 0.158]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Max: [0.538, 0.339, 0.158]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Size: [1.070, 0.674, 0.332]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Size: [1.070, 0.674, 0.332]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Size: [1.070, 0.674, 0.332]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Center: [0.003, 0.002, -0.008]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Center: [0.003, 0.002, -0.008]
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO:   Center: [0.003, 0.002, -0.008]
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackMeshFromSkeleton done (0.15s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshFromSkeleton done (0.15s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshFromSkeleton done (0.15s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'overlay', mode: 'fields', opacity_1: 0.5, opacity_2: 0.5, mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'overlay', mode: 'fields', opacity_1: 0.5, opacity_2: 0.5, mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'overlay', mode: 'fields', opacity_1: 0.5, opacity_2: 0.5, mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=160 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=160 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=160 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: overlay, Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: overlay, Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: overlay, Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 11118 vertices, 21472 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 11118 vertices, 21472 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 11118 vertices, 21472 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Added mesh_id field and red/blue colors for overlay
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Added mesh_id field and red/blue colors for overlay
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Added mesh_id field and red/blue colors for overlay
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/output/preview_dual_overlay_f5f13067.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/output/preview_dual_overlay_f5f13067.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/output/preview_dual_overlay_f5f13067.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (13879 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (13879 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (13879 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: mesh_id (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: mesh_id (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: mesh_id (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 13879 vertices, 26992 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 13879 vertices, 26992 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 13879 vertices, 26992 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported combined VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/output/preview_dual_overlay_f5f13067.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported combined VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/output/preview_dual_overlay_f5f13067.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported combined VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2120/ComfyUI/output/preview_dual_overlay_f5f13067.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Combined Mesh: 13879 vertices, 26992 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Combined Mesh: 13879 vertices, 26992 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Combined Mesh: 13879 vertices, 26992 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.14s): result: NodeOutput
+  [ComfyUI] Prompt executed in 0.41 seconds
+  [ComfyUI] Prompt executed in 0.41 seconds
+  [ComfyUI] Prompt executed in 0.41 seconds
   Node executed (1 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=2.8s)
-  [capture-node] freeze=58ms shot=141ms unfreeze=0ms saved=True
-  Execution complete (t=2.8s)
-  Captured 3 unique frames over 3.02s
+  Frame 2 saved (frame_001.jpg, t=0.7s)
+  [capture-node] freeze=163ms shot=170ms unfreeze=3ms saved=True
+  Execution complete (t=1.2s)
+  Captured 2 unique frames over 1.18s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=1778343, canvas=742x485, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41898/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177844, canvas=742x485, rafFrozen=False
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: skeleton_extraction_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 4 video frames
+    Captured 3 video frames

@@ -113,7 +113,7 @@
         }
 
         .progress-fill.has-failures {
-            background: linear-gradient(90deg, #3fb950 0%, #3fb950 0%, #f85149 0%, #f85149 100%);
+            background: linear-gradient(90deg, #3fb950 0%, #3fb950 66.66666666666666%, #f85149 66.66666666666666%, #f85149 100%);
             width: 100% !important;
             border-radius: 6px;
         }
@@ -924,7 +924,7 @@
     <header>
         <h1><a href="https://github.com/PozzettiAndrea/PozzettiAndrea/ComfyUI-GeometryPack">PozzettiAndrea/ComfyUI-GeometryPack</a> Test Results</h1>
         <div class="meta-chips">
-            
+            <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 110 16A8 8 0 018 0zm.5 4.5a.5.5 0 00-1 0v3.793L5.854 9.854a.5.5 0 10.708.708l1.853-1.854a.5.5 0 00.085-.094V4.5z"/></svg> 2026-05-10 04:03 UTC</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M2.5 4a.5.5 0 100 1 .5.5 0 000-1zM4 4.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zM2.5 7a.5.5 0 100 1 .5.5 0 000-1zM4 7.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7A.5.5 0 014 7.5zM2.5 10a.5.5 0 100 1 .5.5 0 000-1zM4 10.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5z"/></svg> macOS-15.7.4-arm64-arm-64bit</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M5 0a.5.5 0 01.5.5V2h1V.5a.5.5 0 011 0V2h1V.5a.5.5 0 011 0V2h.5A2.5 2.5 0 0112.5 4.5H14v1h-1.5v1H14v1h-1.5v1H14v1h-1.5A2.5 2.5 0 0110 12h-.5v1.5a.5.5 0 01-1 0V12h-1v1.5a.5.5 0 01-1 0V12H6v1.5a.5.5 0 01-1 0V12h-.5A2.5 2.5 0 012 9.5H.5v-1H2v-1H.5v-1H2v-1H.5v-1H2A2.5 2.5 0 014.5 2V.5A.5.5 0 015 0zm-.5 4A1.5 1.5 0 003 5.5v4A1.5 1.5 0 004.5 11h6a1.5 1.5 0 001.5-1.5v-4A1.5 1.5 0 0010.5 4h-6z"/></svg> arm</span>
         </div>
     </header>
 
@@ -932,14 +932,14 @@
         <div class="summary">
             <div class="progress-wrapper">
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
+                    <div class="progress-fill has-failures" style="width: 66.66666666666666%"></div>
                 </div>
-                <span class="progress-label">0.0%</span>
+                <span class="progress-label">66.7%</span>
             </div>
             <div class="stats">
-                <span class="stat-badge stat-pass">0 passed</span>
-                
-                <span class="stat-total">0/0 tests</span>
+                <span class="stat-badge stat-pass">20 passed</span>
+                <span class="stat-badge stat-fail">9 failed</span>
+                <span class="stat-total">20/30 tests</span>
             </div>
         </div>
 
@@ -952,12 +952,83 @@
         </div>
         <div class="workflow-grid" id="workflow-grid">
             
-            <div class="workflow-card clickable " onclick="openLightboxByName('system')">
-                <div class="workflow-screenshot placeholder">No screenshot</div>
+            <div class="workflow-card clickable " onclick="openLightboxByName('sharpen')">
+                
+                <img class="workflow-screenshot" src="screenshots/sharpen_executed.png"
+                     alt="sharpen" loading="lazy">
+            
                 <div class="workflow-info">
                     <div class="workflow-header">
-                        <span class="workflow-name" title="system">system</span>
+                        <span class="workflow-name" title="sharpen">sharpen</span>
                         <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>9.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('alpha_wrap')">
+                
+                <img class="workflow-screenshot" src="screenshots/alpha_wrap_executed.png"
+                     alt="alpha_wrap" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="alpha_wrap">alpha_wrap</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>14.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('batch_remesh')">
+                
+                <img class="workflow-screenshot" src="screenshots/batch_remesh_executed.png"
+                     alt="batch_remesh" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="batch_remesh">batch_remesh</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('boolean_ops')">
+                
+                <img class="workflow-screenshot" src="screenshots/boolean_ops_executed.png"
+                     alt="boolean_ops" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="boolean_ops">boolean_ops</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>6.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('boolean_ops_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/boolean_ops_all_executed.png"
+                     alt="boolean_ops_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="boolean_ops_all">boolean_ops_all</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
                         <span>0.00s</span>
@@ -966,15 +1037,426 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('sharpen')">
-                <div class="workflow-screenshot placeholder">No screenshot</div>
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('decimate')">
+                
+                <img class="workflow-screenshot" src="screenshots/decimate_executed.png"
+                     alt="decimate" loading="lazy">
+            
                 <div class="workflow-info">
                     <div class="workflow-header">
-                        <span class="workflow-name" title="sharpen">sharpen</span>
+                        <span class="workflow-name" title="decimate">decimate</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('decimate_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/decimate_all_executed.png"
+                     alt="decimate_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="decimate_all">decimate_all</span>
                         <span class="workflow-badge pass">pass</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>23.00s</span>
+                        <span>16.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('depth_map_to_mesh')">
+                
+                <img class="workflow-screenshot" src="screenshots/depth_map_to_mesh_executed.png"
+                     alt="depth_map_to_mesh" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="depth_map_to_mesh">depth_map_to_mesh</span>
+                        <span class="workflow-badge timeout">timeout</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>600.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('fix_normals_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/fix_normals_all_executed.png"
+                     alt="fix_normals_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="fix_normals_all">fix_normals_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>11.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('fix_self_intersection')">
+                
+                <img class="workflow-screenshot" src="screenshots/fix_self_intersection_executed.png"
+                     alt="fix_self_intersection" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="fix_self_intersection">fix_self_intersection</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('mesh_info')">
+                
+                <img class="workflow-screenshot" src="screenshots/mesh_info_executed.png"
+                     alt="mesh_info" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="mesh_info">mesh_info</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('mesh_mesh_distance')">
+                
+                <img class="workflow-screenshot" src="screenshots/mesh_mesh_distance_executed.png"
+                     alt="mesh_mesh_distance" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="mesh_mesh_distance">mesh_mesh_distance</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>21.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('normals')">
+                
+                <img class="workflow-screenshot" src="screenshots/normals_executed.png"
+                     alt="normals" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="normals">normals</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>10.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('point_mesh_distance')">
+                
+                <img class="workflow-screenshot" src="screenshots/point_mesh_distance_executed.png"
+                     alt="point_mesh_distance" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="point_mesh_distance">point_mesh_distance</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>5.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('preview_mesh_threejs')">
+                
+                <img class="workflow-screenshot" src="screenshots/preview_mesh_threejs_executed.png"
+                     alt="preview_mesh_threejs" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="preview_mesh_threejs">preview_mesh_threejs</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>21.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('reconstruct_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/reconstruct_all_executed.png"
+                     alt="reconstruct_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="reconstruct_all">reconstruct_all</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('refine_mesh')">
+                
+                <img class="workflow-screenshot" src="screenshots/refine_mesh_executed.png"
+                     alt="refine_mesh" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="refine_mesh">refine_mesh</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>15.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('remesh_intersections')">
+                
+                <img class="workflow-screenshot" src="screenshots/remesh_intersections_executed.png"
+                     alt="remesh_intersections" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="remesh_intersections">remesh_intersections</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>22.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('remeshing')">
+                
+                <img class="workflow-screenshot" src="screenshots/remeshing_executed.png"
+                     alt="remeshing" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="remeshing">remeshing</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>68.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('sMOOth')">
+                
+                <img class="workflow-screenshot" src="screenshots/sMOOth_executed.png"
+                     alt="sMOOth" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="sMOOth">sMOOth</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>22.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('sharpen_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/sharpen_all_executed.png"
+                     alt="sharpen_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="sharpen_all">sharpen_all</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('side_by_side_viewer')">
+                
+                <img class="workflow-screenshot" src="screenshots/side_by_side_viewer_executed.png"
+                     alt="side_by_side_viewer" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="side_by_side_viewer">side_by_side_viewer</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/skeleton_all_executed.png"
+                     alt="skeleton_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="skeleton_all">skeleton_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>51.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_extraction')">
+                
+                <img class="workflow-screenshot" src="screenshots/skeleton_extraction_executed.png"
+                     alt="skeleton_extraction" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="skeleton_extraction">skeleton_extraction</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>14.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('smooth_all')">
+                
+                <img class="workflow-screenshot" src="screenshots/smooth_all_executed.png"
+                     alt="smooth_all" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="smooth_all">smooth_all</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>15.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('surface_reconstruction')">
+                
+                <img class="workflow-screenshot" src="screenshots/surface_reconstruction_executed.png"
+                     alt="surface_reconstruction" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="surface_reconstruction">surface_reconstruction</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('test_loading')">
+                
+                <img class="workflow-screenshot" src="screenshots/test_loading_executed.png"
+                     alt="test_loading" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="test_loading">test_loading</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>16.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('transform')">
+                
+                <img class="workflow-screenshot" src="screenshots/transform_executed.png"
+                     alt="transform" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="transform">transform</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('uv_unwrap')">
+                
+                <img class="workflow-screenshot" src="screenshots/uv_unwrap_executed.png"
+                     alt="uv_unwrap" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="uv_unwrap">uv_unwrap</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>31.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable " onclick="openLightboxByName('view_texture')">
+                
+                <img class="workflow-screenshot" src="screenshots/view_texture_executed.png"
+                     alt="view_texture" loading="lazy">
+            
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="view_texture">view_texture</span>
+                        <span class="workflow-badge pass">pass</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>14.00s</span>
                     </div>
                 </div>
             </div>
@@ -982,6 +1464,83 @@
         </div>
 
         
+        <div class="failed-section">
+            <h2>Failed Tests</h2>
+            
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">boolean_ops_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card boolean_ops_all not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">decimate</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card decimate not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">fix_self_intersection</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card fix_self_intersection not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">mesh_info</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card mesh_info not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">reconstruct_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card reconstruct_all not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">sharpen_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card sharpen_all not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">side_by_side_viewer</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card side_by_side_viewer not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">surface_reconstruction</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card surface_reconstruction not found in section</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">transform</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">card transform not found in section</div>
+            </div>
+        
+        </div>
+    
 
         
     </div>
@@ -1040,9 +1599,9 @@
             });
         }
 
-        const workflowData = {"system": {"src": "", "title": "system", "status": "pass", "duration": "0.00", "log": "[2026-05-09 14:59:04.625] [SRV] [2026-05-09 14:59:04.625] [info]  setup plugin alembic.autogenerate.schemas\n[2026-05-09 14:59:04.625] [SRV] setup plugin alembic.autogenerate.tables\n[2026-05-09 14:59:04.625] [SRV] setup plugin alembic.autogenerate.types\n[2026-05-09 14:59:04.625] [SRV] setup plugin alembic.autogenerate.constraints\n[2026-05-09 14:59:04.625] [SRV] setup plugin alembic.autogenerate.defaults\n[2026-05-09 14:59:04.625] [SRV] setup plugin alembic.autogenerate.comments\n[2026-05-09 14:59:04.625] [SRV] \n[2026-05-09 14:59:04.929] [SRV] [2026-05-09 14:59:04.929] [info]  comfy-aimdo os not supported Darwin\n[2026-05-09 14:59:04.929] [SRV] NOTE: comfy-aimdo is currently only support for Windows and Linux\n[2026-05-09 14:59:04.929] [SRV] \n[2026-05-09 14:59:05.431] [SRV] [2026-05-09 14:59:05.431] [info]  Adding extra search path custom_nodes /Users/runner/Documents/ComfyUI/custom_nodes\n[2026-05-09 14:59:05.431] [SRV] Adding extra search path download_model_base /Users/runner/Documents/ComfyUI/models\n[2026-05-09 14:59:05.431] [SRV] Adding extra search path custom_nodes /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes\n[2026-05-09 14:59:05.431] [SRV] Setting output directory to: /Users/runner/Documents/ComfyUI/output\n[2026-05-09 14:59:05.431] [SRV] Setting input directory to: /Users/runner/Documents/ComfyUI/input\n[2026-05-09 14:59:05.431] [SRV] Setting user directory to: /Users/runner/Documents/ComfyUI/user\n[2026-05-09 14:59:05.431] [SRV] \n[2026-05-09 14:59:08.118] [SRV] [2026-05-09 14:59:08.118] [info]  [START] Security scan\n[2026-05-09 14:59:08.118] [SRV] [DONE] Security scan\n[2026-05-09 14:59:08.118] [SRV] ** ComfyUI startup time: 2026-05-09 14:59:08.116\n[2026-05-09 14:59:08.118] [SRV] \n[2026-05-09 14:59:08.120] [SRV] [2026-05-09 14:59:08.120] [info]  ** Platform: Darwin\n[2026-05-09 14:59:08.120] [SRV] ** Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]\n[2026-05-09 14:59:08.120] [SRV] ** Python executable: /Users/runner/Documents/ComfyUI/.venv/bin/python\n[2026-05-09 14:59:08.120] [SRV] ** ComfyUI Path: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 14:59:08.120] [SRV] ** ComfyUI Base Folder Path: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 14:59:08.120] [SRV] ** User directory: /Users/runner/Documents/ComfyUI/user\n[2026-05-09 14:59:08.120] [SRV] ** ComfyUI-Manager config path: /Users/runner/Documents/ComfyUI/user/__manager/config.ini\n[2026-05-09 14:59:08.120] [SRV] ** Log path: /Users/runner/Documents/ComfyUI/user/comfyui.log\n[2026-05-09 14:59:08.120] [SRV] \n[2026-05-09 14:59:09.029] [SRV] [2026-05-09 14:59:09.029] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-09 14:59:09.029] [SRV] \n[2026-05-09 14:59:09.033] [SRV] [2026-05-09 14:59:09.033] [info]  [PRE] ComfyUI-Manager\n[2026-05-09 14:59:09.033] [SRV] \n[2026-05-09 14:59:19.376] [SRV] [2026-05-09 14:59:19.376] [info]  Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': \"ImportError: No module named 'triton'\", 'capabilities': []}\n[2026-05-09 14:59:19.376] [SRV] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}\n[2026-05-09 14:59:19.376] [SRV] \n[2026-05-09 14:59:19.379] [SRV] [2026-05-09 14:59:19.379] [info]  Found comfy_kitchen backend cuda: {'available': False, 'disabled': True, 'unavailable_reason': 'Extension file not found: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfy_kitchen/backends/cuda/_C.abi3.so', 'capabilities': []}\n[2026-05-09 14:59:19.379] [SRV] \n[2026-05-09 14:59:19.570] [SRV] [2026-05-09 14:59:19.570] [info]  Checkpoint files will always be loaded safely.\n[2026-05-09 14:59:19.570] [SRV] \n[2026-05-09 14:59:19.671] [SRV] [2026-05-09 14:59:19.671] [info]  Total VRAM 7168 MB, total RAM 7168 MB\n[2026-05-09 14:59:19.671] [SRV] pytorch version: 2.10.0\n[2026-05-09 14:59:19.671] [SRV] \n[2026-05-09 14:59:19.680] [SRV] [2026-05-09 14:59:19.680] [info]  Mac Version (15, 7, 4)\n[2026-05-09 14:59:19.680] [SRV] \n[2026-05-09 14:59:19.682] [SRV] [2026-05-09 14:59:19.682] [info]  Set vram state to: SHARED\n[2026-05-09 14:59:19.682] [SRV] Device: mps\n[2026-05-09 14:59:19.682] [SRV] \n[2026-05-09 14:59:21.497] [SRV] [2026-05-09 14:59:21.497] [info]  Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention\n[2026-05-09 14:59:21.497] [SRV] \n[2026-05-09 14:59:31.388] [SRV] [2026-05-09 14:59:31.388] [info]  Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]\n[2026-05-09 14:59:31.388] [SRV] \n[2026-05-09 14:59:31.395] [SRV] [2026-05-09 14:59:31.395] [info]  ComfyUI version: 0.20.1\n[2026-05-09 14:59:31.395] [SRV] comfy-aimdo version: 0.2.14\n[2026-05-09 14:59:31.395] [SRV] \n[2026-05-09 14:59:31.397] [SRV] [2026-05-09 14:59:31.397] [info]  comfy-kitchen version: 0.2.8\n[2026-05-09 14:59:31.397] [SRV] \n[2026-05-09 14:59:31.399] [SRV] [2026-05-09 14:59:31.399] [info]  [Prompt Server] web root: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/web_custom_versions/desktop_app\n[2026-05-09 14:59:31.399] [SRV] \n[2026-05-09 14:59:31.409] [SRV] [2026-05-09 14:59:31.409] [info]  Asset seeder disabled\n[2026-05-09 14:59:31.409] [SRV] [START] ComfyUI-Manager\n[2026-05-09 14:59:31.409] [SRV] \n[2026-05-09 14:59:31.804] [SRV] [2026-05-09 14:59:31.804] [info]  [ComfyUI-Manager] Using GitPython backend\n[2026-05-09 14:59:31.806] [SRV] [2026-05-09 14:59:31.806] [info]  \n[2026-05-09 14:59:31.806] [SRV] \n[2026-05-09 14:59:31.914] [SRV] [2026-05-09 14:59:31.914] [info]  [ComfyUI-Manager] network_mode: public\n[2026-05-09 14:59:31.914] [SRV] \n[2026-05-09 14:59:31.927] [SRV] [2026-05-09 14:59:31.927] [info]  [ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.\n[2026-05-09 14:59:31.927] [SRV] \tTo use this feature, please run the following command:\n[2026-05-09 14:59:31.927] [SRV] \t/Users/runner/Documents/ComfyUI/.venv/bin/python -m pip install matrix-nio\n[2026-05-09 14:59:31.927] [SRV] \n[2026-05-09 14:59:31.927] [SRV] \n[2026-05-09 14:59:37.102] [SRV] [2026-05-09 14:59:37.102] [info]  \n[2026-05-09 14:59:37.102] [SRV] Import times for custom nodes:\n[2026-05-09 14:59:37.102] [SRV] \n[2026-05-09 14:59:37.120] [SRV] [2026-05-09 14:59:37.120] [info]     0.0 seconds: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes/websocket_image_save.py\n[2026-05-09 14:59:37.120] [SRV] \n[2026-05-09 14:59:37.120] [SRV] \n[2026-05-09 14:59:37.256] [SRV] [2026-05-09 14:59:37.256] [info]  Context impl SQLiteImpl.\n[2026-05-09 14:59:37.256] [SRV] Will assume non-transactional DDL.\n[2026-05-09 14:59:37.256] [SRV] \n[2026-05-09 14:59:37.289] [SRV] [2026-05-09 14:59:37.289] [info]  Context impl SQLiteImpl.\n[2026-05-09 14:59:37.289] [SRV] \n[2026-05-09 14:59:37.298] [SRV] [2026-05-09 14:59:37.298] [info]  Will assume non-transactional DDL.\n[2026-05-09 14:59:37.298] [SRV] \n[2026-05-09 14:59:37.304] [SRV] [2026-05-09 14:59:37.304] [info]  Running upgrade  -> 0001_assets, Initial assets schema\n[2026-05-09 14:59:37.304] [SRV] Revision ID: 0001_assets\n[2026-05-09 14:59:37.304] [SRV] Revises: None\n[2026-05-09 14:59:37.304] [SRV] Create Date: 2025-12-10 00:00:00\n[2026-05-09 14:59:37.304] [SRV] \n[2026-05-09 14:59:37.476] [SRV] [2026-05-09 14:59:37.476] [info]  Running upgrade 0001_assets -> 0002_merge_to_asset_references, Merge AssetInfo and AssetCacheState into unified asset_references table.\n[2026-05-09 14:59:37.476] [SRV] \n[2026-05-09 14:59:37.644] [SRV] [2026-05-09 14:59:37.644] [info]  Running upgrade 0002_merge_to_asset_references -> 0003_add_metadata_job_id, Add system_metadata and job_id columns to asset_references.\n[2026-05-09 14:59:37.644] [SRV] Change preview_id FK from assets.id to asset_references.id.\n[2026-05-09 14:59:37.644] [SRV] \n[2026-05-09 14:59:37.749] [SRV] [2026-05-09 14:59:37.749] [info]  Database upgraded from None to 0003_add_metadata_job_id\n[2026-05-09 14:59:37.749] [SRV] \n[2026-05-09 14:59:38.021] [SRV] [2026-05-09 14:59:38.021] [info]  Starting server\n[2026-05-09 14:59:38.021] [SRV] \n[2026-05-09 14:59:38.021] [SRV] \n[2026-05-09 14:59:38.023] [SRV] [2026-05-09 14:59:38.023] [info]  To see the GUI go to: http://127.0.0.1:8000\n[2026-05-09 14:59:38.023] [SRV] \n[2026-05-09 15:00:59.454] [SRV] [2026-05-09 15:00:59.454] [info]  [ComfyUI-Manager] Using uv as Python module for pip operations.\n[2026-05-09 15:00:59.454] [SRV] \n[2026-05-09 15:01:00.614] [SRV] [2026-05-09 15:01:00.614] [error] \n[2026-05-09 15:01:00.614] [SRV]   0%|          | 0.00/55.3M [00:00<?, ?B/s]\n[2026-05-09 15:01:00.725] [SRV] [2026-05-09 15:01:00.725] [error] \n[2026-05-09 15:01:00.725] [SRV]   4%|\u258d         | 2.20M/55.3M [00:00<00:02, 20.7MB/s]\n[2026-05-09 15:01:00.821] [SRV] [2026-05-09 15:01:00.821] [error] \n[2026-05-09 15:01:00.821] [SRV]  17%|\u2588\u258b        | 9.60M/55.3M [00:00<00:00, 51.4MB/s]\n[2026-05-09 15:01:01.013] [SRV] [2026-05-09 15:01:01.013] [error] \n[2026-05-09 15:01:01.013] [SRV]  27%|\u2588\u2588\u258b       | 14.8M/55.3M [00:00<00:01, 36.5MB/s]\n[2026-05-09 15:01:01.121] [SRV] [2026-05-09 15:01:01.121] [error] \n[2026-05-09 15:01:01.121] [SRV]  34%|\u2588\u2588\u2588\u258d      | 19.0M/55.3M [00:00<00:00, 38.2MB/s]\n[2026-05-09 15:01:01.246] [SRV] [2026-05-09 15:01:01.246] [error] \n[2026-05-09 15:01:01.246] [SRV]  42%|\u2588\u2588\u2588\u2588\u258f     | 23.1M/55.3M [00:00<00:00, 35.6MB/s]\n[2026-05-09 15:01:01.459] [SRV] [2026-05-09 15:01:01.459] [error] \n[2026-05-09 15:01:01.459] [SRV]  49%|\u2588\u2588\u2588\u2588\u2589     | 27.3M/55.3M [00:00<00:00, 31.8MB/s]\n[2026-05-09 15:01:01.515] [SRV] [2026-05-09 15:01:01.515] [error] \n[2026-05-09 15:01:01.515] [SRV]  57%|\u2588\u2588\u2588\u2588\u2588\u258b    | 31.5M/55.3M [00:00<00:00, 33.5MB/s]\n[2026-05-09 15:01:01.666] [SRV] [2026-05-09 15:01:01.666] [error] \n[2026-05-09 15:01:01.666] [SRV]  63%|\u2588\u2588\u2588\u2588\u2588\u2588\u258e   | 35.0M/55.3M [00:01<00:00, 29.9MB/s]\n[2026-05-09 15:01:01.876] [SRV] [2026-05-09 15:01:01.876] [error] \n[2026-05-09 15:01:01.876] [SRV]  69%|\u2588\u2588\u2588\u2588\u2588\u2588\u2589   | 38.1M/55.3M [00:01<00:00, 23.8MB/s]\n[2026-05-09 15:01:01.978] [SRV] [2026-05-09 15:01:01.978] [error] \n[2026-05-09 15:01:01.978] [SRV]  78%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258a  | 43.2M/55.3M [00:01<00:00, 29.7MB/s]\n[2026-05-09 15:01:02.145] [SRV] [2026-05-09 15:01:02.145] [error] \n[2026-05-09 15:01:02.145] [SRV]  84%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258d | 46.6M/55.3M [00:01<00:00, 26.4MB/s]\n[2026-05-09 15:01:02.290] [SRV] [2026-05-09 15:01:02.290] [error] \n[2026-05-09 15:01:02.290] [SRV]  91%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258f| 50.5M/55.3M [00:01<00:00, 28.5MB/s]\n[2026-05-09 15:01:02.301] [SRV] [2026-05-09 15:01:02.301] [error] \n[2026-05-09 15:01:02.301] [SRV] 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 55.3M/55.3M [00:01<00:00, 32.8MB/s]\n[2026-05-09 15:01:02.301] [SRV] \n[2026-05-09 15:01:02.770] [SRV] [2026-05-09 15:01:02.770] [info]  Extracted zip file to /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack\n[2026-05-09 15:01:02.770] [SRV] \n[2026-05-09 15:01:02.787] [SRV] [2026-05-09 15:01:02.787] [info]  Install: pip packages\n[2026-05-09 15:01:02.787] [SRV] \n[2026-05-09 15:01:02.924] [SRV] [2026-05-09 15:01:02.924] [info]  \n[2026-05-09 15:01:02.924] [SRV] ## ComfyUI-Manager: EXECUTE => \n[2026-05-09 15:01:02.924] [SRV] ['/Users/runner/Documents/ComfyUI/.venv/bin/python', '-m', 'uv', 'pip', \n[2026-05-09 15:01:02.924] [SRV] 'install', 'comfy-env==0.3.78']\n[2026-05-09 15:01:02.924] [SRV] \n[2026-05-09 15:01:03.153] [SRV] [2026-05-09 15:01:03.153] [error] [!]\n[2026-05-09 15:01:03.154] [SRV] [2026-05-09 15:01:03.154] [error]  Using Python 3.12.11 environment at: /Users/runner/Documents/ComfyUI/.venv\n[2026-05-09 15:01:03.154] [SRV] \n[2026-05-09 15:01:03.524] [SRV] [2026-05-09 15:01:03.524] [error] [!] \n[2026-05-09 15:01:03.525] [SRV] [2026-05-09 15:01:03.525] [error] Resolved 16 packages in 318ms\n[2026-05-09 15:01:03.525] [SRV] \n[2026-05-09 15:01:03.551] [SRV] [2026-05-09 15:01:03.551] [error] [!] \n[2026-05-09 15:01:03.552] [SRV] [2026-05-09 15:01:03.552] [error] Downloading virtualenv (7.2MiB)\n[2026-05-09 15:01:03.552] [SRV] \n[2026-05-09 15:01:04.051] [SRV] [2026-05-09 15:01:04.051] [error] [!]  Downloaded virtualenv\n[2026-05-09 15:01:04.051] [SRV] [!] Prepared 12 packages in 523ms\n[2026-05-09 15:01:04.051] [SRV] \n[2026-05-09 15:01:04.219] [SRV] [2026-05-09 15:01:04.219] [error] [!] Uninstalled 1 package in 166ms\n[2026-05-09 15:01:04.219] [SRV] \n[2026-05-09 15:01:04.295] [SRV] [2026-05-09 15:01:04.295] [error] [!] Installed 12 packages in 74ms\n[2026-05-09 15:01:04.295] [SRV] \n[2026-05-09 15:01:04.308] [SRV] [2026-05-09 15:01:04.308] [error] [!]  + cfgv==3.5.0\n[2026-05-09 15:01:04.308] [SRV] [!]\n[2026-05-09 15:01:04.309] [SRV] [2026-05-09 15:01:04.309] [error]   + comfy-env==0.3.78\n[2026-05-09 15:01:04.309] [SRV] [!]  + distlib==0.4.0\n[2026-05-09 15:01:04.309] [SRV] [!]  - filelock==3.20.3\n[2026-05-09 15:01:04.309] [SRV] \n[2026-05-09 15:01:04.310] [SRV] [2026-05-09 15:01:04.310] [error] [!]  + filelock==3.29.0\n[2026-05-09 15:01:04.310] [SRV] [!]\n[2026-05-09 15:01:04.311] [SRV] [2026-05-09 15:01:04.311] [error]   + identify==2.6.19\n[2026-05-09 15:01:04.311] [SRV] [!]  + nodeenv==1.10.0\n[2026-05-09 15:01:04.311] [SRV] [!]\n[2026-05-09 15:01:04.314] [SRV] [2026-05-09 15:01:04.314] [error]   + platformdirs==4.9.6\n[2026-05-09 15:01:04.314] [SRV] [!]  + pre-commit==4.6.0\n[2026-05-09 15:01:04.314] [SRV] [!]  + python-discovery==1.3.0\n[2026-05-09 15:01:04.314] [SRV] [!]  + tomli==2.4.1\n[2026-05-09 15:01:04.314] [SRV] [!]  + tomli-w==1.2.0\n[2026-05-09 15:01:04.314] [SRV] [!]  + virtualenv==21.3.1\n[2026-05-09 15:01:04.314] [SRV] \n[2026-05-09 15:01:04.350] [SRV] [2026-05-09 15:01:04.350] [info]  \n[2026-05-09 15:01:04.350] [SRV] ## ComfyUI-Manager: EXECUTE => \n[2026-05-09 15:01:04.350] [SRV] ['/Users/runner/Documents/ComfyUI/.venv/bin/python', '-m', 'uv', 'pip', \n[2026-05-09 15:01:04.350] [SRV] 'install', 'comfy-3d-viewers==0.2.44']\n[2026-05-09 15:01:04.350] [SRV] \n[2026-05-09 15:01:04.489] [SRV] [2026-05-09 15:01:04.489] [error] [!]\n[2026-05-09 15:01:04.493] [SRV] [2026-05-09 15:01:04.493] [error]  Using Python 3.12.11 environment at: /Users/runner/Documents/ComfyUI/.venv\n[2026-05-09 15:01:04.493] [SRV] \n[2026-05-09 15:01:04.617] [SRV] [2026-05-09 15:01:04.617] [error] [!] Resolved 1 package in 111ms\n[2026-05-09 15:01:04.617] [SRV] \n[2026-05-09 15:01:04.633] [SRV] [2026-05-09 15:01:04.633] [error] [!] Downloading comfy-3d-viewers (1.2MiB)\n[2026-05-09 15:01:04.633] [SRV] \n[2026-05-09 15:01:04.702] [SRV] [2026-05-09 15:01:04.702] [error] [!]\n[2026-05-09 15:01:04.703] [SRV] [2026-05-09 15:01:04.703] [error]   Downloaded comfy-3d-viewers\n[2026-05-09 15:01:04.703] [SRV] [!] Prepared 1 package in 85ms\n[2026-05-09 15:01:04.703] [SRV] \n[2026-05-09 15:01:04.710] [SRV] [2026-05-09 15:01:04.710] [error] [!]\n[2026-05-09 15:01:04.715] [SRV] [2026-05-09 15:01:04.715] [error]  Installed 1 package in 6ms\n[2026-05-09 15:01:04.715] [SRV] [!]  + comfy-3d-viewers==0.2.44\n[2026-05-09 15:01:04.715] [SRV] \n[2026-05-09 15:01:04.754] [SRV] [2026-05-09 15:01:04.754] [info]  \n[2026-05-09 15:01:04.754] [SRV] ## ComfyUI-Manager: EXECUTE => \n[2026-05-09 15:01:04.754] [SRV] ['/Users/runner/Documents/ComfyUI/.venv/bin/python', '-m', 'uv', 'pip', \n[2026-05-09 15:01:04.754] [SRV] 'install', 'trimesh>=4.0.0']\n[2026-05-09 15:01:04.754] [SRV] \n[2026-05-09 15:01:04.820] [SRV] [2026-05-09 15:01:04.820] [error] [!]\n[2026-05-09 15:01:04.822] [SRV] [2026-05-09 15:01:04.822] [error]  Using Python 3.12.11 environment at: /Users/runner/Documents/ComfyUI/.venv\n[2026-05-09 15:01:04.822] [SRV] \n[2026-05-09 15:01:05.228] [SRV] [2026-05-09 15:01:05.228] [error] [!] Resolved 31 packages in 399ms\n[2026-05-09 15:01:05.228] [SRV] \n[2026-05-09 15:01:05.252] [SRV] [2026-05-09 15:01:05.252] [error] [!] Downloading lxml (8.2MiB)\n[2026-05-09 15:01:05.252] [SRV] [!] \n[2026-05-09 15:01:05.253] [SRV] [2026-05-09 15:01:05.253] [error] Downloading shapely (1.6MiB)\n[2026-05-09 15:01:05.253] [SRV] \n[2026-05-09 15:01:05.256] [SRV] [2026-05-09 15:01:05.256] [error] [!]\n[2026-05-09 15:01:05.259] [SRV] [2026-05-09 15:01:05.259] [error]  Downloading embreex (4.9MiB)\n[2026-05-09 15:01:05.259] [SRV] \n[2026-05-09 15:01:05.634] [SRV] [2026-05-09 15:01:05.634] [error] [!] \n[2026-05-09 15:01:05.636] [SRV] [2026-05-09 15:01:05.636] [error]  Downloaded embreex\n[2026-05-09 15:01:05.636] [SRV] \n[2026-05-09 15:01:05.845] [SRV] [2026-05-09 15:01:05.845] [error] [!] \n[2026-05-09 15:01:05.846] [SRV] [2026-05-09 15:01:05.846] [error]  Downloaded shapely\n[2026-05-09 15:01:05.846] [SRV] \n[2026-05-09 15:01:05.866] [SRV] [2026-05-09 15:01:05.866] [error] [!]\n[2026-05-09 15:01:05.867] [SRV] [2026-05-09 15:01:05.867] [error]   Downloaded lxml\n[2026-05-09 15:01:05.867] [SRV] [!]\n[2026-05-09 15:01:05.869] [SRV] [2026-05-09 15:01:05.869] [error]  Prepared 18 packages in 633ms\n[2026-05-09 15:01:05.869] [SRV] \n[2026-05-09 15:01:05.917] [SRV] [2026-05-09 15:01:05.917] [error] [!]\n[2026-05-09 15:01:05.918] [SRV] [2026-05-09 15:01:05.918] [error]  Installed 18 packages in 50ms\n[2026-05-09 15:01:05.918] [SRV] [!]  + colorlog==6.10.1\n[2026-05-09 15:01:05.918] [SRV] [!]  + embreex==4.4.0\n[2026-05-09 15:01:05.918] [SRV] [!]  + jsonschema==4.26.0\n[2026-05-09 15:01:05.918] [SRV] [!]  + jsonschema-specifications==2025.9.1\n[2026-05-09 15:01:05.918] [SRV] [!]  + lxml==6.1.0\n[2026-05-09 15:01:05.918] [SRV] [!]\n[2026-05-09 15:01:05.919] [SRV] [2026-05-09 15:01:05.919] [error]   + manifold3d==3.4.1\n[2026-05-09 15:01:05.919] [SRV] [!]  + mapbox-earcut==2.0.0\n[2026-05-09 15:01:05.919] [SRV] [!]  + pycollada==0.9.3\n[2026-05-09 15:01:05.919] [SRV] [!]  + python-dateutil==2.9.0.post0\n[2026-05-09 15:01:05.919] [SRV] [!]  + referencing==0.37.0\n[2026-05-09 15:01:05.919] [SRV] [!]  + rpds-py==0.30.0\n[2026-05-09 15:01:05.919] [SRV] [!]\n[2026-05-09 15:01:05.922] [SRV] [2026-05-09 15:01:05.922] [error]   + rtree==1.4.1\n[2026-05-09 15:01:05.922] [SRV] [!]  + shapely==2.1.2\n[2026-05-09 15:01:05.922] [SRV] [!]  + six==1.17.0\n[2026-05-09 15:01:05.922] [SRV] [!] \n[2026-05-09 15:01:05.923] [SRV] [2026-05-09 15:01:05.923] [error]  + svg-path==7.0\n[2026-05-09 15:01:05.923] [SRV] [!]  + trimesh==4.12.2\n[2026-05-09 15:01:05.923] [SRV] [!]  + vhacdx==0.0.10\n[2026-05-09 15:01:05.923] [SRV] [!]  + xxhash==3.7.0\n[2026-05-09 15:01:05.923] [SRV] \n[2026-05-09 15:01:06.092] [SRV] [2026-05-09 15:01:06.092] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-09 15:01:06.092] [SRV] \n[2026-05-09 15:01:06.093] [SRV] [2026-05-09 15:01:06.093] [info]  Install: install script\n[2026-05-09 15:01:06.093] [SRV] \n[2026-05-09 15:01:06.098] [SRV] [2026-05-09 15:01:06.098] [info]  \n[2026-05-09 15:01:06.098] [SRV] ## ComfyUI-Manager: EXECUTE => \n[2026-05-09 15:01:06.098] [SRV] ['/Users/runner/Documents/ComfyUI/.venv/bin/python', 'install.py']\n[2026-05-09 15:01:06.098] [SRV] \n[2026-05-09 15:01:06.652] [SRV] [2026-05-09 15:01:06.652] [error] [!]\n[2026-05-09 15:01:06.654] [SRV] [2026-05-09 15:01:06.654] [error]  [comfy-env] pixi not found, downloading...\n[2026-05-09 15:01:06.654] [SRV] \n[2026-05-09 15:01:07.618] [SRV] [2026-05-09 15:01:07.618] [error] [!] [comfy-env] pixi installed: /Users/runner/.pixi/bin/pixi\n[2026-05-09 15:01:07.618] [SRV] \n[2026-05-09 15:01:07.643] [SRV] [2026-05-09 15:01:07.643] [info]   [comfy-env] Workspace: /Users/runner/Documents/ComfyUI/.ce\n[2026-05-09 15:01:07.643] [SRV]  [comfy-env] ComfyUI: /Users/runner/Documents/ComfyUI\n[2026-05-09 15:01:07.643] [SRV]  [comfy-env] Found 1 node config(s):\n[2026-05-09 15:01:07.643] [SRV]  \n[2026-05-09 15:01:07.645] [SRV] [2026-05-09 15:01:07.645] [info]    - geometrypack-nodes <- custom_nodes/comfyui-geometrypack/nodes/comfy-env.toml (python=host)\n[2026-05-09 15:01:07.645] [SRV] \n[2026-05-09 15:01:07.652] [SRV] [2026-05-09 15:01:07.652] [info]   [comfy-env] Bootstrap interpreter has python 3.12 + torch 2.10.0 (cpu). Looking for cuda-only wheels matching cpu/torch2.10/cp312.\n[2026-05-09 15:01:07.652] [SRV] \n[2026-05-09 15:01:07.654] [SRV] [2026-05-09 15:01:07.654] [info]   [comfy-env] Root conda deps from comfyui-geometrypack: ['av', 'ffmpeg']\n[2026-05-09 15:01:07.654] [SRV]  [comfy-env] Desktop app detected: source=/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI, data=/Users/runner/Documents/ComfyUI\n[2026-05-09 15:01:07.654] [SRV] \n[2026-05-09 15:01:07.686] [SRV] [2026-05-09 15:01:07.686] [info]   [comfy-env] Comfyui feature pin: torch ==2.10.0, torchvision ==0.25.*, torchaudio ==2.10.*\n[2026-05-09 15:01:07.686] [SRV]  [comfy-env] Root conda deps: ['av', 'ffmpeg']\n[2026-05-09 15:01:07.686] [SRV]  [comfy-env] comfyui312: python 3.12, torch from https://download.pytorch.org/whl/cpu\n[2026-05-09 15:01:07.686] [SRV]  Generated /Users/runner/Documents/ComfyUI/.ce/pixi.toml\n[2026-05-09 15:01:07.686] [SRV]  [comfy-env] Installing 1 environment(s):\n[2026-05-09 15:01:07.686] [SRV] \n[2026-05-09 15:01:07.690] [SRV] [2026-05-09 15:01:07.690] [info]     - geometrypack-nodes (python=host, 13 pypi deps, 1 cuda wheels)\n[2026-05-09 15:01:07.690] [SRV]  [comfy-env] Running `pixi install --all`...\n[2026-05-09 15:01:07.690] [SRV] \n[2026-05-09 15:01:16.763] [SRV] [2026-05-09 15:01:16.763] [info]  FETCH ComfyRegistry Data [DONE]\n[2026-05-09 15:01:16.763] [SRV] \n[2026-05-09 15:01:17.212] [SRV] [2026-05-09 15:01:17.212] [info]  [ComfyUI-Manager] default cache updated: https://api.comfy.org/nodes\n[2026-05-09 15:01:17.212] [SRV] \n[2026-05-09 15:01:17.282] [SRV] [2026-05-09 15:01:17.282] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/user/__manager/cache/1514988643_custom-node-list.json [DONE]\n[2026-05-09 15:01:17.282] [SRV] \n[2026-05-09 15:01:17.328] [SRV] [2026-05-09 15:01:17.328] [info]  [ComfyUI-Manager] All startup tasks have been completed.\n[2026-05-09 15:01:17.328] [SRV] \n[2026-05-09 15:01:30.928] [SRV] [2026-05-09 15:01:30.928] [info]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`\n[2026-05-09 15:01:30.928] [SRV]  \n[2026-05-09 15:01:30.944] [SRV] [2026-05-09 15:01:30.944] [info]    \t- bin/.librsvg-pre-unlink.sh\n[2026-05-09 15:01:30.944] [SRV]    To enable them, run:\n[2026-05-09 15:01:30.944] [SRV]    \tpixi config set --local run-post-link-scripts insecure\n[2026-05-09 15:01:30.944] [SRV]    More info:\n[2026-05-09 15:01:30.944] [SRV]    \thttps://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts\n[2026-05-09 15:01:30.944] [SRV] \n[2026-05-09 15:02:14.355] [SRV] [2026-05-09 15:02:14.355] [info]      WARN Skipped running the post-link scripts because `run-post-link-scripts` = `false`\n[2026-05-09 15:02:14.355] [SRV]    \t- bin/.librsvg-pre-unlink.sh\n[2026-05-09 15:02:14.355] [SRV]    To enable them, run:\n[2026-05-09 15:02:14.355] [SRV]    \tpixi config set --local run-post-link-scripts insecure\n[2026-05-09 15:02:14.355] [SRV]    More info:\n[2026-05-09 15:02:14.355] [SRV]    \thttps://pixi.sh/latest/reference/pixi_configuration/#run-post-link-scripts\n[2026-05-09 15:02:14.355] [SRV] \n[2026-05-09 15:02:24.121] [SRV] [2026-05-09 15:02:24.121] [info]     \u2714 The following environments have been installed: default, comfyui, geometrypack-nodes.\n[2026-05-09 15:02:24.121] [SRV] \n[2026-05-09 15:02:24.282] [SRV] [2026-05-09 15:02:24.282] [info]   \n[2026-05-09 15:02:24.284] [SRV] [2026-05-09 15:02:24.284] [info]  [comfy-env] Note: env `default` is on disk but no node declares it in this run. Leaving as-is. Remove via `pixi clean --environment default` if intended.\n[2026-05-09 15:02:24.284] [SRV] \n[2026-05-09 15:02:24.472] [SRV] [2026-05-09 15:02:24.472] [info]   [comfy-env] geometrypack-nodes: deduped libomp\n[2026-05-09 15:02:24.472] [SRV] \n[2026-05-09 15:02:24.475] [SRV] [2026-05-09 15:02:24.475] [info]   [comfy-env] Install log: /Users/runner/Documents/ComfyUI/.ce/install.log\n[2026-05-09 15:02:24.475] [SRV]  \n[2026-05-09 15:02:24.475] [SRV]  Installation complete!\n[2026-05-09 15:02:24.475] [SRV] \n[2026-05-09 15:02:26.227] [SRV] [2026-05-09 15:02:26.227] [info]  \n[2026-05-09 15:02:26.227] [SRV] Restarting... [Legacy Mode]\n[2026-05-09 15:02:26.227] [SRV] \n[2026-05-09 15:02:26.227] [SRV] \n[2026-05-09 15:02:26.227] [SRV] Command: ['/Users/runner/Documents/ComfyUI/.venv/bin/python', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/main.py', '--user-directory', '/Users/runner/Documents/ComfyUI/user', '--input-directory', '/Users/runner/Documents/ComfyUI/input', '--output-directory', '/Users/runner/Documents/ComfyUI/output', '--front-end-root', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/web_custom_versions/desktop_app', '--base-directory', '/Users/runner/Documents/ComfyUI', '--database-url', 'sqlite:////Users/runner/Documents/ComfyUI/user/comfyui.db', '--extra-model-paths-config', '/Users/runner/Library/Application Support/ComfyUI/extra_models_config.yaml', '--log-stdout', '--listen', '127.0.0.1', '--port', '8000', '--enable-manager']\n[2026-05-09 15:02:26.227] [SRV] \n[2026-05-09 15:02:26.360] [SRV] [2026-05-09 15:02:26.360] [error] /Users/runner/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown\n[2026-05-09 15:02:26.360] [SRV]   warnings.warn('resource_tracker: There appear to be %d '\n[2026-05-09 15:02:26.360] [SRV] \n[2026-05-09 15:02:27.518] [SRV] [2026-05-09 15:02:27.518] [info]  setup plugin alembic.autogenerate.schemas\n[2026-05-09 15:02:27.518] [SRV] setup plugin alembic.autogenerate.tables\n[2026-05-09 15:02:27.518] [SRV] setup plugin alembic.autogenerate.types\n[2026-05-09 15:02:27.518] [SRV] setup plugin alembic.autogenerate.constraints\n[2026-05-09 15:02:27.518] [SRV] setup plugin alembic.autogenerate.defaults\n[2026-05-09 15:02:27.518] [SRV] \n[2026-05-09 15:02:27.520] [SRV] [2026-05-09 15:02:27.520] [info]  setup plugin alembic.autogenerate.comments\n[2026-05-09 15:02:27.520] [SRV] \n[2026-05-09 15:02:27.676] [SRV] [2026-05-09 15:02:27.676] [info]  comfy-aimdo os not supported Darwin\n[2026-05-09 15:02:27.676] [SRV] NOTE: comfy-aimdo is currently only support for Windows and Linux\n[2026-05-09 15:02:27.676] [SRV] \n[2026-05-09 15:02:27.972] [SRV] [2026-05-09 15:02:27.972] [info]  Adding extra search path custom_nodes /Users/runner/Documents/ComfyUI/custom_nodes\n[2026-05-09 15:02:27.972] [SRV] Adding extra search path download_model_base /Users/runner/Documents/ComfyUI/models\n[2026-05-09 15:02:27.972] [SRV] Adding extra search path custom_nodes /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes\n[2026-05-09 15:02:27.972] [SRV] Setting output directory to: /Users/runner/Documents/ComfyUI/output\n[2026-05-09 15:02:27.972] [SRV] Setting input directory to: /Users/runner/Documents/ComfyUI/input\n[2026-05-09 15:02:27.972] [SRV] Setting user directory to: /Users/runner/Documents/ComfyUI/user\n[2026-05-09 15:02:27.972] [SRV] \n[2026-05-09 15:02:28.932] [SRV] [2026-05-09 15:02:28.932] [info]  [START] Security scan\n[2026-05-09 15:02:28.932] [SRV] [ComfyUI-Manager] Using uv as Python module for pip operations.\n[2026-05-09 15:02:28.932] [SRV] \n[2026-05-09 15:02:29.232] [SRV] [2026-05-09 15:02:29.232] [info]  [DONE] Security scan\n[2026-05-09 15:02:29.232] [SRV] ** ComfyUI startup time: 2026-05-09 15:02:29.231\n[2026-05-09 15:02:29.232] [SRV] \n[2026-05-09 15:02:29.232] [UI ] [2026-05-09 15:02:29.232] ** Platform: Darwin\n[2026-05-09 15:02:29.232] [UI ] [2026-05-09 15:02:29.232] ** Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]\n[2026-05-09 15:02:29.232] [UI ] [2026-05-09 15:02:29.232] ** Python executable: /Users/runner/Documents/ComfyUI/.venv/bin/python\n[2026-05-09 15:02:29.232] [UI ] [2026-05-09 15:02:29.232] ** ComfyUI Path: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 15:02:29.233] [UI ] [2026-05-09 15:02:29.233] ** ComfyUI Base Folder Path: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 15:02:29.233] [UI ] [2026-05-09 15:02:29.233] ** User directory: /Users/runner/Documents/ComfyUI/user\n[2026-05-09 15:02:29.233] [UI ] [2026-05-09 15:02:29.233] ** ComfyUI-Manager config path: /Users/runner/Documents/ComfyUI/user/__manager/config.ini\n[2026-05-09 15:02:29.233] [UI ] [2026-05-09 15:02:29.233] ** Log path: /Users/runner/Documents/ComfyUI/user/comfyui.log\n[2026-05-09 15:02:29.233] [UI ] [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-09 15:02:29.234] [SRV] [2026-05-09 15:02:29.234] [info]  ** Platform: Darwin\n[2026-05-09 15:02:29.234] [SRV] ** Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]\n[2026-05-09 15:02:29.234] [SRV] ** Python executable: /Users/runner/Documents/ComfyUI/.venv/bin/python\n[2026-05-09 15:02:29.234] [SRV] ** ComfyUI Path: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 15:02:29.234] [SRV] ** ComfyUI Base Folder Path: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 15:02:29.234] [SRV] ** User directory: /Users/runner/Documents/ComfyUI/user\n[2026-05-09 15:02:29.234] [SRV] ** ComfyUI-Manager config path: /Users/runner/Documents/ComfyUI/user/__manager/config.ini\n[2026-05-09 15:02:29.234] [SRV] ** Log path: /Users/runner/Documents/ComfyUI/user/comfyui.log\n[2026-05-09 15:02:29.234] [SRV] \n[2026-05-09 15:02:29.371] [SRV] [2026-05-09 15:02:29.371] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.\n[2026-05-09 15:02:29.371] [SRV] \n[2026-05-09 15:02:29.371] [UI ] [2026-05-09 15:02:29.371] [PRE] ComfyUI-Manager\n[2026-05-09 15:02:29.375] [SRV] [2026-05-09 15:02:29.375] [info]  [PRE] ComfyUI-Manager\n[2026-05-09 15:02:29.375] [SRV] \n[2026-05-09 15:02:29.927] [UI ] [2026-05-09 15:02:29.927] [comfy-env] comfyui-geometrypack: 1 isolation env(s):\n[2026-05-09 15:02:29.928] [SRV] [2026-05-09 15:02:29.928] [error] [comfy-env] comfyui-geometrypack: 1 isolation env(s):\n[2026-05-09 15:02:29.928] [SRV] [comfy-env]   nodes -> /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack/nodes\n[2026-05-09 15:02:29.928] [UI ] [2026-05-09 15:02:29.928] [comfy-env]   nodes -> /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack/nodes\n[2026-05-09 15:02:29.929] [SRV] [2026-05-09 15:02:29.929] [error] \n[2026-05-09 15:02:29.929] [SRV] \n[2026-05-09 15:02:32.435] [UI ] [2026-05-09 15:02:32.435] [comfy-env] prestartup complete\n[2026-05-09 15:02:32.436] [SRV] [2026-05-09 15:02:32.436] [error] [comfy-env] prestartup complete\n[2026-05-09 15:02:32.436] [SRV] \n[2026-05-09 15:02:32.654] [UI ] [2026-05-09 15:02:32.654] WARNING: Potential Error in code: Torch already imported, torch should never be imported before this point.\n[2026-05-09 15:02:32.655] [SRV] [2026-05-09 15:02:32.655] [info]  WARNING: Potential Error in code: Torch already imported, torch should never be imported before this point.\n[2026-05-09 15:02:32.655] [SRV] \n[2026-05-09 15:02:34.870] [SRV] [2026-05-09 15:02:34.870] [info]  Found comfy_kitchen backend cuda: {'available': False, 'disabled': True, 'unavailable_reason': 'Extension file not found: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfy_kitchen/backends/cuda/_C.abi3.so', 'capabilities': []}\n[2026-05-09 15:02:34.870] [SRV] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}\n[2026-05-09 15:02:34.870] [SRV] Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': \"ImportError: No module named 'triton'\", 'capabilities': []}\n[2026-05-09 15:02:34.870] [SRV] \n[2026-05-09 15:02:34.870] [UI ] [2026-05-09 15:02:34.870] Found comfy_kitchen backend cuda: {'available': False, 'disabled': True, 'unavailable_reason': 'Extension file not found: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfy_kitchen/backends/cuda/_C.abi3.so', 'capabilities': []}\n[2026-05-09 15:02:34.870] [UI ] [2026-05-09 15:02:34.870] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}\n[2026-05-09 15:02:34.870] [UI ] [2026-05-09 15:02:34.870] Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': \"ImportError: No module named 'triton'\", 'capabilities': []}\n[2026-05-09 15:02:34.892] [SRV] [2026-05-09 15:02:34.892] [info]  Checkpoint files will always be loaded safely.\n[2026-05-09 15:02:34.892] [SRV] \n[2026-05-09 15:02:34.892] [UI ] [2026-05-09 15:02:34.892] Checkpoint files will always be loaded safely.\n[2026-05-09 15:02:34.963] [SRV] [2026-05-09 15:02:34.963] [info]  Total VRAM 7168 MB, total RAM 7168 MB\n[2026-05-09 15:02:34.963] [SRV] \n[2026-05-09 15:02:34.963] [UI ] [2026-05-09 15:02:34.963] Total VRAM 7168 MB, total RAM 7168 MB\n[2026-05-09 15:02:34.963] [UI ] [2026-05-09 15:02:34.963] pytorch version: 2.10.0\n[2026-05-09 15:02:34.964] [SRV] [2026-05-09 15:02:34.964] [info]  pytorch version: 2.10.0\n[2026-05-09 15:02:34.964] [SRV] \n[2026-05-09 15:02:34.972] [UI ] [2026-05-09 15:02:34.972] Mac Version (15, 7, 4)\n[2026-05-09 15:02:34.973] [SRV] [2026-05-09 15:02:34.973] [info]  Mac Version (15, 7, 4)\n[2026-05-09 15:02:34.973] [SRV] \n[2026-05-09 15:02:34.973] [UI ] [2026-05-09 15:02:34.973] Set vram state to: SHARED\n[2026-05-09 15:02:34.973] [UI ] [2026-05-09 15:02:34.973] Device: mps\n[2026-05-09 15:02:34.974] [SRV] [2026-05-09 15:02:34.974] [info]  Set vram state to: SHARED\n[2026-05-09 15:02:34.974] [SRV] Device: mps\n[2026-05-09 15:02:34.974] [SRV] \n[2026-05-09 15:02:35.771] [UI ] [2026-05-09 15:02:35.771] Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention\n[2026-05-09 15:02:35.773] [SRV] [2026-05-09 15:02:35.773] [info]  Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention\n[2026-05-09 15:02:35.773] [SRV] \n[2026-05-09 15:02:42.793] [UI ] [2026-05-09 15:02:42.793] Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]\n[2026-05-09 15:02:42.793] [UI ] [2026-05-09 15:02:42.793] ComfyUI version: 0.20.1\n[2026-05-09 15:02:42.795] [UI ] [2026-05-09 15:02:42.795] comfy-aimdo version: 0.2.14\n[2026-05-09 15:02:42.798] [UI ] [2026-05-09 15:02:42.798] comfy-kitchen version: 0.2.8\n[2026-05-09 15:02:42.807] [UI ] [2026-05-09 15:02:42.807] [Prompt Server] web root: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/web_custom_versions/desktop_app\n[2026-05-09 15:02:42.810] [SRV] [2026-05-09 15:02:42.810] [info]  Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]\n[2026-05-09 15:02:42.810] [SRV] ComfyUI version: 0.20.1\n[2026-05-09 15:02:42.810] [SRV] \n[2026-05-09 15:02:42.814] [UI ] [2026-05-09 15:02:42.814] Asset seeder disabled\n[2026-05-09 15:02:42.814] [UI ] [2026-05-09 15:02:42.814] [START] ComfyUI-Manager\n[2026-05-09 15:02:42.815] [SRV] [2026-05-09 15:02:42.815] [info]  comfy-aimdo version: 0.2.14\n[2026-05-09 15:02:42.815] [SRV] comfy-kitchen version: 0.2.8\n[2026-05-09 15:02:42.815] [SRV] [Prompt Server] web root: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/web_custom_versions/desktop_app\n[2026-05-09 15:02:42.815] [SRV] Asset seeder disabled\n[2026-05-09 15:02:42.815] [SRV] [START] ComfyUI-Manager\n[2026-05-09 15:02:42.815] [SRV] \n[2026-05-09 15:02:42.988] [UI ] [2026-05-09 15:02:42.988] [ComfyUI-Manager] Using GitPython backend\n[2026-05-09 15:02:42.989] [SRV] [2026-05-09 15:02:42.989] [info]  [ComfyUI-Manager] Using GitPython backend\n[2026-05-09 15:02:42.989] [SRV] \n[2026-05-09 15:02:43.045] [UI ] [2026-05-09 15:02:43.045] [ComfyUI-Manager] network_mode: public\n[2026-05-09 15:02:43.046] [SRV] [2026-05-09 15:02:43.046] [info]  [ComfyUI-Manager] network_mode: public\n[2026-05-09 15:02:43.046] [SRV] \n[2026-05-09 15:02:43.050] [SRV] [2026-05-09 15:02:43.050] [info]  [ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.\n[2026-05-09 15:02:43.050] [SRV] \tTo use this feature, please run the following command:\n[2026-05-09 15:02:43.050] [SRV] \t/Users/runner/Documents/ComfyUI/.venv/bin/python -m pip install matrix-nio\n[2026-05-09 15:02:43.050] [SRV] \n[2026-05-09 15:02:43.050] [SRV] \n[2026-05-09 15:02:43.050] [UI ] [2026-05-09 15:02:43.050] [ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.\n[2026-05-09 15:02:43.050] [UI ] \tTo use this feature, please run the following command:\n[2026-05-09 15:02:43.050] [UI ] \t/Users/runner/Documents/ComfyUI/.venv/bin/python -m pip install matrix-nio\n[2026-05-09 15:02:43.050] [UI ] \n[2026-05-09 15:02:45.104] [UI ] [2026-05-09 15:02:45.104] loading...\n[2026-05-09 15:02:45.105] [SRV] [2026-05-09 15:02:45.105] [info]  loading...\n[2026-05-09 15:02:45.105] [SRV] \n[2026-05-09 15:02:45.105] [UI ] [2026-05-09 15:02:45.105] calling register_nodes\n[2026-05-09 15:02:45.108] [SRV] [2026-05-09 15:02:45.108] [info]  calling register_nodes\n[2026-05-09 15:02:45.108] [SRV] \n[2026-05-09 15:02:45.132] [SRV] [2026-05-09 15:02:45.132] [error] [comfy-env] Version: 0.3.78\n[2026-05-09 15:02:45.132] [UI ] [2026-05-09 15:02:45.132] [comfy-env] Version: 0.3.78\n[2026-05-09 15:02:45.134] [SRV] [2026-05-09 15:02:45.134] [error] \n[2026-05-09 15:02:45.134] [SRV] \n[2026-05-09 15:02:45.431] [UI ] [2026-05-09 15:02:45.431] [comfy-env] register_nodes: comfyui-geometrypack\n[2026-05-09 15:02:45.435] [SRV] [2026-05-09 15:02:45.435] [error] [comfy-env] register_nodes: comfyui-geometrypack\n[2026-05-09 15:02:45.435] [SRV] \n[2026-05-09 15:02:45.435] [UI ] [2026-05-09 15:02:45.435] [comfy-env] ComfyUI source dir: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 15:02:45.439] [SRV] [2026-05-09 15:02:45.439] [error] [comfy-env] ComfyUI source dir: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI\n[2026-05-09 15:02:45.439] [SRV] \n[2026-05-09 15:02:45.479] [SRV] [2026-05-09 15:02:45.479] [error] [comfy-env] Scanning nodes metadata (isolation root)...\n[2026-05-09 15:02:45.479] [UI ] [2026-05-09 15:02:45.479] [comfy-env] Scanning nodes metadata (isolation root)...\n[2026-05-09 15:02:45.481] [SRV] [2026-05-09 15:02:45.481] [error] \n[2026-05-09 15:02:45.481] [SRV] \n[2026-05-09 15:03:10.811] [UI ] [2026-05-09 15:03:10.811] [comfy-env] Scanned nodes: 125 nodes (25.3s)\n[2026-05-09 15:03:10.817] [SRV] [2026-05-09 15:03:10.817] [error] [comfy-env] Scanned nodes: 125 nodes (25.3s)\n[2026-05-09 15:03:10.818] [UI ] [2026-05-09 15:03:10.818] [comfy-env] Scanned nodes root: 125 nodes (25.3s)\n[2026-05-09 15:03:10.826] [SRV] [2026-05-09 15:03:10.826] [error] \n[2026-05-09 15:03:10.826] [SRV] [comfy-env] Scanned nodes root: 125 nodes (25.3s)\n[2026-05-09 15:03:10.826] [SRV] \n[2026-05-09 15:03:10.832] [SRV] [2026-05-09 15:03:10.832] [error] [comfy-env] Imported nodes root: 125 nodes (isolation)\n[2026-05-09 15:03:10.832] [UI ] [2026-05-09 15:03:10.832] [comfy-env] Imported nodes root: 125 nodes (isolation)\n[2026-05-09 15:03:10.834] [UI ] [2026-05-09 15:03:10.834] [comfy-env] Registered 125 total nodes\n[2026-05-09 15:03:10.835] [SRV] [2026-05-09 15:03:10.835] [error] \n[2026-05-09 15:03:10.835] [SRV] [comfy-env] Registered 125 total nodes\n[2026-05-09 15:03:10.835] [SRV] \n[2026-05-09 15:03:10.849] [SRV] [2026-05-09 15:03:10.849] [info]  \n[2026-05-09 15:03:10.849] [SRV] Import times for custom nodes:\n[2026-05-09 15:03:10.849] [SRV] \n[2026-05-09 15:03:10.849] [UI ] [2026-05-09 15:03:10.849] \n[2026-05-09 15:03:10.849] [UI ] Import times for custom nodes:\n[2026-05-09 15:03:10.849] [UI ] [2026-05-09 15:03:10.849]    0.0 seconds: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes/websocket_image_save.py\n[2026-05-09 15:03:10.849] [UI ] [2026-05-09 15:03:10.849]   25.7 seconds: /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack\n[2026-05-09 15:03:10.849] [UI ] [2026-05-09 15:03:10.849] \n[2026-05-09 15:03:10.851] [SRV] [2026-05-09 15:03:10.851] [info]     0.0 seconds: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes/websocket_image_save.py\n[2026-05-09 15:03:10.851] [SRV]   25.7 seconds: /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack\n[2026-05-09 15:03:10.851] [SRV] \n[2026-05-09 15:03:10.851] [SRV] \n[2026-05-09 15:03:10.878] [SRV] [2026-05-09 15:03:10.878] [info]  Context impl SQLiteImpl.\n[2026-05-09 15:03:10.878] [SRV] \n[2026-05-09 15:03:10.878] [UI ] [2026-05-09 15:03:10.878] Context impl SQLiteImpl.\n[2026-05-09 15:03:10.878] [UI ] [2026-05-09 15:03:10.878] Will assume non-transactional DDL.\n[2026-05-09 15:03:10.880] [SRV] [2026-05-09 15:03:10.880] [info]  Will assume non-transactional DDL.\n[2026-05-09 15:03:10.880] [SRV] \n[2026-05-09 15:03:11.105] [SRV] [2026-05-09 15:03:11.105] [info]  Starting server\n[2026-05-09 15:03:11.105] [SRV] \n[2026-05-09 15:03:11.105] [SRV] \n[2026-05-09 15:03:11.105] [UI ] [2026-05-09 15:03:11.105] Starting server\n[2026-05-09 15:03:11.105] [UI ] \n[2026-05-09 15:03:11.107] [UI ] [2026-05-09 15:03:11.107] To see the GUI go to: http://127.0.0.1:8000\n[2026-05-09 15:03:11.108] [SRV] [2026-05-09 15:03:11.108] [info]  To see the GUI go to: http://127.0.0.1:8000\n[2026-05-09 15:03:11.108] [SRV] \n[2026-05-09 15:03:16.645] [UI ] [2026-05-09 15:03:16.645] [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 15:03:16.650] [SRV] [2026-05-09 15:03:16.650] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 15:03:16.650] [SRV] \n[2026-05-09 15:03:16.732] [UI ] [2026-05-09 15:03:16.732] FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json [DONE]\n[2026-05-09 15:03:16.733] [SRV] [2026-05-09 15:03:16.733] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json\n[2026-05-09 15:03:16.767] [SRV] [2026-05-09 15:03:16.767] [info]   [DONE]\n[2026-05-09 15:03:16.767] [SRV] \n[2026-05-09 15:03:18.267] [UI ] [2026-05-09 15:03:18.267] [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 15:03:18.268] [SRV] [2026-05-09 15:03:18.268] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 15:03:18.268] [SRV] \n[2026-05-09 15:03:18.332] [SRV] [2026-05-09 15:03:18.332] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json\n[2026-05-09 15:03:18.332] [UI ] [2026-05-09 15:03:18.332] FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json [DONE]\n[2026-05-09 15:03:18.366] [SRV] [2026-05-09 15:03:18.366] [info]   [DONE]\n[2026-05-09 15:03:18.366] [SRV] \n[2026-05-09 15:03:23.448] [UI ] [2026-05-09 15:03:23.448] [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 15:03:23.449] [SRV] [2026-05-09 15:03:23.449] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.\n[2026-05-09 15:03:23.449] [SRV] \n[2026-05-09 15:03:23.508] [UI ] [2026-05-09 15:03:23.508] FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json [DONE]\n[2026-05-09 15:03:23.509] [SRV] [2026-05-09 15:03:23.509] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json\n[2026-05-09 15:03:23.567] [SRV] [2026-05-09 15:03:23.567] [info]   [DONE]\n[2026-05-09 15:03:23.567] [SRV] \n[2026-05-09 15:03:46.171] [UI ] [2026-05-09 15:03:46.171] got prompt\n[2026-05-09 15:03:46.173] [SRV] [2026-05-09 15:03:46.173] [info]  got prompt\n[2026-05-09 15:03:46.173] [SRV] \n[2026-05-09 15:03:46.246] [UI ] [2026-05-09 15:03:46.246] [comfyui-geometrypack] python: /Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python\n[2026-05-09 15:03:46.247] [UI ] [2026-05-09 15:03:46.247] [comfyui-geometrypack] sys_path sent to worker: ['/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack', '/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.1/site-packages', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack']\n[2026-05-09 15:03:46.286] [SRV] [2026-05-09 15:03:46.286] [info]  [comfyui-geometrypack] python: /Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python\n[2026-05-09 15:03:46.286] [SRV] [comfyui-geometrypack] sys_path sent to worker: ['/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/ComfyUI.app/Contents/Resources/ComfyUI', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack', '/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.1/site-packages', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack']\n[2026-05-09 15:03:46.286] [SRV] \n[2026-05-09 15:03:59.529] [UI ] [2026-05-09 15:03:59.529] [worker:comfyui-geometrypack] INFO: Found mesh in input folder: 3d/noisy/Fandisk0.3/Noisy.obj\n[2026-05-09 15:03:59.531] [UI ] [2026-05-09 15:03:59.531] [worker:comfyui-geometrypack] INFO: Loading: /Users/runner/Documents/ComfyUI/input/3d/noisy/Fandisk0.3/Noisy.obj\n[2026-05-09 15:03:59.533] [SRV] [2026-05-09 15:03:59.533] [error] [worker:comfyui-geometrypack] INFO: Found mesh in input folder: 3d/noisy/Fandisk0.3/Noisy.obj\n[2026-05-09 15:03:59.538] [SRV] [2026-05-09 15:03:59.538] [error] \n[2026-05-09 15:03:59.538] [SRV] [worker:comfyui-geometrypack] INFO: Loading: /Users/runner/Documents/ComfyUI/input/3d/noisy/Fandisk0.3/Noisy.obj\n[2026-05-09 15:03:59.538] [SRV] \n[2026-05-09 15:03:59.572] [UI ] [2026-05-09 15:03:59.572] [worker:comfyui-geometrypack] INFO: Initial mesh: 6475 vertices, 12946 faces\n[2026-05-09 15:03:59.573] [SRV] [2026-05-09 15:03:59.573] [error] [worker:comfyui-geometrypack] INFO: Initial mesh: 6475 vertices, 12946 faces\n[2026-05-09 15:03:59.573] [SRV] \n[2026-05-09 15:03:59.591] [UI ] [2026-05-09 15:03:59.591] [worker:comfyui-geometrypack] INFO: Successfully loaded: 6475 vertices, 12946 faces\n[2026-05-09 15:03:59.592] [SRV] [2026-05-09 15:03:59.592] [error] [worker:comfyui-geometrypack] INFO: Successfully loaded: 6475 vertices, 12946 faces\n[2026-05-09 15:03:59.592] [UI ] [2026-05-09 15:03:59.592] [worker:comfyui-geometrypack] INFO: Loaded: 6475 vertices, 12946 faces\n[2026-05-09 15:03:59.594] [SRV] [2026-05-09 15:03:59.594] [error] \n[2026-05-09 15:03:59.594] [SRV] [worker:comfyui-geometrypack] INFO: Loaded: 6475 vertices, 12946 faces\n[2026-05-09 15:03:59.594] [SRV] \n[2026-05-09 15:04:03.796] [UI ] [2026-05-09 15:04:03.796] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...\n[2026-05-09 15:04:03.811] [SRV] [2026-05-09 15:04:03.811] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...\n[2026-05-09 15:04:03.818] [UI ] [2026-05-09 15:04:03.818] [comfyui-geometrypack] Health check: ok\n[2026-05-09 15:04:03.837] [SRV] [2026-05-09 15:04:03.837] [error] \n[2026-05-09 15:04:03.837] [SRV] [comfyui-geometrypack] Health check: ok\n[2026-05-09 15:04:03.837] [SRV] \n[2026-05-09 15:04:03.888] [UI ] [2026-05-09 15:04:03.888] [worker:comfyui-geometrypack] INFO: Sharpen dispatch: two_step -> GeomPackSharpen_TwoStep\n[2026-05-09 15:04:03.889] [SRV] [2026-05-09 15:04:03.889] [error] [worker:comfyui-geometrypack] INFO: Sharpen dispatch: two_step -> GeomPackSharpen_TwoStep\n[2026-05-09 15:04:03.889] [SRV] \n[2026-05-09 15:04:03.908] [UI ] [2026-05-09 15:04:03.908] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...\n[2026-05-09 15:04:03.909] [SRV] [2026-05-09 15:04:03.909] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...\n[2026-05-09 15:04:03.909] [SRV] [2026-05-09 15:04:03.909] [error] \n[2026-05-09 15:04:03.909] [SRV] [comfyui-geometrypack] Health check: ok\n[2026-05-09 15:04:03.909] [SRV] \n[2026-05-09 15:04:03.909] [UI ] [2026-05-09 15:04:03.909] [comfyui-geometrypack] Health check: ok\n[2026-05-09 15:04:03.932] [UI ] [2026-05-09 15:04:03.932] [worker:comfyui-geometrypack] INFO: Backend: two_step\n[2026-05-09 15:04:03.932] [UI ] [2026-05-09 15:04:03.932] [worker:comfyui-geometrypack] INFO: Input: 6475 vertices, 12946 faces\n[2026-05-09 15:04:03.933] [SRV] [2026-05-09 15:04:03.933] [error] [worker:comfyui-geometrypack] INFO: Backend: two_step\n[2026-05-09 15:04:03.933] [SRV] \n[2026-05-09 15:04:03.933] [UI ] [2026-05-09 15:04:03.933] [worker:comfyui-geometrypack] INFO: Parameters: smooth_steps=2, normal_threshold=60.0\n[2026-05-09 15:04:03.934] [SRV] [2026-05-09 15:04:03.934] [error] [worker:comfyui-geometrypack] INFO: Input: 6475 vertices, 12946 faces\n[2026-05-09 15:04:03.934] [SRV] [worker:comfyui-geometrypack] INFO: Parameters: smooth_steps=2, normal_threshold=60.0\n[2026-05-09 15:04:03.934] [SRV] \n[2026-05-09 15:04:07.520] [UI ] [2026-05-09 15:04:07.520] [worker:co\n... (truncated)", "hardware": null}, "sharpen": {"src": "", "title": "sharpen", "status": "pass", "duration": "23.00", "log": "", "hardware": null}};
+        const workflowData = {"sharpen": {"src": "screenshots/sharpen_executed.png", "title": "sharpen", "status": "pass", "duration": "9.00", "log": "", "hardware": null}, "alpha_wrap": {"src": "screenshots/alpha_wrap_executed.png", "title": "alpha_wrap", "status": "pass", "duration": "14.00", "log": "", "hardware": null}, "batch_remesh": {"src": "screenshots/batch_remesh_executed.png", "title": "batch_remesh", "status": "pass", "duration": "10.00", "log": "", "hardware": null}, "boolean_ops": {"src": "screenshots/boolean_ops_executed.png", "title": "boolean_ops", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "boolean_ops_all": {"src": "screenshots/boolean_ops_all_executed.png", "title": "boolean_ops_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "decimate": {"src": "screenshots/decimate_executed.png", "title": "decimate", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "decimate_all": {"src": "screenshots/decimate_all_executed.png", "title": "decimate_all", "status": "pass", "duration": "16.00", "log": "", "hardware": null}, "depth_map_to_mesh": {"src": "screenshots/depth_map_to_mesh_executed.png", "title": "depth_map_to_mesh", "status": "timeout", "duration": "600.00", "log": "", "hardware": null}, "fix_normals_all": {"src": "screenshots/fix_normals_all_executed.png", "title": "fix_normals_all", "status": "pass", "duration": "11.00", "log": "", "hardware": null}, "fix_self_intersection": {"src": "screenshots/fix_self_intersection_executed.png", "title": "fix_self_intersection", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "mesh_info": {"src": "screenshots/mesh_info_executed.png", "title": "mesh_info", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "mesh_mesh_distance": {"src": "screenshots/mesh_mesh_distance_executed.png", "title": "mesh_mesh_distance", "status": "pass", "duration": "21.00", "log": "", "hardware": null}, "normals": {"src": "screenshots/normals_executed.png", "title": "normals", "status": "pass", "duration": "10.00", "log": "", "hardware": null}, "point_mesh_distance": {"src": "screenshots/point_mesh_distance_executed.png", "title": "point_mesh_distance", "status": "pass", "duration": "5.00", "log": "", "hardware": null}, "preview_mesh_threejs": {"src": "screenshots/preview_mesh_threejs_executed.png", "title": "preview_mesh_threejs", "status": "pass", "duration": "21.00", "log": "", "hardware": null}, "reconstruct_all": {"src": "screenshots/reconstruct_all_executed.png", "title": "reconstruct_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "refine_mesh": {"src": "screenshots/refine_mesh_executed.png", "title": "refine_mesh", "status": "pass", "duration": "15.00", "log": "", "hardware": null}, "remesh_intersections": {"src": "screenshots/remesh_intersections_executed.png", "title": "remesh_intersections", "status": "pass", "duration": "22.00", "log": "", "hardware": null}, "remeshing": {"src": "screenshots/remeshing_executed.png", "title": "remeshing", "status": "pass", "duration": "68.00", "log": "", "hardware": null}, "sMOOth": {"src": "screenshots/sMOOth_executed.png", "title": "sMOOth", "status": "pass", "duration": "22.00", "log": "", "hardware": null}, "sharpen_all": {"src": "screenshots/sharpen_all_executed.png", "title": "sharpen_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "side_by_side_viewer": {"src": "screenshots/side_by_side_viewer_executed.png", "title": "side_by_side_viewer", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "skeleton_all": {"src": "screenshots/skeleton_all_executed.png", "title": "skeleton_all", "status": "pass", "duration": "51.00", "log": "", "hardware": null}, "skeleton_extraction": {"src": "screenshots/skeleton_extraction_executed.png", "title": "skeleton_extraction", "status": "pass", "duration": "14.00", "log": "", "hardware": null}, "smooth_all": {"src": "screenshots/smooth_all_executed.png", "title": "smooth_all", "status": "pass", "duration": "15.00", "log": "", "hardware": null}, "surface_reconstruction": {"src": "screenshots/surface_reconstruction_executed.png", "title": "surface_reconstruction", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "test_loading": {"src": "screenshots/test_loading_executed.png", "title": "test_loading", "status": "pass", "duration": "16.00", "log": "", "hardware": null}, "transform": {"src": "screenshots/transform_executed.png", "title": "transform", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "uv_unwrap": {"src": "screenshots/uv_unwrap_executed.png", "title": "uv_unwrap", "status": "pass", "duration": "31.00", "log": "", "hardware": null}, "view_texture": {"src": "screenshots/view_texture_executed.png", "title": "view_texture", "status": "pass", "duration": "14.00", "log": "", "hardware": null}};
         const workflowNames = Object.keys(workflowData);
-        const videoData = {"sharpen": {"mp4": "driver.mp4", "duration_seconds": 23, "status": "pass"}};
+        const videoData = {"sMOOth": {"mp4": "driver.mp4", "duration_seconds": 22, "status": "pass"}, "fix_self_intersection": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "skeleton_all": {"mp4": "driver.mp4", "duration_seconds": 51, "status": "pass"}, "reconstruct_all": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "uv_unwrap": {"mp4": "driver.mp4", "duration_seconds": 31, "status": "pass"}, "remeshing": {"mp4": "driver.mp4", "duration_seconds": 68, "status": "pass"}, "boolean_ops": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "batch_remesh": {"mp4": "driver.mp4", "duration_seconds": 10, "status": "pass"}, "mesh_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 21, "status": "pass"}, "normals": {"mp4": "driver.mp4", "duration_seconds": 10, "status": "pass"}, "depth_map_to_mesh": {"mp4": "driver.mp4", "duration_seconds": 600, "status": "timeout"}, "alpha_wrap": {"mp4": "driver.mp4", "duration_seconds": 14, "status": "pass"}, "test_loading": {"mp4": "driver.mp4", "duration_seconds": 16, "status": "pass"}, "mesh_info": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "smooth_all": {"mp4": "driver.mp4", "duration_seconds": 15, "status": "pass"}, "skeleton_extraction": {"mp4": "driver.mp4", "duration_seconds": 14, "status": "pass"}, "refine_mesh": {"mp4": "driver.mp4", "duration_seconds": 15, "status": "pass"}, "decimate": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "point_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 5, "status": "pass"}, "boolean_ops_all": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "side_by_side_viewer": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "decimate_all": {"mp4": "driver.mp4", "duration_seconds": 16, "status": "pass"}, "transform": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "surface_reconstruction": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "sharpen": {"mp4": "driver.mp4", "duration_seconds": 9, "status": "pass"}, "preview_mesh_threejs": {"mp4": "driver.mp4", "duration_seconds": 21, "status": "pass"}, "sharpen_all": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "remesh_intersections": {"mp4": "driver.mp4", "duration_seconds": 22, "status": "pass"}, "view_texture": {"mp4": "driver.mp4", "duration_seconds": 14, "status": "pass"}, "fix_normals_all": {"mp4": "driver.mp4", "duration_seconds": 11, "status": "pass"}};
 
         const inIframe = window !== window.top;
         let currentWorkflow = null;
@@ -1459,11 +2018,18 @@
             if (document.getElementById('lightbox').classList.contains('active') && !overlay.classList.contains('active')) {
                 if (key === 'ArrowLeft') { navigateLightbox(-1); }
                 if (key === 'ArrowRight') { navigateLightbox(1); }
+                if ((key === 'ArrowUp' || key === 'ArrowDown') && inIframe) {
+                    window.parent.postMessage({
+                        type: 'comfytest-platform-shift',
+                        delta: key === 'ArrowUp' ? -1 : 1,
+                        workflow: currentWorkflow,
+                    }, '*');
+                }
             }
         }
 
         document.onkeydown = (e) => {
-            if (['Escape', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            if (['Escape', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
                 e.preventDefault();
                 handleKey(e.key);
             }
