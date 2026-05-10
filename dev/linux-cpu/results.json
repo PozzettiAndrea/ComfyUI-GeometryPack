@@ -1,11 +1,12 @@
 {
-  "timestamp": "2026-05-10T03:11:48.117777+00:00",
+  "timestamp": "2026-05-10T17:11:27.483531+00:00",
   "platform": "linux",
   "hardware": {
     "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
     "cpu": "AMD EPYC 7763 64-Core Processor"
   },
-  "commit_hash": "88e81c15d104d28874cdd2153bb3166c30ead949",
+  "commit_hash": "d5240c61c880b2b07e9caf73047b2e97d46e4605",
+  "run_url": "https://github.com/PozzettiAndrea/comfy-gpu-ci/actions/runs/25634519181",
   "success": true,
   "summary": {
     "total": 33,
@@ -16,7 +17,7 @@
     {
       "name": "alpha_wrap",
       "status": "pass",
-      "duration_seconds": 19.73,
+      "duration_seconds": 20.01,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -24,8 +25,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.2,
-          "avg": 1.53
+          "peak": 2.15,
+          "avg": 1.52
         },
         "total_ram_gb": 15.6,
         "samples": 20
@@ -34,7 +35,7 @@
     {
       "name": "batch_remesh",
       "status": "pass",
-      "duration_seconds": 11.79,
+      "duration_seconds": 17.67,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -42,17 +43,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.48,
-          "avg": 2.3
+          "peak": 2.49,
+          "avg": 2.33
         },
         "total_ram_gb": 15.6,
-        "samples": 12
+        "samples": 18
       }
     },
     {
       "name": "boolean_ops",
       "status": "pass",
-      "duration_seconds": 9.19,
+      "duration_seconds": 9.58,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -60,8 +61,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.48,
-          "avg": 2.46
+          "peak": 2.49,
+          "avg": 2.47
         },
         "total_ram_gb": 15.6,
         "samples": 10
@@ -70,7 +71,7 @@
     {
       "name": "boolean_ops_all",
       "status": "pass",
-      "duration_seconds": 10.12,
+      "duration_seconds": 10.22,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -78,8 +79,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.38,
-          "avg": 2.37
+          "peak": 2.3,
+          "avg": 2.29
         },
         "total_ram_gb": 15.6,
         "samples": 11
@@ -88,7 +89,7 @@
     {
       "name": "decimate",
       "status": "pass",
-      "duration_seconds": 8.85,
+      "duration_seconds": 9.21,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -96,17 +97,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.32,
-          "avg": 2.3
+          "peak": 2.3,
+          "avg": 2.28
         },
         "total_ram_gb": 15.6,
-        "samples": 9
+        "samples": 10
       }
     },
     {
       "name": "decimate_all",
       "status": "pass",
-      "duration_seconds": 18.2,
+      "duration_seconds": 18.54,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -114,8 +115,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.27,
-          "avg": 2.01
+          "peak": 2.25,
+          "avg": 1.99
         },
         "total_ram_gb": 15.6,
         "samples": 19
@@ -124,7 +125,7 @@
     {
       "name": "depth_map_to_mesh",
       "status": "pass",
-      "duration_seconds": 20.51,
+      "duration_seconds": 19.66,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -132,11 +133,11 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.77,
-          "avg": 2.39
+          "peak": 2.72,
+          "avg": 2.35
         },
         "total_ram_gb": 15.6,
-        "samples": 21
+        "samples": 20
       }
     },
     {
@@ -149,7 +150,7 @@
     {
       "name": "fix_normals_all",
       "status": "pass",
-      "duration_seconds": 12.32,
+      "duration_seconds": 11.93,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -157,53 +158,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.78,
-          "avg": 2.55
-        },
-        "total_ram_gb": 15.6,
-        "samples": 13
-      }
-    },
-    {
-      "name": "fix_self_intersection",
-      "status": "pass",
-      "duration_seconds": 10.12,
-      "error": null,
-      "hardware": {
-        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
-        "cpu": "AMD EPYC 7763 64-Core Processor"
-      },
-      "resources": {
-        "ram": {
-          "peak": 2.21,
-          "avg": 2.2
-        },
-        "total_ram_gb": 15.6,
-        "samples": 11
-      }
-    },
-    {
-      "name": "mesh_info",
-      "status": "pass",
-      "duration_seconds": 11.75,
-      "error": null,
-      "hardware": {
-        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
-        "cpu": "AMD EPYC 7763 64-Core Processor"
-      },
-      "resources": {
-        "ram": {
-          "peak": 2.21,
-          "avg": 1.93
+          "peak": 2.59,
+          "avg": 2.43
         },
         "total_ram_gb": 15.6,
         "samples": 12
       }
     },
     {
-      "name": "mesh_mesh_distance",
+      "name": "fix_self_intersection",
       "status": "pass",
-      "duration_seconds": 19.58,
+      "duration_seconds": 9.61,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -211,8 +176,44 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.03,
-          "avg": 1.95
+          "peak": 2.12,
+          "avg": 2.11
+        },
+        "total_ram_gb": 15.6,
+        "samples": 10
+      }
+    },
+    {
+      "name": "mesh_info",
+      "status": "pass",
+      "duration_seconds": 12.09,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
+        "cpu": "AMD EPYC 7763 64-Core Processor"
+      },
+      "resources": {
+        "ram": {
+          "peak": 2.12,
+          "avg": 1.88
+        },
+        "total_ram_gb": 15.6,
+        "samples": 13
+      }
+    },
+    {
+      "name": "mesh_mesh_distance",
+      "status": "pass",
+      "duration_seconds": 19.43,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
+        "cpu": "AMD EPYC 7763 64-Core Processor"
+      },
+      "resources": {
+        "ram": {
+          "peak": 2.0,
+          "avg": 1.88
         },
         "total_ram_gb": 15.6,
         "samples": 20
@@ -221,7 +222,7 @@
     {
       "name": "normals",
       "status": "pass",
-      "duration_seconds": 10.09,
+      "duration_seconds": 10.13,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -229,8 +230,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.09,
-          "avg": 2.03
+          "peak": 2.04,
+          "avg": 1.99
         },
         "total_ram_gb": 15.6,
         "samples": 11
@@ -239,7 +240,7 @@
     {
       "name": "point_mesh_distance",
       "status": "pass",
-      "duration_seconds": 9.48,
+      "duration_seconds": 9.46,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -247,8 +248,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.09,
-          "avg": 2.07
+          "peak": 2.04,
+          "avg": 2.0
         },
         "total_ram_gb": 15.6,
         "samples": 10
@@ -257,7 +258,7 @@
     {
       "name": "preview_mesh_threejs",
       "status": "pass",
-      "duration_seconds": 8.82,
+      "duration_seconds": 8.83,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -265,8 +266,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.05,
-          "avg": 2.05
+          "peak": 1.95,
+          "avg": 1.95
         },
         "total_ram_gb": 15.6,
         "samples": 9
@@ -275,7 +276,7 @@
     {
       "name": "reconstruct_all",
       "status": "pass",
-      "duration_seconds": 21.54,
+      "duration_seconds": 22.03,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -283,8 +284,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.05,
-          "avg": 1.92
+          "peak": 1.95,
+          "avg": 1.85
         },
         "total_ram_gb": 15.6,
         "samples": 22
@@ -293,7 +294,7 @@
     {
       "name": "refine_mesh",
       "status": "pass",
-      "duration_seconds": 9.89,
+      "duration_seconds": 10.0,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -301,8 +302,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.09,
-          "avg": 2.03
+          "peak": 2.03,
+          "avg": 1.96
         },
         "total_ram_gb": 15.6,
         "samples": 10
@@ -311,7 +312,7 @@
     {
       "name": "remesh_intersections",
       "status": "pass",
-      "duration_seconds": 9.14,
+      "duration_seconds": 9.65,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -319,8 +320,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.09,
-          "avg": 2.08
+          "peak": 2.03,
+          "avg": 2.02
         },
         "total_ram_gb": 15.6,
         "samples": 10
@@ -329,7 +330,7 @@
     {
       "name": "remeshing",
       "status": "pass",
-      "duration_seconds": 35.9,
+      "duration_seconds": 35.91,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -337,8 +338,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.17,
-          "avg": 2.13
+          "peak": 2.1,
+          "avg": 2.07
         },
         "total_ram_gb": 15.6,
         "samples": 36
@@ -354,7 +355,7 @@
     {
       "name": "sMOOth",
       "status": "pass",
-      "duration_seconds": 8.9,
+      "duration_seconds": 8.7,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -362,8 +363,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.11,
-          "avg": 2.11
+          "peak": 2.05,
+          "avg": 2.05
         },
         "total_ram_gb": 15.6,
         "samples": 9
@@ -372,7 +373,7 @@
     {
       "name": "sharpen",
       "status": "pass",
-      "duration_seconds": 9.1,
+      "duration_seconds": 9.13,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -380,8 +381,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.11,
-          "avg": 2.11
+          "peak": 2.05,
+          "avg": 2.05
         },
         "total_ram_gb": 15.6,
         "samples": 10
@@ -390,7 +391,7 @@
     {
       "name": "sharpen_all",
       "status": "pass",
-      "duration_seconds": 55.23,
+      "duration_seconds": 54.8,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -398,8 +399,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.11,
-          "avg": 2.11
+          "peak": 2.06,
+          "avg": 2.05
         },
         "total_ram_gb": 15.6,
         "samples": 55
@@ -408,7 +409,7 @@
     {
       "name": "side_by_side_viewer",
       "status": "pass",
-      "duration_seconds": 9.12,
+      "duration_seconds": 13.39,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -416,35 +417,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.11,
-          "avg": 2.11
-        },
-        "total_ram_gb": 15.6,
-        "samples": 10
-      }
-    },
-    {
-      "name": "skeleton_all",
-      "status": "pass",
-      "duration_seconds": 14.01,
-      "error": null,
-      "hardware": {
-        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
-        "cpu": "AMD EPYC 7763 64-Core Processor"
-      },
-      "resources": {
-        "ram": {
-          "peak": 2.16,
-          "avg": 2.13
+          "peak": 2.06,
+          "avg": 2.06
         },
         "total_ram_gb": 15.6,
         "samples": 14
       }
     },
     {
-      "name": "skeleton_extraction",
+      "name": "skeleton_all",
       "status": "pass",
-      "duration_seconds": 8.77,
+      "duration_seconds": 20.78,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -452,15 +435,69 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.16,
-          "avg": 2.16
+          "peak": 2.1,
+          "avg": 2.07
         },
         "total_ram_gb": 15.6,
-        "samples": 9
+        "samples": 21
+      }
+    },
+    {
+      "name": "skeleton_extraction",
+      "status": "pass",
+      "duration_seconds": 25.36,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
+        "cpu": "AMD EPYC 7763 64-Core Processor"
+      },
+      "resources": {
+        "ram": {
+          "peak": 2.1,
+          "avg": 1.98
+        },
+        "total_ram_gb": 15.6,
+        "samples": 26
       }
     },
     {
       "name": "smooth_all",
+      "status": "pass",
+      "duration_seconds": 13.75,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
+        "cpu": "AMD EPYC 7763 64-Core Processor"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.88,
+          "avg": 1.85
+        },
+        "total_ram_gb": 15.6,
+        "samples": 14
+      }
+    },
+    {
+      "name": "surface_reconstruction",
+      "status": "pass",
+      "duration_seconds": 15.94,
+      "error": null,
+      "hardware": {
+        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
+        "cpu": "AMD EPYC 7763 64-Core Processor"
+      },
+      "resources": {
+        "ram": {
+          "peak": 2.06,
+          "avg": 1.96
+        },
+        "total_ram_gb": 15.6,
+        "samples": 16
+      }
+    },
+    {
+      "name": "test_loading",
       "status": "pass",
       "duration_seconds": 9.75,
       "error": null,
@@ -470,44 +507,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.16,
-          "avg": 2.16
-        },
-        "total_ram_gb": 15.6,
-        "samples": 10
-      }
-    },
-    {
-      "name": "surface_reconstruction",
-      "status": "pass",
-      "duration_seconds": 19.2,
-      "error": null,
-      "hardware": {
-        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
-        "cpu": "AMD EPYC 7763 64-Core Processor"
-      },
-      "resources": {
-        "ram": {
-          "peak": 2.16,
-          "avg": 1.96
-        },
-        "total_ram_gb": 15.6,
-        "samples": 20
-      }
-    },
-    {
-      "name": "test_loading",
-      "status": "pass",
-      "duration_seconds": 9.62,
-      "error": null,
-      "hardware": {
-        "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
-        "cpu": "AMD EPYC 7763 64-Core Processor"
-      },
-      "resources": {
-        "ram": {
-          "peak": 2.04,
-          "avg": 2.04
+          "peak": 2.07,
+          "avg": 2.06
         },
         "total_ram_gb": 15.6,
         "samples": 10
@@ -516,7 +517,7 @@
     {
       "name": "transform",
       "status": "pass",
-      "duration_seconds": 8.44,
+      "duration_seconds": 8.43,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -524,8 +525,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.04,
-          "avg": 2.04
+          "peak": 2.07,
+          "avg": 2.07
         },
         "total_ram_gb": 15.6,
         "samples": 9
@@ -534,7 +535,7 @@
     {
       "name": "uv_unwrap",
       "status": "pass",
-      "duration_seconds": 14.44,
+      "duration_seconds": 17.9,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -542,11 +543,11 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.05,
-          "avg": 2.04
+          "peak": 2.07,
+          "avg": 1.79
         },
         "total_ram_gb": 15.6,
-        "samples": 15
+        "samples": 18
       }
     },
     {
@@ -559,7 +560,7 @@
     {
       "name": "view_texture",
       "status": "pass",
-      "duration_seconds": 8.83,
+      "duration_seconds": 8.81,
       "error": null,
       "hardware": {
         "os": "Linux-6.17.0-1010-azure-x86_64-with-glibc2.39",
@@ -567,8 +568,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 2.16,
-          "avg": 2.08
+          "peak": 1.96,
+          "avg": 1.85
         },
         "total_ram_gb": 15.6,
         "samples": 9
