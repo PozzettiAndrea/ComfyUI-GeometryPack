@@ -1,26 +1,257 @@
 Capturing execution frames: uv_unwrap.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Prompt has 3 nodes
+  [ComfyUI] Prompt has 3 nodes
+  [ComfyUI] Prompt has 3 nodes
+  [ComfyUI]   Node 4: GeomPackLoadMesh
+  [ComfyUI]   Node 4: GeomPackLoadMesh
+  [ComfyUI]   Node 4: GeomPackLoadMesh
   Queuing workflow for execution...
+  [ComfyUI]     Inputs: {"file_path": "3d/camelhead.off"}
+  [ComfyUI]     Inputs: {"file_path": "3d/camelhead.off"}
+  [ComfyUI]     Inputs: {"file_path": "3d/camelhead.off"}
+  [ComfyUI]   Node 8: GeomPackUVUnwrap
+  [ComfyUI]   Node 8: GeomPackUVUnwrap
+  [ComfyUI]   Node 8: GeomPackUVUnwrap
+  [ComfyUI]     Inputs: {"backend": "xatlas", "report_panel": "false", "trimesh": ["4", 0]}
+  [ComfyUI]     Inputs: {"backend": "xatlas", "report_panel": "false", "trimesh": ["4", 0]}
+  [ComfyUI]     Inputs: {"backend": "xatlas", "report_panel": "false", "trimesh": ["4", 0]}
+  [ComfyUI]   Node 9: GeomPackPreviewMeshUV
+  [ComfyUI]   Node 9: GeomPackPreviewMeshUV
+  [ComfyUI]   Node 9: GeomPackPreviewMeshUV
+  [ComfyUI]     Inputs: {"show_checker": false, "show_wireframe": false, "uv_preview": "", "trimesh": ["8", 0]}
+  [ComfyUI]     Inputs: {"show_checker": false, "show_wireframe": false, "uv_preview": "", "trimesh": ["8", 0]}
+  [ComfyUI]     Inputs: {"show_checker": false, "show_wireframe": false, "uv_preview": "", "trimesh": ["8", 0]}
+  [ComfyUI] Generated prompt_id: 61a2d699-69a9-49fb-90f9-a7cc490068dd
+  [ComfyUI] Generated prompt_id: 61a2d699-69a9-49fb-90f9-a7cc490068dd
+  [ComfyUI] Generated prompt_id: 61a2d699-69a9-49fb-90f9-a7cc490068dd
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] got prompt
+  [ComfyUI] got prompt
+  [ComfyUI] got prompt
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/camelhead.off'
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/camelhead.off'
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/camelhead.off'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=185 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=185 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=185 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\input\3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\input\3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\input\3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.40s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.40s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.40s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackUVUnwrap: backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackUVUnwrap: backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackUVUnwrap: backend: dict, trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.uv.uv_unwrap.UVUnwrapNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.uv.uv_unwrap.UVUnwrapNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.uv.uv_unwrap.UVUnwrapNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=186 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=186 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=186 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: UV Unwrap dispatch: xatlas -> GeomPackUV_Xatlas
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: UV Unwrap dispatch: xatlas -> GeomPackUV_Xatlas
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: UV Unwrap dispatch: xatlas -> GeomPackUV_Xatlas
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackUVUnwrap done (0.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackUVUnwrap done (0.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackUVUnwrap done (0.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackUV_Xatlas: trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackUV_Xatlas: trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackUV_Xatlas: trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.uv.backends.xatlas.UVXatlasNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.uv.backends.xatlas.UVXatlasNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.uv.backends.xatlas.UVXatlasNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=187 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=187 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=187 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: xatlas
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: xatlas
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: xatlas
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 11381 vertices, 22704 faces
   Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=2ms shot=101ms unfreeze=4ms saved=True
+  [capture-periodic] freeze=5ms shot=126ms unfreeze=5ms saved=True
   Frame 3 saved (frame_002.jpg, t=4.5s)
-  [capture-periodic] freeze=36ms shot=91ms unfreeze=4ms saved=True
-  [capture-loop] iter=50 t=5.8s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.0/16.0GB (31%) swap=0.8/2.9GB (27%) cpu=28% browser_rss=0.60GB
-  Frame 4 saved (frame_003.jpg, t=6.7s)
-  [capture-periodic] freeze=3ms shot=89ms unfreeze=3ms saved=True
+  [capture-periodic] freeze=8ms shot=102ms unfreeze=5ms saved=True
+  [capture-loop] iter=50 t=6.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=13 ram=4.4/16.0GB (28%) swap=0.6/2.9GB (22%) cpu=47% browser_rss=0.63GB
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 14128 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 14128 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 14128 vertices, 22704 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackUV_Xatlas done (6.29s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackUV_Xatlas done (6.29s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackUV_Xatlas done (6.29s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshUV: show_checker: False, show_wireframe: False, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshUV: show_checker: False, show_wireframe: False, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshUV: show_checker: False, show_wireframe: False, trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_uv.PreviewMeshUVNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_uv.PreviewMeshUVNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_uv.PreviewMeshUVNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=188 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=188 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=188 sending call_method
   Node executed (1 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=10.9s)
-  [capture-node] freeze=3ms shot=71ms unfreeze=3ms saved=True
-  [capture-loop] iter=100 t=11.7s state={'complete': True, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=5 ram=5.0/16.0GB (31%) swap=0.8/2.9GB (27%) cpu=67% browser_rss=0.59GB
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 14128 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 14128 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 14128 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found UV data: 14128 UV coordinates
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found UV data: 14128 UV coordinates
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found UV data: 14128 UV coordinates
+  Frame 4 saved (frame_003.jpg, t=7.2s)
+  [capture-node] freeze=5ms shot=101ms unfreeze=7ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: UV stats: range=[0.99958265 0.99956256], in_unit_square=True, coverage=0.5783
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: UV stats: range=[0.99958265 0.99956256], in_unit_square=True, coverage=0.5783
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: UV stats: range=[0.99958265 0.99956256], in_unit_square=True, coverage=0.5783
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported mesh to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\output\preview_uv_fb3790b6.glb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported mesh to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\output\preview_uv_fb3790b6.glb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported mesh to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\output\preview_uv_fb3790b6.glb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported UV data to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\output\preview_uv_cd014749_uvdata.json
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported UV data to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\output\preview_uv_cd014749_uvdata.json
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported UV data to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0302\ComfyUI\output\preview_uv_cd014749_uvdata.json
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready: has_uvs=True, checker=False, wireframe=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready: has_uvs=True, checker=False, wireframe=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready: has_uvs=True, checker=False, wireframe=False
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshUV done (0.74s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshUV done (0.74s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshUV done (0.74s): result: NodeOutput
+  [ComfyUI] Prompt executed in 7.56 seconds
+  [ComfyUI] Prompt executed in 7.56 seconds
+  [ComfyUI] Prompt executed in 7.56 seconds
   Node executed (2 total), capturing...
-  Frame 6 saved (frame_005.jpg, t=11.9s)
-  [capture-node] freeze=4ms shot=73ms unfreeze=0ms saved=True
-  Execution complete (t=11.9s)
-  Captured 6 unique frames over 11.97s
+  Frame 5 saved (frame_004.jpg, t=7.9s)
+  [capture-node] freeze=4ms shot=113ms unfreeze=0ms saved=True
+  Execution complete (t=7.9s)
+  Captured 5 unique frames over 8.04s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:8188/extensions/ComfyUI-GeometryPack/viewer_uv.html?v=177834427, canvas=287x287, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41888/extensions/ComfyUI-GeometryPack/viewer_uv.html?v=17783830, canvas=287x287, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: uv_unwrap_executed.png
-  [timing] final_screenshot: 0.1s
-    Captured 7 video frames
+  [timing] final_screenshot: 0.2s
+    Captured 6 video frames
