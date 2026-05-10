@@ -1,7 +1,259 @@
 Capturing execution frames: refine_mesh.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 3 nodes, missing class_type: [1,3,4], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}
-    Status: FAILED
-    Error: Workflow validation failed
-    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 3 nodes, missing class_type: [1,3,4], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] === /validate endpoint called ===
+  [ComfyUI] Received JSON with keys: ['prompt']
+  [ComfyUI] Received JSON with keys: ['prompt']
+  Queuing workflow for execution...
+  [ComfyUI] Prompt has 3 nodes
+  [ComfyUI] Prompt has 3 nodes
+  [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI]   Node 3: GeomPackPreviewMeshDual
+  [ComfyUI]   Node 3: GeomPackPreviewMeshDual
+  [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"se
+  [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"se
+  [ComfyUI]   Node 4: RefineMesh
+  [ComfyUI]   Node 4: RefineMesh
+  [ComfyUI]     Inputs: {"operation": "decimation", "target_face_count": 5000, "decimation_method": "trimesh", "subdivision_iterations": 1, "smoothing_iterations": 5, "lambda_factor": 0.5, "report_panel": "false", "trimesh":
+  [ComfyUI]     Inputs: {"operation": "decimation", "target_face_count": 5000, "decimation_method": "trimesh", "subdivision_iterations": 1, "smoothing_iterations": 5, "lambda_factor": 0.5, "report_panel": "false", "trimesh":
+  [ComfyUI] Generated prompt_id: dfb4e0e0-0f3e-44f5-9a5e-0c2cd3a89c66
+  [ComfyUI] Generated prompt_id: dfb4e0e0-0f3e-44f5-9a5e-0c2cd3a89c66
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] Validation result: valid=True
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] === Validation PASSED ===
+  [ComfyUI] got prompt
+  [ComfyUI] got prompt
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
+  [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
+  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
+  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
+  [ComfyUI] [ComfyUI-GeometryPack] python: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [ComfyUI-GeometryPack] python: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/site-packages', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
+  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/site-packages', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
+  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [SubprocessWorker] launching cmd=['/Users/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_7tka10gg/persistent_worker.py', 'unix:///var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfy_worker_a2330b9680ff.sock']...
+  [ComfyUI] [SubprocessWorker] launching cmd=['/Users/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_7tka10gg/persistent_worker.py', 'unix:///var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfy_worker_a2330b9680ff.sock']...
+  [ComfyUI] [SubprocessWorker] socket_addr=unix:///var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfy_worker_a2330b9680ff.sock exists=True
+  [ComfyUI] [SubprocessWorker] socket_addr=unix:///var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfy_worker_a2330b9680ff.sock exists=True
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:400: UserWarning: resource_tracker: There appear to be 18 leaked shared_memory objects to clean up at shutdown: {'/psm_b792ceb4', '/psm_113b08f0', '/psm_bebb09b9', '/psm_3226da6a', '/psm_d87c8b4e', '/psm_f28b428b', '/psm_d27541db', '/psm_c90f08e5', '/psm_8e74f5de', '/psm_275eb985', '/psm_8604bdfd', '/psm_5a9c8e8b', '/psm_a2914a6d', '/psm_d70da296', '/psm_95b5aaaa', '/psm_be013732', '/psm_390b27f9', '/psm_30c5781c'}
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:400: UserWarning: resource_tracker: There appear to be 18 leaked shared_memory objects to clean up at shutdown: {'/psm_b792ceb4', '/psm_113b08f0', '/psm_bebb09b9', '/psm_3226da6a', '/psm_d87c8b4e', '/psm_f28b428b', '/psm_d27541db', '/psm_c90f08e5', '/psm_8e74f5de', '/psm_275eb985', '/psm_8604bdfd', '/psm_5a9c8e8b', '/psm_a2914a6d', '/psm_d70da296', '/psm_95b5aaaa', '/psm_be013732', '/psm_390b27f9', '/psm_30c5781c'}
+  [ComfyUI]   warnings.warn(
+  [ComfyUI]   warnings.warn(
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_b792ceb4': [Errno 2] No such file or directory: '/psm_b792ceb4'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_b792ceb4': [Errno 2] No such file or directory: '/psm_b792ceb4'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_113b08f0': [Errno 2] No such file or directory: '/psm_113b08f0'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_113b08f0': [Errno 2] No such file or directory: '/psm_113b08f0'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_bebb09b9': [Errno 2] No such file or directory: '/psm_bebb09b9'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_bebb09b9': [Errno 2] No such file or directory: '/psm_bebb09b9'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_3226da6a': [Errno 2] No such file or directory: '/psm_3226da6a'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_3226da6a': [Errno 2] No such file or directory: '/psm_3226da6a'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_d87c8b4e': [Errno 2] No such file or directory: '/psm_d87c8b4e'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_d87c8b4e': [Errno 2] No such file or directory: '/psm_d87c8b4e'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_f28b428b': [Errno 2] No such file or directory: '/psm_f28b428b'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_f28b428b': [Errno 2] No such file or directory: '/psm_f28b428b'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_d27541db': [Errno 2] No such file or directory: '/psm_d27541db'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_d27541db': [Errno 2] No such file or directory: '/psm_d27541db'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_c90f08e5': [Errno 2] No such file or directory: '/psm_c90f08e5'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_c90f08e5': [Errno 2] No such file or directory: '/psm_c90f08e5'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_8e74f5de': [Errno 2] No such file or directory: '/psm_8e74f5de'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_8e74f5de': [Errno 2] No such file or directory: '/psm_8e74f5de'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_275eb985': [Errno 2] No such file or directory: '/psm_275eb985'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_275eb985': [Errno 2] No such file or directory: '/psm_275eb985'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_8604bdfd': [Errno 2] No such file or directory: '/psm_8604bdfd'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_8604bdfd': [Errno 2] No such file or directory: '/psm_8604bdfd'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_5a9c8e8b': [Errno 2] No such file or directory: '/psm_5a9c8e8b'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_5a9c8e8b': [Errno 2] No such file or directory: '/psm_5a9c8e8b'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_a2914a6d': [Errno 2] No such file or directory: '/psm_a2914a6d'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_a2914a6d': [Errno 2] No such file or directory: '/psm_a2914a6d'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_d70da296': [Errno 2] No such file or directory: '/psm_d70da296'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_d70da296': [Errno 2] No such file or directory: '/psm_d70da296'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_95b5aaaa': [Errno 2] No such file or directory: '/psm_95b5aaaa'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_95b5aaaa': [Errno 2] No such file or directory: '/psm_95b5aaaa'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_be013732': [Errno 2] No such file or directory: '/psm_be013732'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_be013732': [Errno 2] No such file or directory: '/psm_be013732'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_390b27f9': [Errno 2] No such file or directory: '/psm_390b27f9'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_390b27f9': [Errno 2] No such file or directory: '/psm_390b27f9'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_30c5781c': [Errno 2] No such file or directory: '/psm_30c5781c'
+  [ComfyUI] /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.13/multiprocessing/resource_tracker.py:416: UserWarning: resource_tracker: '/psm_30c5781c': [Errno 2] No such file or directory: '/psm_30c5781c'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  Frame 2 saved (frame_001.jpg, t=2.4s)
+  [capture-periodic] freeze=5ms shot=107ms unfreeze=3ms saved=True
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] created 0 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=100 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=100 sending call_method
+  Frame 3 saved (frame_002.jpg, t=4.7s)
+  [capture-periodic] freeze=12ms shot=129ms unfreeze=2ms saved=True
+  [capture-loop] iter=50 t=6.3s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=6 ram=3.3/7.0GB (58%) swap=0.0/0.0GB (0%) cpu=86% browser_rss=0.71GB
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (8.35s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (8.35s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running RefineMesh: operation: 'decimation', target_face_count: 5000, decimation_method: 'trimesh', subdivision_iterations: 1, smoothing_iterations: 5, lambda_factor: 0.5, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running RefineMesh: operation: 'decimation', target_face_count: 5000, decimation_method: 'trimesh', subdivision_iterations: 1, smoothing_iterations: 5, lambda_factor: 0.5, trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.refine.RefineMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.refine.RefineMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=101 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=101 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Operation: decimation
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Operation: decimation
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2502 vertices (-53701), 5000 faces (-107402)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2502 vertices (-53701), 5000 faces (-107402)
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] RefineMesh done (0.28s): result: NodeOutput
+  [ComfyUI] [comfy-env] RefineMesh done (0.28s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  Node executed (1 total), capturing...
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=102 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=102 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2502 vertices, 5000 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2502 vertices, 5000 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 fields: ['face.stl']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 fields: ['face.stl']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/output/preview_dual_1_2cb245b7.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/output/preview_dual_1_2cb245b7.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
+  Frame 4 saved (frame_003.jpg, t=9.0s)
+  [capture-node] freeze=5ms shot=184ms unfreeze=44ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/output/preview_dual_1_2cb245b7.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/output/preview_dual_1_2cb245b7.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/output/preview_dual_2_2cb245b7.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1702/ComfyUI/output/preview_dual_2_2cb245b7.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.73s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.73s): result: NodeOutput
+  [ComfyUI] Prompt executed in 9.38 seconds
+  [ComfyUI] Prompt executed in 9.38 seconds
+  Node executed (2 total), capturing...
+  Frame 5 saved (frame_004.jpg, t=9.8s)
+  [capture-node] freeze=4ms shot=233ms unfreeze=0ms saved=True
+  Execution complete (t=9.8s)
+  Captured 5 unique frames over 10.07s
+  [debug] iframes: 1
+  [debug]   iframe[0]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177843, canvas=0x0, rafFrozen=True
+  [timing] trigger_3d_previews: 0.0s
+  Saved high-quality screenshot: refine_mesh_executed.png
+  [timing] final_screenshot: 0.3s
+    Captured 6 video frames
