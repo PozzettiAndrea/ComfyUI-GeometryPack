@@ -1,12 +1,11 @@
 {
-  "timestamp": "2026-05-09T15:16:44.096429+00:00",
+  "timestamp": "2026-05-10T06:15:03.007241+00:00",
   "platform": "windows",
   "hardware": {
-    "os": "Windows-10-10.0.26200-SP0",
-    "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel",
-    "gpu": "NVIDIA GeForce RTX 3090"
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel"
   },
-  "commit_hash": "fb2170cb1254be0a131d221c17a78fec9cc204af",
+  "commit_hash": "88e81c15d104d28874cdd2153bb3166c30ead949",
   "success": true,
   "summary": {
     "total": 33,
@@ -36,6 +35,13 @@
       "hardware": null
     },
     {
+      "name": "boolean_ops_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "decimate",
       "status": "skipped",
       "duration_seconds": 0,
@@ -43,7 +49,39 @@
       "hardware": null
     },
     {
+      "name": "decimate_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "depth_map_to_mesh",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
+      "name": "fill_holes_all",
+      "status": "pass",
+      "duration_seconds": 28.93,
+      "error": null,
+      "hardware": {
+        "os": "Windows-11-10.0.26200-SP0",
+        "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.85,
+          "avg": 1.39
+        },
+        "total_ram_gb": 31.9,
+        "samples": 29
+      }
+    },
+    {
+      "name": "fix_normals_all",
       "status": "skipped",
       "duration_seconds": 0,
       "error": "Not configured for GPU runner",
@@ -92,6 +130,13 @@
       "hardware": null
     },
     {
+      "name": "reconstruct_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "refine_mesh",
       "status": "skipped",
       "duration_seconds": 0,
@@ -113,6 +158,24 @@
       "hardware": null
     },
     {
+      "name": "remeshing_all",
+      "status": "pass",
+      "duration_seconds": 592.83,
+      "error": null,
+      "hardware": {
+        "os": "Windows-11-10.0.26200-SP0",
+        "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel"
+      },
+      "resources": {
+        "ram": {
+          "peak": 2.59,
+          "avg": 2.11
+        },
+        "total_ram_gb": 31.9,
+        "samples": 584
+      }
+    },
+    {
       "name": "sharpen",
       "status": "skipped",
       "duration_seconds": 0,
@@ -120,7 +183,21 @@
       "hardware": null
     },
     {
+      "name": "sharpen_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "side_by_side_viewer",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
+      "name": "skeleton_all",
       "status": "skipped",
       "duration_seconds": 0,
       "error": "Not configured for GPU runner",
@@ -141,6 +218,13 @@
       "hardware": null
     },
     {
+      "name": "smooth_all",
+      "status": "skipped",
+      "duration_seconds": 0,
+      "error": "Not configured for GPU runner",
+      "hardware": null
+    },
+    {
       "name": "surface_reconstruction",
       "status": "skipped",
       "duration_seconds": 0,
@@ -155,124 +239,6 @@
       "hardware": null
     },
     {
-      "name": "boolean_ops_all",
-      "status": "skipped",
-      "duration_seconds": 0,
-      "error": "Not configured for GPU runner",
-      "hardware": null
-    },
-    {
-      "name": "decimate_all",
-      "status": "skipped",
-      "duration_seconds": 0,
-      "error": "Not configured for GPU runner",
-      "hardware": null
-    },
-    {
-      "name": "fill_holes_all",
-      "status": "pass",
-      "duration_seconds": 29.28,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26200-SP0",
-        "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel",
-        "gpu": "NVIDIA GeForce RTX 3090"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.93,
-          "avg": 1.47
-        },
-        "total_ram_gb": 31.9,
-        "samples": 25,
-        "vram": {
-          "peak": 0.99,
-          "avg": 0.75
-        }
-      }
-    },
-    {
-      "name": "fix_normals_all",
-      "status": "skipped",
-      "duration_seconds": 0,
-      "error": "Not configured for GPU runner",
-      "hardware": null
-    },
-    {
-      "name": "reconstruct_all",
-      "status": "skipped",
-      "duration_seconds": 0,
-      "error": "Not configured for GPU runner",
-      "hardware": null
-    },
-    {
-      "name": "remeshing_all",
-      "status": "pass",
-      "duration_seconds": 651.71,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26200-SP0",
-        "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel",
-        "gpu": "NVIDIA GeForce RTX 3090"
-      },
-      "resources": {
-        "ram": {
-          "peak": 2.87,
-          "avg": 2.61
-        },
-        "total_ram_gb": 31.9,
-        "samples": 573,
-        "vram": {
-          "peak": 1.63,
-          "avg": 1.28
-        }
-      }
-    },
-    {
-      "name": "sharpen_all",
-      "status": "skipped",
-      "duration_seconds": 0,
-      "error": "Not configured for GPU runner",
-      "hardware": null
-    },
-    {
-      "name": "skeleton_all",
-      "status": "skipped",
-      "duration_seconds": 0,
-      "error": "Not configured for GPU runner",
-      "hardware": null
-    },
-    {
-      "name": "smooth_all",
-      "status": "skipped",
-      "duration_seconds": 0,
-      "error": "Not configured for GPU runner",
-      "hardware": null
-    },
-    {
-      "name": "uv_unwrap_all",
-      "status": "pass",
-      "duration_seconds": 31.23,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26200-SP0",
-        "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel",
-        "gpu": "NVIDIA GeForce RTX 3090"
-      },
-      "resources": {
-        "ram": {
-          "peak": 2.58,
-          "avg": 2.54
-        },
-        "total_ram_gb": 31.9,
-        "samples": 28,
-        "vram": {
-          "peak": 1.43,
-          "avg": 1.13
-        }
-      }
-    },
-    {
       "name": "transform",
       "status": "skipped",
       "duration_seconds": 0,
@@ -285,6 +251,24 @@
       "duration_seconds": 0,
       "error": "Not configured for GPU runner",
       "hardware": null
+    },
+    {
+      "name": "uv_unwrap_all",
+      "status": "pass",
+      "duration_seconds": 34.16,
+      "error": null,
+      "hardware": {
+        "os": "Windows-11-10.0.26200-SP0",
+        "cpu": "Intel64 Family 6 Model 79 Stepping 1, GenuineIntel"
+      },
+      "resources": {
+        "ram": {
+          "peak": 2.42,
+          "avg": 2.39
+        },
+        "total_ram_gb": 31.9,
+        "samples": 34
+      }
     },
     {
       "name": "view_texture",
