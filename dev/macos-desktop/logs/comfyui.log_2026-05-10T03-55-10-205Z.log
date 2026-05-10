@@ -1,0 +1,589 @@
+[2026-05-10 03:53:26.684] [info]  setup plugin alembic.autogenerate.schemas
+
+[2026-05-10 03:53:26.693] [info]  setup plugin alembic.autogenerate.tables
+setup plugin alembic.autogenerate.types
+setup plugin alembic.autogenerate.constraints
+setup plugin alembic.autogenerate.defaults
+setup plugin alembic.autogenerate.comments
+
+[2026-05-10 03:53:26.796] [info]  comfy-aimdo os not supported Darwin
+
+[2026-05-10 03:53:26.800] [info]  NOTE: comfy-aimdo is currently only support for Windows and Linux
+
+[2026-05-10 03:53:27.009] [info]  Adding extra search path custom_nodes /Users/runner/Documents/ComfyUI/custom_nodes
+
+[2026-05-10 03:53:27.011] [info]  Adding extra search path download_model_base /Users/runner/Documents/ComfyUI/models
+
+[2026-05-10 03:53:27.013] [info]  Adding extra search path custom_nodes /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes
+
+[2026-05-10 03:53:27.016] [info]  Setting output directory to: /Users/runner/Documents/ComfyUI/output
+Setting input directory to: /Users/runner/Documents/ComfyUI/input
+
+[2026-05-10 03:53:27.018] [info]  Setting user directory to: /Users/runner/Documents/ComfyUI/user
+
+[2026-05-10 03:53:27.386] [info]  [START] Security scan
+[ComfyUI-Manager] Using uv as Python module for pip operations.
+
+[2026-05-10 03:53:27.530] [info]  [DONE] Security scan
+** ComfyUI startup time:
+[2026-05-10 03:53:27.533] [info]   
+[2026-05-10 03:53:27.534] [info]  2026-05-10 03:53:27.529
+[2026-05-10 03:53:27.535] [info]  
+
+[2026-05-10 03:53:27.536] [info]  ** Platform:
+[2026-05-10 03:53:27.537] [info]   Darwin
+[2026-05-10 03:53:27.538] [info]  
+
+[2026-05-10 03:53:27.538] [info]  ** Python version:
+[2026-05-10 03:53:27.539] [info]   
+[2026-05-10 03:53:27.543] [info]  3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]
+[2026-05-10 03:53:27.546] [info]  
+
+[2026-05-10 03:53:27.551] [info]  ** Python executable:
+[2026-05-10 03:53:27.554] [info]   
+[2026-05-10 03:53:27.556] [info]  /Users/runner/Documents/ComfyUI/.venv/bin/python
+
+[2026-05-10 03:53:27.565] [info]  ** ComfyUI Path:
+[2026-05-10 03:53:27.567] [info]   
+[2026-05-10 03:53:27.568] [info]  /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI
+[2026-05-10 03:53:27.569] [info]  
+
+[2026-05-10 03:53:27.569] [info]  ** ComfyUI Base Folder Path:
+[2026-05-10 03:53:27.570] [info]   
+[2026-05-10 03:53:27.571] [info]  /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI
+[2026-05-10 03:53:27.572] [info]  
+
+[2026-05-10 03:53:27.573] [info]  ** User directory:
+[2026-05-10 03:53:27.583] [info]   
+[2026-05-10 03:53:27.585] [info]  /Users/runner/Documents/ComfyUI/user
+
+[2026-05-10 03:53:27.586] [info]  ** ComfyUI-Manager config path:
+[2026-05-10 03:53:27.587] [info]   
+[2026-05-10 03:53:27.588] [info]  /Users/runner/Documents/ComfyUI/user/__manager/config.ini
+[2026-05-10 03:53:27.588] [info]  
+
+[2026-05-10 03:53:27.589] [info]  ** Log path:
+[2026-05-10 03:53:27.594] [info]   
+[2026-05-10 03:53:27.596] [info]  /Users/runner/Documents/ComfyUI/user/comfyui.log
+[2026-05-10 03:53:27.598] [info]  
+
+[2026-05-10 03:53:27.729] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.
+
+[2026-05-10 03:53:27.732] [info]  [PRE] ComfyUI-Manager
+
+[2026-05-10 03:53:27.988] [error] [comfy-env] comfyui-geometrypack: 1 isolation env(s):
+[2026-05-10 03:53:27.993] [error] 
+
+[2026-05-10 03:53:27.995] [error] [comfy-env]   nodes -> /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack/nodes
+[2026-05-10 03:53:27.997] [error] 
+
+[2026-05-10 03:53:29.524] [error] [comfy-env] prestartup complete
+[2026-05-10 03:53:29.528] [error] 
+
+[2026-05-10 03:53:29.552] [info]  WARNING: Potential Error in code: Torch already imported, torch should never be imported before this point.
+
+[2026-05-10 03:53:30.862] [info]  Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': "ImportError: No module named 'triton'", 'capabilities': []}
+Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}
+
+[2026-05-10 03:53:30.866] [info]  Found comfy_kitchen backend cuda: {'available': False, 'disabled': True, 'unavailable_reason': 'Extension file not found: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfy_kitchen/backends/cuda/_C.abi3.so', 'capabilities': []}
+
+[2026-05-10 03:53:30.917] [info]  Checkpoint files will always be loaded safely.
+
+[2026-05-10 03:53:30.973] [info]  Total VRAM 7168 MB, total RAM 7168 MB
+
+[2026-05-10 03:53:30.977] [info]  pytorch version: 2.10.0
+
+[2026-05-10 03:53:30.983] [info]  Mac Version (15, 7, 4)
+
+[2026-05-10 03:53:30.985] [info]  Set vram state to: SHARED
+
+[2026-05-10 03:53:30.986] [info]  Device: mps
+
+[2026-05-10 03:53:31.472] [info]  Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+
+[2026-05-10 03:53:34.801] [info]  Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]
+
+[2026-05-10 03:53:34.803] [info]  ComfyUI version: 0.20.1
+
+[2026-05-10 03:53:34.805] [info]  comfy-aimdo version: 0.2.14
+
+[2026-05-10 03:53:34.814] [info]  comfy-kitchen version: 0.2.8
+
+[2026-05-10 03:53:34.818] [info]  [Prompt Server] web root: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI/web_custom_versions/desktop_app
+
+[2026-05-10 03:53:34.820] [info]  Asset seeder disabled
+
+[2026-05-10 03:53:34.822] [info]  [START] ComfyUI-Manager
+
+[2026-05-10 03:53:35.060] [info]  [ComfyUI-Manager] Using GitPython backend
+[2026-05-10 03:53:35.062] [info]  
+
+[2026-05-10 03:53:35.135] [info]  [ComfyUI-Manager] network_mode: public
+
+[2026-05-10 03:53:35.145] [info]  [ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.
+	To use this feature, please run the following command:
+	/Users/runner/Documents/ComfyUI/.venv/bin/python -m pip install matrix-nio
+
+
+[2026-05-10 03:53:36.739] [info]  loading...
+
+[2026-05-10 03:53:36.744] [info]  calling register_nodes
+
+[2026-05-10 03:53:36.753] [error] [comfy-env] Version: 0.3.78
+[2026-05-10 03:53:36.754] [error] 
+
+[2026-05-10 03:53:37.045] [error] [comfy-env] register_nodes: comfyui-geometrypack
+[2026-05-10 03:53:37.048] [error] 
+
+[2026-05-10 03:53:37.069] [error] [comfy-env] ComfyUI source dir: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI
+[2026-05-10 03:53:37.071] [error] 
+
+[2026-05-10 03:53:37.117] [error] [comfy-env] Scanning nodes metadata (isolation root)...
+[2026-05-10 03:53:37.119] [error] 
+
+[2026-05-10 03:53:37.155] [error] [comfy-env] Cache hit for nodes: 125 nodes
+[2026-05-10 03:53:37.162] [error] 
+
+[2026-05-10 03:53:37.165] [error] [comfy-env] Scanned nodes root: 125 nodes (0.0s)
+[2026-05-10 03:53:37.167] [error] 
+
+[2026-05-10 03:53:37.172] [error] [comfy-env] Imported nodes root: 125 nodes (isolation)
+[2026-05-10 03:53:37.182] [error] 
+
+[2026-05-10 03:53:37.186] [error] [comfy-env] Registered 125 total nodes
+[2026-05-10 03:53:37.188] [error] 
+
+[2026-05-10 03:53:37.201] [info]  
+Import times for custom nodes:
+
+[2026-05-10 03:53:37.203] [info]     0.0 seconds: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes/websocket_image_save.py
+   0.5 seconds: /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack
+
+[2026-05-10 03:53:37.204] [info]  
+
+[2026-05-10 03:53:37.219] [info]  Context impl SQLiteImpl.
+
+[2026-05-10 03:53:37.220] [info]  Will assume non-transactional DDL.
+
+[2026-05-10 03:53:37.327] [info]  Starting server
+
+
+[2026-05-10 03:53:37.330] [info]  To see the GUI go to: http://127.0.0.1:8000
+
+[2026-05-10 03:53:39.230] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.
+
+[2026-05-10 03:53:39.366] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json
+[2026-05-10 03:53:39.381] [info]   [DONE]
+
+[2026-05-10 03:53:41.423] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.
+
+[2026-05-10 03:53:41.465] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json
+[2026-05-10 03:53:41.478] [info]   [DONE]
+
+[2026-05-10 03:54:04.853] [info]  got prompt
+
+[2026-05-10 03:54:05.205] [info]  [comfyui-geometrypack] python: /Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/bin/python
+[2026-05-10 03:54:05.206] [info]  
+
+[2026-05-10 03:54:05.207] [info]  [comfyui-geometrypack] sys_path sent to worker: ['/Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack', '/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.1/site-packages', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack']
+[2026-05-10 03:54:05.209] [info]  
+
+[2026-05-10 03:54:15.270] [error] [worker:comfyui-geometrypack] INFO: Found mesh in input folder: 3d/cow.off
+[2026-05-10 03:54:15.272] [error] 
+[worker:comfyui-geometrypack] INFO: Loading: /Users/runner/Documents/ComfyUI/input/3d/cow.off
+
+[2026-05-10 03:54:15.295] [error] [worker:comfyui-geometrypack] INFO: Initial mesh: 2761 vertices, 5520 faces
+[2026-05-10 03:54:15.296] [error] 
+
+[2026-05-10 03:54:15.303] [error] [worker:comfyui-geometrypack] INFO: Successfully loaded: 2761 vertices, 5520 faces
+
+[2026-05-10 03:54:15.305] [error] [worker:comfyui-geometrypack] INFO: Loaded: 2761 vertices, 5520 faces
+[2026-05-10 03:54:15.308] [error] 
+
+[2026-05-10 03:54:16.521] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:16.527] [error] 
+
+[2026-05-10 03:54:16.622] [error] [comfyui-geometrypack] Health check: ok
+
+[2026-05-10 03:54:16.637] [error] [worker:comfyui-geometrypack] INFO: Extract Skeleton dispatch: edge_collapse -> GeomPackSkeleton_EdgeCollapse
+[2026-05-10 03:54:16.638] [error] 
+
+[2026-05-10 03:54:16.648] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:16.660] [error] 
+
+[2026-05-10 03:54:16.667] [error] [comfyui-geometrypack] Health check: ok
+
+[2026-05-10 03:54:25.817] [error] [worker:comfyui-geometrypack] WARNING: Matplotlib is building the font cache; this may take a moment.
+[2026-05-10 03:54:25.818] [error] 
+
+[2026-05-10 03:54:49.571] [error] [worker:comfyui-geometrypack] INFO: Backend: edge_collapse
+
+[2026-05-10 03:54:49.718] [error] Collapsing edges:   0%|          | 0/5520 [00:00<?, ?it/s]
+[2026-05-10 03:54:49.819] [error] Collapsing edges:   4%|▍         | 222/5520 [00:00<00:02, 2218.23it/s]
+[2026-05-10 03:54:49.919] [error] Collapsing edges:   8%|▊         | 466/5520 [00:00<00:02, 2341.21it/s]
+[2026-05-10 03:54:50.020] [error] Collapsing edges:  13%|█▎        | 710/5520 [00:00<00:02, 2381.51it/s]
+[2026-05-10 03:54:50.132] [error] Collapsing edges:  17%|█▋        | 950/5520 [00:00<00:02, 2277.21it/s]
+[2026-05-10 03:54:50.252] [error] Collapsing edges:  21%|██▏       | 1180/5520 [00:00<00:02, 2134.08it/s]
+[2026-05-10 03:54:50.365] [error] Collapsing edges:  25%|██▌       | 1396/5520 [00:00<00:02, 2058.34it/s]
+[2026-05-10 03:54:50.466] [error] Collapsing edges:  30%|██▉       | 1632/5520 [00:00<00:01, 2147.56it/s]
+[2026-05-10 03:54:50.566] [error] Collapsing edges:  34%|███▍      | 1884/5520 [00:00<00:01, 2259.90it/s]
+[2026-05-10 03:54:50.666] [error] Collapsing edges:  39%|███▉      | 2158/5520 [00:00<00:01, 2404.04it/s]
+[2026-05-10 03:54:50.768] [error] Collapsing edges:  44%|████▎     | 2414/5520 [00:01<00:01, 2432.17it/s]
+[2026-05-10 03:54:50.872] [error] Collapsing edges:  48%|████▊     | 2660/5520 [00:01<00:01, 2411.04it/s]
+[2026-05-10 03:54:50.986] [error] Collapsing edges:  53%|█████▎    | 2904/5520 [00:01<00:01, 2328.49it/s]
+[2026-05-10 03:54:51.085] [error] Collapsing edges:  57%|█████▋    | 3152/5520 [00:01<00:00, 2372.36it/s]
+[2026-05-10 03:54:51.227] [error] Collapsing edges:  61%|██████▏   | 3392/5520 [00:01<00:01, 2120.70it/s]
+[2026-05-10 03:54:51.328] [error] Collapsing edges:  66%|██████▌   | 3638/5520 [00:01<00:00, 2210.39it/s]
+[2026-05-10 03:54:51.428] [error] Collapsing edges:  71%|███████   | 3918/5520 [00:01<00:00, 2374.09it/s]
+[2026-05-10 03:54:51.528] [error] Collapsing edges:  76%|███████▌  | 4184/5520 [00:01<00:00, 2453.07it/s]
+[2026-05-10 03:54:51.628] [error] Collapsing edges:  81%|████████  | 4466/5520 [00:01<00:00, 2558.35it/s]
+[2026-05-10 03:54:51.729] [error] Collapsing edges:  86%|████████▌ | 4736/5520 [00:02<00:00, 2596.75it/s]
+[2026-05-10 03:54:51.829] [error] Collapsing edges:  91%|█████████ | 5014/5520 [00:02<00:00, 2645.54it/s]
+[2026-05-10 03:54:51.930] [error] Collapsing edges:  96%|█████████▌| 5294/5520 [00:02<00:00, 2690.25it/s]
+[2026-05-10 03:54:52.036] [error] Collapsing edges: 100%|█████████▉| 5518/5520 [00:02<00:00, 2381.52it/s]
+
+[2026-05-10 03:54:52.113] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:52.140] [error] 
+
+[2026-05-10 03:54:52.170] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:52.220] [error] 
+
+[2026-05-10 03:54:52.288] [error] [worker:comfyui-geometrypack] INFO: Creating solid mesh: 55 joints, 54 bones
+[2026-05-10 03:54:52.294] [error] 
+
+[2026-05-10 03:54:52.295] [error] [worker:comfyui-geometrypack] INFO: Skeleton metadata: scale=0.505, normalized=False
+[2026-05-10 03:54:52.298] [error] 
+
+[2026-05-10 03:54:52.301] [error] [worker:comfyui-geometrypack] INFO: Input skeleton bounding box:
+
+[2026-05-10 03:54:52.302] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.507, -0.308, -0.140]
+[2026-05-10 03:54:52.304] [error] 
+[worker:comfyui-geometrypack] INFO:   Max: [0.503, 0.319, 0.138]
+
+[2026-05-10 03:54:52.309] [error] [worker:comfyui-geometrypack] INFO:   Size: [1.010, 0.627, 0.277]
+[2026-05-10 03:54:52.310] [error] 
+
+[2026-05-10 03:54:52.311] [error] [worker:comfyui-geometrypack] INFO:   Center: [-0.002, 0.005, -0.001]
+[2026-05-10 03:54:52.312] [error] 
+
+[2026-05-10 03:54:52.406] [error] [worker:comfyui-geometrypack] INFO: Created mesh: 6362 vertices, 12288 faces
+
+[2026-05-10 03:54:52.414] [error] [worker:comfyui-geometrypack] INFO: Output mesh bounding box:
+
+[2026-05-10 03:54:52.416] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.527, -0.328, -0.160]
+[2026-05-10 03:54:52.417] [error] 
+
+[2026-05-10 03:54:52.419] [error] [worker:comfyui-geometrypack] INFO:   Max: [0.522, 0.338, 0.158]
+
+[2026-05-10 03:54:52.421] [error] [worker:comfyui-geometrypack] INFO:   Size: [1.049, 0.666, 0.317]
+[2026-05-10 03:54:52.421] [error] 
+
+[2026-05-10 03:54:52.422] [error] [worker:comfyui-geometrypack] INFO:   Center: [-0.002, 0.005, -0.001]
+
+[2026-05-10 03:54:52.432] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:52.434] [error] 
+
+[2026-05-10 03:54:52.504] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:52.506] [error] 
+
+[2026-05-10 03:54:52.520] [error] [worker:comfyui-geometrypack] INFO: Extract Skeleton dispatch: vertex_clusters -> GeomPackSkeleton_VertexClusters
+[2026-05-10 03:54:52.522] [error] 
+
+[2026-05-10 03:54:52.538] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:52.544] [error] 
+
+[2026-05-10 03:54:52.556] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:52.562] [error] 
+
+[2026-05-10 03:54:52.585] [error] [worker:comfyui-geometrypack] INFO: Backend: vertex_clusters
+[2026-05-10 03:54:52.587] [error] 
+
+[2026-05-10 03:54:52.663] [error] Clustering:   0%|          | 0/2761 [00:00<?, ?it/s]
+[2026-05-10 03:54:52.677] [error] Clustering: 100%|██████████| 2761/2761 [00:00<00:00, 191071.70it/s]
+
+[2026-05-10 03:54:52.703] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:52.704] [error] 
+
+[2026-05-10 03:54:52.722] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:52.740] [error] 
+
+[2026-05-10 03:54:52.810] [error] [worker:comfyui-geometrypack] INFO: Creating solid mesh: 25 joints, 24 bones
+
+[2026-05-10 03:54:52.813] [error] [worker:comfyui-geometrypack] INFO: Skeleton metadata: scale=0.453, normalized=False
+
+[2026-05-10 03:54:52.818] [error] [worker:comfyui-geometrypack] INFO: Input skeleton bounding box:
+
+[2026-05-10 03:54:52.821] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.481, -0.320, -0.111]
+
+[2026-05-10 03:54:52.822] [error] [worker:comfyui-geometrypack] INFO:   Max: [0.425, 0.308, 0.123]
+[2026-05-10 03:54:52.828] [error] 
+
+[2026-05-10 03:54:52.830] [error] [worker:comfyui-geometrypack] INFO:   Size: [0.906, 0.628, 0.234]
+
+[2026-05-10 03:54:52.832] [error] [worker:comfyui-geometrypack] INFO:   Center: [-0.028, -0.006, 0.006]
+[2026-05-10 03:54:52.833] [error] 
+
+[2026-05-10 03:54:52.879] [error] [worker:comfyui-geometrypack] INFO: Created mesh: 2882 vertices, 5568 faces
+
+[2026-05-10 03:54:52.883] [error] [worker:comfyui-geometrypack] INFO: Output mesh bounding box:
+[2026-05-10 03:54:52.885] [error] 
+
+[2026-05-10 03:54:52.886] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.500, -0.339, -0.131]
+[2026-05-10 03:54:52.887] [error] 
+
+[2026-05-10 03:54:52.888] [error] [worker:comfyui-geometrypack] INFO:   Max: [0.445, 0.328, 0.143]
+[2026-05-10 03:54:52.893] [error] 
+
+[2026-05-10 03:54:52.894] [error] [worker:comfyui-geometrypack] INFO:   Size: [0.945, 0.667, 0.274]
+[2026-05-10 03:54:52.895] [error] 
+
+[2026-05-10 03:54:52.898] [error] [worker:comfyui-geometrypack] INFO:   Center: [-0.028, -0.006, 0.006]
+
+[2026-05-10 03:54:52.902] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:52.903] [error] 
+
+[2026-05-10 03:54:52.962] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:52.965] [error] 
+
+[2026-05-10 03:54:52.971] [error] [worker:comfyui-geometrypack] INFO: Extract Skeleton dispatch: wavefront -> GeomPackSkeleton_Wavefront
+[2026-05-10 03:54:52.972] [error] 
+
+[2026-05-10 03:54:52.980] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+
+[2026-05-10 03:54:52.989] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:52.998] [error] 
+
+[2026-05-10 03:54:53.005] [error] [worker:comfyui-geometrypack] INFO: Backend: wavefront
+
+[2026-05-10 03:54:53.064] [error] Skeletonizing:   0%|          | 0/2761 [00:00<?, ?it/s]
+[2026-05-10 03:54:53.086] [error] Skeletonizing: 100%|██████████| 2761/2761 [00:00<00:00, 120937.31it/s]
+
+[2026-05-10 03:54:53.120] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:53.132] [error] 
+
+[2026-05-10 03:54:53.203] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:53.208] [error] 
+
+[2026-05-10 03:54:53.215] [error] [worker:comfyui-geometrypack] INFO: Creating solid mesh: 96 joints, 95 bones
+
+[2026-05-10 03:54:53.217] [error] [worker:comfyui-geometrypack] INFO: Skeleton metadata: scale=0.515, normalized=False
+[2026-05-10 03:54:53.218] [error] 
+
+[2026-05-10 03:54:53.219] [error] [worker:comfyui-geometrypack] INFO: Input skeleton bounding box:
+
+[2026-05-10 03:54:53.220] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.512, -0.315, -0.154]
+[2026-05-10 03:54:53.221] [error] 
+
+[2026-05-10 03:54:53.221] [error] [worker:comfyui-geometrypack] INFO:   Max: [0.519, 0.320, 0.138]
+[2026-05-10 03:54:53.222] [error] 
+
+[2026-05-10 03:54:53.222] [error] [worker:comfyui-geometrypack] INFO:   Size: [1.031, 0.635, 0.292]
+[2026-05-10 03:54:53.228] [error] 
+
+[2026-05-10 03:54:53.230] [error] [worker:comfyui-geometrypack] INFO:   Center: [0.003, 0.002, -0.008]
+[2026-05-10 03:54:53.232] [error] 
+
+[2026-05-10 03:54:53.362] [error] [worker:comfyui-geometrypack] INFO: Created mesh: 11118 vertices, 21472 faces
+[2026-05-10 03:54:53.365] [error] 
+
+[2026-05-10 03:54:53.369] [error] [worker:comfyui-geometrypack] INFO: Output mesh bounding box:
+[2026-05-10 03:54:53.370] [error] 
+
+[2026-05-10 03:54:53.371] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.531, -0.334, -0.174]
+[2026-05-10 03:54:53.372] [error] 
+
+[2026-05-10 03:54:53.372] [error] [worker:comfyui-geometrypack] INFO:   Max: [0.538, 0.339, 0.158]
+[2026-05-10 03:54:53.373] [error] 
+
+[2026-05-10 03:54:53.378] [error] [worker:comfyui-geometrypack] INFO:   Size: [1.070, 0.674, 0.332]
+
+[2026-05-10 03:54:53.379] [error] [worker:comfyui-geometrypack] INFO:   Center: [0.003, 0.002, -0.008]
+[2026-05-10 03:54:53.379] [error] 
+
+[2026-05-10 03:54:53.386] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:53.387] [error] 
+
+[2026-05-10 03:54:53.450] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:53.452] [error] 
+
+[2026-05-10 03:54:53.464] [error] [worker:comfyui-geometrypack] INFO: Mode: fields, Meshes: 4
+
+[2026-05-10 03:54:53.467] [error] [worker:comfyui-geometrypack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
+[2026-05-10 03:54:53.468] [error] 
+
+[2026-05-10 03:54:53.469] [error] [worker:comfyui-geometrypack] INFO: Exporting mesh to VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_1_63dd1e1e.vtp
+[2026-05-10 03:54:53.470] [error] 
+
+[2026-05-10 03:54:53.485] [error] [worker:comfyui-geometrypack] INFO: Adding normals field (2761 vertices)
+
+[2026-05-10 03:54:53.502] [error] [worker:comfyui-geometrypack] INFO: Export complete: 2761 vertices, 5520 faces
+
+[2026-05-10 03:54:53.504] [error] [worker:comfyui-geometrypack] INFO: Exported VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_1_63dd1e1e.vtp
+
+[2026-05-10 03:54:53.511] [error] [worker:comfyui-geometrypack] INFO: Mesh 2: Mesh - 11118 vertices, 21472 faces
+
+[2026-05-10 03:54:53.512] [error] [worker:comfyui-geometrypack] INFO: Exporting mesh to VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_2_63dd1e1e.vtp
+[2026-05-10 03:54:53.513] [error] 
+
+[2026-05-10 03:54:53.564] [error] [worker:comfyui-geometrypack] INFO: Adding normals field (11118 vertices)
+[2026-05-10 03:54:53.566] [error] 
+
+[2026-05-10 03:54:53.616] [error] [worker:comfyui-geometrypack] INFO: Export complete: 11118 vertices, 21472 faces
+[2026-05-10 03:54:53.617] [error] 
+
+[2026-05-10 03:54:53.618] [error] [worker:comfyui-geometrypack] INFO: Exported VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_2_63dd1e1e.vtp
+[2026-05-10 03:54:53.619] [error] 
+
+[2026-05-10 03:54:53.633] [error] [worker:comfyui-geometrypack] INFO: Mesh 3: Mesh - 2882 vertices, 5568 faces
+[2026-05-10 03:54:53.634] [error] 
+
+[2026-05-10 03:54:53.635] [error] [worker:comfyui-geometrypack] INFO: Exporting mesh to VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_3_63dd1e1e.vtp
+[2026-05-10 03:54:53.636] [error] 
+
+[2026-05-10 03:54:53.650] [error] [worker:comfyui-geometrypack] INFO: Adding normals field (2882 vertices)
+[2026-05-10 03:54:53.651] [error] 
+
+[2026-05-10 03:54:53.667] [error] [worker:comfyui-geometrypack] INFO: Export complete: 2882 vertices, 5568 faces
+
+[2026-05-10 03:54:53.668] [error] [worker:comfyui-geometrypack] INFO: Exported VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_3_63dd1e1e.vtp
+[2026-05-10 03:54:53.669] [error] 
+
+[2026-05-10 03:54:53.672] [error] [worker:comfyui-geometrypack] INFO: Mesh 4: Mesh - 6362 vertices, 12288 faces
+[2026-05-10 03:54:53.672] [error] 
+
+[2026-05-10 03:54:53.676] [error] [worker:comfyui-geometrypack] INFO: Exporting mesh to VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_4_63dd1e1e.vtp
+
+[2026-05-10 03:54:53.703] [error] [worker:comfyui-geometrypack] INFO: Adding normals field (6362 vertices)
+[2026-05-10 03:54:53.704] [error] 
+
+[2026-05-10 03:54:53.738] [error] [worker:comfyui-geometrypack] INFO: Export complete: 6362 vertices, 12288 faces
+[2026-05-10 03:54:53.743] [error] 
+
+[2026-05-10 03:54:53.745] [error] [worker:comfyui-geometrypack] INFO: Exported VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_4_63dd1e1e.vtp
+
+[2026-05-10 03:54:53.753] [error] [worker:comfyui-geometrypack] INFO: Grid: 2x2, Preview ready
+[2026-05-10 03:54:53.754] [error] 
+
+[2026-05-10 03:54:53.756] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+
+[2026-05-10 03:54:53.761] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:53.818] [error] 
+
+[2026-05-10 03:54:54.280] [error] [worker:comfyui-geometrypack] INFO: Extract Skeleton dispatch: teasar -> GeomPackSkeleton_Teasar
+[2026-05-10 03:54:54.284] [error] 
+
+[2026-05-10 03:54:54.295] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:54.300] [error] 
+
+[2026-05-10 03:54:54.383] [error] [comfyui-geometrypack] Health check: ok
+
+[2026-05-10 03:54:54.703] [error] [worker:comfyui-geometrypack] INFO: Backend: teasar
+
+[2026-05-10 03:54:54.965] [error] Invalidating:   0%|          | 0/2761 [00:00<?, ?it/s]
+[2026-05-10 03:54:54.985] [error]                                                       
+[2026-05-10 03:54:55.000] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:55.018] [error] 
+
+[2026-05-10 03:54:55.048] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:55.085] [error] 
+
+[2026-05-10 03:54:55.095] [error] [worker:comfyui-geometrypack] INFO: Creating solid mesh: 37 joints, 36 bones
+
+[2026-05-10 03:54:55.097] [error] [worker:comfyui-geometrypack] INFO: Skeleton metadata: scale=0.325, normalized=False
+[2026-05-10 03:54:55.099] [error] 
+
+[2026-05-10 03:54:55.100] [error] [worker:comfyui-geometrypack] INFO: Input skeleton bounding box:
+[2026-05-10 03:54:55.101] [error] 
+
+[2026-05-10 03:54:55.102] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.498, -0.152, -0.129]
+[2026-05-10 03:54:55.103] [error] 
+
+[2026-05-10 03:54:55.103] [error] [worker:comfyui-geometrypack] INFO:   Max: [0.152, 0.231, 0.017]
+[2026-05-10 03:54:55.104] [error] 
+
+[2026-05-10 03:54:55.104] [error] [worker:comfyui-geometrypack] INFO:   Size: [0.650, 0.383, 0.146]
+[2026-05-10 03:54:55.105] [error] 
+[worker:comfyui-geometrypack] INFO:   Center: [-0.173, 0.040, -0.056]
+[2026-05-10 03:54:55.105] [error] 
+
+[2026-05-10 03:54:55.167] [error] [worker:comfyui-geometrypack] INFO: Created mesh: 4274 vertices, 8256 faces
+[2026-05-10 03:54:55.168] [error] 
+
+[2026-05-10 03:54:55.170] [error] [worker:comfyui-geometrypack] INFO: Output mesh bounding box:
+[2026-05-10 03:54:55.171] [error] 
+
+[2026-05-10 03:54:55.175] [error] [worker:comfyui-geometrypack] INFO:   Min: [-0.518, -0.171, -0.149]
+[2026-05-10 03:54:55.176] [error] 
+
+[2026-05-10 03:54:55.177] [error] [worker:comfyui-geometrypack] INFO:   Max: [0.171, 0.251, 0.037]
+[2026-05-10 03:54:55.177] [error] 
+
+[2026-05-10 03:54:55.178] [error] [worker:comfyui-geometrypack] INFO:   Size: [0.689, 0.422, 0.186]
+[2026-05-10 03:54:55.179] [error] 
+[worker:comfyui-geometrypack] INFO:   Center: [-0.173, 0.040, -0.056]
+
+[2026-05-10 03:54:55.184] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+[2026-05-10 03:54:55.186] [error] 
+
+[2026-05-10 03:54:55.205] [error] [comfyui-geometrypack] Health check: ok
+[2026-05-10 03:54:55.233] [error] 
+
+[2026-05-10 03:54:55.268] [error] [worker:comfyui-geometrypack] INFO: Mode: fields, Meshes: 2
+[2026-05-10 03:54:55.269] [error] 
+[worker:comfyui-geometrypack] INFO: Mesh 1: Mesh - 4274 vertices, 8256 faces
+[2026-05-10 03:54:55.270] [error] 
+
+[2026-05-10 03:54:55.271] [error] [worker:comfyui-geometrypack] INFO: Exporting mesh to VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_1_71cecd08.vtp
+
+[2026-05-10 03:54:55.296] [error] [worker:comfyui-geometrypack] INFO: Adding normals field (4274 vertices)
+[2026-05-10 03:54:55.298] [error] 
+
+[2026-05-10 03:54:55.339] [error] [worker:comfyui-geometrypack] INFO: Export complete: 4274 vertices, 8256 faces
+[2026-05-10 03:54:55.344] [error] 
+
+[2026-05-10 03:54:55.346] [error] [worker:comfyui-geometrypack] INFO: Exported VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_1_71cecd08.vtp
+[2026-05-10 03:54:55.347] [error] 
+
+[2026-05-10 03:54:55.352] [error] [worker:comfyui-geometrypack] INFO: Mesh 2: Mesh - 6362 vertices, 12288 faces
+[2026-05-10 03:54:55.353] [error] 
+
+[2026-05-10 03:54:55.354] [error] [worker:comfyui-geometrypack] INFO: Exporting mesh to VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_2_71cecd08.vtp
+[2026-05-10 03:54:55.355] [error] 
+
+[2026-05-10 03:54:55.386] [error] [worker:comfyui-geometrypack] INFO: Adding normals field (6362 vertices)
+[2026-05-10 03:54:55.387] [error] 
+
+[2026-05-10 03:54:55.419] [error] [worker:comfyui-geometrypack] INFO: Export complete: 6362 vertices, 12288 faces
+
+[2026-05-10 03:54:55.421] [error] [worker:comfyui-geometrypack] INFO: Exported VTP: /Users/runner/Documents/ComfyUI/output/preview_multi_2_71cecd08.vtp
+[2026-05-10 03:54:55.422] [error] 
+
+[2026-05-10 03:54:55.432] [error] [worker:comfyui-geometrypack] INFO: Grid: 2x1, Preview ready
+[2026-05-10 03:54:55.433] [error] 
+
+[2026-05-10 03:54:55.611] [info]  Prompt executed in 50.60 seconds
+
+[2026-05-10 03:55:02.539] [error] /Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 9 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_f5b281de': [Errno 2] No such file or directory: '/psm_f5b281de'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_0c77e604': [Errno 2] No such file or directory: '/psm_0c77e604'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_27924fe9': [Errno 2] No such file or directory: '/psm_27924fe9'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_66d82867': [Errno 2] No such file or directory: '/psm_66d82867'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_1cf15c81': [Errno 2] No such file or directory: '/psm_1cf15c81'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_5acff9a1': [Errno 2] No such file or directory: '/psm_5acff9a1'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+
+[2026-05-10 03:55:02.573] [error] /Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_3ee98828': [Errno 2] No such file or directory: '/psm_3ee98828'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_b1f1ce03': [Errno 2] No such file or directory: '/psm_b1f1ce03'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/Users/runner/Documents/ComfyUI/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/multiprocessing/resource_tracker.py:292: UserWarning: resource_tracker: '/psm_295bf58d': [Errno 2] No such file or directory: '/psm_295bf58d'
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+

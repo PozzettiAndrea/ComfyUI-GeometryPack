@@ -1,16 +1,196 @@
 {
+  "timestamp": "2026-05-10T04:03:03.799659+00:00",
+  "platform": "macos_desktop",
+  "hardware": {
+    "os": "macOS-15.7.4-arm64-arm-64bit",
+    "cpu": "arm"
+  },
+  "commit_hash": "819d38de74687cf803ab440583a00873951d07f0",
+  "success": false,
+  "summary": {
+    "total": 30,
+    "passed": 20,
+    "failed": 9
+  },
   "workflows": [
-    {
-      "name": "system",
-      "status": "pass",
-      "duration_seconds": 0,
-      "error": null,
-      "hardware": null
-    },
     {
       "name": "sharpen",
       "status": "pass",
-      "duration_seconds": 23,
+      "duration_seconds": 9,
+      "error": null
+    },
+    {
+      "name": "alpha_wrap",
+      "status": "pass",
+      "duration_seconds": 14,
+      "error": null
+    },
+    {
+      "name": "batch_remesh",
+      "status": "pass",
+      "duration_seconds": 10,
+      "error": null
+    },
+    {
+      "name": "boolean_ops",
+      "status": "pass",
+      "duration_seconds": 6,
+      "error": null
+    },
+    {
+      "name": "boolean_ops_all",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card boolean_ops_all not found in section"
+    },
+    {
+      "name": "decimate",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card decimate not found in section"
+    },
+    {
+      "name": "decimate_all",
+      "status": "pass",
+      "duration_seconds": 16,
+      "error": null
+    },
+    {
+      "name": "depth_map_to_mesh",
+      "status": "timeout",
+      "duration_seconds": 600,
+      "error": "no execution_success/error in 10min"
+    },
+    {
+      "name": "fix_normals_all",
+      "status": "pass",
+      "duration_seconds": 11,
+      "error": null
+    },
+    {
+      "name": "fix_self_intersection",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card fix_self_intersection not found in section"
+    },
+    {
+      "name": "mesh_info",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card mesh_info not found in section"
+    },
+    {
+      "name": "mesh_mesh_distance",
+      "status": "pass",
+      "duration_seconds": 21,
+      "error": null
+    },
+    {
+      "name": "normals",
+      "status": "pass",
+      "duration_seconds": 10,
+      "error": null
+    },
+    {
+      "name": "point_mesh_distance",
+      "status": "pass",
+      "duration_seconds": 5,
+      "error": null
+    },
+    {
+      "name": "preview_mesh_threejs",
+      "status": "pass",
+      "duration_seconds": 21,
+      "error": null
+    },
+    {
+      "name": "reconstruct_all",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card reconstruct_all not found in section"
+    },
+    {
+      "name": "refine_mesh",
+      "status": "pass",
+      "duration_seconds": 15,
+      "error": null
+    },
+    {
+      "name": "remesh_intersections",
+      "status": "pass",
+      "duration_seconds": 22,
+      "error": null
+    },
+    {
+      "name": "remeshing",
+      "status": "pass",
+      "duration_seconds": 68,
+      "error": null
+    },
+    {
+      "name": "sMOOth",
+      "status": "pass",
+      "duration_seconds": 22,
+      "error": null
+    },
+    {
+      "name": "sharpen_all",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card sharpen_all not found in section"
+    },
+    {
+      "name": "side_by_side_viewer",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card side_by_side_viewer not found in section"
+    },
+    {
+      "name": "skeleton_all",
+      "status": "pass",
+      "duration_seconds": 51,
+      "error": null
+    },
+    {
+      "name": "skeleton_extraction",
+      "status": "pass",
+      "duration_seconds": 14,
+      "error": null
+    },
+    {
+      "name": "smooth_all",
+      "status": "pass",
+      "duration_seconds": 15,
+      "error": null
+    },
+    {
+      "name": "surface_reconstruction",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card surface_reconstruction not found in section"
+    },
+    {
+      "name": "test_loading",
+      "status": "pass",
+      "duration_seconds": 16,
+      "error": null
+    },
+    {
+      "name": "transform",
+      "status": "fail",
+      "duration_seconds": 0,
+      "error": "card transform not found in section"
+    },
+    {
+      "name": "uv_unwrap",
+      "status": "pass",
+      "duration_seconds": 31,
+      "error": null
+    },
+    {
+      "name": "view_texture",
+      "status": "pass",
+      "duration_seconds": 14,
       "error": null
     }
   ]
