@@ -20,8 +20,8 @@ Capturing execution frames: mesh_info.json
   [ComfyUI]   Node 12: GeomPackMeshQuality
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
-  [ComfyUI] Generated prompt_id: a23103e5-cb98-4b8f-bf54-5d214af0d036
-  [ComfyUI] Generated prompt_id: a23103e5-cb98-4b8f-bf54-5d214af0d036
+  [ComfyUI] Generated prompt_id: 62a8dde3-66ca-462e-bdfd-085e157f0e47
+  [ComfyUI] Generated prompt_id: 62a8dde3-66ca-462e-bdfd-085e157f0e47
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -38,8 +38,22 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
+  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
+  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
+  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1011/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1011/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1011/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
+  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1011/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1011/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.12/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1011/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
+  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/tmp/comfyui_pvenv_kpwwsjrd/persistent_worker.py', 'abstract://comfy_worker_2b3813502e54']...
+  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/tmp/comfyui_pvenv_kpwwsjrd/persistent_worker.py', 'abstract://comfy_worker_2b3813502e54']...
+  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_2b3813502e54 (abstract, no filesystem path)
+  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_2b3813502e54 (abstract, no filesystem path)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
+  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
@@ -50,12 +64,14 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=66 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=66 sending call_method
+  Frame 2 saved (frame_001.jpg, t=2.2s)
+  [capture-periodic] freeze=2ms shot=85ms unfreeze=3ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created cube: 8 vertices, 12 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created cube: 8 vertices, 12 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.01s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (2.29s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (2.29s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshQuality: include_face_quality: True, include_edge_stats: True, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshQuality: include_face_quality: True, include_edge_stats: True, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_quality.MeshQualityNode.EXECUTE_NORMALIZED
@@ -82,8 +98,8 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analysis complete
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.02s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.02s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.01s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
   [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
   [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
@@ -108,15 +124,15 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.01s): result: NodeOutput
   [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.01s): result: NodeOutput
-  [ComfyUI] Prompt executed in 0.04 seconds
-  [ComfyUI] Prompt executed in 0.04 seconds
+  [ComfyUI] Prompt executed in 2.31 seconds
+  [ComfyUI] Prompt executed in 2.31 seconds
   Node executed (2 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=0.4s)
-  [capture-node] freeze=2ms shot=74ms unfreeze=0ms saved=True
-  Execution complete (t=0.4s)
-  Captured 2 unique frames over 0.56s
+  Frame 3 saved (frame_002.jpg, t=2.6s)
+  [capture-node] freeze=2ms shot=77ms unfreeze=0ms saved=True
+  Execution complete (t=2.7s)
+  Captured 3 unique frames over 2.77s
   [debug] iframes: 0
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: mesh_info_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 3 video frames
+    Captured 4 video frames
