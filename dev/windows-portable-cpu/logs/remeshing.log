@@ -20,8 +20,8 @@ Capturing execution frames: remeshing.json
   [ComfyUI]   Node 27: GeomPackRemesh
   [ComfyUI]     Inputs: {"backend": "quadwild", "backend.qw_sharp_angle": 35, "backend.qw_alpha": 0.02, "backend.qw_scale_factor": 1, "backend.qw_remesh": "true", "backend.qw_smooth": "true", "report_panel": "false", "trimes
   [ComfyUI]     Inputs: {"backend": "quadwild", "backend.qw_sharp_angle": 35, "backend.qw_alpha": 0.02, "backend.qw_scale_factor": 1, "backend.qw_remesh": "true", "backend.qw_smooth": "true", "report_panel": "false", "trimes
-  [ComfyUI] Generated prompt_id: 0b1bcc54-1c14-4d08-8966-8da50f26ed77
-  [ComfyUI] Generated prompt_id: 0b1bcc54-1c14-4d08-8966-8da50f26ed77
+  [ComfyUI] Generated prompt_id: 65b260e2-7760-4109-b7ad-00657a2056f3
+  [ComfyUI] Generated prompt_id: 65b260e2-7760-4109-b7ad-00657a2056f3
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -52,8 +52,8 @@ Capturing execution frames: remeshing.json
   [ComfyUI] [SubprocessWorker] call_id=108 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
@@ -62,8 +62,8 @@ Capturing execution frames: remeshing.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.44s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.44s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.35s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.35s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
@@ -88,8 +88,8 @@ Capturing execution frames: remeshing.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: quadwild -> GeomPackRemesh_QuadWild
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.13s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.17s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.17s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh_QuadWild: trimesh: Trimesh, qw_sharp_angle: 35.0, qw_alpha: 0.02, qw_scale_factor: 1.0, qw_remesh: 'true', qw_smooth: 'true'
   [ComfyUI] [comfy-env] Running GeomPackRemesh_QuadWild: trimesh: Trimesh, qw_sharp_angle: 35.0, qw_alpha: 0.02, qw_scale_factor: 1.0, qw_remesh: 'true', qw_smooth: 'true'
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.quadwild.RemeshQuadWildNode.EXECUTE_NORMALIZED
@@ -117,27 +117,26 @@ Capturing execution frames: remeshing.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: sharp_angle=35.0, alpha=0.02, scale=1.0, remesh=true, smooth=true
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: sharp_angle=35.0, alpha=0.02, scale=1.0, remesh=true, smooth=true
   Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=2ms shot=105ms unfreeze=3ms saved=True
+  [capture-periodic] freeze=3ms shot=90ms unfreeze=3ms saved=True
   Frame 3 saved (frame_002.jpg, t=4.4s)
-  [capture-periodic] freeze=3ms shot=91ms unfreeze=6ms saved=True
-  [capture-loop] iter=50 t=5.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.7/16.0GB (35%) swap=1.0/2.9GB (34%) cpu=52% browser_rss=0.66GB
-  [capture-loop] iter=100 t=11.3s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.5/16.0GB (35%) swap=1.0/2.9GB (34%) cpu=59% browser_rss=0.54GB
-  [capture-loop] iter=150 t=16.8s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.5/16.0GB (35%) swap=1.0/2.9GB (34%) cpu=56% browser_rss=0.54GB
-  [capture-loop] iter=200 t=22.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.5/16.0GB (35%) swap=1.0/2.9GB (34%) cpu=56% browser_rss=0.54GB
-  [capture-loop] iter=250 t=28.1s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.5/16.0GB (34%) swap=1.0/2.9GB (34%) cpu=56% browser_rss=0.53GB
-  [capture-loop] iter=300 t=33.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.4/16.0GB (34%) swap=1.0/2.9GB (34%) cpu=56% browser_rss=0.53GB
+  [capture-periodic] freeze=3ms shot=98ms unfreeze=4ms saved=True
+  [capture-loop] iter=50 t=5.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.1/16.0GB (32%) swap=0.7/2.9GB (25%) cpu=28% browser_rss=0.60GB
+  [capture-loop] iter=100 t=11.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.1/16.0GB (32%) swap=0.7/2.9GB (25%) cpu=32% browser_rss=0.58GB
+  [capture-loop] iter=150 t=16.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.1/16.0GB (32%) swap=0.7/2.9GB (25%) cpu=31% browser_rss=0.58GB
+  [capture-loop] iter=200 t=22.3s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.1/16.0GB (32%) swap=0.7/2.9GB (25%) cpu=33% browser_rss=0.57GB
+  [capture-loop] iter=250 t=27.9s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.0/16.0GB (32%) swap=0.7/2.9GB (25%) cpu=32% browser_rss=0.57GB
   [ComfyUI] Initital dimension: 33306 x 33306, number of constraints: 0, number of integer variables: 20058, use reordering: yes
   [ComfyUI] Initital dimension: 33306 x 33306, number of constraints: 0, number of integer variables: 20058, use reordering: yes
-  [ComfyUI] COMISO::ConstrainedSolver::make_constraints_independent took 0.0010575999999999999 s.
-  [ComfyUI] COMISO::ConstrainedSolver::make_constraints_independent took 0.0010575999999999999 s.
-  [ComfyUI] Constraint integration took 0.0002198 s.
-  [ComfyUI] Constraint integration took 0.0002198 s.
-  [ComfyUI] Constraint elimination took 0.0071256000000000002 s.
-  [ComfyUI] Constraint elimination took 0.0071256000000000002 s.
-  [ComfyUI] Reindexing took 0.00044089999999999998 s.
-  [ComfyUI] Reindexing took 0.00044089999999999998 s.
-  [ComfyUI] COMISO::ConstrainedSolver::eliminate_constraints took 0.0081753999999999993 s.
-  [ComfyUI] COMISO::ConstrainedSolver::eliminate_constraints took 0.0081753999999999993 s.
+  [ComfyUI] COMISO::ConstrainedSolver::make_constraints_independent took 0.00088159999999999996 s.
+  [ComfyUI] COMISO::ConstrainedSolver::make_constraints_independent took 0.00088159999999999996 s.
+  [ComfyUI] Constraint integration took 0.0001584 s.
+  [ComfyUI] Constraint integration took 0.0001584 s.
+  [ComfyUI] Constraint elimination took 0.0063842999999999999 s.
+  [ComfyUI] Constraint elimination took 0.0063842999999999999 s.
+  [ComfyUI] Reindexing took 0.00030279999999999999 s.
+  [ComfyUI] Reindexing took 0.00030279999999999999 s.
+  [ComfyUI] COMISO::ConstrainedSolver::eliminate_constraints took 0.0070943000000000004 s.
+  [ComfyUI] COMISO::ConstrainedSolver::eliminate_constraints took 0.0070943000000000004 s.
   [ComfyUI] Eliminated dimension: 33306 x 33306
   [ComfyUI] Eliminated dimension: 33306 x 33306
   [ComfyUI] #nonzeros: 152166
@@ -148,12 +147,12 @@ Capturing execution frames: remeshing.json
   [ComfyUI] continuous variables #: 13248
   [ComfyUI] initial full solution
   [ComfyUI] initial full solution
-  [ComfyUI] COMISO::EigenLDLTSolver::calc_system_eigen took 0.022413599999999999 s.
-  [ComfyUI] COMISO::EigenLDLTSolver::calc_system_eigen took 0.022413599999999999 s.
+  [ComfyUI] COMISO::EigenLDLTSolver::calc_system_eigen took 0.0213671 s.
+  [ComfyUI] COMISO::EigenLDLTSolver::calc_system_eigen took 0.0213671 s.
   [ComfyUI] final full solution
   [ComfyUI] final full solution
-  [ComfyUI] COMISO::EigenLDLTSolver::update_system_eigen took 0.0070809000000000002 s.
-  [ComfyUI] COMISO::EigenLDLTSolver::update_system_eigen took 0.0070809000000000002 s.
+  [ComfyUI] COMISO::EigenLDLTSolver::update_system_eigen took 0.0063197000000000001 s.
+  [ComfyUI] COMISO::EigenLDLTSolver::update_system_eigen took 0.0063197000000000001 s.
   [ComfyUI]  *** Statistics of MiSo Solver ***
   [ComfyUI]  *** Statistics of MiSo Solver ***
   [ComfyUI] Number of LOCAL iterations  = 3043
@@ -164,29 +163,30 @@ Capturing execution frames: remeshing.json
   [ComfyUI] Number of FULL  iterations  = 2
   [ComfyUI] Number of ROUNDING          = 20058
   [ComfyUI] Number of ROUNDING          = 20058
-  [ComfyUI] COMISO::MISolver::solve_multiple_rounding took 0.78097059999999996 s.
-  [ComfyUI] COMISO::MISolver::solve_multiple_rounding took 0.78097059999999996 s.
-  [ComfyUI] COMISO::MISolver::solve took 0.78125739999999999 s.
-  [ComfyUI] COMISO::MISolver::solve took 0.78125739999999999 s.
-  [ComfyUI] COMISO::ConstrainedSolver::restore_eliminated_vars took 0.0001708 s.
-  [ComfyUI] COMISO::ConstrainedSolver::restore_eliminated_vars took 0.0001708 s.
-  [ComfyUI] COMISO::ConstrainedSolver::solve took 0.79246369999999999 s.
-  [ComfyUI] COMISO::ConstrainedSolver::solve took 0.79246369999999999 s.
-  [capture-loop] iter=350 t=39.2s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.4/16.0GB (34%) swap=1.0/2.9GB (34%) cpu=58% browser_rss=0.53GB
+  [ComfyUI] COMISO::MISolver::solve_multiple_rounding took 0.70732260000000013 s.
+  [ComfyUI] COMISO::MISolver::solve_multiple_rounding took 0.70732260000000013 s.
+  [ComfyUI] COMISO::MISolver::solve took 0.70763129999999996 s.
+  [ComfyUI] COMISO::MISolver::solve took 0.70763129999999996 s.
+  [ComfyUI] COMISO::ConstrainedSolver::restore_eliminated_vars took 0.00015019999999999999 s.
+  [ComfyUI] COMISO::ConstrainedSolver::restore_eliminated_vars took 0.00015019999999999999 s.
+  [ComfyUI] COMISO::ConstrainedSolver::solve took 0.71784689999999995 s.
+  [ComfyUI] COMISO::ConstrainedSolver::solve took 0.71784689999999995 s.
+  [capture-loop] iter=300 t=33.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.0/16.0GB (32%) swap=0.7/2.9GB (25%) cpu=32% browser_rss=0.56GB
   [ComfyUI] performed 202 adjustments for even rhs
   [ComfyUI] performed 202 adjustments for even rhs
   [ComfyUI] performed 184 adjustments for even rhs
   [ComfyUI] performed 184 adjustments for even rhs
+  [capture-loop] iter=350 t=39.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.1/16.0GB (32%) swap=0.7/2.9GB (25%) cpu=34% browser_rss=0.57GB
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 6906 vertices, 13804 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 6906 vertices, 13804 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack]
   [ComfyUI] [worker:ComfyUI-GeometryPack]
-  [ComfyUI] === WATCHDOG TICK 4 ===
-  [ComfyUI] === WATCHDOG TICK 4 ===
-  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x000014f8 (most recent call first):
-  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x000014f8 (most recent call first):
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_23kbyj93\persistent_worker.py", line 52 in _watchdog
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_23kbyj93\persistent_worker.py", line 52 in _watchdog
+  [ComfyUI] === WATCHDOG TICK 1 ===
+  [ComfyUI] === WATCHDOG TICK 1 ===
+  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x00001188 (most recent call first):
+  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x00001188 (most recent call first):
+  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_5dq2l63t\persistent_worker.py", line 52 in _watchdog
+  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_5dq2l63t\persistent_worker.py", line 52 in _watchdog
   [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 995 in run
   [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 995 in run
   [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 1044 in _bootstrap_inner
@@ -195,24 +195,22 @@ Capturing execution frames: remeshing.json
   [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 1015 in _bootstrap
   [ComfyUI] 
   [ComfyUI] 
-  [ComfyUI] Thread 0x00000f60 (most recent call first):
-  [ComfyUI] Thread 0x00000f60 (most recent call first):
-  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\caching.py", line 96 in tracked_array
-  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\caching.py", line 96 in tracked_array
-  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\caching.py", line 651 in __setitem__
-  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\caching.py", line 651 in __setitem__
-  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 381 in faces
-  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 381 in faces
+  [ComfyUI] Thread 0x00001b30 (most recent call first):
+  [ComfyUI] Thread 0x00001b30 (most recent call first):
+  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\geometry.py", line 185 in triangulate_quads
+  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\geometry.py", line 185 in triangulate_quads
+  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 379 in faces
+  [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 379 in faces
   [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 192 in __init__
   [ComfyUI]   File "C:\ce\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 192 in __init__
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\remeshing\backends\quadwild.py", line 61 in execute
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\remeshing\backends\quadwild.py", line 61 in execute
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\comfy_api\latest\_io.py", line 1826 in EXECUTE_NORMALIZED
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\comfy_api\latest\_io.py", line 1826 in EXECUTE_NORMALIZED
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_23kbyj93\persistent_worker.py", line 1762 in main
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_23kbyj93\persistent_worker.py", line 1762 in main
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_23kbyj93\persistent_worker.py", line 1807 in <module>
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_23kbyj93\persistent_worker.py", line 1807 in <module>
+  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\remeshing\backends\quadwild.py", line 61 in execute
+  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\remeshing\backends\quadwild.py", line 61 in execute
+  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\comfy_api\latest\_io.py", line 1826 in EXECUTE_NORMALIZED
+  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\comfy_api\latest\_io.py", line 1826 in EXECUTE_NORMALIZED
+  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_5dq2l63t\persistent_worker.py", line 1762 in main
+  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_5dq2l63t\persistent_worker.py", line 1762 in main
+  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_5dq2l63t\persistent_worker.py", line 1807 in <module>
+  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_5dq2l63t\persistent_worker.py", line 1807 in <module>
   [ComfyUI] 
   [ComfyUI] 
   [ComfyUI] [worker:ComfyUI-GeometryPack] === END ===
@@ -221,8 +219,8 @@ Capturing execution frames: remeshing.json
   [ComfyUI] 
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_QuadWild done (43.93s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh_QuadWild done (43.93s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_QuadWild done (38.51s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_QuadWild done (38.51s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
@@ -243,7 +241,6 @@ Capturing execution frames: remeshing.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=111 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=111 sending call_method
-  [capture-loop] iter=400 t=44.7s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=5.3/16.0GB (33%) swap=1.0/2.9GB (33%) cpu=56% browser_rss=0.53GB
   Node executed (1 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
@@ -261,36 +258,36 @@ Capturing execution frames: remeshing.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_1a3a69eb.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_1a3a69eb.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_c0eec60b.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_c0eec60b.vtp
+  Frame 4 saved (frame_003.jpg, t=39.4s)
+  [capture-node] freeze=3ms shot=104ms unfreeze=4ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
-  Frame 4 saved (frame_003.jpg, t=44.9s)
-  [capture-node] freeze=3ms shot=102ms unfreeze=7ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_1a3a69eb.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_1a3a69eb.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_1a3a69eb.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2137\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_1a3a69eb.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_c0eec60b.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_c0eec60b.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_c0eec60b.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_c0eec60b.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.74s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.74s): result: NodeOutput
-  [ComfyUI] Prompt executed in 45.25 seconds
-  [ComfyUI] Prompt executed in 45.25 seconds
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.75s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.75s): result: NodeOutput
+  [ComfyUI] Prompt executed in 39.79 seconds
+  [ComfyUI] Prompt executed in 39.79 seconds
   Node executed (2 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=45.6s)
-  [capture-node] freeze=4ms shot=95ms unfreeze=0ms saved=True
-  Execution complete (t=45.6s)
-  Captured 5 unique frames over 45.73s
+  Frame 5 saved (frame_004.jpg, t=40.1s)
+  [capture-node] freeze=3ms shot=105ms unfreeze=0ms saved=True
+  Execution complete (t=40.1s)
+  Captured 5 unique frames over 40.26s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41896/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177844, canvas=0x0, rafFrozen=False
+  [debug]   iframe[0]: src=http://127.0.0.1:41894/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177846, canvas=0x0, rafFrozen=False
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: remeshing_executed.png
-  [timing] final_screenshot: 0.3s
+  [timing] final_screenshot: 0.2s
     Captured 6 video frames

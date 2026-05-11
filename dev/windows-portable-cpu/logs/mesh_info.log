@@ -9,9 +9,9 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] Prompt has 3 nodes
   [ComfyUI]   Node 1: GeomPackCreatePrimitive
   [ComfyUI]   Node 1: GeomPackCreatePrimitive
-  [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
-  [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
   Queuing workflow for execution...
+  [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
+  [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
   [ComfyUI]   Node 7: GeomPackMeshInfo
   [ComfyUI]   Node 7: GeomPackMeshInfo
   [ComfyUI]     Inputs: {"report_panel": "true", "trimesh": ["1", 0]}
@@ -20,8 +20,8 @@ Capturing execution frames: mesh_info.json
   [ComfyUI]   Node 12: GeomPackMeshQuality
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
-  [ComfyUI] Generated prompt_id: a85065fd-1857-405f-8ed5-ac8eec46b80a
-  [ComfyUI] Generated prompt_id: a85065fd-1857-405f-8ed5-ac8eec46b80a
+  [ComfyUI] Generated prompt_id: f3a8e6ce-5181-46ea-8b04-105b25f084c5
+  [ComfyUI] Generated prompt_id: f3a8e6ce-5181-46ea-8b04-105b25f084c5
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -54,8 +54,8 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created cube: 8 vertices, 12 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.32s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.32s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.09s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.09s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshQuality: include_face_quality: True, include_edge_stats: True, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshQuality: include_face_quality: True, include_edge_stats: True, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_quality.MeshQualityNode.EXECUTE_NORMALIZED
@@ -82,8 +82,8 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analysis complete
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.63s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.63s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.11s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
   [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
   [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
@@ -105,21 +105,20 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [SubprocessWorker] call_id=68 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=68 sending call_method
   Node executed (1 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=1.3s)
-  [capture-node] freeze=3ms shot=93ms unfreeze=1ms saved=True
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.57s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.57s): result: NodeOutput
-  [ComfyUI] Prompt executed in 1.52 seconds
-  [ComfyUI] Prompt executed in 1.52 seconds
+  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.11s): result: NodeOutput
+  [ComfyUI] Prompt executed in 0.31 seconds
+  [ComfyUI] Prompt executed in 0.31 seconds
+  Frame 2 saved (frame_001.jpg, t=0.6s)
+  [capture-node] freeze=6ms shot=88ms unfreeze=3ms saved=True
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=1.9s)
-  [capture-node] freeze=2ms shot=86ms unfreeze=0ms saved=True
-  Execution complete (t=1.8s)
-  Captured 3 unique frames over 1.96s
+  [capture-node] freeze=3ms shot=77ms unfreeze=0ms saved=False
+  Execution complete (t=0.9s)
+  Captured 2 unique frames over 1.01s
   [debug] iframes: 0
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: mesh_info_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 4 video frames
+    Captured 3 video frames
