@@ -5,8 +5,8 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI] Received JSON with keys: ['prompt']
   [ComfyUI] Prompt has 5 nodes
   [ComfyUI]   Node 1: GeomPackCreatePrimitive
-  Queuing workflow for execution...
   [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
+  Queuing workflow for execution...
   [ComfyUI]   Node 2: GeomPackCreatePrimitive
   [ComfyUI]     Inputs: {"shape": "sphere", "size": 2.5, "subdivisions": 2}
   [ComfyUI]   Node 21: GeomPackPreviewMeshDual
@@ -15,7 +15,7 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI]     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":true,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}", "trimesh": ["2
   [ComfyUI]   Node 25: GeomPackBoolean
   [ComfyUI]     Inputs: {"operation": "union", "backend": "libigl_cgal", "mesh_a": ["1", 0], "mesh_b": ["2", 0]}
-  [ComfyUI] Generated prompt_id: d9f90ebd-c3d8-443d-938e-3eeeb1365731
+  [ComfyUI] Generated prompt_id: 7f679ee1-6a0c-43da-a401-fc21365339ab
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
   [ComfyUI] === Validation PASSED ===
@@ -32,7 +32,7 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI] [SubprocessWorker] call_id=18 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created sphere: 162 vertices, 320 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.08s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.09s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackCreatePrimitive: shape: 'cube', size: 2.0, subdivisions: 1
   [ComfyUI] [SubprocessWorker] call_method: nodes.primitives.create_primitive.CreatePrimitive.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -45,7 +45,7 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI] [SubprocessWorker] call_id=19 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created cube: 8 vertices, 12 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.06s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackBoolean: operation: 'union', backend: dict, mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.boolean.boolean.BooleanNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -58,7 +58,7 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI] [SubprocessWorker] call_id=20 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Boolean dispatch: libigl_cgal -> GeomPackBoolean_LibiglCGAL
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackBoolean done (0.09s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackBoolean done (0.07s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -77,11 +77,11 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0921\ComfyUI\output\preview_dual_1_b2e0acee.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0921\ComfyUI\output\preview_dual_2_b2e0acee.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1011\ComfyUI\output\preview_dual_1_9915d71b.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1011\ComfyUI\output\preview_dual_2_9915d71b.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.17s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackBoolean_LibiglCGAL: mesh_a: Trimesh, mesh_b: Trimesh, operation: 'union'
   [ComfyUI] [SubprocessWorker] call_method: nodes.boolean.backends.libigl_cgal.BooleanLibiglCGALNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -97,9 +97,11 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 8 vertices, 12 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 162 vertices, 320 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Operation: union
+  Frame 2 saved (frame_001.jpg, t=0.7s)
+  [capture-node] freeze=55ms shot=152ms unfreeze=6ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Success: 302 vertices, 600 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackBoolean_LibiglCGAL done (0.49s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackBoolean_LibiglCGAL done (0.45s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshVTK: mode: 'fields', trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_vtk.PreviewMeshVTKNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -110,31 +112,29 @@ Capturing execution frames: boolean_ops.json
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=23 sending call_method
-  Frame 2 saved (frame_001.jpg, t=0.8s)
-  [capture-node] freeze=92ms shot=169ms unfreeze=5ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 302 vertices, 600 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Visual data - has_visual: True, kind: None, texture: False, vertex_colors: False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP export
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0921\ComfyUI\output\preview_vtk_83f521b8.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1011\ComfyUI\output\preview_vtk_cbf787dd.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (302 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 302 vertices, 600 faces
   Node executed (2 total), capturing...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0921\ComfyUI\output\preview_vtk_83f521b8.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 302 vertices, 600 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1011\ComfyUI\output\preview_vtk_cbf787dd.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=True, volume=9.214489033870414, area=25.093742655540616, no fields
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshVTK done (0.15s): result: NodeOutput
-  [ComfyUI] Prompt executed in 1.06 seconds
-  Frame 3 saved (frame_002.jpg, t=1.3s)
-  [capture-node] freeze=15ms shot=234ms unfreeze=6ms saved=True
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshVTK done (0.10s): result: NodeOutput
+  [ComfyUI] Prompt executed in 0.95 seconds
+  Frame 3 saved (frame_002.jpg, t=1.2s)
+  [capture-node] freeze=70ms shot=112ms unfreeze=4ms saved=True
   Node executed (3 total), capturing...
-  Frame 4 saved (frame_003.jpg, t=1.9s)
-  [capture-node] freeze=5ms shot=125ms unfreeze=0ms saved=True
-  Execution complete (t=1.9s)
-  Captured 4 unique frames over 2.05s
+  Frame 4 saved (frame_003.jpg, t=1.7s)
+  [capture-node] freeze=4ms shot=109ms unfreeze=0ms saved=True
+  Execution complete (t=1.7s)
+  Captured 4 unique frames over 1.84s
   [debug] iframes: 2
-  [debug]   iframe[0]: src=http://127.0.0.1:41897/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177849, canvas=370x485, rafFrozen=True
-  [debug]   iframe[1]: src=http://127.0.0.1:41897/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1778491, canvas=486x348, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41896/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177849, canvas=370x485, rafFrozen=True
+  [debug]   iframe[1]: src=http://127.0.0.1:41896/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1778494, canvas=486x348, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: boolean_ops_executed.png
   [timing] final_screenshot: 0.2s
