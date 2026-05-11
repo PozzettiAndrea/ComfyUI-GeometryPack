@@ -6,8 +6,8 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] Prompt has 7 nodes
   [ComfyUI]   Node 1: GeomPackLoadMesh
   [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
-  Queuing workflow for execution...
   [ComfyUI]   Node 2: GeomPackDecimateMesh
+  Queuing workflow for execution...
   [ComfyUI]     Inputs: {"backend": "quadric_edge_collapse", "backend.target_face_count": 5000, "backend.quality_threshold": 0.3, "backend.preserve_boundary": "true", "backend.preserve_normal": "true", "backend.preserve_topo
   [ComfyUI]   Node 3: GeomPackDecimateMesh
   [ComfyUI]     Inputs: {"backend": "fast_simplification", "backend.target_reduction": 0.8, "backend.aggressiveness": 7, "trimesh": ["1", 0]}
@@ -19,7 +19,7 @@ Capturing execution frames: decimate_all.json
   [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[156.15573456772853,45.50443036606394,116.04835655422535],\\\"focalPoint\\\":[30.319300651550293,1.894807
   [ComfyUI]   Node 8: GeomPackPreviewMeshMulti
   [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[156.15573456772853,45.50443036606394,116.04835655422535],\\\"focalPoint\\\":[30.319300651550293,1.894807
-  [ComfyUI] Generated prompt_id: 1b86a699-720e-47ae-bb17-e32a8bbce0fd
+  [ComfyUI] Generated prompt_id: 1e8d6ace-2251-40e8-94f4-20ececf32df8
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
   [ComfyUI] === Validation PASSED ===
@@ -35,12 +35,12 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=35 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.36s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.54s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimateMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.decimate.DecimateMeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -53,7 +53,7 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] call_id=36 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: vertex_clustering -> GeomPackDecimate_VertexClustering
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.25s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimateMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.decimate.DecimateMeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -64,9 +64,9 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=37 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: quadric_edge_collapse -> GeomPackDecimate_QuadricEdgeCollapse
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: decimate_pro -> GeomPackDecimate_DecimatePro
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.19s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimateMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.decimate.DecimateMeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -77,9 +77,9 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=38 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: decimate_pro -> GeomPackDecimate_DecimatePro
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: fast_simplification -> GeomPackDecimate_FastSimplification
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.16s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimateMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.decimate.DecimateMeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -90,9 +90,9 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=39 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: fast_simplification -> GeomPackDecimate_FastSimplification
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: quadric_edge_collapse -> GeomPackDecimate_QuadricEdgeCollapse
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.17s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimate_VertexClustering: trimesh: Trimesh, cluster_threshold: 3.0
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.backends.vertex_clustering.DecimateVertexClusteringNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -106,24 +106,7 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: vertex_clustering
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimate_VertexClustering done (0.16s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackDecimate_QuadricEdgeCollapse: trimesh: Trimesh, target_face_count: 5000, quality_threshold: 0.3, preserve_boundary: 'true', preserve_normal: 'true', preserve_topology: 'true', planar_quadric: 'false'
-  [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.backends.quadric_edge_collapse.DecimateQuadricEdgeCollapseNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=41 sending call_method
-  Node executed (1 total), capturing...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: quadric_edge_collapse
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
-  Frame 2 saved (frame_001.jpg, t=1.3s)
-  [capture-node] freeze=3ms shot=99ms unfreeze=4ms saved=True
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (2.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimate_VertexClustering done (0.18s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimate_DecimatePro: trimesh: Trimesh, target_reduction: 0.8, feature_angle: 15.0, preserve_topology: 'true'
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.backends.decimate_pro.DecimateProNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -133,14 +116,14 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=42 sending call_method
-  Node executed (2 total), capturing...
+  [ComfyUI] [SubprocessWorker] call_id=41 sending call_method
+  Node executed (1 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: decimate_pro
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
-  Frame 3 saved (frame_002.jpg, t=3.4s)
-  [capture-node] freeze=3ms shot=89ms unfreeze=3ms saved=True
+  Frame 2 saved (frame_001.jpg, t=1.9s)
+  [capture-node] freeze=3ms shot=100ms unfreeze=3ms saved=True
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimate_DecimatePro done (2.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimate_DecimatePro done (3.81s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -150,30 +133,31 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 3 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=43 sending call_method
-  Node executed (3 total), capturing...
+  [ComfyUI] [SubprocessWorker] call_id=42 sending call_method
+  Node executed (2 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 3
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_4abcd707.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f3e22449.vtp
+  Frame 3 saved (frame_002.jpg, t=5.7s)
+  [capture-node] freeze=4ms shot=101ms unfreeze=3ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
-  Frame 4 saved (frame_003.jpg, t=5.6s)
-  [capture-node] freeze=3ms shot=100ms unfreeze=7ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_4abcd707.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f3e22449.vtp
+  [capture-loop] iter=50 t=6.2s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=3 ram=6.3/16.0GB (40%) swap=0.3/2.9GB (11%) cpu=28% browser_rss=0.89GB
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 11242 vertices, 22480 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_4abcd707.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f3e22449.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11242 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11242 vertices, 22480 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_4abcd707.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f3e22449.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 1272 vertices, 2582 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_4abcd707.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_f3e22449.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (1272 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 1272 vertices, 2582 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_4abcd707.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_f3e22449.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 3x1, Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.86s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (1.03s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimate_FastSimplification: trimesh: Trimesh, target_reduction: 0.8, aggressiveness: 7
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.backends.fast_simplification.DecimateFastSimplificationNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -183,13 +167,30 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=44 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=43 sending call_method
+  Node executed (3 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: fast_simplification
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
-  [capture-loop] iter=50 t=6.5s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=158 ram=5.9/16.0GB (37%) swap=0.3/2.9GB (10%) cpu=28% browser_rss=0.78GB
-  Node executed (4 total), capturing...
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimate_FastSimplification done (0.35s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimate_FastSimplification done (0.60s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackDecimate_QuadricEdgeCollapse: trimesh: Trimesh, target_face_count: 5000, quality_threshold: 0.3, preserve_boundary: 'true', preserve_normal: 'true', preserve_topology: 'true', planar_quadric: 'false'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.backends.quadric_edge_collapse.DecimateQuadricEdgeCollapseNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=44 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: quadric_edge_collapse
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
+  Frame 4 saved (frame_003.jpg, t=6.8s)
+  [capture-node] freeze=1243ms shot=791ms unfreeze=5ms saved=True
+  Node executed (4 total), capturing...
+  [capture-node] freeze=3ms shot=151ms unfreeze=7ms saved=False
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (3.83s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -200,41 +201,39 @@ Capturing execution frames: decimate_all.json
   [ComfyUI] [SubprocessWorker] created 3 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=45 sending call_method
+  Node executed (5 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 3
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_3610a0e2.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5cf87192.vtp
+  Frame 5 saved (frame_004.jpg, t=11.2s)
+  [capture-node] freeze=5ms shot=159ms unfreeze=4ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (56203 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_3610a0e2.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5cf87192.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2502 vertices, 5000 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_3610a0e2.vtp
-  Frame 5 saved (frame_004.jpg, t=6.6s)
-  [capture-node] freeze=1196ms shot=727ms unfreeze=8ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5cf87192.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2502 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2502 vertices, 5000 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_3610a0e2.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5cf87192.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 11242 vertices, 22480 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_3610a0e2.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5cf87192.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11242 vertices)
-  Node executed (5 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11242 vertices, 22480 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0031\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_3610a0e2.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5cf87192.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 3x1, Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (2.12s): result: NodeOutput
-  [ComfyUI] Prompt executed in 8.63 seconds
-  Frame 6 saved (frame_005.jpg, t=8.8s)
-  [capture-node] freeze=3ms shot=163ms unfreeze=3ms saved=True
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (1.12s): result: NodeOutput
+  [ComfyUI] Prompt executed in 11.90 seconds
   Node executed (6 total), capturing...
-  Frame 7 saved (frame_006.jpg, t=9.3s)
-  [capture-node] freeze=980ms shot=712ms unfreeze=0ms saved=True
-  Execution complete (t=9.3s)
-  Captured 7 unique frames over 11.05s
+  Frame 6 saved (frame_005.jpg, t=12.3s)
+  [capture-node] freeze=4ms shot=262ms unfreeze=0ms saved=True
+  Execution complete (t=12.3s)
+  Captured 6 unique frames over 13.8s
   [debug] iframes: 2
-  [debug]   iframe[0]: src=http://127.0.0.1:41894/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17784, canvas=244x393, rafFrozen=True
-  [debug]   iframe[1]: src=http://127.0.0.1:41894/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17784, canvas=244x393, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17784, canvas=244x393, rafFrozen=True
+  [debug]   iframe[1]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17784, canvas=244x393, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: decimate_all_executed.png
   [timing] final_screenshot: 0.3s
-    Captured 8 video frames
+    Captured 7 video frames
