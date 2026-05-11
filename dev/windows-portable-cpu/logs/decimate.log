@@ -11,7 +11,7 @@ Capturing execution frames: decimate.json
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-3.3575253938003646,2.5035395853711653,0.519424
   [ComfyUI]   Node 4: GeomPackDecimateMesh
   [ComfyUI]     Inputs: {"backend": "quadric_edge_collapse", "backend.target_face_count": 1004, "backend.quality_threshold": 0.3, "backend.preserve_boundary": "true", "backend.preserve_normal": "true", "backend.preserve_topo
-  [ComfyUI] Generated prompt_id: 655e03a5-f40d-4eac-9d62-40add2fb61f0
+  [ComfyUI] Generated prompt_id: 8af89b15-b52a-4451-88fc-f4c624367e70
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
   [ComfyUI] === Validation PASSED ===
@@ -27,7 +27,7 @@ Capturing execution frames: decimate.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=31 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/spot_the_cow.obj
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/spot_the_cow.obj
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1011\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/spot_the_cow.obj
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 3225 vertices, 5856 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 3225 vertices, 5856 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 3225 vertices, 5856 faces
@@ -45,7 +45,7 @@ Capturing execution frames: decimate.json
   [ComfyUI] [SubprocessWorker] call_id=32 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: quadric_edge_collapse -> GeomPackDecimate_QuadricEdgeCollapse
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.11s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimate_QuadricEdgeCollapse: trimesh: Trimesh, target_face_count: 1004, quality_threshold: 0.3, preserve_boundary: 'true', preserve_normal: 'true', preserve_topology: 'true', planar_quadric: 'false'
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.backends.quadric_edge_collapse.DecimateQuadricEdgeCollapseNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -59,7 +59,7 @@ Capturing execution frames: decimate.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: quadric_edge_collapse
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 3,225 vertices, 5,856 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (0.19s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (0.18s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -79,22 +79,22 @@ Capturing execution frames: decimate.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=texture, texture=True, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_f6b694b8.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0920\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_f6b694b8.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1011\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_6ac7faf2.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1011\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_6ac7faf2.stl
+  Frame 2 saved (frame_001.jpg, t=0.9s)
+  [capture-node] freeze=4ms shot=119ms unfreeze=3ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.25s): result: NodeOutput
-  [ComfyUI] Prompt executed in 0.87 seconds
-  Frame 2 saved (frame_001.jpg, t=0.9s)
-  [capture-node] freeze=4ms shot=89ms unfreeze=24ms saved=True
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.41s): result: NodeOutput
+  [ComfyUI] Prompt executed in 0.98 seconds
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=1.5s)
-  [capture-node] freeze=2ms shot=148ms unfreeze=0ms saved=True
-  Execution complete (t=1.5s)
-  Captured 3 unique frames over 1.68s
+  Frame 3 saved (frame_002.jpg, t=1.4s)
+  [capture-node] freeze=16ms shot=266ms unfreeze=0ms saved=True
+  Execution complete (t=1.4s)
+  Captured 3 unique frames over 1.74s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177849, canvas=370x485, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41897/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177849, canvas=370x485, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: decimate_executed.png
-  [timing] final_screenshot: 0.2s
+  [timing] final_screenshot: 0.3s
     Captured 4 video frames
