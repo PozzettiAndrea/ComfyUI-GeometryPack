@@ -7,8 +7,10 @@
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
-[Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-warning] WARNING: Multiple instances of Three.js being imported.
+[Console-log] [VTK Bundle] GLTFImporter included in bundle
+[Console-log] [GeomPack] Loading mesh preview extension...
+[Console-log] [GeomPack] Mesh preview extension registered
 [Console-log] [GeomPack Multi JS] Loading mesh_preview_multi.js extension
 [Console-log] [FBX Preview] Auto-registering for all known FBX preview node types...
 [Console-log] [UniRig] Loading FBX mesh preview extension...
@@ -23,25 +25,23 @@
 [Console-log] [MotionCapture] Loading FBX mesh preview extension...
 [Console-log] [MotionCapture] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [MotionCapture] FBX mesh preview extension registered
-[Console-log] [GeomPack] Loading UV mesh preview extension...
-[Console-log] [GeomPack] UV mesh preview extension registered
-[Console-log] [BVHViewer] Loading BVH Viewer extension
-[Console-log] [BVHViewer] Loading BVH viewer extension...
-[Console-log] [BVHViewer] Extension registered: comfy3d.bvhviewer
-[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
-[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
 [Console-log] [UniRig Compare] Loading compare skeleton widget...
 [Console-log] [UniRig Compare] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [UniRig Compare] Compare skeleton widget registered
+[Console-log] [BVHViewer] Loading BVH Viewer extension
+[Console-log] [BVHViewer] Loading BVH viewer extension...
+[Console-log] [BVHViewer] Extension registered: comfy3d.bvhviewer
 [Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension
 [Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension...
 [Console-log] [FBXAnimationViewer] Extension registered: comfy3d.fbxanimationviewer
-[Console-log] [GeomPack] Loading mesh preview extension...
-[Console-log] [GeomPack] Mesh preview extension registered
+[Console-log] [GeomPack Gaussian] Loading extension...
 [Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension
 [Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension...
 [Console-log] [CompareSMPLBVH] Extension registered: comfy3d.comparesmplbvh
-[Console-log] [GeomPack Gaussian] Loading extension...
+[Console-log] [GeomPack] Loading UV mesh preview extension...
+[Console-log] [GeomPack] UV mesh preview extension registered
+[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
+[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
 [Console-log] [UniRig Debug] Loading FBX mesh preview extension...
 [Console-log] [UniRig Debug] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [UniRig Debug] FBX mesh preview extension registered
@@ -56,7 +56,7 @@
 [Console-log] [GeomPack DEBUG] typeof this.addDOMWidget: function
 [Console-log] [GeomPack DEBUG] Widget created: DOMWidgetImpl
 [Console-log] [GeomPack DEBUG] Widget properties: [_node, linkedWidgets, name, options, type, y, last_y, width, computedDisabled, tooltip, _state, hidden, advanced, element, promotionStore, id]
-[Console-log] [GeomPack DEBUG] Widget.id: cda687c8-b649-44a6-bfd8-4d54c1ac8878
+[Console-log] [GeomPack DEBUG] Widget.id: 38e6f932-9475-4789-81ff-186bb0c93699
 [Console-log] [GeomPack DEBUG] this.widgets after addDOMWidget: [DOMWidgetImpl]
 [Console-log] [GeomPack DEBUG] Widget computeSize set
 [Console-log] [GeomPack DEBUG] Iframe dimensions: 100% 100%
@@ -74,10 +74,10 @@
 [Console-log] [GeomPack DEBUG] computeSize returning: [512, 512]
 [Console-log] [GeomPack Multi JS] Creating PreviewMeshMulti node widget
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
-[Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-log] [GeomPack VTK Viewer] Initializing unified viewer...
 [Console-warning] Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
 [Console-log] [GeomPack VTK Viewer] Ready (unified)
+[Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-error] No input!
 [Console-log] [GeomPack VTK Multi Viewer] Initializing...
 [Console-log] [GeomPack VTK Multi Viewer] Ready
@@ -89,26 +89,21 @@
 [Console-warning] Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
 [Console-log] [GeomPack VTK Viewer] Ready (unified)
 [Console-error] No input!
-[Console-log] [GeomPack VTK Viewer] Loading: /view?filename=preview_vtk_b672f511.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Viewer] Loading: /view?filename=preview_vtk_15627e55.vtp&type=output&subfolder=
 [Console-log] [GeomPack VTK Viewer] Detected point cloud, skipping normals filter
 [Console-log] [GeomPack VTK Viewer] Mesh loaded: 10000 points
 [Console-log] [GeomPack VTK Viewer] Loaded successfully
 [Console-log] [GeomPack Multi] onExecuted: 4 meshes, grid 2x2
-[Console-log] [GeomPack Multi] Sending message to iframe: {type: LOAD_MULTI_MESH, numMeshes: 4, meshFiles: Array(4), timestamp: 1778493309050, showEdges: true}
-[Console-log] [GeomPack VTK Multi Viewer] Received LOAD_MULTI_MESH message: {type: LOAD_MULTI_MESH, numMeshes: 4, meshFiles: Array(4), timestamp: 1778493309050, showEdges: true}
+[Console-log] [GeomPack Multi] Sending message to iframe: {type: LOAD_MULTI_MESH, numMeshes: 4, meshFiles: Array(4), timestamp: 1778495357063, showEdges: true}
+[Console-log] [GeomPack VTK Multi Viewer] Received LOAD_MULTI_MESH message: {type: LOAD_MULTI_MESH, numMeshes: 4, meshFiles: Array(4), timestamp: 1778495357063, showEdges: true}
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 1: /view?filename=preview_multi_1_d994c7fd.vtp&type=output&subfolder=
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 2: /view?filename=preview_multi_2_d994c7fd.vtp&type=output&subfolder=
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 3: /view?filename=preview_multi_3_d994c7fd.vtp&type=output&subfolder=
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 4: /view?filename=preview_multi_4_d994c7fd.vtp&type=output&subfolder=
-[Console-error] No input!
-[Console-error] No input!
-[Console-error] No input!
-[Console-error] No input!
-[Console-error] No input!
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 1: /view?filename=preview_multi_1_820a414e.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 2: /view?filename=preview_multi_2_820a414e.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 3: /view?filename=preview_multi_3_820a414e.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 4: /view?filename=preview_multi_4_820a414e.vtp&type=output&subfolder=
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
@@ -116,13 +111,18 @@
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
-[Console-log] [GeomPack VTK Multi Viewer] Mesh 2 fields: [normals]
-[Console-log] [GeomPack VTK Multi Viewer] Mesh 2 loaded, bounds: [-23.49327850341797, 84.0667953491211, -41.98195266723633, 45.769107818603516, 5.27508544921875, 113.03172302246094]
+[Console-error] No input!
+[Console-error] No input!
+[Console-error] No input!
+[Console-error] No input!
+[Console-error] No input!
 [Console-log] [GeomPack VTK Multi Viewer] Mesh 3 fields: [normals]
-[Console-log] [GeomPack VTK Multi Viewer] Mesh 3 loaded, bounds: [-23.49327850341797, 84.0667953491211, -41.98195266723633, 45.769107818603516, 5.27508544921875, 113.03172302246094]
+[Console-log] [GeomPack VTK Multi Viewer] Mesh 3 loaded, bounds: [-23.388437271118164, 84.15962219238281, -41.94651794433594, 45.75889205932617, 5.27508544921875, 113.15703582763672]
+[Console-log] [GeomPack VTK Multi Viewer] Mesh 2 fields: [normals]
+[Console-log] [GeomPack VTK Multi Viewer] Mesh 2 loaded, bounds: [-23.388437271118164, 84.15962219238281, -41.94651794433594, 45.75889205932617, 5.27508544921875, 113.15703582763672]
 [Console-log] [GeomPack VTK Multi Viewer] Mesh 4 fields: [normals]
-[Console-log] [GeomPack VTK Multi Viewer] Mesh 4 loaded, bounds: [-23.49327850341797, 84.0667953491211, -41.98195266723633, 45.769107818603516, 5.27508544921875, 113.03172302246094]
+[Console-log] [GeomPack VTK Multi Viewer] Mesh 4 loaded, bounds: [-23.388437271118164, 84.15962219238281, -41.94651794433594, 45.75889205932617, 5.27508544921875, 113.15703582763672]
 [Console-log] [GeomPack VTK Multi Viewer] Mesh 1 fields: [normals]
-[Console-log] [GeomPack VTK Multi Viewer] Mesh 1 loaded, bounds: [-28.979394912719727, 89.55290985107422, -57.37257766723633, 45.74949264526367, -0.11274785548448563, 118.4195556640625]
+[Console-log] [GeomPack VTK Multi Viewer] Mesh 1 loaded, bounds: [-28.94948387145996, 89.72066497802734, -57.42888641357422, 45.79167175292969, -0.11901336908340454, 118.55113220214844]
 [Console-log] [GeomPack VTK Multi Viewer] Common fields: [normals]
 [Console-log] [GeomPack VTK Multi Viewer] All meshes Loaded successfully
