@@ -7,7 +7,13 @@
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
-[Console-warning] WARNING: Multiple instances of Three.js being imported.
+[Console-log] [GeomPack] Loading mesh preview extension...
+[Console-log] [GeomPack] Mesh preview extension registered
+[Console-log] [GeomPack] Loading UV mesh preview extension...
+[Console-log] [GeomPack] UV mesh preview extension registered
+[Console-log] [BVHViewer] Loading BVH Viewer extension
+[Console-log] [BVHViewer] Loading BVH viewer extension...
+[Console-log] [BVHViewer] Extension registered: comfy3d.bvhviewer
 [Console-log] [FBX Preview] Auto-registering for all known FBX preview node types...
 [Console-log] [UniRig] Loading FBX mesh preview extension...
 [Console-log] [UniRig] Detected extension folder: ComfyUI-GeometryPack
@@ -24,26 +30,20 @@
 [Console-log] [UniRig Compare] Loading compare skeleton widget...
 [Console-log] [UniRig Compare] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [UniRig Compare] Compare skeleton widget registered
-[Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension
-[Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension...
-[Console-log] [FBXAnimationViewer] Extension registered: comfy3d.fbxanimationviewer
 [Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension
 [Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension...
 [Console-log] [CompareSMPLBVH] Extension registered: comfy3d.comparesmplbvh
+[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
+[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
 [Console-log] [GeomPack Gaussian] Loading extension...
-[Console-log] [GeomPack] Loading UV mesh preview extension...
-[Console-log] [GeomPack] UV mesh preview extension registered
-[Console-log] [BVHViewer] Loading BVH Viewer extension
-[Console-log] [BVHViewer] Loading BVH viewer extension...
-[Console-log] [BVHViewer] Extension registered: comfy3d.bvhviewer
-[Console-log] [GeomPack Multi JS] Loading mesh_preview_multi.js extension
 [Console-log] [UniRig Debug] Loading FBX mesh preview extension...
 [Console-log] [UniRig Debug] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [UniRig Debug] FBX mesh preview extension registered
-[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
-[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
-[Console-log] [GeomPack] Loading mesh preview extension...
-[Console-log] [GeomPack] Mesh preview extension registered
+[Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension
+[Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension...
+[Console-log] [FBXAnimationViewer] Extension registered: comfy3d.fbxanimationviewer
+[Console-log] [GeomPack Multi JS] Loading mesh_preview_multi.js extension
+[Console-warning] WARNING: Multiple instances of Three.js being imported.
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-warning] [MaskEditor] ComfyApp.open_maskeditor is deprecated. Plugins should migrate to using the command system or direct node context menu integration.
 [Console-log] [GeomPack] Registering Preview Mesh node
@@ -56,13 +56,13 @@
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
+[Console-log] [GeomPack VTK Multi Viewer] Initializing...
+[Console-log] [GeomPack VTK Multi Viewer] Ready
+[Console-log] [GeomPack Multi] Iframe loaded
+[Console-log] [GeomPack VTK Multi Viewer] Initializing...
+[Console-log] [GeomPack VTK Multi Viewer] Ready
+[Console-log] [GeomPack Multi] Iframe loaded
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
-[Console-log] [GeomPack VTK Multi Viewer] Initializing...
-[Console-log] [GeomPack VTK Multi Viewer] Ready
-[Console-log] [GeomPack Multi] Iframe loaded
-[Console-log] [GeomPack VTK Multi Viewer] Initializing...
-[Console-log] [GeomPack VTK Multi Viewer] Ready
-[Console-log] [GeomPack Multi] Iframe loaded
 [Console-log] [GeomPack VTK Multi Viewer] Initializing...
 [Console-log] [GeomPack VTK Multi Viewer] Ready
 [Console-log] [GeomPack Multi] Iframe loaded
@@ -102,92 +102,92 @@
 [Console-log] THREE.WebGLRenderer: Context Lost.
 [Console-log] [comfy-test] graphToPrompt: 19 nodes, missing class_type: [], sample: {"inputs":{"file_path":"3d/camelhead.off"},"class_type":"GeomPackLoadMesh","_meta":{"title":"Load Mesh"}}
 [Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_dfacc1a0.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_1f97bede_uvdata.json
-[Console-log] [GeomPack UV] Checker: false, Wireframe: true
-[Console-log] [GeomPack UV] UV Coverage: 0.578, In Unit Square: true
-[Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_dfacc1a0.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_1f97bede_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_dfacc1a0.glb&type=output&subfolder=
-[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
-[Console-log] [GeomPack UV Viewer] UV data loaded: 14128 UVs
-[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_aad1bbe3.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_cc1fc31d_uvdata.json
-[Console-log] [GeomPack UV] Checker: false, Wireframe: true
-[Console-log] [GeomPack UV] UV Coverage: 0.036, In Unit Square: true
-[Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_aad1bbe3.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_cc1fc31d_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_aad1bbe3.glb&type=output&subfolder=
-[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
-[Console-log] [GeomPack UV Viewer] UV data loaded: 13353 UVs
-[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_e62a65c5.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_a6e831d2_uvdata.json
-[Console-log] [GeomPack UV] Checker: false, Wireframe: true
-[Console-log] [GeomPack UV] UV Coverage: 2.143, In Unit Square: true
-[Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_e62a65c5.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_a6e831d2_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_e62a65c5.glb&type=output&subfolder=
-[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
-[Console-log] [GeomPack UV Viewer] UV data loaded: 13121 UVs
-[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_e7272238.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_548979cc_uvdata.json
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_e507359d.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_21165ef8_uvdata.json
 [Console-log] [GeomPack UV] Checker: false, Wireframe: true
 [Console-log] [GeomPack UV] UV Coverage: 0.757, In Unit Square: true
 [Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_e7272238.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_548979cc_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_e7272238.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_e507359d.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_21165ef8_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_e507359d.glb&type=output&subfolder=
 [Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
 [Console-log] [GeomPack UV Viewer] UV data loaded: 11381 UVs
 [Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_b3f62c04.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_464c06a7_uvdata.json
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_2ab3a039.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_b2634a80_uvdata.json
 [Console-log] [GeomPack UV] Checker: false, Wireframe: true
-[Console-log] [GeomPack UV] UV Coverage: 0.594, In Unit Square: true
+[Console-log] [GeomPack UV] UV Coverage: 2.143, In Unit Square: true
 [Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_b3f62c04.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_464c06a7_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_b3f62c04.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_2ab3a039.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_b2634a80_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_2ab3a039.glb&type=output&subfolder=
 [Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
-[Console-log] [GeomPack UV Viewer] UV data loaded: 13555 UVs
+[Console-log] [GeomPack UV Viewer] UV data loaded: 13121 UVs
 [Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_f58e170a.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_45a28130_uvdata.json
-[Console-log] [GeomPack UV] Checker: false, Wireframe: true
-[Console-log] [GeomPack UV] UV Coverage: 0.784, In Unit Square: true
-[Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_f58e170a.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_45a28130_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_f58e170a.glb&type=output&subfolder=
-[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
-[Console-log] [GeomPack UV Viewer] UV data loaded: 11381 UVs
-[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_169c4ca0.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_ad1a308c_uvdata.json
-[Console-log] [GeomPack UV] Checker: false, Wireframe: true
-[Console-log] [GeomPack UV] UV Coverage: 0.683, In Unit Square: true
-[Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_169c4ca0.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_ad1a308c_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_169c4ca0.glb&type=output&subfolder=
-[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
-[Console-log] [GeomPack UV Viewer] UV data loaded: 11428 UVs
-[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_3089bbe9.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_65a16975_uvdata.json
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_f2cb8d3a.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_8c94573b_uvdata.json
 [Console-log] [GeomPack UV] Checker: false, Wireframe: true
 [Console-log] [GeomPack UV] UV Coverage: 0.625, In Unit Square: true
 [Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_3089bbe9.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_65a16975_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_3089bbe9.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_f2cb8d3a.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_8c94573b_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_f2cb8d3a.glb&type=output&subfolder=
 [Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
 [Console-log] [GeomPack UV Viewer] UV data loaded: 11428 UVs
 [Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
-[Console-log] [GeomPack UV] Loading mesh: preview_uv_0397d076.glb
-[Console-log] [GeomPack UV] UV data: preview_uv_82f5f223_uvdata.json
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_0d957641.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_54efbb11_uvdata.json
+[Console-log] [GeomPack UV] Checker: false, Wireframe: true
+[Console-log] [GeomPack UV] UV Coverage: 0.784, In Unit Square: true
+[Console-log] [GeomPack UV] Sending postMessage to iframe
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_0d957641.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_54efbb11_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_0d957641.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
+[Console-log] [GeomPack UV Viewer] UV data loaded: 11381 UVs
+[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_3966de18.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_c3155428_uvdata.json
 [Console-log] [GeomPack UV] Checker: false, Wireframe: true
 [Console-log] [GeomPack UV] UV Coverage: 0.678, In Unit Square: true
 [Console-log] [GeomPack UV] Sending postMessage to iframe
-[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_0397d076.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_82f5f223_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
-[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_0397d076.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_3966de18.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_c3155428_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_3966de18.glb&type=output&subfolder=
 [Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
 [Console-log] [GeomPack UV Viewer] UV data loaded: 11381 UVs
+[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_3e428664.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_42391316_uvdata.json
+[Console-log] [GeomPack UV] Checker: false, Wireframe: true
+[Console-log] [GeomPack UV] UV Coverage: 0.683, In Unit Square: true
+[Console-log] [GeomPack UV] Sending postMessage to iframe
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_3e428664.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_42391316_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_3e428664.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
+[Console-log] [GeomPack UV Viewer] UV data loaded: 11428 UVs
+[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_f4ba3753.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_b10b36d4_uvdata.json
+[Console-log] [GeomPack UV] Checker: false, Wireframe: true
+[Console-log] [GeomPack UV] UV Coverage: 0.036, In Unit Square: true
+[Console-log] [GeomPack UV] Sending postMessage to iframe
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_f4ba3753.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_b10b36d4_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_f4ba3753.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
+[Console-log] [GeomPack UV Viewer] UV data loaded: 13353 UVs
+[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_171a3205.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_6d95a206_uvdata.json
+[Console-log] [GeomPack UV] Checker: false, Wireframe: true
+[Console-log] [GeomPack UV] UV Coverage: 0.594, In Unit Square: true
+[Console-log] [GeomPack UV] Sending postMessage to iframe
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_171a3205.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_6d95a206_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_171a3205.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
+[Console-log] [GeomPack UV Viewer] UV data loaded: 13555 UVs
+[Console-log] [GeomPack UV] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
+[Console-log] [GeomPack UV] Loading mesh: preview_uv_5f724a47.glb
+[Console-log] [GeomPack UV] UV data: preview_uv_b33dcf40_uvdata.json
+[Console-log] [GeomPack UV] Checker: false, Wireframe: true
+[Console-log] [GeomPack UV] UV Coverage: 0.578, In Unit Square: true
+[Console-log] [GeomPack UV] Sending postMessage to iframe
+[Console-log] [GeomPack UV Viewer] Received message: {type: LOAD_MESH_UV, meshPath: /view?filename=preview_uv_5f724a47.glb&type=output&subfolder=, uvDataPath: /view?filename=preview_uv_b33dcf40_uvdata.json&type=output&subfolder=, checker: false, wireframe: true}
+[Console-log] [GeomPack UV Viewer] Loading mesh: /view?filename=preview_uv_5f724a47.glb&type=output&subfolder=
+[Console-log] [GeomPack UV Viewer] Mesh Loaded successfully
+[Console-log] [GeomPack UV Viewer] UV data loaded: 14128 UVs
