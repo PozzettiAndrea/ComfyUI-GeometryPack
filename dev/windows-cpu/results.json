@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-05-13T08:44:02.569299+00:00",
+  "timestamp": "2026-05-13T11:23:01.132994+00:00",
   "platform": "windows",
   "hardware": {
     "os": "Windows-10-10.0.26100-SP0",
     "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
   },
-  "commit_hash": "5b239c4a6e5efc79099c2a093bf0577e620d6f97",
-  "run_url": "https://github.com/PozzettiAndrea/comfy-gpu-ci/actions/runs/25787520052",
-  "success": true,
+  "commit_hash": "7303ca1a08c7e1a2f8ea253d17672245664802d9",
+  "run_url": "https://github.com/PozzettiAndrea/comfy-gpu-ci/actions/runs/25795158350",
+  "success": false,
   "summary": {
     "total": 33,
-    "passed": 30,
-    "failed": 0
+    "passed": 21,
+    "failed": 9
   },
   "workflows": [
     {
       "name": "alpha_wrap",
       "status": "pass",
-      "duration_seconds": 28.6,
+      "duration_seconds": 29.09,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -25,8 +25,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 1.33,
-          "avg": 0.89
+          "peak": 1.34,
+          "avg": 0.9
         },
         "total_ram_gb": 16.0,
         "samples": 29
@@ -35,7 +35,7 @@
     {
       "name": "batch_remesh",
       "status": "pass",
-      "duration_seconds": 30.16,
+      "duration_seconds": 17.97,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -44,16 +44,16 @@
       "resources": {
         "ram": {
           "peak": 1.65,
-          "avg": 1.46
+          "avg": 1.37
         },
         "total_ram_gb": 16.0,
-        "samples": 30
+        "samples": 18
       }
     },
     {
       "name": "boolean_ops",
       "status": "pass",
-      "duration_seconds": 11.88,
+      "duration_seconds": 11.2,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -62,7 +62,7 @@
       "resources": {
         "ram": {
           "peak": 1.43,
-          "avg": 1.35
+          "avg": 1.34
         },
         "total_ram_gb": 16.0,
         "samples": 12
@@ -71,43 +71,7 @@
     {
       "name": "boolean_ops_all",
       "status": "pass",
-      "duration_seconds": 17.66,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.07,
-          "avg": 0.95
-        },
-        "total_ram_gb": 16.0,
-        "samples": 18
-      }
-    },
-    {
-      "name": "decimate",
-      "status": "pass",
-      "duration_seconds": 11.28,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 0.91,
-          "avg": 0.9
-        },
-        "total_ram_gb": 16.0,
-        "samples": 12
-      }
-    },
-    {
-      "name": "decimate_all",
-      "status": "pass",
-      "duration_seconds": 22.98,
+      "duration_seconds": 13.09,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -116,16 +80,16 @@
       "resources": {
         "ram": {
           "peak": 1.14,
-          "avg": 1.01
+          "avg": 1.12
         },
         "total_ram_gb": 16.0,
-        "samples": 23
+        "samples": 14
       }
     },
     {
-      "name": "depth_map_to_mesh",
+      "name": "decimate",
       "status": "pass",
-      "duration_seconds": 26.17,
+      "duration_seconds": 14.28,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -133,11 +97,47 @@
       },
       "resources": {
         "ram": {
-          "peak": 1.81,
-          "avg": 1.4
+          "peak": 1.08,
+          "avg": 0.93
         },
         "total_ram_gb": 16.0,
-        "samples": 26
+        "samples": 15
+      }
+    },
+    {
+      "name": "decimate_all",
+      "status": "pass",
+      "duration_seconds": 21.73,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.17,
+          "avg": 1.05
+        },
+        "total_ram_gb": 16.0,
+        "samples": 22
+      }
+    },
+    {
+      "name": "depth_map_to_mesh",
+      "status": "pass",
+      "duration_seconds": 20.87,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.86,
+          "avg": 1.38
+        },
+        "total_ram_gb": 16.0,
+        "samples": 21
       }
     },
     {
@@ -149,170 +149,170 @@
     },
     {
       "name": "fix_normals_all",
-      "status": "pass",
-      "duration_seconds": 15.66,
-      "error": null,
+      "status": "fail",
+      "duration_seconds": 11.84,
+      "error": "Workflow execution failed: {'prompt_id': 'ab3c9446-077e-4cf9-abd3-8450e8acbd48', 'node_id': '6', 'node_type': 'GeomPackFixNormals', 'executed': ['1'], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'backend': ['igl_signed_dist'], 'trimesh': ['<trimesh.Trimesh(vertices.shape=(2956, 3), faces.shape=(4770, 3), name=`truck.obj`)>'], 'prompt': ['{\\'1\\': {\\'inputs\\': {\\'file_path\\': \\'3d/truck.obj\\'}, \\'class_type\\': \\'GeomPackLoadMesh\\', \\'_meta\\': {\\'title\\': \\'Load Mesh\\'}}, \\'2\\': {\\'inputs\\': {\\'backend\\': \\'trimesh\\', \\'report_panel\\': \\'false\\', \\'trimesh\\': [\\'1\\', 0]}, \\'class_type\\': \\'GeomPackFixNormals\\', \\'_meta\\': {\\'title\\': \\'Fix Normals\\'}}, \\'3\\': {\\'inputs\\': {\\'backend\\': \\'igl_bfs\\', \\'report_panel\\': \\'false\\', \\'trimesh\\': [\\'1\\', 0]}, \\'class_type\\': \\'GeomPackFixNormals\\', \\'_meta\\': {\\'title\\': \\'Fix Normals\\'}}, \\'4\\': {\\'inputs\\': {\\'backend\\': \\'igl_winding\\', \\'report_panel\\': \\'false\\', \\'trimesh\\': [\\'1\\', 0]}, \\'class_type\\': \\'GeomPackFixNormals\\', \\'_meta\\': {\\'title\\': \\'Fix Normals\\'}}, \\'5\\': {\\'inputs\\': {\\'backend\\': \\'igl_raycast\\', \\'report_panel\\': \\'false\\', \\'trimesh\\': [\\'1\\', 0]}, \\'class_type\\': \\'GeomPackFixNormals\\', \\'_meta\\': {\\'title\\': \\'Fix Normals\\'}}, \\'6\\': {\\'inputs\\': {\\'backend\\': \\'igl_signed_dist\\', \\'report_panel\\': \\'false\\', \\'trimesh\\': [\\'1\\', 0]}, \\'class_type\\': \\'GeomPackFixNormals\\', \\'_meta\\': {\\'title\\': \\'Fix Normals\\'}}, \\'8\\': {\\'inputs\\': {\\'mode\\': \\'fields\\', \\'preview_multi\\': \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[2.4457834419570967,0.9339641357719854,-1.1112698573158992],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[-0.2837493462372615,0.9439214532462359,0.16881527955561504]}\",\"selected_field\":\"normals\",\"selected_channel\":\"0\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\', \\'mesh_1\\': [\\'1\\', 0], \\'mesh_2\\': [\\'2\\', 0], \\'mesh_3\\': [\\'3\\', 0], \\'mesh_4\\': [\\'4\\', 0]}, \\'class_type\\': \\'GeomPackPreviewMeshMulti\\', \\'_meta\\': {\\'title\\': \\'Preview Mesh Multi\\'}}, \\'9\\': {\\'inputs\\': {\\'mode\\': \\'fields\\', \\'preview_multi\\': \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[2.4457834419570967,0.9339641357719854,-1.1112698573158992],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[-0.2837493462372615,0.9439214532462359,0.16881527955561504]}\",\"selected_field\":\"normals\",\"selected_channel\":\"0\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\', \\'mesh_1\\': [\\'5\\', 0], \\'mesh_2\\': [\\'6\\', 0]}, \\'class_type\\': \\'GeomPackPreviewMeshMulti\\', \\'_meta\\': {\\'title\\': \\'Preview Mesh Multi\\'}}}'], 'extra_pnginfo': ['{\\'workflow\\': {\\'id\\': \\'test-fix-normals-all-0001\\', \\'revision\\': 0, \\'last_node_id\\': 11, \\'last_link_id\\': 14, \\'nodes\\': [{\\'id\\': 6, \\'type\\': \\'GeomPackFixNormals\\', \\'pos\\': [-887.3027798647635, 491.3849236163281], \\'size\\': [370, 156.359375], \\'flags\\': {}, \\'order\\': 5, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'trimesh\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 5}], \\'outputs\\': [{\\'name\\': \\'fixed_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [11]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackFixNormals\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'igl_signed_dist\\', \\'false\\']}, {\\'id\\': 5, \\'type\\': \\'GeomPackFixNormals\\', \\'pos\\': [-889.1493998795415, 340.07985048214533], \\'size\\': [370, 156.359375], \\'flags\\': {}, \\'order\\': 4, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'trimesh\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 4}], \\'outputs\\': [{\\'name\\': \\'fixed_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [10]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackFixNormals\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'igl_raycast\\', \\'false\\']}, {\\'id\\': 4, \\'type\\': \\'GeomPackFixNormals\\', \\'pos\\': [-891.2679834338181, 191.1117182341826], \\'size\\': [370, 156.359375], \\'flags\\': {}, \\'order\\': 3, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'trimesh\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 3}], \\'outputs\\': [{\\'name\\': \\'fixed_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [9]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackFixNormals\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'igl_winding\\', \\'false\\']}, {\\'id\\': 3, \\'type\\': \\'GeomPackFixNormals\\', \\'pos\\': [-895.379931408891, 43.61392767922324], \\'size\\': [370, 156.359375], \\'flags\\': {}, \\'order\\': 2, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'trimesh\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 2}], \\'outputs\\': [{\\'name\\': \\'fixed_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [8]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackFixNormals\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'igl_bfs\\', \\'false\\']}, {\\'id\\': 2, \\'type\\': \\'GeomPackFixNormals\\', \\'pos\\': [-895.5148783097702, -102.5023129319287], \\'size\\': [370, 156.359375], \\'flags\\': {}, \\'order\\': 1, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'trimesh\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 1}], \\'outputs\\': [{\\'name\\': \\'fixed_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [7]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackFixNormals\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'trimesh\\', \\'false\\']}, {\\'id\\': 9, \\'type\\': \\'GeomPackPreviewMeshMulti\\', \\'pos\\': [378.5374405209115, -99.09842223891802], \\'size\\': [768, 702], \\'flags\\': {}, \\'order\\': 7, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_1\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 10}, {\\'name\\': \\'mesh_2\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': 11}, {\\'name\\': \\'mesh_3\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': None}, {\\'name\\': \\'mesh_4\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': None}], \\'outputs\\': [], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackPreviewMeshMulti\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'fields\\', \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[2.4457834419570967,0.9339641357719854,-1.1112698573158992],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[-0.2837493462372615,0.9439214532462359,0.16881527955561504]}\",\"selected_field\":\"normals\",\"selected_channel\":\"0\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\']}, {\\'id\\': 8, \\'type\\': \\'GeomPackPreviewMeshMulti\\', \\'pos\\': [-416.27848735286733, -99.09842223891802], \\'size\\': [768, 702], \\'flags\\': {}, \\'order\\': 6, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_1\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 6}, {\\'name\\': \\'mesh_2\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': 7}, {\\'name\\': \\'mesh_3\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': 8}, {\\'name\\': \\'mesh_4\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': 9}], \\'outputs\\': [], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackPreviewMeshMulti\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'fields\\', \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[2.4457834419570967,0.9339641357719854,-1.1112698573158992],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[-0.2837493462372615,0.9439214532462359,0.16881527955561504]}\",\"selected_field\":\"normals\",\"selected_channel\":\"0\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\']}, {\\'id\\': 1, \\'type\\': \\'GeomPackLoadMesh\\', \\'pos\\': [-883.8968194340091, -229.55171550212876], \\'size\\': [270, 130.65625], \\'flags\\': {}, \\'order\\': 0, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [1, 2, 3, 4, 5, 6]}, {\\'name\\': \\'texture\\', \\'type\\': \\'IMAGE\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackLoadMesh\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\'}, \\'widgets_values\\': [\\'3d/truck.obj\\']}], \\'links\\': [[1, 1, 0, 2, 0, \\'TRIMESH\\'], [2, 1, 0, 3, 0, \\'TRIMESH\\'], [3, 1, 0, 4, 0, \\'TRIMESH\\'], [4, 1, 0, 5, 0, \\'TRIMESH\\'], [5, 1, 0, 6, 0, \\'TRIMESH\\'], [6, 1, 0, 8, 0, \\'TRIMESH\\'], [7, 2, 0, 8, 1, \\'TRIMESH\\'], [8, 3, 0, 8, 2, \\'TRIMESH\\'], [9, 4, 0, 8, 3, \\'TRIMESH\\'], [10, 5, 0, 9, 0, \\'TRIMESH\\'], [11, 6, 0, 9, 1, \\'TRIMESH\\']], \\'groups\\': [], \\'config\\': {}, \\'extra\\': {\\'ds\\': {\\'scale\\': 0.798600000000001, \\'offset\\': [1042.4626817735398, 377.0953401889155]}, \\'frontendVersion\\': \\'1.43.18\\', \\'workflowRendererVersion\\': \\'LG\\'}, \\'version\\': 0.4}}']}, 'current_outputs': ['8', '3', '5', '9', '6', '4', '1', '2'], 'timestamp': 1778670982115}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\fix_normals_all.json\nNode error: GeomPackFixNormals",
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.57,
-          "avg": 1.41
-        },
-        "total_ram_gb": 16.0,
-        "samples": 16
-      }
-    },
-    {
-      "name": "fix_self_intersection",
-      "status": "pass",
-      "duration_seconds": 12.77,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 0.96,
-          "avg": 0.95
-        },
-        "total_ram_gb": 16.0,
-        "samples": 13
-      }
-    },
-    {
-      "name": "mesh_info",
-      "status": "pass",
-      "duration_seconds": 9.63,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 0.94,
-          "avg": 0.94
-        },
-        "total_ram_gb": 16.0,
-        "samples": 10
-      }
-    },
-    {
-      "name": "mesh_mesh_distance",
-      "status": "pass",
-      "duration_seconds": 28.77,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.07,
-          "avg": 0.98
-        },
-        "total_ram_gb": 16.0,
-        "samples": 29
-      }
-    },
-    {
-      "name": "normals",
-      "status": "pass",
-      "duration_seconds": 12.32,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.06,
-          "avg": 0.98
-        },
-        "total_ram_gb": 16.0,
-        "samples": 13
-      }
-    },
-    {
-      "name": "point_mesh_distance",
-      "status": "pass",
-      "duration_seconds": 11.65,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.02,
-          "avg": 0.94
+          "peak": 1.63,
+          "avg": 1.4
         },
         "total_ram_gb": 16.0,
         "samples": 12
       }
     },
     {
-      "name": "preview_mesh_threejs",
-      "status": "pass",
-      "duration_seconds": 10.21,
-      "error": null,
+      "name": "fix_self_intersection",
+      "status": "fail",
+      "duration_seconds": 6.39,
+      "error": "Workflow execution failed: {'prompt_id': '2432222f-9153-480f-b00c-121932b99bde', 'node_id': '1', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/camelhead.off']}, 'current_outputs': ['22', '21', '1', '14', '17'], 'timestamp': 1778670989063}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\fix_self_intersection.json\nNode error: GeomPackLoadMesh",
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 0.82,
-          "avg": 0.8
+          "peak": 0.77,
+          "avg": 0.77
         },
         "total_ram_gb": 16.0,
-        "samples": 11
+        "samples": 7
+      }
+    },
+    {
+      "name": "mesh_info",
+      "status": "fail",
+      "duration_seconds": 5.99,
+      "error": "Workflow execution failed: {'prompt_id': '4b2aabe6-0deb-4977-88a4-8e04fb57f0c3', 'node_id': '1', 'node_type': 'GeomPackCreatePrimitive', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'shape': ['cube'], 'size': [2], 'subdivisions': [1]}, 'current_outputs': ['1', '7', '12'], 'timestamp': 1778670995484}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\mesh_info.json\nNode error: GeomPackCreatePrimitive",
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 0.76,
+          "avg": 0.76
+        },
+        "total_ram_gb": 16.0,
+        "samples": 6
+      }
+    },
+    {
+      "name": "mesh_mesh_distance",
+      "status": "fail",
+      "duration_seconds": 6.12,
+      "error": "Workflow execution failed: {'prompt_id': 'b63a26b8-52b7-4c47-9aac-d8cb1e7386c4', 'node_id': '8', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/Stanford_Bunny.stl']}, 'current_outputs': ['8', '3', '16', '10', '15'], 'timestamp': 1778671001980}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\mesh_mesh_distance.json\nNode error: GeomPackLoadMesh",
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 0.76,
+          "avg": 0.76
+        },
+        "total_ram_gb": 16.0,
+        "samples": 7
+      }
+    },
+    {
+      "name": "normals",
+      "status": "fail",
+      "duration_seconds": 6.17,
+      "error": "Workflow execution failed: {'prompt_id': '5517d307-16ef-4b85-8c40-1d6a41adf223', 'node_id': '1', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/Stanford_Bunny.stl']}, 'current_outputs': ['1', '3', '2', '7'], 'timestamp': 1778671008437}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\normals.json\nNode error: GeomPackLoadMesh",
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 0.76,
+          "avg": 0.76
+        },
+        "total_ram_gb": 16.0,
+        "samples": 7
+      }
+    },
+    {
+      "name": "point_mesh_distance",
+      "status": "fail",
+      "duration_seconds": 6.34,
+      "error": "Workflow execution failed: {'prompt_id': 'd126fc1c-6a53-4ad7-9500-12a69c6e6d97', 'node_id': '1', 'node_type': 'GeomPackCreatePrimitive', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'shape': ['cube'], 'size': [2], 'subdivisions': [1]}, 'current_outputs': ['8', '5', '4', '1', '7', '2'], 'timestamp': 1778671015133}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\point_mesh_distance.json\nNode error: GeomPackCreatePrimitive",
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 0.76,
+          "avg": 0.76
+        },
+        "total_ram_gb": 16.0,
+        "samples": 7
+      }
+    },
+    {
+      "name": "preview_mesh_threejs",
+      "status": "fail",
+      "duration_seconds": 6.58,
+      "error": "Workflow execution failed: {'prompt_id': 'ccdd2e19-17ba-4d11-9113-7462f1471e4e', 'node_id': '1', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/Stanford_Bunny.stl']}, 'current_outputs': ['1', '3'], 'timestamp': 1778671022060}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\preview_mesh_threejs.json\nNode error: GeomPackLoadMesh",
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 0.76,
+          "avg": 0.76
+        },
+        "total_ram_gb": 16.0,
+        "samples": 7
       }
     },
     {
       "name": "reconstruct_all",
-      "status": "pass",
-      "duration_seconds": 25.86,
-      "error": null,
+      "status": "fail",
+      "duration_seconds": 6.51,
+      "error": "Workflow execution failed: {'prompt_id': '16055f2f-29d6-471b-9258-e1997d83ed37', 'node_id': '1', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/Stanford_Bunny.stl']}, 'current_outputs': ['3', '5', '6', '4', '1', '14', '10', '2'], 'timestamp': 1778671029045}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\reconstruct_all.json\nNode error: GeomPackLoadMesh",
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 0.9,
-          "avg": 0.79
+          "peak": 0.76,
+          "avg": 0.76
         },
         "total_ram_gb": 16.0,
-        "samples": 26
+        "samples": 7
       }
     },
     {
       "name": "refine_mesh",
-      "status": "pass",
-      "duration_seconds": 12.47,
-      "error": null,
+      "status": "fail",
+      "duration_seconds": 6.39,
+      "error": "Workflow execution failed: {'prompt_id': '70b087ca-7bd6-40e3-8a1b-5e33d71edf06', 'node_id': '1', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_7pa4wo7n\\\\persistent_worker.py\", line 1738, in main\\n    module = importlib.import_module(module_name)\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Programs\\\\comfy-env\\\\.pixi\\\\envs\\\\geometrypack-nodes\\\\Lib\\\\importlib\\\\__init__.py\", line 88, in import_module\\n    return _bootstrap._gcd_import(name[level:], package, level)\\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1310, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\__init__.py\", line 17, in <module>\\n    from . import blender_io\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\__init__.py\", line 8, in <module>\\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 15, in <module>\\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\\n    ^^^^^^^^^^\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1106\\\\.venv\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/Stanford_Bunny.stl']}, 'current_outputs': ['1', '3', '4'], 'timestamp': 1778671035745}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-atpp8ub2\\ComfyUI-GeometryPack\\workflows\\refine_mesh.json\nNode error: GeomPackLoadMesh",
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.0,
-          "avg": 0.93
+          "peak": 0.76,
+          "avg": 0.76
         },
         "total_ram_gb": 16.0,
-        "samples": 13
+        "samples": 7
       }
     },
     {
       "name": "remesh_intersections",
       "status": "pass",
-      "duration_seconds": 12.19,
+      "duration_seconds": 14.2,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -320,17 +320,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.99,
-          "avg": 0.94
+          "peak": 0.91,
+          "avg": 0.79
         },
         "total_ram_gb": 16.0,
-        "samples": 13
+        "samples": 15
       }
     },
     {
       "name": "remeshing",
       "status": "pass",
-      "duration_seconds": 58.32,
+      "duration_seconds": 51.27,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -339,10 +339,10 @@
       "resources": {
         "ram": {
           "peak": 1.05,
-          "avg": 1.01
+          "avg": 1.0
         },
         "total_ram_gb": 16.0,
-        "samples": 59
+        "samples": 51
       }
     },
     {
@@ -355,7 +355,7 @@
     {
       "name": "sharpen",
       "status": "pass",
-      "duration_seconds": 14.01,
+      "duration_seconds": 27.67,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -363,53 +363,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.96,
-          "avg": 0.94
+          "peak": 0.93,
+          "avg": 0.78
         },
         "total_ram_gb": 16.0,
-        "samples": 14
+        "samples": 28
       }
     },
     {
       "name": "sharpen_all",
       "status": "pass",
-      "duration_seconds": 86.46,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 0.87,
-          "avg": 0.78
-        },
-        "total_ram_gb": 16.0,
-        "samples": 86
-      }
-    },
-    {
-      "name": "side_by_side_viewer",
-      "status": "pass",
-      "duration_seconds": 10.31,
-      "error": null,
-      "hardware": {
-        "os": "Windows-10-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 0.69,
-          "avg": 0.68
-        },
-        "total_ram_gb": 16.0,
-        "samples": 11
-      }
-    },
-    {
-      "name": "skeleton_all",
-      "status": "pass",
-      "duration_seconds": 30.27,
+      "duration_seconds": 80.3,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -418,16 +382,16 @@
       "resources": {
         "ram": {
           "peak": 0.85,
-          "avg": 0.73
+          "avg": 0.83
         },
         "total_ram_gb": 16.0,
-        "samples": 31
+        "samples": 80
       }
     },
     {
-      "name": "skeleton_extraction",
+      "name": "side_by_side_viewer",
       "status": "pass",
-      "duration_seconds": 10.49,
+      "duration_seconds": 9.8,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -435,8 +399,44 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.86,
-          "avg": 0.85
+          "peak": 0.84,
+          "avg": 0.84
+        },
+        "total_ram_gb": 16.0,
+        "samples": 10
+      }
+    },
+    {
+      "name": "skeleton_all",
+      "status": "pass",
+      "duration_seconds": 42.27,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 0.83,
+          "avg": 0.8
+        },
+        "total_ram_gb": 16.0,
+        "samples": 43
+      }
+    },
+    {
+      "name": "skeleton_extraction",
+      "status": "pass",
+      "duration_seconds": 10.68,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 0.8,
+          "avg": 0.79
         },
         "total_ram_gb": 16.0,
         "samples": 11
@@ -445,7 +445,7 @@
     {
       "name": "sMOOth",
       "status": "pass",
-      "duration_seconds": 10.41,
+      "duration_seconds": 9.94,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -453,17 +453,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.87,
-          "avg": 0.86
+          "peak": 0.8,
+          "avg": 0.8
         },
         "total_ram_gb": 16.0,
-        "samples": 11
+        "samples": 10
       }
     },
     {
       "name": "smooth_all",
       "status": "pass",
-      "duration_seconds": 15.2,
+      "duration_seconds": 15.4,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -471,8 +471,8 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.88,
-          "avg": 0.87
+          "peak": 0.79,
+          "avg": 0.75
         },
         "total_ram_gb": 16.0,
         "samples": 16
@@ -481,7 +481,7 @@
     {
       "name": "surface_reconstruction",
       "status": "pass",
-      "duration_seconds": 19.05,
+      "duration_seconds": 12.7,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -489,17 +489,17 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.9,
-          "avg": 0.8
+          "peak": 0.91,
+          "avg": 0.83
         },
         "total_ram_gb": 16.0,
-        "samples": 19
+        "samples": 13
       }
     },
     {
       "name": "test_loading",
       "status": "pass",
-      "duration_seconds": 11.43,
+      "duration_seconds": 11.3,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -517,7 +517,7 @@
     {
       "name": "transform",
       "status": "pass",
-      "duration_seconds": 10.02,
+      "duration_seconds": 21.52,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -526,16 +526,16 @@
       "resources": {
         "ram": {
           "peak": 0.89,
-          "avg": 0.89
+          "avg": 0.88
         },
         "total_ram_gb": 16.0,
-        "samples": 10
+        "samples": 22
       }
     },
     {
       "name": "uv_unwrap",
       "status": "pass",
-      "duration_seconds": 19.98,
+      "duration_seconds": 22.96,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -543,11 +543,11 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.89,
-          "avg": 0.86
+          "peak": 0.87,
+          "avg": 0.74
         },
         "total_ram_gb": 16.0,
-        "samples": 20
+        "samples": 23
       }
     },
     {
@@ -560,7 +560,7 @@
     {
       "name": "view_texture",
       "status": "pass",
-      "duration_seconds": 14.44,
+      "duration_seconds": 9.9,
       "error": null,
       "hardware": {
         "os": "Windows-10-10.0.26100-SP0",
@@ -568,11 +568,11 @@
       },
       "resources": {
         "ram": {
-          "peak": 0.89,
-          "avg": 0.76
+          "peak": 0.93,
+          "avg": 0.8
         },
         "total_ram_gb": 16.0,
-        "samples": 15
+        "samples": 10
       }
     }
   ]
