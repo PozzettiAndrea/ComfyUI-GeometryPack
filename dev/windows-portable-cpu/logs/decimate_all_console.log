@@ -7,13 +7,11 @@
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
-[Console-warning] WARNING: Multiple instances of Three.js being imported.
 [Console-log] [GeomPack] Loading UV mesh preview extension...
 [Console-log] [GeomPack] UV mesh preview extension registered
-[Console-log] [GeomPack Multi JS] Loading mesh_preview_multi.js extension
-[Console-log] [BVHViewer] Loading BVH Viewer extension
-[Console-log] [BVHViewer] Loading BVH viewer extension...
-[Console-log] [BVHViewer] Extension registered: comfy3d.bvhviewer
+[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension
+[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension...
+[Console-log] [CompareSMPLBVH] Extension registered: comfy3d.comparesmplbvh
 [Console-log] [FBX Preview] Auto-registering for all known FBX preview node types...
 [Console-log] [UniRig] Loading FBX mesh preview extension...
 [Console-log] [UniRig] Detected extension folder: ComfyUI-GeometryPack
@@ -30,20 +28,22 @@
 [Console-log] [UniRig Compare] Loading compare skeleton widget...
 [Console-log] [UniRig Compare] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [UniRig Compare] Compare skeleton widget registered
+[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
+[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
 [Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension
 [Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension...
 [Console-log] [FBXAnimationViewer] Extension registered: comfy3d.fbxanimationviewer
 [Console-log] [GeomPack Gaussian] Loading extension...
 [Console-log] [GeomPack] Loading mesh preview extension...
 [Console-log] [GeomPack] Mesh preview extension registered
-[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension
-[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension...
-[Console-log] [CompareSMPLBVH] Extension registered: comfy3d.comparesmplbvh
-[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
-[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
 [Console-log] [UniRig Debug] Loading FBX mesh preview extension...
 [Console-log] [UniRig Debug] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [UniRig Debug] FBX mesh preview extension registered
+[Console-log] [GeomPack Multi JS] Loading mesh_preview_multi.js extension
+[Console-log] [BVHViewer] Loading BVH Viewer extension
+[Console-log] [BVHViewer] Loading BVH viewer extension...
+[Console-log] [BVHViewer] Extension registered: comfy3d.bvhviewer
+[Console-warning] WARNING: Multiple instances of Three.js being imported.
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-warning] [MaskEditor] ComfyApp.open_maskeditor is deprecated. Plugins should migrate to using the command system or direct node context menu integration.
 [Console-log] [GeomPack] Registering Preview Mesh node
@@ -55,23 +55,23 @@
 [Console-log] [GeomPack Multi JS] Creating PreviewMeshMulti node widget
 [Console-log] [GeomPack Multi JS] Creating PreviewMeshMulti node widget
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
-[Console-log] [GeomPack VTK Multi Viewer] Initializing...
-[Console-log] [GeomPack VTK Multi Viewer] Ready
-[Console-log] [GeomPack Multi] Iframe loaded
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-log] [GeomPack VTK Multi Viewer] Initializing...
 [Console-log] [GeomPack VTK Multi Viewer] Ready
+[Console-log] [GeomPack VTK Multi Viewer] Initializing...
+[Console-log] [GeomPack VTK Multi Viewer] Ready
+[Console-log] [GeomPack Multi] Iframe loaded
 [Console-log] [GeomPack Multi] Iframe loaded
 [Console-log] [comfy-test] graphToPrompt: 7 nodes, missing class_type: [], sample: {"inputs":{"file_path":"3d/Stanford_Bunny.stl"},"class_type":"GeomPackLoadMesh","_meta":{"title":"Load Mesh"}}
 [Console-log] [GeomPack Multi] onExecuted: 3 meshes, grid 3x1
-[Console-log] [GeomPack Multi] Sending message to iframe: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778494848006, showEdges: true}
-[Console-log] [GeomPack VTK Multi Viewer] Received LOAD_MULTI_MESH message: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778494848006, showEdges: true}
+[Console-log] [GeomPack Multi] Sending message to iframe: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778661473193, showEdges: true}
+[Console-log] [GeomPack VTK Multi Viewer] Received LOAD_MULTI_MESH message: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778661473193, showEdges: true}
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 1: /view?filename=preview_multi_1_214b367e.vtp&type=output&subfolder=
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 2: /view?filename=preview_multi_2_214b367e.vtp&type=output&subfolder=
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 3: /view?filename=preview_multi_3_214b367e.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 1: /view?filename=preview_multi_1_5516557f.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 2: /view?filename=preview_multi_2_5516557f.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 3: /view?filename=preview_multi_3_5516557f.vtp&type=output&subfolder=
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
@@ -90,14 +90,14 @@
 [Console-log] [GeomPack VTK Multi Viewer] Common fields: [normals]
 [Console-log] [GeomPack VTK Multi Viewer] All meshes Loaded successfully
 [Console-log] [GeomPack Multi] onExecuted: 3 meshes, grid 3x1
-[Console-log] [GeomPack Multi] Sending message to iframe: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778494853514, showEdges: true}
-[Console-log] [GeomPack VTK Multi Viewer] Received LOAD_MULTI_MESH message: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778494853514, showEdges: true}
+[Console-log] [GeomPack Multi] Sending message to iframe: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778661478340, showEdges: true}
+[Console-log] [GeomPack VTK Multi Viewer] Received LOAD_MULTI_MESH message: {type: LOAD_MULTI_MESH, numMeshes: 3, meshFiles: Array(3), timestamp: 1778661478340, showEdges: true}
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 1: /view?filename=preview_multi_1_d4c40241.vtp&type=output&subfolder=
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 2: /view?filename=preview_multi_2_d4c40241.vtp&type=output&subfolder=
-[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 3: /view?filename=preview_multi_3_d4c40241.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 1: /view?filename=preview_multi_1_ad0351d3.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 2: /view?filename=preview_multi_2_ad0351d3.vtp&type=output&subfolder=
+[Console-log] [GeomPack VTK Multi Viewer] Loading mesh 3: /view?filename=preview_multi_3_ad0351d3.vtp&type=output&subfolder=
 [Console-error] No input!
 [Console-error] No input!
 [Console-error] No input!
