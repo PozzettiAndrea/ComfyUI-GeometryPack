@@ -9,15 +9,15 @@ Capturing execution frames: preview_mesh_threejs.json
   [ComfyUI] Prompt has 2 nodes
   [ComfyUI]   Node 1: GeomPackLoadMesh
   [ComfyUI]   Node 1: GeomPackLoadMesh
+  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI]   Node 3: GeomPackPreviewMesh
+  [ComfyUI]   Node 3: GeomPackPreviewMesh
+  [ComfyUI]     Inputs: {"preview": "", "trimesh": ["1", 0]}
+  [ComfyUI]     Inputs: {"preview": "", "trimesh": ["1", 0]}
+  [ComfyUI] Generated prompt_id: 97bbf9aa-00b4-434a-b1a1-f56a3b796c45
+  [ComfyUI] Generated prompt_id: 97bbf9aa-00b4-434a-b1a1-f56a3b796c45
   Queuing workflow for execution...
-  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
-  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
-  [ComfyUI]   Node 3: GeomPackPreviewMesh
-  [ComfyUI]   Node 3: GeomPackPreviewMesh
-  [ComfyUI]     Inputs: {"preview": "", "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"preview": "", "trimesh": ["1", 0]}
-  [ComfyUI] Generated prompt_id: 86d8ef44-7101-421d-b5e8-60a48e943f53
-  [ComfyUI] Generated prompt_id: 86d8ef44-7101-421d-b5e8-60a48e943f53
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -48,8 +48,8 @@ Capturing execution frames: preview_mesh_threejs.json
   [ComfyUI] [SubprocessWorker] call_id=86 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0802/ComfyUI/input/3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0802/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1105/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1105/ComfyUI/input/3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
@@ -58,8 +58,8 @@ Capturing execution frames: preview_mesh_threejs.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.24s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.24s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.23s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.23s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMesh: trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMesh: trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh.PreviewMeshNode.EXECUTE_NORMALIZED
@@ -82,21 +82,21 @@ Capturing execution frames: preview_mesh_threejs.json
   [ComfyUI] [SubprocessWorker] call_id=87 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0802/ComfyUI/output/preview_5e4a39f9.glb
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0802/ComfyUI/output/preview_5e4a39f9.glb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1105/ComfyUI/output/preview_453a279e.glb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1105/ComfyUI/output/preview_453a279e.glb
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMesh done (0.05s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMesh done (0.05s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMesh done (0.04s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMesh done (0.04s): result: NodeOutput
   [ComfyUI] Prompt executed in 0.28 seconds
   [ComfyUI] Prompt executed in 0.28 seconds
   Node executed (1 total), capturing...
   Frame 2 saved (frame_001.jpg, t=0.7s)
-  [capture-node] freeze=65ms shot=136ms unfreeze=0ms saved=True
+  [capture-node] freeze=45ms shot=130ms unfreeze=0ms saved=True
   Execution complete (t=0.7s)
-  Captured 2 unique frames over 0.93s
+  Captured 2 unique frames over 0.9s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41880/extensions/ComfyUI-GeometryPack/viewer.html?v=17786596397, canvas=486x486, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41887/extensions/ComfyUI-GeometryPack/viewer.html?v=17786706459, canvas=486x486, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: preview_mesh_threejs_executed.png
   [timing] final_screenshot: 0.2s
