@@ -27,8 +27,8 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI]   Node 16: GeomPackRemesh
   [ComfyUI]     Inputs: {"backend": "cgal_isotropic", "backend.cgal_edge_length": 1, "backend.cgal_iterations": 3, "backend.protect_boundaries": "true", "report_panel": "false", "trimesh": ["8", 0]}
   [ComfyUI]     Inputs: {"backend": "cgal_isotropic", "backend.cgal_edge_length": 1, "backend.cgal_iterations": 3, "backend.protect_boundaries": "true", "report_panel": "false", "trimesh": ["8", 0]}
-  [ComfyUI] Generated prompt_id: fa7658d2-c02f-4d2b-b349-4abed221ba08
-  [ComfyUI] Generated prompt_id: fa7658d2-c02f-4d2b-b349-4abed221ba08
+  [ComfyUI] Generated prompt_id: a9c9c07c-e659-48f8-bc38-249c8941d3e4
+  [ComfyUI] Generated prompt_id: a9c9c07c-e659-48f8-bc38-249c8941d3e4
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -60,18 +60,70 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [SubprocessWorker] call_id=69 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1024/ComfyUI/input/3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1024/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/input/3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack]
+  [ComfyUI] [worker:ComfyUI-GeometryPack]
+  [ComfyUI] === WATCHDOG TICK 1 ===
+  [ComfyUI] === WATCHDOG TICK 1 ===
+  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x000000016ea2b000 (most recent call first):
+  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x000000016ea2b000 (most recent call first):
+  [ComfyUI]   File "/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_xaat97rf/persistent_worker.py", line 52 in _watchdog
+  [ComfyUI]   File "/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_xaat97rf/persistent_worker.py", line 52 in _watchdog
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/threading.py", line 982 in run
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/threading.py", line 982 in run
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/threading.py", line 1045 in _bootstrap_inner
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/threading.py", line 1045 in _bootstrap_inner
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/threading.py", line 1002 in _bootstrap
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/threading.py", line 1002 in _bootstrap
+  [ComfyUI] 
+  [ComfyUI] 
+  [ComfyUI] Thread 0x00000001fbc76240 (most recent call first):
+  [ComfyUI] Thread 0x00000001fbc76240 (most recent call first):
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 49 in hash_fallback
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 49 in hash_fallback
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 222 in __hash__
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 222 in __hash__
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 693 in <listcomp>
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 693 in <listcomp>
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 692 in __hash__
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 692 in __hash__
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 375 in verify
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 375 in verify
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 440 in __getitem__
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/caching.py", line 440 in __getitem__
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/base.py", line 1239 in update_vertices
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/base.py", line 1239 in update_vertices
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/grouping.py", line 110 in merge_vertices
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/grouping.py", line 110 in merge_vertices
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/base.py", line 1186 in merge_vertices
+  [ComfyUI]   File "/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages/trimesh/base.py", line 1186 in merge_vertices
+  [ComfyUI]   File "/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/custom_nodes/ComfyUI-GeometryPack/nodes/io/mesh_io.py", line 189 in load_mesh_file
+  [ComfyUI]   File "/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/custom_nodes/ComfyUI-GeometryPack/nodes/io/mesh_io.py", line 189 in load_mesh_file
+  [ComfyUI]   File "/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/custom_nodes/ComfyUI-GeometryPack/nodes/io/load_mesh.py", line 197 in execute
+  [ComfyUI]   File "/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/custom_nodes/ComfyUI-GeometryPack/nodes/io/load_mesh.py", line 197 in execute
+  [ComfyUI]   File "/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/comfy_api/latest/_io.py", line 1833 in EXECUTE_NORMALIZED
+  [ComfyUI]   File "/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/comfy_api/latest/_io.py", line 1833 in EXECUTE_NORMALIZED
+  [ComfyUI]   File "/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_xaat97rf/persistent_worker.py", line 1762 in main
+  [ComfyUI]   File "/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_xaat97rf/persistent_worker.py", line 1762 in main
+  [ComfyUI]   File "/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_xaat97rf/persistent_worker.py", line 1807 in <module>
+  [ComfyUI]   File "/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_xaat97rf/persistent_worker.py", line 1807 in <module>
+  [ComfyUI] 
+  [ComfyUI] 
+  [ComfyUI] [worker:ComfyUI-GeometryPack] === END ===
+  [ComfyUI] [worker:ComfyUI-GeometryPack] === END ===
+  [ComfyUI] 
+  [ComfyUI] 
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.27s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.27s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.36s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.36s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
@@ -92,12 +144,12 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=70 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=70 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: cgal_isotropic -> GeomPackRemesh_CGAL
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: cgal_isotropic -> GeomPackRemesh_CGAL
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.02s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.02s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.04s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.04s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
@@ -118,16 +170,16 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=71 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=71 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: cgal_isotropic -> GeomPackRemesh_CGAL
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: cgal_isotropic -> GeomPackRemesh_CGAL
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.02s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.02s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackRemesh_CGAL: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, protect_boundaries: 'true'
-  [ComfyUI] [comfy-env] Running GeomPackRemesh_CGAL: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, protect_boundaries: 'true'
-  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing_cgal.remesh.RemeshCGALNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing_cgal.remesh.RemeshCGALNode.EXECUTE_NORMALIZED
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.04s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.04s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
+  [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
@@ -144,22 +196,18 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=72 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=72 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: cgal_isotropic
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: cgal_isotropic
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, protect_boundaries=true
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, protect_boundaries=true
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Running CGAL isotropic remesh (target_edge_length=1.0)...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Running CGAL isotropic remesh (target_edge_length=1.0)...
-  Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=1ms shot=73ms unfreeze=1ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 41466 vertices (-14737), 82928 faces (-29474)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 41466 vertices (-14737), 82928 faces (-29474)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: pymeshlab_isotropic
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: pymeshlab_isotropic
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56203 vertices, 112402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32284 vertices, 64564 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32284 vertices, 64564 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (3.01s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (3.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (1.35s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (1.35s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.distance.mesh_to_mesh_distance.MeshDistanceNode.EXECUTE_NORMALIZED
@@ -185,18 +233,18 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Metric: hausdorff, Samples: 10000
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 41466 vertices, 82928 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 41466 vertices, 82928 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 2.940322
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 2.940322
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32284 vertices, 64564 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32284 vertices, 64564 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.599101
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.599101
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.13s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.13s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
-  [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
-  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.24s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.24s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackRemesh_CGAL: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, protect_boundaries: 'true'
+  [ComfyUI] [comfy-env] Running GeomPackRemesh_CGAL: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, protect_boundaries: 'true'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing_cgal.remesh.RemeshCGALNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing_cgal.remesh.RemeshCGALNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
@@ -213,22 +261,26 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=74 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=74 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: pymeshlab_isotropic
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: pymeshlab_isotropic
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
-  Frame 3 saved (frame_002.jpg, t=3.6s)
-  [capture-node] freeze=1ms shot=59ms unfreeze=1ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: cgal_isotropic
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: cgal_isotropic
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56,203 vertices, 112,402 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, protect_boundaries=true
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, protect_boundaries=true
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Running CGAL isotropic remesh (target_edge_length=1.0)...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Running CGAL isotropic remesh (target_edge_length=1.0)...
+  Frame 2 saved (frame_001.jpg, t=2.2s)
+  [capture-node] freeze=13ms shot=138ms unfreeze=3ms saved=True
   Node executed (2 total), capturing...
-  [capture-node] freeze=2ms shot=64ms unfreeze=1ms saved=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32284 vertices, 64564 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32284 vertices, 64564 faces
+  [capture-node] freeze=3ms shot=78ms unfreeze=3ms saved=False
+  Frame 3 saved (frame_002.jpg, t=4.8s)
+  [capture-periodic] freeze=2ms shot=102ms unfreeze=5ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 41466 vertices (-14737), 82928 faces (-29474)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 41466 vertices (-14737), 82928 faces (-29474)
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (2.17s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (2.17s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (3.38s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (3.38s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.distance.mesh_to_mesh_distance.MeshDistanceNode.EXECUTE_NORMALIZED
@@ -253,26 +305,26 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Metric: hausdorff, Samples: 10000
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32284 vertices, 64564 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32284 vertices, 64564 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 41466 vertices, 82928 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 41466 vertices, 82928 faces
   Node executed (3 total), capturing...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.411644
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.411644
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.479736
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.479736
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.08s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.08s): result: NodeOutput
-  [ComfyUI] Prompt executed in 5.71 seconds
-  [ComfyUI] Prompt executed in 5.71 seconds
-  Frame 4 saved (frame_003.jpg, t=6.0s)
-  [capture-node] freeze=2ms shot=83ms unfreeze=2ms saved=True
-  [capture-loop] iter=50 t=6.2s state={'complete': True, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=2 ram=3.5/7.0GB (61%) swap=0.0/0.0GB (0%) cpu=40% browser_rss=0.79GB
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.12s): result: NodeOutput
+  [ComfyUI] Prompt executed in 5.53 seconds
+  [ComfyUI] Prompt executed in 5.53 seconds
+  Frame 4 saved (frame_003.jpg, t=5.8s)
+  [capture-node] freeze=6ms shot=92ms unfreeze=5ms saved=True
   Node executed (4 total), capturing...
-  [capture-node] freeze=5ms shot=94ms unfreeze=0ms saved=False
-  Execution complete (t=6.3s)
-  Captured 4 unique frames over 6.44s
+  Frame 5 saved (frame_004.jpg, t=6.2s)
+  [capture-node] freeze=2ms shot=73ms unfreeze=0ms saved=True
+  Execution complete (t=6.2s)
+  Captured 5 unique frames over 6.3s
   [debug] iframes: 0
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: mesh_mesh_distance_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 5 video frames
+    Captured 6 video frames
