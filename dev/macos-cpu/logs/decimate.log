@@ -2,37 +2,109 @@ Capturing execution frames: decimate.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
   [ComfyUI] === /validate endpoint called ===
+  Queuing workflow for execution...
   [ComfyUI] Received JSON with keys: ['prompt']
   [ComfyUI] Prompt has 3 nodes
   [ComfyUI]   Node 2: GeomPackLoadMesh
   [ComfyUI]     Inputs: {"file_path": "3d/spot_the_cow.obj"}
   [ComfyUI]   Node 3: GeomPackPreviewMeshDual
+  [ComfyUI] [ComfyUI-GeometryPack] python: /Users/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-3.3575253938003646,2.5035395853711653,0.519424
   [ComfyUI]   Node 4: GeomPackDecimateMesh
   [ComfyUI]     Inputs: {"backend": "quadric_edge_collapse", "backend.target_face_count": 1004, "backend.quality_threshold": 0.3, "backend.preserve_boundary": "true", "backend.preserve_normal": "true", "backend.preserve_topo
-  [ComfyUI] Generated prompt_id: 4ef37fd6-7ed9-4174-b27e-cd01035cdb9c
+  [ComfyUI] Generated prompt_id: 2a28e740-6d39-4874-a01b-6e26af023667
+  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1112/ComfyUI', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1112/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages', '/Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1112/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
   [ComfyUI] Calling execution.validate_prompt()...
+  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/Users/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
+  [ComfyUI] [SubprocessWorker] launching cmd=['/Users/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/Users/runner/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfyui_pvenv_q7uvxqda/persistent_worker.py', 'unix:///var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfy_worker_4aa4d73cb85c.sock']...
+  [ComfyUI] [SubprocessWorker] socket_addr=unix:///var/folders/tb/y368xp_x10s3ty1b_mtl5mxr0000gn/T/comfy_worker_4aa4d73cb85c.sock exists=True
   [ComfyUI] Validation result: valid=True
   [ComfyUI] === Validation PASSED ===
-  Queuing workflow for execution...
   [ComfyUI] got prompt
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/spot_the_cow.obj'
   [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
+  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 29 leaked shared_memory objects to clean up at shutdown
+  [ComfyUI]   warnings.warn('resource_tracker: There appear to be %d '
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_82874c01': [Errno 2] No such file or directory: '/psm_82874c01'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_99900566': [Errno 2] No such file or directory: '/psm_99900566'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_1f3f06e8': [Errno 2] No such file or directory: '/psm_1f3f06e8'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_649a3130': [Errno 2] No such file or directory: '/psm_649a3130'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_3fb5dec8': [Errno 2] No such file or directory: '/psm_3fb5dec8'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_9d782aad': [Errno 2] No such file or directory: '/psm_9d782aad'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_f80feee9': [Errno 2] No such file or directory: '/psm_f80feee9'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_cab5faf7': [Errno 2] No such file or directory: '/psm_cab5faf7'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_4a4262e8': [Errno 2] No such file or directory: '/psm_4a4262e8'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_3d28829c': [Errno 2] No such file or directory: '/psm_3d28829c'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_b9bc0bb1': [Errno 2] No such file or directory: '/psm_b9bc0bb1'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_2d4aa85d': [Errno 2] No such file or directory: '/psm_2d4aa85d'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_d3f2f2d7': [Errno 2] No such file or directory: '/psm_d3f2f2d7'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_6d453610': [Errno 2] No such file or directory: '/psm_6d453610'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_b31aaf50': [Errno 2] No such file or directory: '/psm_b31aaf50'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_fe4172c8': [Errno 2] No such file or directory: '/psm_fe4172c8'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_42eadd48': [Errno 2] No such file or directory: '/psm_42eadd48'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_44683495': [Errno 2] No such file or directory: '/psm_44683495'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_9e6889d9': [Errno 2] No such file or directory: '/psm_9e6889d9'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_a22958cd': [Errno 2] No such file or directory: '/psm_a22958cd'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_fd68c2d6': [Errno 2] No such file or directory: '/psm_fd68c2d6'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_815d1dd1': [Errno 2] No such file or directory: '/psm_815d1dd1'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_374ccc4a': [Errno 2] No such file or directory: '/psm_374ccc4a'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_baddd3bb': [Errno 2] No such file or directory: '/psm_baddd3bb'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_5138d5f3': [Errno 2] No such file or directory: '/psm_5138d5f3'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_f5ec7676': [Errno 2] No such file or directory: '/psm_f5ec7676'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_c8d0e4c7': [Errno 2] No such file or directory: '/psm_c8d0e4c7'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_746e614f': [Errno 2] No such file or directory: '/psm_746e614f'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  [ComfyUI] /Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/psm_376b8096': [Errno 2] No such file or directory: '/psm_376b8096'
+  [ComfyUI]   warnings.warn('resource_tracker: %r: %s' % (name, e))
+  Frame 2 saved (frame_001.jpg, t=2.4s)
+  [capture-periodic] freeze=6ms shot=167ms unfreeze=9ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 0 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=31 sending call_method
+  Frame 3 saved (frame_002.jpg, t=4.7s)
+  [capture-periodic] freeze=6ms shot=127ms unfreeze=6ms saved=True
+  [capture-loop] iter=50 t=6.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=3.4/7.0GB (56%) swap=0.0/0.0GB (0%) cpu=76% browser_rss=0.64GB
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/spot_the_cow.obj
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/input/3d/spot_the_cow.obj
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1112/ComfyUI/input/3d/spot_the_cow.obj
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 3225 vertices, 5856 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 3225 vertices, 5856 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 3225 vertices, 5856 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.04s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (7.26s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimateMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.decimate.DecimateMeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -58,8 +130,10 @@ Capturing execution frames: decimate.json
   [ComfyUI] [SubprocessWorker] call_id=33 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: quadric_edge_collapse
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 3,225 vertices, 5,856 faces
+  Frame 4 saved (frame_003.jpg, t=9.1s)
+  [capture-periodic] freeze=4ms shot=164ms unfreeze=9ms saved=True
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (0.08s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (2.34s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -78,23 +152,23 @@ Capturing execution frames: decimate.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=texture, texture=True, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/output/preview_dual_1_4fa111db.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0759/ComfyUI/output/preview_dual_2_4fa111db.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1112/ComfyUI/output/preview_dual_1_c7fa8fdb.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1112/ComfyUI/output/preview_dual_2_c7fa8fdb.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.03s): result: NodeOutput
-  [ComfyUI] Prompt executed in 0.18 seconds
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.04s): result: NodeOutput
   Node executed (1 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=0.5s)
-  [capture-node] freeze=4ms shot=139ms unfreeze=2ms saved=True
+  [ComfyUI] Prompt executed in 9.69 seconds
+  Frame 5 saved (frame_004.jpg, t=10.1s)
+  [capture-node] freeze=4ms shot=127ms unfreeze=5ms saved=True
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=0.9s)
-  [capture-node] freeze=4ms shot=151ms unfreeze=0ms saved=True
-  Execution complete (t=0.9s)
-  Captured 3 unique frames over 1.12s
+  Frame 6 saved (frame_005.jpg, t=10.5s)
+  [capture-node] freeze=7ms shot=157ms unfreeze=0ms saved=True
+  Execution complete (t=10.5s)
+  Captured 6 unique frames over 10.76s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177865, canvas=370x485, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
+  [debug]   iframe[0]: src=http://127.0.0.1:41899/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177867, canvas=0x0, rafFrozen=False
+  [timing] trigger_3d_previews: 0.1s
   Saved high-quality screenshot: decimate_executed.png
-  [timing] final_screenshot: 0.2s
-    Captured 4 video frames
+  [timing] final_screenshot: 0.4s
+    Captured 7 video frames
