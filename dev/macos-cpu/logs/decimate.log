@@ -10,11 +10,11 @@ Capturing execution frames: decimate.json
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-3.3575253938003646,2.5035395853711653,0.519424
   [ComfyUI]   Node 4: GeomPackDecimateMesh
   [ComfyUI]     Inputs: {"backend": "quadric_edge_collapse", "backend.target_face_count": 1004, "backend.quality_threshold": 0.3, "backend.preserve_boundary": "true", "backend.preserve_normal": "true", "backend.preserve_topo
-  [ComfyUI] Generated prompt_id: 041d098e-fef5-4b7c-8862-b008f0416e01
+  [ComfyUI] Generated prompt_id: 7d2114ff-c52d-42ba-bada-ed3dca1139c0
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
-  [ComfyUI] === Validation PASSED ===
   Queuing workflow for execution...
+  [ComfyUI] === Validation PASSED ===
   [ComfyUI] got prompt
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/spot_the_cow.obj'
   [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
@@ -27,12 +27,12 @@ Capturing execution frames: decimate.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=31 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/spot_the_cow.obj
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/input/3d/spot_the_cow.obj
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/input/3d/spot_the_cow.obj
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 3225 vertices, 5856 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 3225 vertices, 5856 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 3225 vertices, 5856 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.06s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.03s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimateMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.decimate.DecimateMeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -45,7 +45,7 @@ Capturing execution frames: decimate.json
   [ComfyUI] [SubprocessWorker] call_id=32 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Decimate dispatch: quadric_edge_collapse -> GeomPackDecimate_QuadricEdgeCollapse
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimateMesh done (0.01s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDecimate_QuadricEdgeCollapse: trimesh: Trimesh, target_face_count: 1004, quality_threshold: 0.3, preserve_boundary: 'true', preserve_normal: 'true', preserve_topology: 'true', planar_quadric: 'false'
   [ComfyUI] [SubprocessWorker] call_method: nodes.decimation.backends.quadric_edge_collapse.DecimateQuadricEdgeCollapseNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -59,7 +59,7 @@ Capturing execution frames: decimate.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: quadric_edge_collapse
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 3,225 vertices, 5,856 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (0.09s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDecimate_QuadricEdgeCollapse done (0.07s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -78,19 +78,19 @@ Capturing execution frames: decimate.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: []
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=texture, texture=True, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/output/preview_dual_1_668ea507.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/output/preview_dual_2_668ea507.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/output/preview_dual_1_2e8bdac9.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/output/preview_dual_2_2e8bdac9.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.01s): result: NodeOutput
-  [ComfyUI] Prompt executed in 0.20 seconds
+  [ComfyUI] Prompt executed in 0.13 seconds
   Node executed (2 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=0.6s)
-  [capture-node] freeze=2ms shot=130ms unfreeze=0ms saved=True
-  Execution complete (t=0.6s)
-  Captured 2 unique frames over 0.77s
+  Frame 2 saved (frame_001.jpg, t=0.5s)
+  [capture-node] freeze=2ms shot=112ms unfreeze=0ms saved=True
+  Execution complete (t=0.4s)
+  Captured 2 unique frames over 0.6s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41899/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177882, canvas=370x485, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41891/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177884, canvas=370x485, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: decimate_executed.png
   [timing] final_screenshot: 0.2s

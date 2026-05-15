@@ -7,16 +7,16 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI]   Node 1: GeomPackLoadMeshBatch
   [ComfyUI]     Inputs: {"folder_path": "3d", "start_index": 0, "max_meshes": 4}
   [ComfyUI]   Node 4: GeomPackMeshInfo
+  Queuing workflow for execution...
   [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["1", 0]}
   [ComfyUI]   Node 6: GeomPackPreviewMeshVTKBatch
   [ComfyUI]     Inputs: {"mode": "fields", "index": 0, "preview_vtk_batch": "{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\
   [ComfyUI]   Node 11: GeomPackRemesh
   [ComfyUI]     Inputs: {"backend": "pymeshlab_isotropic", "backend.target_edge_length": 1, "backend.iterations": 3, "backend.feature_angle": 30, "backend.adaptive": "false", "report_panel": "false", "trimesh": ["1", 0]}
-  [ComfyUI] Generated prompt_id: a162a104-b15c-4924-ad6c-a1f2b9d22f6a
+  [ComfyUI] Generated prompt_id: 9da234d0-42f2-494c-8c89-329a57521223
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
   [ComfyUI] === Validation PASSED ===
-  Queuing workflow for execution...
   [ComfyUI] got prompt
   [ComfyUI] [comfy-env] Running GeomPackLoadMeshBatch: folder_path: '3d', start_index: 0, max_meshes: 4
   [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh_batch.LoadMeshBatch.EXECUTE_NORMALIZED
@@ -31,26 +31,26 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found folder in input: 3d
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 12 mesh files
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading up to 4 meshes
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/input/3d/ArmoredWarrior_00005_.glb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/input/3d/ArmoredWarrior_00005_.glb
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Converting Scene to single mesh (scene has 1 geometries)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 18061 vertices, 19827 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 18061 vertices, 19827 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: [1/4] Loaded ArmoredWarrior_00005_.glb: 18061 vertices, 19827 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/input/3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: [2/4] Loaded Stanford_Bunny.stl: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/input/3d/camel_b.obj
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/input/3d/camel_b.obj
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2032 vertices, 3576 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 2032 vertices, 3576 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: [3/4] Loaded camel_b.obj: 2032 vertices, 3576 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/input/3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/input/3d/camelhead.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 11381 vertices, 22704 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: [4/4] Loaded camelhead.off: 11381 vertices, 22704 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded 4 meshes
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMeshBatch done (1.26s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMeshBatch done (0.58s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[4]
   [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -62,7 +62,7 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=8 sending call_method
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.59s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.23s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -70,13 +70,13 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  Node executed (1 total), capturing...
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=9 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.43s): result: NodeOutput
+  Node executed (1 total), capturing...
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.09s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -89,7 +89,7 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [SubprocessWorker] call_id=10 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.05s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.02s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -102,7 +102,7 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [SubprocessWorker] call_id=11 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.00s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -115,11 +115,9 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [SubprocessWorker] call_id=12 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.02s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.01s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
-  Frame 2 saved (frame_001.jpg, t=2.2s)
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
-  [capture-node] freeze=8ms shot=177ms unfreeze=7ms saved=True
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
@@ -131,9 +129,11 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: pymeshlab_isotropic
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 18061 vertices, 19827 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
+  Frame 2 saved (frame_001.jpg, t=1.1s)
+  [capture-node] freeze=1ms shot=73ms unfreeze=1ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 4474 vertices, 9516 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (0.35s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (0.21s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -148,11 +148,11 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=3.1s)
-  [capture-node] freeze=4ms shot=93ms unfreeze=3ms saved=True
+  Frame 3 saved (frame_002.jpg, t=1.5s)
+  [capture-node] freeze=2ms shot=54ms unfreeze=2ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32284 vertices, 64564 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (1.53s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (1.11s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -169,7 +169,7 @@ Capturing execution frames: batch_remesh.json
   Node executed (3 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 9658 vertices, 19314 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (0.25s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (0.19s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh_PyMeshLab: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, feature_angle: 30.0, adaptive: 'false'
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.backends.pymeshlab_isotropic.RemeshPyMeshLabNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -183,11 +183,9 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: pymeshlab_isotropic
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 11381 vertices, 22704 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
-  Frame 4 saved (frame_003.jpg, t=4.5s)
-  [capture-node] freeze=2ms shot=102ms unfreeze=3ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 56 vertices, 96 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (0.08s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshVTKBatch: mode: list[1], index: list[1], trimesh: list[4]
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_vtk_batch.PreviewMeshVTKBatchNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -203,19 +201,21 @@ Capturing execution frames: batch_remesh.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Visual data - has_visual: True, kind: None, texture: False, vertex_colors: False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP/STL export
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL to: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0705/ComfyUI/output/preview_vtk_batch_c772bcc7.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL to: /Users/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1125/ComfyUI/output/preview_vtk_batch_ed1fc133.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=False, volume=None, area=4.220802644036005, no fields
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [comfy-env] GeomPackPreviewMeshVTKBatch done (0.02s): result: NodeOutput
-  [ComfyUI] Prompt executed in 4.62 seconds
+  [ComfyUI] Prompt executed in 2.56 seconds
+  Frame 4 saved (frame_003.jpg, t=2.6s)
+  [capture-node] freeze=2ms shot=80ms unfreeze=5ms saved=True
   Node executed (6 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=5.0s)
-  [capture-node] freeze=4ms shot=121ms unfreeze=0ms saved=True
-  Execution complete (t=4.9s)
-  Captured 5 unique frames over 5.11s
+  Frame 5 saved (frame_004.jpg, t=3.0s)
+  [capture-node] freeze=2ms shot=67ms unfreeze=0ms saved=True
+  Execution complete (t=3.0s)
+  Captured 5 unique frames over 3.09s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41899/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1778828, canvas=622x375, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41891/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1778844, canvas=622x373, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: batch_remesh_executed.png
-  [timing] final_screenshot: 0.2s
+  [timing] final_screenshot: 0.1s
     Captured 6 video frames
