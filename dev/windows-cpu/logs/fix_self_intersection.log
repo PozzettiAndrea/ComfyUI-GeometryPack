@@ -11,9 +11,9 @@ Capturing execution frames: fix_self_intersection.json
   [ComfyUI]   Node 1: GeomPackLoadMesh
   [ComfyUI]     Inputs: {"file_path": "3d/camelhead.off"}
   [ComfyUI]     Inputs: {"file_path": "3d/camelhead.off"}
+  [ComfyUI]   Node 14: GeomPackDetectSelfIntersections
+  [ComfyUI]   Node 14: GeomPackDetectSelfIntersections
   Queuing workflow for execution...
-  [ComfyUI]   Node 14: GeomPackDetectSelfIntersections
-  [ComfyUI]   Node 14: GeomPackDetectSelfIntersections
   [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["1", 0]}
   [ComfyUI]   Node 17: GeomPackFixSelfIntersectionsByPerturbation
@@ -28,8 +28,8 @@ Capturing execution frames: fix_self_intersection.json
   [ComfyUI]   Node 22: GeomPackDetectSelfIntersections
   [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["17", 0]}
   [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["17", 0]}
-  [ComfyUI] Generated prompt_id: c9db966f-5d3c-4756-9e40-ef563394aede
-  [ComfyUI] Generated prompt_id: c9db966f-5d3c-4756-9e40-ef563394aede
+  [ComfyUI] Generated prompt_id: 1add5d4e-d02d-47c7-8c10-ba7fef8722ca
+  [ComfyUI] Generated prompt_id: 1add5d4e-d02d-47c7-8c10-ba7fef8722ca
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -56,187 +56,231 @@ Capturing execution frames: fix_self_intersection.json
   [ComfyUI] [SubprocessWorker] created 0 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=54 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=54 sending call_method
-  [ComfyUI] [SubprocessWorker] got response: error
-  [ComfyUI] [SubprocessWorker] got response: error
-  [ComfyUI] !!! Exception during processing !!! DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] !!! Exception during processing !!! DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] Worker traceback:
-  [ComfyUI] Worker traceback:
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_7pa4wo7n\persistent_worker.py", line 1738, in main
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_7pa4wo7n\persistent_worker.py", line 1738, in main
-  [ComfyUI]     module = importlib.import_module(module_name)
-  [ComfyUI]     module = importlib.import_module(module_name)
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\importlib\__init__.py", line 88, in import_module
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\importlib\__init__.py", line 88, in import_module
-  [ComfyUI]     return _bootstrap._gcd_import(name[level:], package, level)
-  [ComfyUI]     return _bootstrap._gcd_import(name[level:], package, level)
-  [ComfyUI]            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
-  [ComfyUI]   File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\__init__.py", line 17, in <module>
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\__init__.py", line 17, in <module>
-  [ComfyUI]     from . import blender_io
-  [ComfyUI]     from . import blender_io
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\__init__.py", line 8, in <module>
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\__init__.py", line 8, in <module>
-  [ComfyUI]     from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP
-  [ComfyUI]     from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\load_mesh_blend.py", line 15, in <module>
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\load_mesh_blend.py", line 15, in <module>
-  [ComfyUI]     import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)
-  [ComfyUI]     import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)
-  [ComfyUI]     ^^^^^^^^^^
-  [ComfyUI]     ^^^^^^^^^^
-  [ComfyUI] ImportError: DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] ImportError: DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 535, in execute
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 535, in execute
-  [ComfyUI]     output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
-  [ComfyUI]     output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
-  [ComfyUI]                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 335, in get_output_data
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 335, in get_output_data
-  [ComfyUI]     return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
-  [ComfyUI]     return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
-  [ComfyUI]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 309, in _async_map_node_over_list
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 309, in _async_map_node_over_list
-  [ComfyUI]     await process_inputs(input_dict, i)
-  [ComfyUI]     await process_inputs(input_dict, i)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 297, in process_inputs
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\execution.py", line 297, in process_inputs
-  [ComfyUI]     result = f(**inputs)
-  [ComfyUI]     result = f(**inputs)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\.venv\Lib\site-packages\comfy_env\isolation\metadata.py", line 556, in proxy
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\.venv\Lib\site-packages\comfy_env\isolation\metadata.py", line 556, in proxy
-  [ComfyUI]     result = worker.call_method(
-  [ComfyUI]     result = worker.call_method(
-  [ComfyUI]         module_name=mod,
-  [ComfyUI]         module_name=mod,
-  [ComfyUI]     ...<4 lines>...
-  [ComfyUI]     ...<4 lines>...
-  [ComfyUI]         timeout=600.0,
-  [ComfyUI]         timeout=600.0,
-  [ComfyUI]     )
-  [ComfyUI]     )
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\.venv\Lib\site-packages\comfy_env\isolation\workers\subprocess.py", line 674, in call_method
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\.venv\Lib\site-packages\comfy_env\isolation\workers\subprocess.py", line 674, in call_method
-  [ComfyUI]     raise WorkerError(
-  [ComfyUI]     raise WorkerError(
-  [ComfyUI]     ...<2 lines>...
-  [ComfyUI]     ...<2 lines>...
-  [ComfyUI]     )
-  [ComfyUI]     )
-  [ComfyUI] comfy_env.isolation.workers.base.WorkerError: DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] comfy_env.isolation.workers.base.WorkerError: DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] Worker traceback:
-  [ComfyUI] Worker traceback:
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_7pa4wo7n\persistent_worker.py", line 1738, in main
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_7pa4wo7n\persistent_worker.py", line 1738, in main
-  [ComfyUI]     module = importlib.import_module(module_name)
-  [ComfyUI]     module = importlib.import_module(module_name)
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\importlib\__init__.py", line 88, in import_module
-  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\importlib\__init__.py", line 88, in import_module
-  [ComfyUI]     return _bootstrap._gcd_import(name[level:], package, level)
-  [ComfyUI]     return _bootstrap._gcd_import(name[level:], package, level)
-  [ComfyUI]            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-  [ComfyUI]   File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
-  [ComfyUI]   File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\__init__.py", line 17, in <module>
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\__init__.py", line 17, in <module>
-  [ComfyUI]     from . import blender_io
-  [ComfyUI]     from . import blender_io
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\__init__.py", line 8, in <module>
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\__init__.py", line 8, in <module>
-  [ComfyUI]     from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP
-  [ComfyUI]     from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\load_mesh_blend.py", line 15, in <module>
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1106\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\blender_io\load_mesh_blend.py", line 15, in <module>
-  [ComfyUI]     import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)
-  [ComfyUI]     import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)
-  [ComfyUI]     ^^^^^^^^^^
-  [ComfyUI]     ^^^^^^^^^^
-  [ComfyUI] ImportError: DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] ImportError: DLL load failed while importing bpy: The specified procedure could not be found.
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] 
-  [ComfyUI] Prompt executed in 0.20 seconds
-  [ComfyUI] Prompt executed in 0.20 seconds
-  Execution complete (t=0.4s)
-  Execution error: {'prompt_id': '2432222f-9153-480f-b00c-121932b99bde', 'node_id': '1', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\n\nWorker traceback:\nTraceback (most recent call last):\n  File "C:\\Users\\stduser\\AppData\\Local\\Temp\\comfyui_pvenv_7pa4wo7n\\persistent_worker.py", line 1738, in main\n    module = importlib.import_module(module_name)\n  File "C:\\Users\\stduser\\AppData\\Local\\Programs\\comfy-env\\.pixi\\envs\\geometrypack-nodes\\Lib\\importlib\\__init__.py", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<frozen importlib._bootstrap>", line 1395, in _gcd_import\n  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load\n  File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked\n  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed\n  File "<frozen importlib._bootstrap>", line 1395, in _gcd_import\n  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load\n  File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked\n  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed\n  File "<frozen importlib._bootstrap>", line 1395, in _gcd_import\n  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load\n  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked\n  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked\n  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module\n  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed\n  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack\\nodes\\__init__.py", line 17, in <module>\n    from . import blender_io\n  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack\\nodes\\blender_io\\__init__.py", line 8, in <module>\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\n  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack\\nodes\\blender_io\\load_mesh_blend.py", line 15, in <module>\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\n    ^^^^^^^^^^\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\n\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 535, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 335, in get_output_data\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 309, in _async_map_node_over_list\n    await process_inputs(input_dict, i)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 297, in process_inputs\n    result = f(**inputs)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\.venv\\Lib\\site-packages\\comfy_env\\isolation\\metadata.py", line 556, in proxy\n    result = worker.call_method(\n        module_name=mod,\n    ...<4 lines>...\n        timeout=600.0,\n    )\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\.venv\\Lib\\site-packages\\comfy_env\\isolation\\workers\\subprocess.py", line 674, in call_method\n    raise WorkerError(\n    ...<2 lines>...\n    )\n'], 'current_inputs': {'file_path': ['3d/camelhead.off']}, 'current_outputs': ['22', '21', '1', '14', '17'], 'timestamp': 1778670989063}
-    Status: FAILED
-    Error: Workflow execution failed: {'prompt_id': '2432222f-9153-480f-b00c-121932b99bde', 'node_id': '1', 'node_type': 'GeomPackLoadMesh', 'executed': [], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\n\nWorker traceback:\nTraceback (most recent call last):\n  File "C:\\Users\\stduser\\AppData\\Local\\Temp\\comfyui_pvenv_7pa4wo7n\\persistent_worker.py", line 1738, in main\n    module = importlib.import_module(module_name)\n  File "C:\\Users\\stduser\\AppData\\Local\\Programs\\comfy-env\\.pixi\\envs\\geometrypack-nodes\\Lib\\importlib\\__init__.py", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<frozen importlib._bootstrap>", line 1395, in _gcd_import\n  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load\n  File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked\n  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed\n  File "<frozen importlib._bootstrap>", line 1395, in _gcd_import\n  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load\n  File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked\n  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed\n  File "<frozen importlib._bootstrap>", line 1395, in _gcd_import\n  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load\n  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked\n  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked\n  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module\n  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed\n  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack\\nodes\\__init__.py", line 17, in <module>\n    from . import blender_io\n  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack\\nodes\\blender_io\\__init__.py", line 8, in <module>\n    from .load_mesh_blend import NODE_CLASS_MAPPINGS as LOAD_MESH_BLEND_MAPS, NODE_DISPLAY_NAME_MAPPINGS as LOAD_MESH_BLEND_DISP\n  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack\\nodes\\blender_io\\load_mesh_blend.py", line 15, in <module>\n    import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)\n    ^^^^^^^^^^\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\n\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 535, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 335, in get_output_data\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 309, in _async_map_node_over_list\n    await process_inputs(input_dict, i)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\ComfyUI\\execution.py", line 297, in process_inputs\n    result = f(**inputs)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\.venv\\Lib\\site-packages\\comfy_env\\isolation\\metadata.py", line 556, in proxy\n    result = worker.call_method(\n        module_name=mod,\n    ...<4 lines>...\n        timeout=600.0,\n    )\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-1106\\.venv\\Lib\\site-packages\\comfy_env\\isolation\\workers\\subprocess.py", line 674, in call_method\n    raise WorkerError(\n    ...<2 lines>...\n    )\n'], 'current_inputs': {'file_path': ['3d/camelhead.off']}, 'current_outputs': ['22', '21', '1', '14', '17'], 'timestamp': 1778670989063}
-    Details: Workflow: C:\Users\stduser\AppData\Local\Temp\comfy-test-run-atpp8ub2\ComfyUI-GeometryPack\workflows\fix_self_intersection.json
-Node error: GeomPackLoadMesh
+  [ComfyUI] [SubprocessWorker] call_id=61 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=61 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\input\3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\input\3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 11381 vertices, 22704 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.45s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.45s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.detect_intersections.DetectSelfIntersectionsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.detect_intersections.DetectSelfIntersectionsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=62 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=62 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 6 intersecting faces (5 intersection pairs)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 6 intersecting faces (5 intersection pairs)
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.52s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.52s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackFixSelfIntersectionsByPerturbation: epsilon: 0.0001, max_iterations: 12, direction: 'adaptive', scale_by_intersection_count: True, re_detect_after_fix: True, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackFixSelfIntersectionsByPerturbation: epsilon: 0.0001, max_iterations: 12, direction: 'adaptive', scale_by_intersection_count: True, re_detect_after_fix: True, trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.fix_intersections_perturbation.FixSelfIntersectionsByPerturbationNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.fix_intersections_perturbation.FixSelfIntersectionsByPerturbationNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=63 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=63 sending call_method
+  Node executed (1 total), capturing...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Params: epsilon=0.0001, max_iter=12, direction=adaptive, re_detect=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Params: epsilon=0.0001, max_iter=12, direction=adaptive, re_detect=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 8 vertices to perturb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 8 vertices to perturb
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 1: avg displacement = 0.000004
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 1: avg displacement = 0.000004
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 2: avg displacement = 0.000008
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 2: avg displacement = 0.000008
+  Frame 2 saved (frame_001.jpg, t=1.3s)
+  [capture-node] freeze=5ms shot=127ms unfreeze=6ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 3: avg displacement = 0.000011
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 3: avg displacement = 0.000011
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 4: avg displacement = 0.000015
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 4: avg displacement = 0.000015
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 5: avg displacement = 0.000019
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 5: avg displacement = 0.000019
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 6: avg displacement = 0.000023
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 6: avg displacement = 0.000023
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 7: avg displacement = 0.000026
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 7: avg displacement = 0.000026
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 8: avg displacement = 0.000030
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 8: avg displacement = 0.000030
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 9: avg displacement = 0.000034
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 9: avg displacement = 0.000034
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 10: avg displacement = 0.000038
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 10: avg displacement = 0.000038
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 11: avg displacement = 0.000041
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 11: avg displacement = 0.000041
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 12: avg displacement = 0.000045
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Iteration 12: avg displacement = 0.000045
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Re-detecting self-intersections...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Re-detecting self-intersections...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections remaining!
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections remaining!
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Complete: perturbed 8 vertices over 12 iterations
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Complete: perturbed 8 vertices over 12 iterations
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackFixSelfIntersectionsByPerturbation done (0.88s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackFixSelfIntersectionsByPerturbation done (0.88s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.detect_intersections.DetectSelfIntersectionsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.detect_intersections.DetectSelfIntersectionsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=64 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=64 sending call_method
+  Node executed (2 total), capturing...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections detected
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections detected
+  Frame 3 saved (frame_002.jpg, t=2.2s)
+  [capture-node] freeze=4ms shot=123ms unfreeze=4ms saved=True
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.37s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.37s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=65 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=65 sending call_method
+  Node executed (3 total), capturing...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 fields: ['intersection_flag', 'intersection_count', 'face.self_intersecting']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 fields: ['intersection_flag', 'intersection_count', 'face.self_intersecting']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 fields: ['intersection_flag', 'intersection_count', 'face.self_intersecting']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 fields: ['intersection_flag', 'intersection_count', 'face.self_intersecting']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: ['face.self_intersecting', 'intersection_flag', 'intersection_count']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Common fields: ['face.self_intersecting', 'intersection_flag', 'intersection_count']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_1_f1eebe19.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_1_f1eebe19.vtp
+  Frame 4 saved (frame_003.jpg, t=2.6s)
+  [capture-node] freeze=4ms shot=114ms unfreeze=3ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11381 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11381 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_flag (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_flag (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_count (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_count (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: self_intersecting
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: self_intersecting
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_1_f1eebe19.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_1_f1eebe19.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_2_f1eebe19.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_2_f1eebe19.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11381 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11381 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_flag (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_flag (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_count (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_count (components: 1)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: self_intersecting
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: self_intersecting
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_2_f1eebe19.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0524\ComfyUI\output\preview_dual_2_f1eebe19.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.93s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.93s): result: NodeOutput
+  [ComfyUI] Prompt executed in 3.15 seconds
+  [ComfyUI] Prompt executed in 3.15 seconds
+  Node executed (4 total), capturing...
+  Frame 5 saved (frame_004.jpg, t=3.6s)
+  [capture-node] freeze=339ms shot=417ms unfreeze=0ms saved=True
+  Execution complete (t=3.6s)
+  Captured 5 unique frames over 4.37s
+  [debug] iframes: 1
+  [debug]   iframe[0]: src=http://127.0.0.1:41891/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177882, canvas=370x485, rafFrozen=True
+  [timing] trigger_3d_previews: 0.0s
+  Saved high-quality screenshot: fix_self_intersection_executed.png
+  [timing] final_screenshot: 0.3s
+    Captured 6 video frames

@@ -7,11 +7,6 @@
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
 [Console-error] Failed to load resource: the server responded with a status of 404 (Not Found)
-[Console-log] [GeomPack Gaussian] Loading extension...
-[Console-log] [GeomPack] Loading UV mesh preview extension...
-[Console-log] [GeomPack] UV mesh preview extension registered
-[Console-log] [GeomPack] Loading mesh preview extension...
-[Console-log] [GeomPack] Mesh preview extension registered
 [Console-log] [FBX Preview] Auto-registering for all known FBX preview node types...
 [Console-log] [UniRig] Loading FBX mesh preview extension...
 [Console-log] [UniRig] Detected extension folder: ComfyUI-GeometryPack
@@ -25,24 +20,29 @@
 [Console-log] [MotionCapture] Loading FBX mesh preview extension...
 [Console-log] [MotionCapture] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [MotionCapture] FBX mesh preview extension registered
-[Console-log] [UniRig Debug] Loading FBX mesh preview extension...
-[Console-log] [UniRig Debug] Detected extension folder: ComfyUI-GeometryPack
-[Console-log] [UniRig Debug] FBX mesh preview extension registered
-[Console-log] [GeomPack Multi JS] Loading mesh_preview_multi.js extension
-[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension
-[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension...
-[Console-log] [CompareSMPLBVH] Extension registered: comfy3d.comparesmplbvh
 [Console-log] [BVHViewer] Loading BVH Viewer extension
 [Console-log] [BVHViewer] Loading BVH viewer extension...
 [Console-log] [BVHViewer] Extension registered: comfy3d.bvhviewer
+[Console-log] [GeomPack] Loading UV mesh preview extension...
+[Console-log] [GeomPack] UV mesh preview extension registered
 [Console-log] [UniRig Compare] Loading compare skeleton widget...
 [Console-log] [UniRig Compare] Detected extension folder: ComfyUI-GeometryPack
 [Console-log] [UniRig Compare] Compare skeleton widget registered
-[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
-[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
+[Console-log] [GeomPack] Loading mesh preview extension...
+[Console-log] [GeomPack] Mesh preview extension registered
 [Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension
 [Console-log] [FBXAnimationViewer] Loading FBX Animation Viewer extension...
 [Console-log] [FBXAnimationViewer] Extension registered: comfy3d.fbxanimationviewer
+[Console-log] [UniRig Debug] Loading FBX mesh preview extension...
+[Console-log] [UniRig Debug] Detected extension folder: ComfyUI-GeometryPack
+[Console-log] [UniRig Debug] FBX mesh preview extension registered
+[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension
+[Console-log] [CompareSMPLBVH] Loading Compare SMPL BVH extension...
+[Console-log] [CompareSMPLBVH] Extension registered: comfy3d.comparesmplbvh
+[Console-log] [GeomPack] Loading VTK.js textured mesh preview extension...
+[Console-log] [GeomPack] VTK.js textured mesh preview extension registered
+[Console-log] [GeomPack Gaussian] Loading extension...
+[Console-log] [GeomPack Multi JS] Loading mesh_preview_multi.js extension
 [Console-warning] WARNING: Multiple instances of Three.js being imported.
 [Console-log] [VTK Bundle] GLTFImporter included in bundle
 [Console-warning] [MaskEditor] ComfyApp.open_maskeditor is deprecated. Plugins should migrate to using the command system or direct node context menu integration.
@@ -59,7 +59,7 @@
 [Console-log] [GeomPack DEBUG] typeof this.addDOMWidget: function
 [Console-log] [GeomPack DEBUG] Widget created: DOMWidgetImpl
 [Console-log] [GeomPack DEBUG] Widget properties: [_node, linkedWidgets, name, options, type, y, last_y, width, computedDisabled, tooltip, _state, hidden, advanced, element, promotionStore, id]
-[Console-log] [GeomPack DEBUG] Widget.id: 3814ae5f-719c-44fa-9e83-1eb265720ae4
+[Console-log] [GeomPack DEBUG] Widget.id: 8822905c-b855-4e76-8d19-793240e7ce53
 [Console-log] [GeomPack DEBUG] this.widgets after addDOMWidget: [DOMWidgetImpl]
 [Console-log] [GeomPack DEBUG] Widget computeSize set
 [Console-log] [GeomPack DEBUG] Iframe dimensions: 100% 100%
@@ -90,7 +90,28 @@
 [Console-log] [GeomPack DEBUG] computeSize returning: [512, 512]
 [Console-log] [GeomPack DEBUG] computeSize called with width: undefined
 [Console-log] [GeomPack DEBUG] computeSize returning: [512, 512]
+[Console-log] [GeomPack] onExecuted called with message: {mesh_file: Array(1), vertex_count: Array(1), face_count: Array(1), bounds_min: Array(1), bounds_max: Array(1)}
+[Console-log] [GeomPack] Loading mesh: preview_61abff14.glb
 [Console-log] [GeomPack DEBUG] computeSize called with width: undefined
 [Console-log] [GeomPack DEBUG] computeSize returning: [512, 512]
 [Console-log] [GeomPack DEBUG] computeSize called with width: undefined
 [Console-log] [GeomPack DEBUG] computeSize returning: [512, 512]
+[Console-log] [GeomPack] Sending postMessage to iframe: /view?filename=preview_61abff14.glb&type=output&subfolder=
+[Console-log] [GeomPack Viewer DEBUG] Received postMessage: {type: LOAD_MESH, filepath: /view?filename=preview_61abff14.glb&type=output&subfolder=, timestamp: 1778823293341}
+[Console-log] [GeomPack Viewer DEBUG] Message type: LOAD_MESH
+[Console-log] [GeomPack Viewer DEBUG] Message filepath: /view?filename=preview_61abff14.glb&type=output&subfolder=
+[Console-log] [GeomPack Viewer] Received LOAD_MESH message: /view?filename=preview_61abff14.glb&type=output&subfolder=
+[Console-log] [GeomPack Viewer] Loading: /view?filename=preview_61abff14.glb&type=output&subfolder=
+[Console-log] [GeomPack Viewer DEBUG] Full filepath URL: /view?filename=preview_61abff14.glb&type=output&subfolder=
+[Console-log] [GeomPack Viewer] File type detected: GLB/GLTF
+[Console-log] [GeomPack Viewer DEBUG] Using loader: GLTFLoader
+[Console-log] [GeomPack Viewer DEBUG] About to call loader.load()...
+[Console-log] [GeomPack Viewer DEBUG] Loader success callback called
+[Console-log] [GeomPack Viewer DEBUG] Result: {scene: Group, scenes: Array(1), animations: Array(0), cameras: Array(0), asset: Object}
+[Console-log] [GeomPack Viewer DEBUG] currentMesh: Group
+[Console-log] [GeomPack Viewer DEBUG] Mesh bounds: Box3
+[Console-log] [GeomPack Viewer DEBUG] Mesh center: Vector3
+[Console-log] [GeomPack Viewer DEBUG] Mesh count in scene: 1
+[Console-log] [GeomPack Viewer DEBUG] Mesh added to scene
+[Console-log] [GeomPack Viewer DEBUG] Camera adjusted to distance: 269.72938537597656
+[Console-log] [GeomPack Viewer] Mesh Loaded successfully
