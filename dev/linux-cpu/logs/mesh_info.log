@@ -11,17 +11,17 @@ Capturing execution frames: mesh_info.json
   [ComfyUI]   Node 1: GeomPackCreatePrimitive
   [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
   [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
+  [ComfyUI]   Node 7: GeomPackMeshInfo
+  [ComfyUI]   Node 7: GeomPackMeshInfo
   Queuing workflow for execution...
-  [ComfyUI]   Node 7: GeomPackMeshInfo
-  [ComfyUI]   Node 7: GeomPackMeshInfo
   [ComfyUI]     Inputs: {"report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]   Node 12: GeomPackMeshQuality
   [ComfyUI]   Node 12: GeomPackMeshQuality
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
-  [ComfyUI] Generated prompt_id: 2123fe97-1250-4002-80f3-725abb480aee
-  [ComfyUI] Generated prompt_id: 2123fe97-1250-4002-80f3-725abb480aee
+  [ComfyUI] Generated prompt_id: 479008cd-066d-4927-a185-aa9e55c41a35
+  [ComfyUI] Generated prompt_id: 479008cd-066d-4927-a185-aa9e55c41a35
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -38,22 +38,8 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0524/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0524/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0524/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0524/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0524/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.11/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-0524/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
-  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/tmp/comfyui_pvenv_ujwc_84e/persistent_worker.py', 'abstract://comfy_worker_4d7d36b93b80']...
-  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/.ce/pixi.toml', '-e', 'geometrypack-nodes', 'python', '/tmp/comfyui_pvenv_ujwc_84e/persistent_worker.py', 'abstract://comfy_worker_4d7d36b93b80']...
-  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_4d7d36b93b80 (abstract, no filesystem path)
-  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_4d7d36b93b80 (abstract, no filesystem path)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
@@ -68,8 +54,8 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created cube: 8 vertices, 12 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (2.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (2.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.01s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
   [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
   [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
@@ -120,19 +106,17 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analysis complete
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.02s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.02s): result: NodeOutput
-  [ComfyUI] Prompt executed in 2.13 seconds
-  [ComfyUI] Prompt executed in 2.13 seconds
-  Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=3ms shot=117ms unfreeze=2ms saved=True
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.01s): result: NodeOutput
+  [ComfyUI] Prompt executed in 0.03 seconds
+  [ComfyUI] Prompt executed in 0.03 seconds
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=2.6s)
-  [capture-node] freeze=3ms shot=88ms unfreeze=0ms saved=True
-  Execution complete (t=2.6s)
-  Captured 3 unique frames over 2.75s
+  Frame 2 saved (frame_001.jpg, t=0.4s)
+  [capture-node] freeze=2ms shot=77ms unfreeze=0ms saved=True
+  Execution complete (t=0.4s)
+  Captured 2 unique frames over 0.47s
   [debug] iframes: 0
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: mesh_info_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 4 video frames
+    Captured 3 video frames
