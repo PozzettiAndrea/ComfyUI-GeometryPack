@@ -11,17 +11,17 @@ Capturing execution frames: mesh_info.json
   [ComfyUI]   Node 1: GeomPackCreatePrimitive
   [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
   [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
-  [ComfyUI]   Node 7: GeomPackMeshInfo
-  [ComfyUI]   Node 7: GeomPackMeshInfo
   Queuing workflow for execution...
+  [ComfyUI]   Node 7: GeomPackMeshInfo
+  [ComfyUI]   Node 7: GeomPackMeshInfo
   [ComfyUI]     Inputs: {"report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]   Node 12: GeomPackMeshQuality
   [ComfyUI]   Node 12: GeomPackMeshQuality
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"include_face_quality": true, "include_edge_stats": true, "report_panel": "true", "trimesh": ["1", 0]}
-  [ComfyUI] Generated prompt_id: 479008cd-066d-4927-a185-aa9e55c41a35
-  [ComfyUI] Generated prompt_id: 479008cd-066d-4927-a185-aa9e55c41a35
+  [ComfyUI] Generated prompt_id: 6bdbdaf9-6793-402f-bf19-7145cdc029e1
+  [ComfyUI] Generated prompt_id: 6bdbdaf9-6793-402f-bf19-7145cdc029e1
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -56,30 +56,6 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.01s): result: NodeOutput
   [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.01s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
-  [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
-  [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=67 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=67 sending call_method
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.01s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.01s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshQuality: include_face_quality: True, include_edge_stats: True, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshQuality: include_face_quality: True, include_edge_stats: True, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_quality.MeshQualityNode.EXECUTE_NORMALIZED
@@ -98,23 +74,49 @@ Capturing execution frames: mesh_info.json
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=68 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=68 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=67 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=67 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 8 vertices, 12 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 8 vertices, 12 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analysis complete
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analysis complete
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.01s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.01s): result: NodeOutput
-  [ComfyUI] Prompt executed in 0.03 seconds
-  [ComfyUI] Prompt executed in 0.03 seconds
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.02s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshQuality done (0.02s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
+  [ComfyUI] [comfy-env] Running GeomPackMeshInfo: trimesh: list[1]
+  [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.analysis.mesh_info.MeshInfoNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=68 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=68 sending call_method
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.01s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshInfo done (0.01s): result: NodeOutput
+  [ComfyUI] Prompt executed in 0.04 seconds
+  [ComfyUI] Prompt executed in 0.04 seconds
+  Node executed (1 total), capturing...
+  Frame 2 saved (frame_001.jpg, t=0.3s)
+  [capture-node] freeze=2ms shot=89ms unfreeze=3ms saved=True
   Node executed (2 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=0.4s)
-  [capture-node] freeze=2ms shot=77ms unfreeze=0ms saved=True
-  Execution complete (t=0.4s)
-  Captured 2 unique frames over 0.47s
+  [capture-node] freeze=2ms shot=88ms unfreeze=0ms saved=False
+  Execution complete (t=0.7s)
+  Captured 2 unique frames over 0.83s
   [debug] iframes: 0
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: mesh_info_executed.png
