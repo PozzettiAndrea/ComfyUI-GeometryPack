@@ -1,103 +1,23 @@
 Capturing execution frames: depth_map_to_mesh.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Prompt has 4 nodes
-  [ComfyUI]   Node 1: LoadImage
-  [ComfyUI]     Inputs: {"image": "example.png"}
-  [ComfyUI]   Node 4: GeomPackPreviewMeshVTK
   Queuing workflow for execution...
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[-0.24987848276768215,0.32154187563545744,0.9133299327529744],\\\"focalPoint\\\":[0,0,0],\\\"viewUp\\\":[0
-  [ComfyUI]   Node 6: ImageToMask
-  [ComfyUI]     Inputs: {"channel": "red", "image": ["1", 0]}
-  [ComfyUI]   Node 7: GeomPackTextureToGeometry
-  [ComfyUI]     Inputs: {"height_scale": 1, "backend": "grid", "backend.smooth_normals": "true", "field_name": "field", "invert_height": "false", "skip_black": "false", "black_threshold": 0.01, "report_panel": "false", "mask
-  [ComfyUI] Generated prompt_id: aaaf1df7-e4f3-4df4-a0cd-e18fb59c07e4
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] got prompt
-  [ComfyUI] [comfy-env] Running GeomPackTextureToGeometry: height_scale: 1.0, backend: dict, field_name: 'field', invert_height: 'false', skip_black: 'false', black_threshold: 0.01, mask: torch.float32 [1,768,768] cpu
-  [ComfyUI] [SubprocessWorker] call_method: nodes.texture_remeshing.texture_to_geometry.TextureToGeometryNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [comfy-env] PRE-SERIALIZE 'mask' shape: torch.Size([1, 768, 768])
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 0 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=46 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'manager_path', 'storage_key', 'storage_size']
-  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[1, 768, 768]
-  [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([1, 768, 768])
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Converting to geometry using backend: grid
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using mask input
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using native resolution: 768x768, range: [0.000, 1.000]
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Generated 589824 points
   Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=6ms shot=108ms unfreeze=7ms saved=True
+  [capture-periodic] freeze=3ms shot=106ms unfreeze=5ms saved=True
   Frame 3 saved (frame_002.jpg, t=4.4s)
-  [capture-periodic] freeze=4ms shot=95ms unfreeze=4ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created mesh: 589824 vertices, 1176578 faces
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackTextureToGeometry done (5.05s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshVTK: mode: 'fields', trimesh: Trimesh
-  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_vtk.PreviewMeshVTKNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [capture-periodic] freeze=5ms shot=105ms unfreeze=5ms saved=True
   Node executed (1 total), capturing...
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=47 sending call_method
-  Frame 4 saved (frame_003.jpg, t=5.5s)
-  [capture-node] freeze=5ms shot=95ms unfreeze=5ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 589824 vertices, 1176578 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Visual data - has_visual: True, kind: None, texture: False, vertex_colors: False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP export
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0826\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_vtk_8c0a28de.vtp
-  [capture-loop] iter=50 t=6.2s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=6 ram=6.5/16.0GB (41%) swap=0.4/2.9GB (14%) cpu=39% browser_rss=0.79GB
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (589824 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 589824 vertices, 1176578 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0826\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_vtk_8c0a28de.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack]
-  [ComfyUI] === WATCHDOG TICK 1 ===
-  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x0000244c (most recent call first):
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_8br5u9pv\persistent_worker.py", line 52 in _watchdog
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 995 in run
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 1044 in _bootstrap_inner
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 1015 in _bootstrap
-  [ComfyUI] 
-  [ComfyUI] Thread 0x00001d88 (most recent call first):
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\site-packages\numpy\_core\fromnumeric.py", line 1092 in sort
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 1026 in edges_sorted
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\caching.py", line 139 in get_cached
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\base.py", line 1740 in is_watertight
-  [ComfyUI]   File "C:\Users\runneradmin\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\site-packages\trimesh\caching.py", line 139 in get_cached
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0826\portable-comfyui\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-GeometryPack\nodes\visualization\preview_mesh_vtk.py", line 192 in execute
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0826\portable-comfyui\ComfyUI_windows_portable\ComfyUI\comfy_api\latest\_io.py", line 1833 in EXECUTE_NORMALIZED
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_8br5u9pv\persistent_worker.py", line 1762 in main
-  [ComfyUI]   File "C:\Users\RUNNER~1\AppData\Local\Temp\comfyui_pvenv_8br5u9pv\persistent_worker.py", line 1807 in <module>
-  [ComfyUI] 
-  [ComfyUI] [worker:ComfyUI-GeometryPack] === END ===
-  [ComfyUI] 
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=False, volume=None, area=11.966723990015208, no fields
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshVTK done (5.65s): result: NodeOutput
+  Frame 4 saved (frame_003.jpg, t=5.3s)
+  [capture-node] freeze=5ms shot=94ms unfreeze=6ms saved=True
+  [capture-loop] iter=50 t=6.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=6.7/16.0GB (42%) swap=0.5/2.9GB (18%) cpu=44% browser_rss=0.76GB
   Node executed (2 total), capturing...
-  [ComfyUI] Prompt executed in 10.81 seconds
   Frame 5 saved (frame_004.jpg, t=11.1s)
-  [capture-node] freeze=6ms shot=100ms unfreeze=5ms saved=True
-  Execution complete (t=11.4s)
-  Captured 5 unique frames over 11.41s
+  [capture-node] freeze=5ms shot=94ms unfreeze=0ms saved=True
+  Execution complete (t=11.1s)
+  Captured 5 unique frames over 11.18s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41891/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1778661, canvas=486x384, rafFrozen=False
+  [debug]   iframe[0]: src=http://127.0.0.1:41884/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1778823, canvas=486x384, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: depth_map_to_mesh_executed.png
-  [timing] final_screenshot: 1.3s
+  [timing] final_screenshot: 2.0s
     Captured 6 video frames
