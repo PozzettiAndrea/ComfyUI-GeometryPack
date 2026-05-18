@@ -11,9 +11,9 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI]   Node 1: GeomPackLoadMesh
   [ComfyUI]     Inputs: {"file_path": "3d/camelhead.off"}
   [ComfyUI]     Inputs: {"file_path": "3d/camelhead.off"}
-  [ComfyUI]   Node 5: GeomPackDetectSelfIntersections
-  [ComfyUI]   Node 5: GeomPackDetectSelfIntersections
   Queuing workflow for execution...
+  [ComfyUI]   Node 5: GeomPackDetectSelfIntersections
+  [ComfyUI]   Node 5: GeomPackDetectSelfIntersections
   [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["1", 0]}
   [ComfyUI]     Inputs: {"report_panel": "false", "trimesh": ["1", 0]}
   [ComfyUI]   Node 8: GeomPackDetectSelfIntersections
@@ -28,8 +28,8 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI]   Node 13: GeomPackPreviewMeshDual
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.09589855044406126,0.14917436072323867,0.1071
   [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.09589855044406126,0.14917436072323867,0.1071
-  [ComfyUI] Generated prompt_id: 4360db6f-7a9f-49a6-af9f-6f35988765e1
-  [ComfyUI] Generated prompt_id: 4360db6f-7a9f-49a6-af9f-6f35988765e1
+  [ComfyUI] Generated prompt_id: e67a5776-d2d2-4ad0-b03d-01f197dd3fa6
+  [ComfyUI] Generated prompt_id: e67a5776-d2d2-4ad0-b03d-01f197dd3fa6
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
@@ -60,8 +60,8 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI] [SubprocessWorker] call_id=103 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/camelhead.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/camelhead.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/input/3d/camelhead.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/input/3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/input/3d/camelhead.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/input/3d/camelhead.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 11381 vertices, 22704 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 11381 vertices, 22704 faces
@@ -72,42 +72,6 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.08s): result: NodeOutput
   [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.08s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackRemeshSelfIntersections: detect_only: False, remove_unreferenced: True, extract_outer_hull: False, stitch_all: True, mesh: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackRemeshSelfIntersections: detect_only: False, remove_unreferenced: True, extract_outer_hull: False, stitch_all: True, mesh: Trimesh
-  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.remesh_intersections.RemeshSelfIntersectionsNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.remesh_intersections.RemeshSelfIntersectionsNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=104 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=104 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh: 11381 vertices, 22704 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh: 11381 vertices, 22704 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Options: detect_only=False, remove_unreferenced=True, extract_outer_hull=False, stitch_all=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Options: detect_only=False, remove_unreferenced=True, extract_outer_hull=False, stitch_all=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remeshing complete: 11385 vertices, 22720 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remeshing complete: 11385 vertices, 22720 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Removing unreferenced vertices...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Removing unreferenced vertices...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: After cleanup: 11385 vertices, 22720 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: After cleanup: 11385 vertices, 22720 faces
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemeshSelfIntersections done (0.20s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemeshSelfIntersections done (0.20s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.detect_intersections.DetectSelfIntersectionsNode.EXECUTE_NORMALIZED
@@ -126,19 +90,55 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=105 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=105 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11385 vertices, 22720 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11385 vertices, 22720 faces
+  [ComfyUI] [SubprocessWorker] call_id=104 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=104 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 6 intersecting faces (5 intersection pairs)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 6 intersecting faces (5 intersection pairs)
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackRemeshSelfIntersections: detect_only: False, remove_unreferenced: True, extract_outer_hull: False, stitch_all: True, mesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackRemeshSelfIntersections: detect_only: False, remove_unreferenced: True, extract_outer_hull: False, stitch_all: True, mesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.remesh_intersections.RemeshSelfIntersectionsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.remesh_intersections.RemeshSelfIntersectionsNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   Node executed (1 total), capturing...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=105 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=105 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Processing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Options: detect_only=False, remove_unreferenced=True, extract_outer_hull=False, stitch_all=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Options: detect_only=False, remove_unreferenced=True, extract_outer_hull=False, stitch_all=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections detected
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections detected
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remeshing complete: 11385 vertices, 22720 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remeshing complete: 11385 vertices, 22720 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Removing unreferenced vertices...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Removing unreferenced vertices...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: After cleanup: 11385 vertices, 22720 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: After cleanup: 11385 vertices, 22720 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.09s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.09s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemeshSelfIntersections done (0.21s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemeshSelfIntersections done (0.21s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackDetectSelfIntersections: trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.repair_cgal.detect_intersections.DetectSelfIntersectionsNode.EXECUTE_NORMALIZED
@@ -159,12 +159,14 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=106 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=106 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11381 vertices, 22704 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11385 vertices, 22720 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Analyzing mesh: 11385 vertices, 22720 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using libigl CGAL method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 6 intersecting faces (5 intersection pairs)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found 6 intersecting faces (5 intersection pairs)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections detected
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: No self-intersections detected
+  Frame 2 saved (frame_001.jpg, t=0.5s)
+  [capture-node] freeze=9ms shot=84ms unfreeze=3ms saved=True
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [comfy-env] GeomPackDetectSelfIntersections done (0.10s): result: NodeOutput
@@ -205,8 +207,8 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_1_302bf32e.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_1_302bf32e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_1_c36acc1e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_1_c36acc1e.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11381 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11381 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_flag (components: 1)
@@ -217,14 +219,13 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: self_intersecting
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11381 vertices, 22704 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11381 vertices, 22704 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_1_302bf32e.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_1_302bf32e.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_2_302bf32e.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_2_302bf32e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_1_c36acc1e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_1_c36acc1e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_2_c36acc1e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_2_c36acc1e.vtp
+  Node executed (3 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11385 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (11385 vertices)
-  Frame 2 saved (frame_001.jpg, t=0.6s)
-  [capture-node] freeze=3ms shot=108ms unfreeze=4ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_flag (components: 1)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_flag (components: 1)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: intersection_count (components: 1)
@@ -233,24 +234,26 @@ Capturing execution frames: remesh_intersections.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding face field: self_intersecting
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11385 vertices, 22720 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 11385 vertices, 22720 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_2_302bf32e.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2032/ComfyUI/output/preview_dual_2_302bf32e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_2_c36acc1e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-2057/ComfyUI/output/preview_dual_2_c36acc1e.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.18s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.18s): result: NodeOutput
-  [ComfyUI] Prompt executed in 0.66 seconds
-  [ComfyUI] Prompt executed in 0.66 seconds
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.19s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.19s): result: NodeOutput
+  [ComfyUI] Prompt executed in 0.68 seconds
+  [ComfyUI] Prompt executed in 0.68 seconds
+  Frame 3 saved (frame_002.jpg, t=0.9s)
+  [capture-node] freeze=4ms shot=132ms unfreeze=10ms saved=True
   Node executed (4 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=1.0s)
-  [capture-node] freeze=293ms shot=315ms unfreeze=0ms saved=True
-  Execution complete (t=1.0s)
-  Captured 3 unique frames over 1.62s
+  Frame 4 saved (frame_003.jpg, t=1.5s)
+  [capture-node] freeze=38ms shot=99ms unfreeze=0ms saved=True
+  Execution complete (t=1.5s)
+  Captured 4 unique frames over 1.65s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41883/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177913, canvas=370x485, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41889/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177913, canvas=370x485, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: remesh_intersections_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 4 video frames
+    Captured 5 video frames
