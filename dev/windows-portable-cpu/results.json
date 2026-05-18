@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-05-16T20:07:26.579534+00:00",
+  "timestamp": "2026-05-18T20:23:57.331756+00:00",
   "platform": "windows_portable",
   "hardware": {
-    "os": "Windows-2025Server-10.0.26100-SP0",
+    "os": "Windows-10-10.0.26100-SP0",
     "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
   },
-  "commit_hash": "ec356e6d4e5811ebe8b114c996b830da51c09c34",
-  "run_url": "https://github.com/PozzettiAndrea/comfy-gpu-ci/actions/runs/25971143368",
+  "commit_hash": "2b4160229797619a7de215625d7f3fd967065e05",
+  "run_url": "https://github.com/PozzettiAndrea/comfy-gpu-ci/actions/runs/26057401041",
   "success": false,
   "summary": {
     "total": 33,
@@ -17,52 +17,52 @@
     {
       "name": "alpha_wrap",
       "status": "pass",
-      "duration_seconds": 31.65,
+      "duration_seconds": 32.42,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.34,
-          "avg": 1.99
+          "peak": 2.42,
+          "avg": 1.94
         },
         "total_ram_gb": 16.0,
-        "samples": 31
+        "samples": 32
       }
     },
     {
       "name": "batch_remesh",
       "status": "pass",
-      "duration_seconds": 17.0,
+      "duration_seconds": 17.72,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.8,
-          "avg": 2.5
+          "peak": 2.81,
+          "avg": 2.52
         },
         "total_ram_gb": 16.0,
-        "samples": 17
+        "samples": 18
       }
     },
     {
       "name": "boolean_ops",
       "status": "pass",
-      "duration_seconds": 10.37,
+      "duration_seconds": 10.68,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.59,
-          "avg": 2.5
+          "peak": 2.6,
+          "avg": 2.52
         },
         "total_ram_gb": 16.0,
         "samples": 11
@@ -71,16 +71,16 @@
     {
       "name": "boolean_ops_all",
       "status": "fail",
-      "duration_seconds": 8.14,
-      "error": "Workflow execution failed: {'prompt_id': '74fc7a9c-708c-4797-a802-97b955406fc4', 'node_id': '4', 'node_type': 'GeomPackBoolean', 'executed': ['2', '3', '1', '.0.6.1'], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_gdpr6wpb\\\\persistent_worker.py\", line 1762, in main\\n    result = method(**inputs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\comfy_api\\\\latest\\\\_io.py\", line 1833, in EXECUTE_NORMALIZED\\n    to_return = cls.execute(*args, **kwargs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_boolean\\\\boolean.py\", line 102, in execute\\n    result_data = _bpy_boolean_operation(\\n        vertices_a=np.asarray(mesh_a.vertices, dtype=np.float32),\\n    ...<3 lines>...\\n        operation=blender_op\\n    )\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_boolean\\\\boolean.py\", line 17, in _bpy_boolean_operation\\n    import bpy\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'mesh_a': ['<trimesh.Trimesh(vertices.shape=(2562, 3), faces.shape=(5120, 3))>'], 'mesh_b': ['<trimesh.Trimesh(vertices.shape=(8, 3), faces.shape=(12, 3))>'], 'operation': ['difference'], 'prompt': ['{\\'1\\': {\\'inputs\\': {\\'shape\\': \\'sphere\\', \\'size\\': 1.0, \\'subdivisions\\': 4}, \\'class_type\\': \\'GeomPackCreatePrimitive\\', \\'_meta\\': {\\'title\\': \\'Create Primitive\\'}}, \\'2\\': {\\'inputs\\': {\\'shape\\': \\'cube\\', \\'size\\': 0.8, \\'subdivisions\\': 1}, \\'class_type\\': \\'GeomPackCreatePrimitive\\', \\'_meta\\': {\\'title\\': \\'Create Primitive\\'}}, \\'3\\': {\\'inputs\\': {\\'operation\\': \\'difference\\', \\'backend\\': \\'libigl_cgal\\', \\'mesh_a\\': [\\'1\\', 0], \\'mesh_b\\': [\\'2\\', 0]}, \\'class_type\\': \\'GeomPackBoolean\\', \\'_meta\\': {\\'title\\': \\'Boolean Operations\\'}}, \\'4\\': {\\'inputs\\': {\\'operation\\': \\'difference\\', \\'backend\\': \\'blender_exact\\', \\'mesh_a\\': [\\'1\\', 0], \\'mesh_b\\': [\\'2\\', 0]}, \\'class_type\\': \\'GeomPackBoolean\\', \\'_meta\\': {\\'title\\': \\'Boolean Operations\\'}}, \\'5\\': {\\'inputs\\': {\\'mode\\': \\'fields\\', \\'preview_multi\\': \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[0,0,1]}\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\', \\'mesh_1\\': [\\'3\\', 0], \\'mesh_2\\': [\\'4\\', 0]}, \\'class_type\\': \\'GeomPackPreviewMeshMulti\\', \\'_meta\\': {\\'title\\': \\'Preview Mesh Multi\\'}}}'], 'extra_pnginfo': ['{\\'workflow\\': {\\'id\\': \\'test-boolean-all-0001\\', \\'revision\\': 0, \\'last_node_id\\': 6, \\'last_link_id\\': 8, \\'nodes\\': [{\\'id\\': 2, \\'type\\': \\'GeomPackCreatePrimitive\\', \\'pos\\': [-600, 100], \\'size\\': [270, 170.65625], \\'flags\\': {}, \\'order\\': 0, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [2, 4]}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackCreatePrimitive\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'cube\\', 0.8, 1]}, {\\'id\\': 3, \\'type\\': \\'GeomPackBoolean\\', \\'pos\\': [-200, -200], \\'size\\': [370, 165.3125], \\'flags\\': {}, \\'order\\': 2, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_a\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 1}, {\\'name\\': \\'mesh_b\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 2}], \\'outputs\\': [{\\'name\\': \\'result_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [5]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackBoolean\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'difference\\', \\'libigl_cgal\\']}, {\\'id\\': 4, \\'type\\': \\'GeomPackBoolean\\', \\'pos\\': [-200, 100], \\'size\\': [370, 165.3125], \\'flags\\': {}, \\'order\\': 3, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_a\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 3}, {\\'name\\': \\'mesh_b\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 4}], \\'outputs\\': [{\\'name\\': \\'result_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [6]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackBoolean\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'difference\\', \\'blender_exact\\']}, {\\'id\\': 5, \\'type\\': \\'GeomPackPreviewMeshMulti\\', \\'pos\\': [213.07101477171835, -194.17306733063847], \\'size\\': [768, 702], \\'flags\\': {}, \\'order\\': 4, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_1\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 5}, {\\'name\\': \\'mesh_2\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': 6}, {\\'name\\': \\'mesh_3\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': None}, {\\'name\\': \\'mesh_4\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': None}], \\'outputs\\': [], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackPreviewMeshMulti\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'fields\\', \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[0,0,1]}\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\']}, {\\'id\\': 1, \\'type\\': \\'GeomPackCreatePrimitive\\', \\'pos\\': [-600, -200], \\'size\\': [270, 170.65625], \\'flags\\': {}, \\'order\\': 1, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [1, 3]}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackCreatePrimitive\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'sphere\\', 1, 4]}], \\'links\\': [[1, 1, 0, 3, 0, \\'TRIMESH\\'], [2, 2, 0, 3, 1, \\'TRIMESH\\'], [3, 1, 0, 4, 0, \\'TRIMESH\\'], [4, 2, 0, 4, 1, \\'TRIMESH\\'], [5, 3, 0, 5, 0, \\'TRIMESH\\'], [6, 4, 0, 5, 1, \\'TRIMESH\\']], \\'groups\\': [], \\'config\\': {}, \\'extra\\': {\\'ds\\': {\\'scale\\': 0.8719083213796316, \\'offset\\': [536.4213213855968, 421.65866536973317]}, \\'frontendVersion\\': \\'1.43.18\\', \\'workflowRendererVersion\\': \\'LG\\'}, \\'version\\': 0.4}}']}, 'current_outputs': ['5', '4', '1', '2', '3'], 'timestamp': 1778961486793}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-55pnstfx\\ComfyUI-GeometryPack\\workflows\\boolean_ops_all.json\nNode error: GeomPackBoolean",
+      "duration_seconds": 8.54,
+      "error": "Workflow execution failed: {'prompt_id': '0e7e644b-e842-4b45-8443-53b3a446333c', 'node_id': '4', 'node_type': 'GeomPackBoolean', 'executed': ['.0.6.1', '3', '2', '1'], 'exception_message': 'DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_4hrft4wj\\\\persistent_worker.py\", line 1762, in main\\n    result = method(**inputs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\comfy_api\\\\latest\\\\_io.py\", line 1833, in EXECUTE_NORMALIZED\\n    to_return = cls.execute(*args, **kwargs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_boolean\\\\boolean.py\", line 102, in execute\\n    result_data = _bpy_boolean_operation(\\n        vertices_a=np.asarray(mesh_a.vertices, dtype=np.float32),\\n    ...<3 lines>...\\n        operation=blender_op\\n    )\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_boolean\\\\boolean.py\", line 17, in _bpy_boolean_operation\\n    import bpy\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'mesh_a': ['<trimesh.Trimesh(vertices.shape=(2562, 3), faces.shape=(5120, 3))>'], 'mesh_b': ['<trimesh.Trimesh(vertices.shape=(8, 3), faces.shape=(12, 3))>'], 'operation': ['difference'], 'prompt': ['{\\'1\\': {\\'inputs\\': {\\'shape\\': \\'sphere\\', \\'size\\': 1.0, \\'subdivisions\\': 4}, \\'class_type\\': \\'GeomPackCreatePrimitive\\', \\'_meta\\': {\\'title\\': \\'Create Primitive\\'}}, \\'2\\': {\\'inputs\\': {\\'shape\\': \\'cube\\', \\'size\\': 0.8, \\'subdivisions\\': 1}, \\'class_type\\': \\'GeomPackCreatePrimitive\\', \\'_meta\\': {\\'title\\': \\'Create Primitive\\'}}, \\'3\\': {\\'inputs\\': {\\'operation\\': \\'difference\\', \\'backend\\': \\'libigl_cgal\\', \\'mesh_a\\': [\\'1\\', 0], \\'mesh_b\\': [\\'2\\', 0]}, \\'class_type\\': \\'GeomPackBoolean\\', \\'_meta\\': {\\'title\\': \\'Boolean Operations\\'}}, \\'4\\': {\\'inputs\\': {\\'operation\\': \\'difference\\', \\'backend\\': \\'blender_exact\\', \\'mesh_a\\': [\\'1\\', 0], \\'mesh_b\\': [\\'2\\', 0]}, \\'class_type\\': \\'GeomPackBoolean\\', \\'_meta\\': {\\'title\\': \\'Boolean Operations\\'}}, \\'5\\': {\\'inputs\\': {\\'mode\\': \\'fields\\', \\'preview_multi\\': \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[0,0,1]}\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\', \\'mesh_1\\': [\\'3\\', 0], \\'mesh_2\\': [\\'4\\', 0]}, \\'class_type\\': \\'GeomPackPreviewMeshMulti\\', \\'_meta\\': {\\'title\\': \\'Preview Mesh Multi\\'}}}'], 'extra_pnginfo': ['{\\'workflow\\': {\\'id\\': \\'test-boolean-all-0001\\', \\'revision\\': 0, \\'last_node_id\\': 6, \\'last_link_id\\': 8, \\'nodes\\': [{\\'id\\': 2, \\'type\\': \\'GeomPackCreatePrimitive\\', \\'pos\\': [-600, 100], \\'size\\': [270, 170.65625], \\'flags\\': {}, \\'order\\': 0, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [2, 4]}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackCreatePrimitive\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'cube\\', 0.8, 1]}, {\\'id\\': 3, \\'type\\': \\'GeomPackBoolean\\', \\'pos\\': [-200, -200], \\'size\\': [370, 165.3125], \\'flags\\': {}, \\'order\\': 2, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_a\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 1}, {\\'name\\': \\'mesh_b\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 2}], \\'outputs\\': [{\\'name\\': \\'result_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [5]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackBoolean\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'difference\\', \\'libigl_cgal\\']}, {\\'id\\': 4, \\'type\\': \\'GeomPackBoolean\\', \\'pos\\': [-200, 100], \\'size\\': [370, 165.3125], \\'flags\\': {}, \\'order\\': 3, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_a\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 3}, {\\'name\\': \\'mesh_b\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 4}], \\'outputs\\': [{\\'name\\': \\'result_mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [6]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackBoolean\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'difference\\', \\'blender_exact\\']}, {\\'id\\': 5, \\'type\\': \\'GeomPackPreviewMeshMulti\\', \\'pos\\': [213.07101477171835, -194.17306733063847], \\'size\\': [768, 702], \\'flags\\': {}, \\'order\\': 4, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_1\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 5}, {\\'name\\': \\'mesh_2\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': 6}, {\\'name\\': \\'mesh_3\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': None}, {\\'name\\': \\'mesh_4\\', \\'shape\\': 7, \\'type\\': \\'TRIMESH\\', \\'link\\': None}], \\'outputs\\': [], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackPreviewMeshMulti\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'fields\\', \\'{\"show_edges\":true,\"camera_state\":\"{\\\\\\\\\"position\\\\\\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\\\\\\"focalPoint\\\\\\\\\":[0,0,0],\\\\\\\\\"viewUp\\\\\\\\\":[0,0,1]}\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\']}, {\\'id\\': 1, \\'type\\': \\'GeomPackCreatePrimitive\\', \\'pos\\': [-600, -200], \\'size\\': [270, 170.65625], \\'flags\\': {}, \\'order\\': 1, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [1, 3]}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackCreatePrimitive\\', \\'cnr_id\\': \\'comfyui-geometrypack\\', \\'ver\\': \\'224d843d5a35546212d1fb7babe30efabdf2116c\\'}, \\'widgets_values\\': [\\'sphere\\', 1, 4]}], \\'links\\': [[1, 1, 0, 3, 0, \\'TRIMESH\\'], [2, 2, 0, 3, 1, \\'TRIMESH\\'], [3, 1, 0, 4, 0, \\'TRIMESH\\'], [4, 2, 0, 4, 1, \\'TRIMESH\\'], [5, 3, 0, 5, 0, \\'TRIMESH\\'], [6, 4, 0, 5, 1, \\'TRIMESH\\']], \\'groups\\': [], \\'config\\': {}, \\'extra\\': {\\'ds\\': {\\'scale\\': 0.8719083213796316, \\'offset\\': [536.4213213855968, 421.65866536973317]}, \\'frontendVersion\\': \\'1.43.18\\', \\'workflowRendererVersion\\': \\'LG\\'}, \\'version\\': 0.4}}']}, 'current_outputs': ['4', '1', '2', '3', '5'], 'timestamp': 1779135327618}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-811kqbl_\\ComfyUI-GeometryPack\\workflows\\boolean_ops_all.json\nNode error: GeomPackBoolean",
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.31,
-          "avg": 2.3
+          "peak": 2.29,
+          "avg": 2.28
         },
         "total_ram_gb": 16.0,
         "samples": 9
@@ -89,55 +89,55 @@
     {
       "name": "decimate",
       "status": "pass",
-      "duration_seconds": 31.34,
+      "duration_seconds": 14.8,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.3,
-          "avg": 2.02
+          "peak": 2.29,
+          "avg": 2.09
         },
         "total_ram_gb": 16.0,
-        "samples": 32
+        "samples": 15
       }
     },
     {
       "name": "decimate_all",
       "status": "pass",
-      "duration_seconds": 37.16,
+      "duration_seconds": 20.86,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.1,
-          "avg": 2.01
+          "peak": 2.17,
+          "avg": 2.09
         },
         "total_ram_gb": 16.0,
-        "samples": 37
+        "samples": 20
       }
     },
     {
       "name": "depth_map_to_mesh",
       "status": "pass",
-      "duration_seconds": 25.34,
+      "duration_seconds": 22.52,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.42,
-          "avg": 2.0
+          "peak": 2.86,
+          "avg": 2.4
         },
         "total_ram_gb": 16.0,
-        "samples": 26
+        "samples": 23
       }
     },
     {
@@ -150,70 +150,70 @@
     {
       "name": "fix_normals_all",
       "status": "pass",
-      "duration_seconds": 22.05,
+      "duration_seconds": 13.06,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 2.21,
-          "avg": 1.99
-        },
-        "total_ram_gb": 16.0,
-        "samples": 22
-      }
-    },
-    {
-      "name": "fix_self_intersection",
-      "status": "pass",
-      "duration_seconds": 13.11,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.57,
-          "avg": 1.54
+          "peak": 2.63,
+          "avg": 2.36
         },
         "total_ram_gb": 16.0,
         "samples": 13
       }
     },
     {
-      "name": "mesh_info",
+      "name": "fix_self_intersection",
       "status": "pass",
-      "duration_seconds": 13.79,
+      "duration_seconds": 15.66,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.53,
-          "avg": 1.44
+          "peak": 1.96,
+          "avg": 1.91
         },
         "total_ram_gb": 16.0,
-        "samples": 14
+        "samples": 16
+      }
+    },
+    {
+      "name": "mesh_info",
+      "status": "pass",
+      "duration_seconds": 11.37,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.88,
+          "avg": 1.84
+        },
+        "total_ram_gb": 16.0,
+        "samples": 12
       }
     },
     {
       "name": "mesh_mesh_distance",
       "status": "pass",
-      "duration_seconds": 25.4,
+      "duration_seconds": 25.98,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.67,
-          "avg": 1.53
+          "peak": 1.91,
+          "avg": 1.81
         },
         "total_ram_gb": 16.0,
         "samples": 26
@@ -222,127 +222,127 @@
     {
       "name": "normals",
       "status": "pass",
-      "duration_seconds": 13.31,
+      "duration_seconds": 15.34,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.65,
+          "peak": 1.73,
           "avg": 1.56
         },
         "total_ram_gb": 16.0,
-        "samples": 14
+        "samples": 16
       }
     },
     {
       "name": "point_mesh_distance",
       "status": "pass",
-      "duration_seconds": 13.17,
+      "duration_seconds": 10.43,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.61,
-          "avg": 1.53
-        },
-        "total_ram_gb": 16.0,
-        "samples": 14
-      }
-    },
-    {
-      "name": "preview_mesh_threejs",
-      "status": "pass",
-      "duration_seconds": 13.19,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.4,
-          "avg": 1.32
-        },
-        "total_ram_gb": 16.0,
-        "samples": 14
-      }
-    },
-    {
-      "name": "reconstruct_all",
-      "status": "pass",
-      "duration_seconds": 16.65,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.42,
-          "avg": 1.35
-        },
-        "total_ram_gb": 16.0,
-        "samples": 17
-      }
-    },
-    {
-      "name": "refine_mesh",
-      "status": "pass",
-      "duration_seconds": 10.93,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
           "peak": 1.51,
-          "avg": 1.44
+          "avg": 1.48
         },
         "total_ram_gb": 16.0,
         "samples": 11
       }
     },
     {
-      "name": "remesh_intersections",
+      "name": "preview_mesh_threejs",
       "status": "pass",
-      "duration_seconds": 20.13,
+      "duration_seconds": 9.76,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
           "peak": 1.48,
-          "avg": 1.39
+          "avg": 1.45
         },
         "total_ram_gb": 16.0,
-        "samples": 21
+        "samples": 10
+      }
+    },
+    {
+      "name": "reconstruct_all",
+      "status": "pass",
+      "duration_seconds": 20.02,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.52,
+          "avg": 1.48
+        },
+        "total_ram_gb": 16.0,
+        "samples": 20
+      }
+    },
+    {
+      "name": "refine_mesh",
+      "status": "pass",
+      "duration_seconds": 11.67,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.57,
+          "avg": 1.51
+        },
+        "total_ram_gb": 16.0,
+        "samples": 12
+      }
+    },
+    {
+      "name": "remesh_intersections",
+      "status": "pass",
+      "duration_seconds": 14.73,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.54,
+          "avg": 1.37
+        },
+        "total_ram_gb": 16.0,
+        "samples": 15
       }
     },
     {
       "name": "remeshing",
       "status": "pass",
-      "duration_seconds": 51.76,
+      "duration_seconds": 58.05,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.35,
-          "avg": 1.23
+          "peak": 1.5,
+          "avg": 1.44
         },
         "total_ram_gb": 16.0,
-        "samples": 52
+        "samples": 57
       }
     },
     {
@@ -355,106 +355,106 @@
     {
       "name": "sharpen",
       "status": "pass",
-      "duration_seconds": 16.94,
+      "duration_seconds": 10.86,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.26,
-          "avg": 1.26
-        },
-        "total_ram_gb": 16.0,
-        "samples": 17
-      }
-    },
-    {
-      "name": "sharpen_all",
-      "status": "pass",
-      "duration_seconds": 69.05,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.25,
-          "avg": 1.2
-        },
-        "total_ram_gb": 16.0,
-        "samples": 69
-      }
-    },
-    {
-      "name": "side_by_side_viewer",
-      "status": "pass",
-      "duration_seconds": 14.99,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.22,
-          "avg": 1.12
-        },
-        "total_ram_gb": 16.0,
-        "samples": 15
-      }
-    },
-    {
-      "name": "skeleton_all",
-      "status": "pass",
-      "duration_seconds": 33.5,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.24,
-          "avg": 1.18
-        },
-        "total_ram_gb": 16.0,
-        "samples": 34
-      }
-    },
-    {
-      "name": "skeleton_extraction",
-      "status": "pass",
-      "duration_seconds": 10.26,
-      "error": null,
-      "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
-        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
-      },
-      "resources": {
-        "ram": {
-          "peak": 1.24,
-          "avg": 1.23
+          "peak": 1.38,
+          "avg": 1.36
         },
         "total_ram_gb": 16.0,
         "samples": 11
       }
     },
     {
-      "name": "sMOOth",
+      "name": "sharpen_all",
       "status": "pass",
-      "duration_seconds": 10.92,
+      "duration_seconds": 79.2,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.25,
-          "avg": 1.24
+          "peak": 1.31,
+          "avg": 1.25
+        },
+        "total_ram_gb": 16.0,
+        "samples": 79
+      }
+    },
+    {
+      "name": "side_by_side_viewer",
+      "status": "pass",
+      "duration_seconds": 9.19,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.13,
+          "avg": 1.12
+        },
+        "total_ram_gb": 16.0,
+        "samples": 10
+      }
+    },
+    {
+      "name": "skeleton_all",
+      "status": "pass",
+      "duration_seconds": 28.06,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.16,
+          "avg": 1.13
+        },
+        "total_ram_gb": 16.0,
+        "samples": 28
+      }
+    },
+    {
+      "name": "skeleton_extraction",
+      "status": "pass",
+      "duration_seconds": 19.7,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.12,
+          "avg": 1.09
+        },
+        "total_ram_gb": 16.0,
+        "samples": 15
+      }
+    },
+    {
+      "name": "sMOOth",
+      "status": "pass",
+      "duration_seconds": 10.12,
+      "error": null,
+      "hardware": {
+        "os": "Windows-10-10.0.26100-SP0",
+        "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
+      },
+      "resources": {
+        "ram": {
+          "peak": 1.08,
+          "avg": 1.07
         },
         "total_ram_gb": 16.0,
         "samples": 11
@@ -463,52 +463,52 @@
     {
       "name": "smooth_all",
       "status": "pass",
-      "duration_seconds": 27.74,
+      "duration_seconds": 11.72,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.29,
-          "avg": 1.26
+          "peak": 1.05,
+          "avg": 1.04
         },
         "total_ram_gb": 16.0,
-        "samples": 28
+        "samples": 12
       }
     },
     {
       "name": "surface_reconstruction",
       "status": "pass",
-      "duration_seconds": 13.37,
+      "duration_seconds": 19.41,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.47,
-          "avg": 1.37
+          "peak": 1.29,
+          "avg": 1.11
         },
         "total_ram_gb": 16.0,
-        "samples": 14
+        "samples": 19
       }
     },
     {
       "name": "test_loading",
       "status": "fail",
-      "duration_seconds": 6.32,
-      "error": "Workflow execution failed: {'prompt_id': '7420c75d-5e27-4e33-b7ea-6e975c7ff3c6', 'node_id': '2', 'node_type': 'GeomPackLoadMeshFBX', 'executed': [], 'exception_message': 'Failed to load FBX file: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_fbx.py\", line 197, in execute\\n    result = _bpy_import_fbx(full_path)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_fbx.py\", line 31, in _bpy_import_fbx\\n    import bpy\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nDuring handling of the above exception, another exception occurred:\\n\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_gdpr6wpb\\\\persistent_worker.py\", line 1762, in main\\n    result = method(**inputs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\comfy_api\\\\latest\\\\_io.py\", line 1833, in EXECUTE_NORMALIZED\\n    to_return = cls.execute(*args, **kwargs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_fbx.py\", line 199, in execute\\n    raise ValueError(f\"Failed to load FBX file: {e}\")\\nValueError: Failed to load FBX file: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-1945\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/rigged_human.fbx'], 'prompt': ['{\\'1\\': {\\'inputs\\': {\\'file_path\\': \\'3d/coca_cola.blend\\', \\'report_panel\\': \\'false\\'}, \\'class_type\\': \\'GeomPackLoadMeshBlend\\', \\'_meta\\': {\\'title\\': \\'Load Mesh (Blender)\\'}}, \\'2\\': {\\'inputs\\': {\\'file_path\\': \\'3d/rigged_human.fbx\\', \\'report_panel\\': \\'false\\'}, \\'class_type\\': \\'GeomPackLoadMeshFBX\\', \\'_meta\\': {\\'title\\': \\'Load Mesh (FBX)\\'}}, \\'3\\': {\\'inputs\\': {\\'layout\\': \\'side_by_side\\', \\'mode\\': \\'fields\\', \\'opacity_1\\': 1.0, \\'opacity_2\\': 1.0, \\'preview_dual\\': \\'{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\', \\'mesh_1\\': [\\'1\\', 0], \\'mesh_2\\': [\\'2\\', 0]}, \\'class_type\\': \\'GeomPackPreviewMeshDual\\', \\'_meta\\': {\\'title\\': \\'Preview Mesh Dual\\'}}}'], 'extra_pnginfo': ['{\\'workflow\\': {\\'id\\': \\'t8e9d0c1-2b3a-4567-890b-cdef12345678\\', \\'revision\\': 0, \\'last_node_id\\': 3, \\'last_link_id\\': 2, \\'nodes\\': [{\\'id\\': 1, \\'type\\': \\'GeomPackLoadMeshBlend\\', \\'pos\\': [-500, -100], \\'size\\': [270, 156.359375], \\'flags\\': {}, \\'order\\': 0, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [1]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackLoadMeshBlend\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\', \\'ver\\': \\'0.1.1\\', \\'cnr_id\\': \\'comfyui-geometrypack\\'}, \\'widgets_values\\': [\\'3d/coca_cola.blend\\', \\'false\\']}, {\\'id\\': 2, \\'type\\': \\'GeomPackLoadMeshFBX\\', \\'pos\\': [-500, 100], \\'size\\': [270, 156.359375], \\'flags\\': {}, \\'order\\': 1, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [2]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackLoadMeshFBX\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\', \\'ver\\': \\'0.1.1\\', \\'cnr_id\\': \\'comfyui-geometrypack\\'}, \\'widgets_values\\': [\\'3d/rigged_human.fbx\\', \\'false\\']}, {\\'id\\': 3, \\'type\\': \\'GeomPackPreviewMeshDual\\', \\'pos\\': [100, -50], \\'size\\': [768, 834], \\'flags\\': {}, \\'order\\': 2, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_1\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 1}, {\\'name\\': \\'mesh_2\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 2}], \\'outputs\\': [], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackPreviewMeshDual\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\', \\'ver\\': \\'0.1.1\\', \\'cnr_id\\': \\'comfyui-geometrypack\\'}, \\'widgets_values\\': [\\'side_by_side\\', \\'fields\\', 1, 1, \\'{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\']}], \\'links\\': [[1, 1, 0, 3, 0, \\'TRIMESH\\'], [2, 2, 0, 3, 1, \\'TRIMESH\\']], \\'groups\\': [], \\'config\\': {}, \\'extra\\': {\\'ds\\': {\\'scale\\': 1, \\'offset\\': [600, 300]}, \\'frontendVersion\\': \\'1.43.18\\', \\'workflowRendererVersion\\': \\'LG\\'}, \\'version\\': 0.4}}']}, 'current_outputs': ['2', '3', '1'], 'timestamp': 1778962006336}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-55pnstfx\\ComfyUI-GeometryPack\\workflows\\test_loading.json\nNode error: GeomPackLoadMeshFBX",
+      "duration_seconds": 6.63,
+      "error": "Workflow execution failed: {'prompt_id': '60ceec16-2072-422b-b8bf-eebc4a6bcec2', 'node_id': '1', 'node_type': 'GeomPackLoadMeshBlend', 'executed': [], 'exception_message': 'Failed to load .blend file: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nWorker traceback:\\nTraceback (most recent call last):\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 197, in execute\\n    result = _bpy_import_blend(full_path)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 31, in _bpy_import_blend\\n    import bpy\\nImportError: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\nDuring handling of the above exception, another exception occurred:\\n\\nTraceback (most recent call last):\\n  File \"C:\\\\Users\\\\stduser\\\\AppData\\\\Local\\\\Temp\\\\comfyui_pvenv_4hrft4wj\\\\persistent_worker.py\", line 1762, in main\\n    result = method(**inputs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\comfy_api\\\\latest\\\\_io.py\", line 1833, in EXECUTE_NORMALIZED\\n    to_return = cls.execute(*args, **kwargs)\\n  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\custom_nodes\\\\ComfyUI-GeometryPack\\\\nodes\\\\blender_io\\\\load_mesh_blend.py\", line 199, in execute\\n    raise ValueError(f\"Failed to load .blend file: {e}\")\\nValueError: Failed to load .blend file: DLL load failed while importing bpy: The specified procedure could not be found.\\n\\n', 'exception_type': 'comfy_env.isolation.workers.base.WorkerError', 'traceback': ['  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 535, in execute\\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 335, in get_output_data\\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 309, in _async_map_node_over_list\\n    await process_inputs(input_dict, i)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\ComfyUI\\\\execution.py\", line 297, in process_inputs\\n    result = f(**inputs)\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\metadata.py\", line 556, in proxy\\n    result = worker.call_method(\\n        module_name=mod,\\n    ...<4 lines>...\\n        timeout=600.0,\\n    )\\n', '  File \"D:\\\\a\\\\comfy-gpu-ci\\\\comfy-gpu-ci\\\\test_workspaces\\\\GeometryPack-2005\\\\portable-comfyui\\\\ComfyUI_windows_portable\\\\python_embeded\\\\Lib\\\\site-packages\\\\comfy_env\\\\isolation\\\\workers\\\\subprocess.py\", line 674, in call_method\\n    raise WorkerError(\\n    ...<2 lines>...\\n    )\\n'], 'current_inputs': {'file_path': ['3d/coca_cola.blend'], 'prompt': ['{\\'1\\': {\\'inputs\\': {\\'file_path\\': \\'3d/coca_cola.blend\\', \\'report_panel\\': \\'false\\'}, \\'class_type\\': \\'GeomPackLoadMeshBlend\\', \\'_meta\\': {\\'title\\': \\'Load Mesh (Blender)\\'}}, \\'2\\': {\\'inputs\\': {\\'file_path\\': \\'3d/rigged_human.fbx\\', \\'report_panel\\': \\'false\\'}, \\'class_type\\': \\'GeomPackLoadMeshFBX\\', \\'_meta\\': {\\'title\\': \\'Load Mesh (FBX)\\'}}, \\'3\\': {\\'inputs\\': {\\'layout\\': \\'side_by_side\\', \\'mode\\': \\'fields\\', \\'opacity_1\\': 1.0, \\'opacity_2\\': 1.0, \\'preview_dual\\': \\'{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\', \\'mesh_1\\': [\\'1\\', 0], \\'mesh_2\\': [\\'2\\', 0]}, \\'class_type\\': \\'GeomPackPreviewMeshDual\\', \\'_meta\\': {\\'title\\': \\'Preview Mesh Dual\\'}}}'], 'extra_pnginfo': ['{\\'workflow\\': {\\'id\\': \\'t8e9d0c1-2b3a-4567-890b-cdef12345678\\', \\'revision\\': 0, \\'last_node_id\\': 3, \\'last_link_id\\': 2, \\'nodes\\': [{\\'id\\': 1, \\'type\\': \\'GeomPackLoadMeshBlend\\', \\'pos\\': [-500, -100], \\'size\\': [270, 156.359375], \\'flags\\': {}, \\'order\\': 0, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [1]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackLoadMeshBlend\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\', \\'ver\\': \\'0.1.1\\', \\'cnr_id\\': \\'comfyui-geometrypack\\'}, \\'widgets_values\\': [\\'3d/coca_cola.blend\\', \\'false\\']}, {\\'id\\': 2, \\'type\\': \\'GeomPackLoadMeshFBX\\', \\'pos\\': [-500, 100], \\'size\\': [270, 156.359375], \\'flags\\': {}, \\'order\\': 1, \\'mode\\': 0, \\'inputs\\': [], \\'outputs\\': [{\\'name\\': \\'mesh\\', \\'type\\': \\'TRIMESH\\', \\'links\\': [2]}, {\\'name\\': \\'info\\', \\'type\\': \\'STRING\\', \\'links\\': None}], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackLoadMeshFBX\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\', \\'ver\\': \\'0.1.1\\', \\'cnr_id\\': \\'comfyui-geometrypack\\'}, \\'widgets_values\\': [\\'3d/rigged_human.fbx\\', \\'false\\']}, {\\'id\\': 3, \\'type\\': \\'GeomPackPreviewMeshDual\\', \\'pos\\': [100, -50], \\'size\\': [768, 834], \\'flags\\': {}, \\'order\\': 2, \\'mode\\': 0, \\'inputs\\': [{\\'name\\': \\'mesh_1\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 1}, {\\'name\\': \\'mesh_2\\', \\'type\\': \\'TRIMESH\\', \\'link\\': 2}], \\'outputs\\': [], \\'properties\\': {\\'Node name for S&R\\': \\'GeomPackPreviewMeshDual\\', \\'aux_id\\': \\'PozzettiAndrea/ComfyUI-GeometryPack\\', \\'ver\\': \\'0.1.1\\', \\'cnr_id\\': \\'comfyui-geometrypack\\'}, \\'widgets_values\\': [\\'side_by_side\\', \\'fields\\', 1, 1, \\'{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"selected_colormap\":\"erdc_rainbow_bright\"}\\']}], \\'links\\': [[1, 1, 0, 3, 0, \\'TRIMESH\\'], [2, 2, 0, 3, 1, \\'TRIMESH\\']], \\'groups\\': [], \\'config\\': {}, \\'extra\\': {\\'ds\\': {\\'scale\\': 1, \\'offset\\': [600, 300]}, \\'frontendVersion\\': \\'1.43.18\\', \\'workflowRendererVersion\\': \\'LG\\'}, \\'version\\': 0.4}}']}, 'current_outputs': ['3', '2', '1'], 'timestamp': 1779135796898}\n\nDetails:\nWorkflow: C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy-test-run-811kqbl_\\ComfyUI-GeometryPack\\workflows\\test_loading.json\nNode error: GeomPackLoadMeshBlend",
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.41,
-          "avg": 1.4
+          "peak": 1.28,
+          "avg": 1.28
         },
         "total_ram_gb": 16.0,
         "samples": 7
@@ -517,16 +517,16 @@
     {
       "name": "transform",
       "status": "pass",
-      "duration_seconds": 9.33,
+      "duration_seconds": 9.7,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.39,
-          "avg": 1.39
+          "peak": 1.28,
+          "avg": 1.28
         },
         "total_ram_gb": 16.0,
         "samples": 10
@@ -535,19 +535,19 @@
     {
       "name": "uv_unwrap",
       "status": "pass",
-      "duration_seconds": 15.53,
+      "duration_seconds": 18.86,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.39,
-          "avg": 1.36
+          "peak": 1.28,
+          "avg": 1.25
         },
         "total_ram_gb": 16.0,
-        "samples": 16
+        "samples": 19
       }
     },
     {
@@ -560,19 +560,19 @@
     {
       "name": "view_texture",
       "status": "pass",
-      "duration_seconds": 13.54,
+      "duration_seconds": 9.8,
       "error": null,
       "hardware": {
-        "os": "Windows-2025Server-10.0.26100-SP0",
+        "os": "Windows-10-10.0.26100-SP0",
         "cpu": "AMD64 Family 25 Model 17 Stepping 1, AuthenticAMD"
       },
       "resources": {
         "ram": {
-          "peak": 1.5,
-          "avg": 1.37
+          "peak": 1.4,
+          "avg": 1.27
         },
         "total_ram_gb": 16.0,
-        "samples": 14
+        "samples": 10
       }
     }
   ]
