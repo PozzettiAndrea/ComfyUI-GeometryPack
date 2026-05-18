@@ -68,6 +68,17 @@
             color: #8ba3c1;
         }
 
+        a.meta-chip {
+            text-decoration: none;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+
+        a.meta-chip:hover {
+            background: #25395a;
+            border-color: #3a5587;
+            color: #cfe1f7;
+        }
+
         .meta-chip svg {
             width: 12px;
             height: 12px;
@@ -113,7 +124,7 @@
         }
 
         .progress-fill.has-failures {
-            background: linear-gradient(90deg, #3fb950 0%, #3fb950 66.66666666666666%, #f85149 66.66666666666666%, #f85149 100%);
+            background: linear-gradient(90deg, #3fb950 0%, #3fb950 0.0%, #f85149 0.0%, #f85149 100%);
             width: 100% !important;
             border-radius: 6px;
         }
@@ -924,7 +935,7 @@
     <header>
         <h1><a href="https://github.com/PozzettiAndrea/PozzettiAndrea/ComfyUI-GeometryPack">PozzettiAndrea/ComfyUI-GeometryPack</a> Test Results</h1>
         <div class="meta-chips">
-            <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 110 16A8 8 0 018 0zm.5 4.5a.5.5 0 00-1 0v3.793L5.854 9.854a.5.5 0 10.708.708l1.853-1.854a.5.5 0 00.085-.094V4.5z"/></svg> 2026-05-11 11:00 UTC</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M2.5 4a.5.5 0 100 1 .5.5 0 000-1zM4 4.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zM2.5 7a.5.5 0 100 1 .5.5 0 000-1zM4 7.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7A.5.5 0 014 7.5zM2.5 10a.5.5 0 100 1 .5.5 0 000-1zM4 10.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5z"/></svg> macOS-15.7.4-arm64-arm-64bit</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M5 0a.5.5 0 01.5.5V2h1V.5a.5.5 0 011 0V2h1V.5a.5.5 0 011 0V2h.5A2.5 2.5 0 0112.5 4.5H14v1h-1.5v1H14v1h-1.5v1H14v1h-1.5A2.5 2.5 0 0110 12h-.5v1.5a.5.5 0 01-1 0V12h-1v1.5a.5.5 0 01-1 0V12H6v1.5a.5.5 0 01-1 0V12h-.5A2.5 2.5 0 012 9.5H.5v-1H2v-1H.5v-1H2v-1H.5v-1H2A2.5 2.5 0 014.5 2V.5A.5.5 0 015 0zm-.5 4A1.5 1.5 0 003 5.5v4A1.5 1.5 0 004.5 11h6a1.5 1.5 0 001.5-1.5v-4A1.5 1.5 0 0010.5 4h-6z"/></svg> arm</span>
+            <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 110 16A8 8 0 018 0zm.5 4.5a.5.5 0 00-1 0v3.793L5.854 9.854a.5.5 0 10.708.708l1.853-1.854a.5.5 0 00.085-.094V4.5z"/></svg> 2026-05-18 19:06 UTC</span> <a class="meta-chip" href="https://github.com/PozzettiAndrea/comfy-gpu-ci/actions/runs/26052444906" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zM6.5 4.5l5 3.5-5 3.5v-7z"/></svg> Test run</a> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M2.5 4a.5.5 0 100 1 .5.5 0 000-1zM4 4.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zM2.5 7a.5.5 0 100 1 .5.5 0 000-1zM4 7.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7A.5.5 0 014 7.5zM2.5 10a.5.5 0 100 1 .5.5 0 000-1zM4 10.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5z"/></svg> macOS-15.7.4-arm64-arm-64bit</span> <span class="meta-chip"><svg viewBox="0 0 16 16"><path d="M5 0a.5.5 0 01.5.5V2h1V.5a.5.5 0 011 0V2h1V.5a.5.5 0 011 0V2h.5A2.5 2.5 0 0112.5 4.5H14v1h-1.5v1H14v1h-1.5v1H14v1h-1.5A2.5 2.5 0 0110 12h-.5v1.5a.5.5 0 01-1 0V12h-1v1.5a.5.5 0 01-1 0V12H6v1.5a.5.5 0 01-1 0V12h-.5A2.5 2.5 0 012 9.5H.5v-1H2v-1H.5v-1H2v-1H.5v-1H2A2.5 2.5 0 014.5 2V.5A.5.5 0 015 0zm-.5 4A1.5 1.5 0 003 5.5v4A1.5 1.5 0 004.5 11h6a1.5 1.5 0 001.5-1.5v-4A1.5 1.5 0 0010.5 4h-6z"/></svg> arm</span>
         </div>
     </header>
 
@@ -932,14 +943,14 @@
         <div class="summary">
             <div class="progress-wrapper">
                 <div class="progress-bar">
-                    <div class="progress-fill has-failures" style="width: 66.66666666666666%"></div>
+                    <div class="progress-fill has-failures" style="width: 0.0%"></div>
                 </div>
-                <span class="progress-label">66.7%</span>
+                <span class="progress-label">0.0%</span>
             </div>
             <div class="stats">
-                <span class="stat-badge stat-pass">20 passed</span>
-                <span class="stat-badge stat-fail">9 failed</span>
-                <span class="stat-total">20/30 tests</span>
+                <span class="stat-badge stat-pass">0 passed</span>
+                <span class="stat-badge stat-fail">30 failed</span>
+                <span class="stat-total">0/30 tests</span>
             </div>
         </div>
 
@@ -952,79 +963,50 @@
         </div>
         <div class="workflow-grid" id="workflow-grid">
             
-            <div class="workflow-card clickable " onclick="openLightboxByName('sharpen')">
-                
-                <img class="workflow-screenshot" src="screenshots/sharpen_executed.png"
-                     alt="sharpen" loading="lazy">
-            
-                <div class="workflow-info">
-                    <div class="workflow-header">
-                        <span class="workflow-name" title="sharpen">sharpen</span>
-                        <span class="workflow-badge pass">pass</span>
-                    </div>
-                    <div class="workflow-meta">
-                        <span>7.00s</span>
-                    </div>
-                </div>
-            </div>
-        
-
-            <div class="workflow-card clickable " onclick="openLightboxByName('alpha_wrap')">
-                
-                <img class="workflow-screenshot" src="screenshots/alpha_wrap_executed.png"
-                     alt="alpha_wrap" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('alpha_wrap')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="alpha_wrap">alpha_wrap</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>11.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('batch_remesh')">
-                
-                <img class="workflow-screenshot" src="screenshots/batch_remesh_executed.png"
-                     alt="batch_remesh" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('batch_remesh')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="batch_remesh">batch_remesh</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>8.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('boolean_ops')">
-                
-                <img class="workflow-screenshot" src="screenshots/boolean_ops_executed.png"
-                     alt="boolean_ops" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('boolean_ops')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="boolean_ops">boolean_ops</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>4.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('boolean_ops_all')">
-                
-                <img class="workflow-screenshot" src="screenshots/boolean_ops_all_executed.png"
-                     alt="boolean_ops_all" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="boolean_ops_all">boolean_ops_all</span>
@@ -1038,10 +1020,7 @@
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('decimate')">
-                
-                <img class="workflow-screenshot" src="screenshots/decimate_executed.png"
-                     alt="decimate" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="decimate">decimate</span>
@@ -1054,62 +1033,50 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('decimate_all')">
-                
-                <img class="workflow-screenshot" src="screenshots/decimate_all_executed.png"
-                     alt="decimate_all" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('decimate_all')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="decimate_all">decimate_all</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>15.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('depth_map_to_mesh')">
-                
-                <img class="workflow-screenshot" src="screenshots/depth_map_to_mesh_executed.png"
-                     alt="depth_map_to_mesh" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('depth_map_to_mesh')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="depth_map_to_mesh">depth_map_to_mesh</span>
-                        <span class="workflow-badge timeout">timeout</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>600.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('fix_normals_all')">
-                
-                <img class="workflow-screenshot" src="screenshots/fix_normals_all_executed.png"
-                     alt="fix_normals_all" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('fix_normals_all')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="fix_normals_all">fix_normals_all</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>5.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('fix_self_intersection')">
-                
-                <img class="workflow-screenshot" src="screenshots/fix_self_intersection_executed.png"
-                     alt="fix_self_intersection" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="fix_self_intersection">fix_self_intersection</span>
@@ -1123,10 +1090,7 @@
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('mesh_info')">
-                
-                <img class="workflow-screenshot" src="screenshots/mesh_info_executed.png"
-                     alt="mesh_info" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="mesh_info">mesh_info</span>
@@ -1139,79 +1103,64 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('mesh_mesh_distance')">
-                
-                <img class="workflow-screenshot" src="screenshots/mesh_mesh_distance_executed.png"
-                     alt="mesh_mesh_distance" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('mesh_mesh_distance')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="mesh_mesh_distance">mesh_mesh_distance</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>10.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('normals')">
-                
-                <img class="workflow-screenshot" src="screenshots/normals_executed.png"
-                     alt="normals" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('normals')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="normals">normals</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>4.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('point_mesh_distance')">
-                
-                <img class="workflow-screenshot" src="screenshots/point_mesh_distance_executed.png"
-                     alt="point_mesh_distance" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('point_mesh_distance')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="point_mesh_distance">point_mesh_distance</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>3.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('preview_mesh_threejs')">
-                
-                <img class="workflow-screenshot" src="screenshots/preview_mesh_threejs_executed.png"
-                     alt="preview_mesh_threejs" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('preview_mesh_threejs')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="preview_mesh_threejs">preview_mesh_threejs</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>3.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('reconstruct_all')">
-                
-                <img class="workflow-screenshot" src="screenshots/reconstruct_all_executed.png"
-                     alt="reconstruct_all" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="reconstruct_all">reconstruct_all</span>
@@ -1224,79 +1173,78 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('refine_mesh')">
-                
-                <img class="workflow-screenshot" src="screenshots/refine_mesh_executed.png"
-                     alt="refine_mesh" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('refine_mesh')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="refine_mesh">refine_mesh</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>3.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('remesh_intersections')">
-                
-                <img class="workflow-screenshot" src="screenshots/remesh_intersections_executed.png"
-                     alt="remesh_intersections" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('remesh_intersections')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="remesh_intersections">remesh_intersections</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>3.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('remeshing')">
-                
-                <img class="workflow-screenshot" src="screenshots/remeshing_executed.png"
-                     alt="remeshing" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('remeshing')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="remeshing">remeshing</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>24.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('sMOOth')">
-                
-                <img class="workflow-screenshot" src="screenshots/sMOOth_executed.png"
-                     alt="sMOOth" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('sMOOth')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="sMOOth">sMOOth</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>5.00s</span>
+                        <span>0.00s</span>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('sharpen')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
+                <div class="workflow-info">
+                    <div class="workflow-header">
+                        <span class="workflow-name" title="sharpen">sharpen</span>
+                        <span class="workflow-badge fail">fail</span>
+                    </div>
+                    <div class="workflow-meta">
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('sharpen_all')">
-                
-                <img class="workflow-screenshot" src="screenshots/sharpen_all_executed.png"
-                     alt="sharpen_all" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="sharpen_all">sharpen_all</span>
@@ -1310,10 +1258,7 @@
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('side_by_side_viewer')">
-                
-                <img class="workflow-screenshot" src="screenshots/side_by_side_viewer_executed.png"
-                     alt="side_by_side_viewer" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="side_by_side_viewer">side_by_side_viewer</span>
@@ -1326,62 +1271,50 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_all')">
-                
-                <img class="workflow-screenshot" src="screenshots/skeleton_all_executed.png"
-                     alt="skeleton_all" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('skeleton_all')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="skeleton_all">skeleton_all</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>20.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('skeleton_extraction')">
-                
-                <img class="workflow-screenshot" src="screenshots/skeleton_extraction_executed.png"
-                     alt="skeleton_extraction" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('skeleton_extraction')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="skeleton_extraction">skeleton_extraction</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>4.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('smooth_all')">
-                
-                <img class="workflow-screenshot" src="screenshots/smooth_all_executed.png"
-                     alt="smooth_all" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('smooth_all')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="smooth_all">smooth_all</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>4.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('surface_reconstruction')">
-                
-                <img class="workflow-screenshot" src="screenshots/surface_reconstruction_executed.png"
-                     alt="surface_reconstruction" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="surface_reconstruction">surface_reconstruction</span>
@@ -1394,28 +1327,22 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('test_loading')">
-                
-                <img class="workflow-screenshot" src="screenshots/test_loading_executed.png"
-                     alt="test_loading" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('test_loading')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="test_loading">test_loading</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>3.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
             <div class="workflow-card clickable failed" onclick="openLightboxByName('transform')">
-                
-                <img class="workflow-screenshot" src="screenshots/transform_executed.png"
-                     alt="transform" loading="lazy">
-            
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="transform">transform</span>
@@ -1428,35 +1355,29 @@
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('uv_unwrap')">
-                
-                <img class="workflow-screenshot" src="screenshots/uv_unwrap_executed.png"
-                     alt="uv_unwrap" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('uv_unwrap')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="uv_unwrap">uv_unwrap</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>6.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
         
 
-            <div class="workflow-card clickable " onclick="openLightboxByName('view_texture')">
-                
-                <img class="workflow-screenshot" src="screenshots/view_texture_executed.png"
-                     alt="view_texture" loading="lazy">
-            
+            <div class="workflow-card clickable failed" onclick="openLightboxByName('view_texture')">
+                <div class="workflow-screenshot placeholder">No screenshot</div>
                 <div class="workflow-info">
                     <div class="workflow-header">
                         <span class="workflow-name" title="view_texture">view_texture</span>
-                        <span class="workflow-badge pass">pass</span>
+                        <span class="workflow-badge fail">fail</span>
                     </div>
                     <div class="workflow-meta">
-                        <span>2.00s</span>
+                        <span>0.00s</span>
                     </div>
                 </div>
             </div>
@@ -1469,10 +1390,34 @@
             
             <div class="failed-item">
                 <div class="failed-header">
+                    <span class="failed-name">alpha_wrap</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">batch_remesh</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">boolean_ops</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
                     <span class="failed-name">boolean_ops_all</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card boolean_ops_all not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1480,7 +1425,31 @@
                     <span class="failed-name">decimate</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card decimate not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">decimate_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">depth_map_to_mesh</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">fix_normals_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1488,7 +1457,7 @@
                     <span class="failed-name">fix_self_intersection</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card fix_self_intersection not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1496,7 +1465,39 @@
                     <span class="failed-name">mesh_info</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card mesh_info not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">mesh_mesh_distance</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">normals</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">point_mesh_distance</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">preview_mesh_threejs</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1504,7 +1505,47 @@
                     <span class="failed-name">reconstruct_all</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card reconstruct_all not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">refine_mesh</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">remesh_intersections</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">remeshing</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">sMOOth</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">sharpen</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1512,7 +1553,7 @@
                     <span class="failed-name">sharpen_all</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card sharpen_all not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1520,7 +1561,31 @@
                     <span class="failed-name">side_by_side_viewer</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card side_by_side_viewer not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">skeleton_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">skeleton_extraction</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">smooth_all</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1528,7 +1593,15 @@
                     <span class="failed-name">surface_reconstruction</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card surface_reconstruction not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">test_loading</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
             <div class="failed-item">
@@ -1536,7 +1609,23 @@
                     <span class="failed-name">transform</span>
                     <span class="failed-duration">0.00s</span>
                 </div>
-                <div class="failed-error">card transform not found in section</div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">uv_unwrap</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
+            </div>
+        
+            <div class="failed-item">
+                <div class="failed-header">
+                    <span class="failed-name">view_texture</span>
+                    <span class="failed-duration">0.00s</span>
+                </div>
+                <div class="failed-error">Templates+section not openable after restart</div>
             </div>
         
         </div>
@@ -1599,9 +1688,9 @@
             });
         }
 
-        const workflowData = {"sharpen": {"src": "screenshots/sharpen_executed.png", "title": "sharpen", "status": "pass", "duration": "7.00", "log": "", "hardware": null}, "alpha_wrap": {"src": "screenshots/alpha_wrap_executed.png", "title": "alpha_wrap", "status": "pass", "duration": "11.00", "log": "", "hardware": null}, "batch_remesh": {"src": "screenshots/batch_remesh_executed.png", "title": "batch_remesh", "status": "pass", "duration": "8.00", "log": "", "hardware": null}, "boolean_ops": {"src": "screenshots/boolean_ops_executed.png", "title": "boolean_ops", "status": "pass", "duration": "4.00", "log": "", "hardware": null}, "boolean_ops_all": {"src": "screenshots/boolean_ops_all_executed.png", "title": "boolean_ops_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "decimate": {"src": "screenshots/decimate_executed.png", "title": "decimate", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "decimate_all": {"src": "screenshots/decimate_all_executed.png", "title": "decimate_all", "status": "pass", "duration": "15.00", "log": "", "hardware": null}, "depth_map_to_mesh": {"src": "screenshots/depth_map_to_mesh_executed.png", "title": "depth_map_to_mesh", "status": "timeout", "duration": "600.00", "log": "", "hardware": null}, "fix_normals_all": {"src": "screenshots/fix_normals_all_executed.png", "title": "fix_normals_all", "status": "pass", "duration": "5.00", "log": "", "hardware": null}, "fix_self_intersection": {"src": "screenshots/fix_self_intersection_executed.png", "title": "fix_self_intersection", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "mesh_info": {"src": "screenshots/mesh_info_executed.png", "title": "mesh_info", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "mesh_mesh_distance": {"src": "screenshots/mesh_mesh_distance_executed.png", "title": "mesh_mesh_distance", "status": "pass", "duration": "10.00", "log": "", "hardware": null}, "normals": {"src": "screenshots/normals_executed.png", "title": "normals", "status": "pass", "duration": "4.00", "log": "", "hardware": null}, "point_mesh_distance": {"src": "screenshots/point_mesh_distance_executed.png", "title": "point_mesh_distance", "status": "pass", "duration": "3.00", "log": "", "hardware": null}, "preview_mesh_threejs": {"src": "screenshots/preview_mesh_threejs_executed.png", "title": "preview_mesh_threejs", "status": "pass", "duration": "3.00", "log": "", "hardware": null}, "reconstruct_all": {"src": "screenshots/reconstruct_all_executed.png", "title": "reconstruct_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "refine_mesh": {"src": "screenshots/refine_mesh_executed.png", "title": "refine_mesh", "status": "pass", "duration": "3.00", "log": "", "hardware": null}, "remesh_intersections": {"src": "screenshots/remesh_intersections_executed.png", "title": "remesh_intersections", "status": "pass", "duration": "3.00", "log": "", "hardware": null}, "remeshing": {"src": "screenshots/remeshing_executed.png", "title": "remeshing", "status": "pass", "duration": "24.00", "log": "", "hardware": null}, "sMOOth": {"src": "screenshots/sMOOth_executed.png", "title": "sMOOth", "status": "pass", "duration": "5.00", "log": "", "hardware": null}, "sharpen_all": {"src": "screenshots/sharpen_all_executed.png", "title": "sharpen_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "side_by_side_viewer": {"src": "screenshots/side_by_side_viewer_executed.png", "title": "side_by_side_viewer", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "skeleton_all": {"src": "screenshots/skeleton_all_executed.png", "title": "skeleton_all", "status": "pass", "duration": "20.00", "log": "", "hardware": null}, "skeleton_extraction": {"src": "screenshots/skeleton_extraction_executed.png", "title": "skeleton_extraction", "status": "pass", "duration": "4.00", "log": "", "hardware": null}, "smooth_all": {"src": "screenshots/smooth_all_executed.png", "title": "smooth_all", "status": "pass", "duration": "4.00", "log": "", "hardware": null}, "surface_reconstruction": {"src": "screenshots/surface_reconstruction_executed.png", "title": "surface_reconstruction", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "test_loading": {"src": "screenshots/test_loading_executed.png", "title": "test_loading", "status": "pass", "duration": "3.00", "log": "", "hardware": null}, "transform": {"src": "screenshots/transform_executed.png", "title": "transform", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "uv_unwrap": {"src": "screenshots/uv_unwrap_executed.png", "title": "uv_unwrap", "status": "pass", "duration": "6.00", "log": "", "hardware": null}, "view_texture": {"src": "screenshots/view_texture_executed.png", "title": "view_texture", "status": "pass", "duration": "2.00", "log": "", "hardware": null}};
+        const workflowData = {"alpha_wrap": {"src": "", "title": "alpha_wrap", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "batch_remesh": {"src": "", "title": "batch_remesh", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "boolean_ops": {"src": "", "title": "boolean_ops", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "boolean_ops_all": {"src": "", "title": "boolean_ops_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "decimate": {"src": "", "title": "decimate", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "decimate_all": {"src": "", "title": "decimate_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "depth_map_to_mesh": {"src": "", "title": "depth_map_to_mesh", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "fix_normals_all": {"src": "", "title": "fix_normals_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "fix_self_intersection": {"src": "", "title": "fix_self_intersection", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "mesh_info": {"src": "", "title": "mesh_info", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "mesh_mesh_distance": {"src": "", "title": "mesh_mesh_distance", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "normals": {"src": "", "title": "normals", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "point_mesh_distance": {"src": "", "title": "point_mesh_distance", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "preview_mesh_threejs": {"src": "", "title": "preview_mesh_threejs", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "reconstruct_all": {"src": "", "title": "reconstruct_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "refine_mesh": {"src": "", "title": "refine_mesh", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "remesh_intersections": {"src": "", "title": "remesh_intersections", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "remeshing": {"src": "", "title": "remeshing", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "sMOOth": {"src": "", "title": "sMOOth", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "sharpen": {"src": "", "title": "sharpen", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "sharpen_all": {"src": "", "title": "sharpen_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "side_by_side_viewer": {"src": "", "title": "side_by_side_viewer", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "skeleton_all": {"src": "", "title": "skeleton_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "skeleton_extraction": {"src": "", "title": "skeleton_extraction", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "smooth_all": {"src": "", "title": "smooth_all", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "surface_reconstruction": {"src": "", "title": "surface_reconstruction", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "test_loading": {"src": "", "title": "test_loading", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "transform": {"src": "", "title": "transform", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "uv_unwrap": {"src": "", "title": "uv_unwrap", "status": "fail", "duration": "0.00", "log": "", "hardware": null}, "view_texture": {"src": "", "title": "view_texture", "status": "fail", "duration": "0.00", "log": "", "hardware": null}};
         const workflowNames = Object.keys(workflowData);
-        const videoData = {"sMOOth": {"mp4": "driver.mp4", "duration_seconds": 5, "status": "pass"}, "fix_self_intersection": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "skeleton_all": {"mp4": "driver.mp4", "duration_seconds": 20, "status": "pass"}, "reconstruct_all": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "uv_unwrap": {"mp4": "driver.mp4", "duration_seconds": 6, "status": "pass"}, "remeshing": {"mp4": "driver.mp4", "duration_seconds": 24, "status": "pass"}, "boolean_ops": {"mp4": "driver.mp4", "duration_seconds": 4, "status": "pass"}, "batch_remesh": {"mp4": "driver.mp4", "duration_seconds": 8, "status": "pass"}, "mesh_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 10, "status": "pass"}, "normals": {"mp4": "driver.mp4", "duration_seconds": 4, "status": "pass"}, "depth_map_to_mesh": {"mp4": "driver.mp4", "duration_seconds": 600, "status": "timeout"}, "alpha_wrap": {"mp4": "driver.mp4", "duration_seconds": 11, "status": "pass"}, "test_loading": {"mp4": "driver.mp4", "duration_seconds": 3, "status": "pass"}, "mesh_info": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "smooth_all": {"mp4": "driver.mp4", "duration_seconds": 4, "status": "pass"}, "skeleton_extraction": {"mp4": "driver.mp4", "duration_seconds": 4, "status": "pass"}, "refine_mesh": {"mp4": "driver.mp4", "duration_seconds": 3, "status": "pass"}, "decimate": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "point_mesh_distance": {"mp4": "driver.mp4", "duration_seconds": 3, "status": "pass"}, "boolean_ops_all": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "side_by_side_viewer": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "decimate_all": {"mp4": "driver.mp4", "duration_seconds": 15, "status": "pass"}, "transform": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "surface_reconstruction": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "sharpen": {"mp4": "driver.mp4", "duration_seconds": 7, "status": "pass"}, "preview_mesh_threejs": {"mp4": "driver.mp4", "duration_seconds": 3, "status": "pass"}, "sharpen_all": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "fail"}, "remesh_intersections": {"mp4": "driver.mp4", "duration_seconds": 3, "status": "pass"}, "view_texture": {"mp4": "driver.mp4", "duration_seconds": 2, "status": "pass"}, "fix_normals_all": {"mp4": "driver.mp4", "duration_seconds": 5, "status": "pass"}};
+        const videoData = {"system": {"mp4": "driver.mp4", "duration_seconds": 0, "status": "pass"}};
 
         const inIframe = window !== window.top;
         let currentWorkflow = null;
