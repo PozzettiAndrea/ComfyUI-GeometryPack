@@ -39,6 +39,9 @@ class RemeshMMGNode(io.ComfyNode):
     def execute(cls, trimesh, hausd=0.01, hmin=0.0, hmax=0.0, hgrad=1.3):
         try:
             import mmgpy
+            # conda-forge mmgpy's __init__ omits Mesh from public exports; the class
+            # itself is present at mmgpy._mesh.Mesh on both pypi and conda builds.
+            from mmgpy._mesh import Mesh as _MmgMesh
         except ImportError:
             log.warning("mmgpy not available on Windows — returning input mesh unchanged")
             info = "Remesh (MMG Adaptive): skipped — mmgpy not available on this platform"
@@ -50,7 +53,7 @@ class RemeshMMGNode(io.ComfyNode):
 
         vertices = np.array(trimesh.vertices, dtype=np.float64)
         faces = np.array(trimesh.faces, dtype=np.int32)
-        mmg_mesh = mmgpy.Mesh(vertices, faces)
+        mmg_mesh = _MmgMesh(vertices, faces)
 
         opts_kwargs = {"hausd": hausd, "hgrad": hgrad, "verbose": -1}
         if hmin > 0:
