@@ -1,0 +1,184 @@
+[2026-05-19 11:46:58.004] [info]  setup plugin alembic.autogenerate.schemas
+setup plugin alembic.autogenerate.tables
+setup plugin alembic.autogenerate.types
+setup plugin alembic.autogenerate.constraints
+setup plugin alembic.autogenerate.defaults
+setup plugin alembic.autogenerate.comments
+
+[2026-05-19 11:46:58.066] [info]  Could not autodetect AIMDO implementation, assuming Nvidia
+comfy-aimdo unsupported operating system: Darwin
+NOTE: comfy-aimdo currently only supports Windows and Linux
+
+[2026-05-19 11:46:58.201] [info]  Adding extra search path custom_nodes /Users/runner/Documents/ComfyUI/custom_nodes
+Adding extra search path download_model_base /Users/runner/Documents/ComfyUI/models
+Adding extra search path custom_nodes /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes
+Setting output directory to: /Users/runner/Documents/ComfyUI/output
+
+[2026-05-19 11:46:58.202] [info]  Setting input directory to: /Users/runner/Documents/ComfyUI/input
+Setting user directory to: /Users/runner/Documents/ComfyUI/user
+
+[2026-05-19 11:46:58.365] [info]  [START] Security scan
+[ComfyUI-Manager] Using uv as Python module for pip operations.
+
+[2026-05-19 11:46:58.427] [info]  [DONE] Security scan
+** ComfyUI startup time: 2026-05-19 11:46:58.425
+** Platform: Darwin
+** Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]
+** Python executable: /Users/runner/Documents/ComfyUI/.venv/bin/python
+** ComfyUI Path: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI
+** ComfyUI Base Folder Path: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI
+** User directory: /Users/runner/Documents/ComfyUI/user
+** ComfyUI-Manager config path: /Users/runner/Documents/ComfyUI/user/__manager/config.ini
+** Log path: /Users/runner/Documents/ComfyUI/user/comfyui.log
+
+[2026-05-19 11:46:58.499] [info]  [ComfyUI-Manager] Skipped fixing the 'comfyui-frontend-package' dependency because the ComfyUI is outdated.
+
+[2026-05-19 11:46:58.500] [info]  [PRE] ComfyUI-Manager
+
+[2026-05-19 11:46:58.628] [error] [comfy-env] comfyui-geometrypack: 1 isolation env(s):
+
+[2026-05-19 11:46:58.630] [error] [comfy-env]   nodes -> /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack/nodes
+[comfy-env] Workspace: /Users/runner/.ce
+
+[2026-05-19 11:46:58.631] [error] [comfy-env]     env: /Users/runner/.ce/.pixi/envs/geometrypack-nodes  [OK]
+
+[2026-05-19 11:46:59.446] [error] [comfy-env] prestartup complete
+
+[2026-05-19 11:46:59.461] [info]  WARNING: Potential Error in code: Torch already imported, torch should never be imported before this point.
+
+[2026-05-19 11:47:00.137] [info]  Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': "ImportError: No module named 'triton'", 'capabilities': []}
+
+[2026-05-19 11:47:00.138] [info]  Found comfy_kitchen backend cuda: {'available': False, 'disabled': True, 'unavailable_reason': 'Extension file not found: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfy_kitchen/backends/cuda/_C.abi3.so', 'capabilities': []}
+Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}
+
+[2026-05-19 11:47:00.142] [info]  Checkpoint files will always be loaded safely.
+
+[2026-05-19 11:47:00.164] [info]  Total VRAM 7168 MB, total RAM 7168 MB
+
+[2026-05-19 11:47:00.165] [info]  pytorch version: 2.10.0
+
+[2026-05-19 11:47:00.167] [info]  Mac Version (15, 7, 4)
+
+[2026-05-19 11:47:00.168] [info]  Set vram state to: SHARED
+Device: mps
+
+[2026-05-19 11:47:00.427] [info]  Using sub quadratic optimization for attention, if you have memory or speed issues try using: --use-split-cross-attention
+
+[2026-05-19 11:47:02.481] [info]  Python version: 3.12.11 (main, Aug 18 2025, 19:02:39) [Clang 20.1.4 ]
+
+[2026-05-19 11:47:02.482] [info]  ComfyUI version: 0.21.1
+comfy-aimdo version: 0.3.0
+comfy-kitchen version: 0.2.8
+
+[2026-05-19 11:47:02.483] [info]  [Prompt Server] web root: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI/web_custom_versions/desktop_app
+
+[2026-05-19 11:47:02.484] [info]  Asset seeder disabled
+
+[2026-05-19 11:47:02.484] [info]  [START] ComfyUI-Manager
+
+[2026-05-19 11:47:02.564] [info]  [ComfyUI-Manager] Using GitPython backend
+
+[2026-05-19 11:47:02.591] [info]  [ComfyUI-Manager] network_mode: public
+
+[2026-05-19 11:47:02.595] [info]  [ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.
+	To use this feature, please run the following command:
+	/Users/runner/Documents/ComfyUI/.venv/bin/python -m pip install matrix-nio
+
+
+[2026-05-19 11:47:03.488] [info]  loading...
+
+[2026-05-19 11:47:03.489] [info]  calling register_nodes
+
+[2026-05-19 11:47:03.491] [error] [comfy-env] Version: 0.3.89
+[2026-05-19 11:47:03.492] [error] 
+
+[2026-05-19 11:47:03.722] [error] [comfy-env] register_nodes: comfyui-geometrypack
+
+[2026-05-19 11:47:03.735] [error] [comfy-env] ComfyUI source dir: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI
+[2026-05-19 11:47:03.739] [error] 
+
+[2026-05-19 11:47:03.757] [error] [comfy-env] Scanning nodes metadata (isolation root)...
+
+[2026-05-19 11:47:03.771] [error] [comfy-env] Cache hit for nodes: 125 nodes
+
+[2026-05-19 11:47:03.773] [error] [comfy-env] Scanned nodes root: 125 nodes (0.0s)
+
+[2026-05-19 11:47:03.775] [error] [comfy-env] Imported nodes root: 125 nodes (isolation)
+[comfy-env] Registered 125 total nodes
+
+[2026-05-19 11:47:03.780] [info]  
+Import times for custom nodes:
+
+[2026-05-19 11:47:03.781] [info]     0.0 seconds: /Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI/custom_nodes/websocket_image_save.py
+   0.3 seconds: /Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack
+
+
+[2026-05-19 11:47:03.784] [info]  Context impl SQLiteImpl.
+
+[2026-05-19 11:47:03.786] [info]  Will assume non-transactional DDL.
+
+[2026-05-19 11:47:03.864] [info]  Starting server
+
+
+[2026-05-19 11:47:03.866] [info]  To see the GUI go to: http://127.0.0.1:8000
+
+[2026-05-19 11:47:05.580] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.
+
+[2026-05-19 11:47:05.633] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json
+[2026-05-19 11:47:05.655] [info]   [DONE]
+
+[2026-05-19 11:47:08.051] [info]  [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.
+
+[2026-05-19 11:47:08.111] [info]  FETCH DATA from: /Users/runner/Documents/ComfyUI/.venv/lib/python3.12/site-packages/comfyui_manager/custom-node-list.json
+[2026-05-19 11:47:08.123] [info]   [DONE]
+
+[2026-05-19 11:47:30.747] [info]  got prompt
+
+[2026-05-19 11:47:30.811] [info]  [comfyui-geometrypack] python: /Users/runner/.ce/.pixi/envs/geometrypack-nodes/bin/python
+[2026-05-19 11:47:30.813] [info]  
+[comfyui-geometrypack] sys_path sent to worker: ['/Users/runner/.comfy-test-cache/desktop/ComfyUI.app/Contents/Resources/ComfyUI', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack', '/Users/runner/.ce/.pixi/envs/geometrypack-nodes/lib/python3.1/site-packages', '/Users/runner/Documents/ComfyUI/custom_nodes/comfyui-geometrypack']
+
+[2026-05-19 11:47:34.554] [error] [worker:comfyui-geometrypack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
+
+[2026-05-19 11:47:37.625] [error] [worker:comfyui-geometrypack] INFO: Found FBX in input folder: 3d/rigged_human.fbx
+
+[2026-05-19 11:47:37.628] [error] [worker:comfyui-geometrypack] INFO: Loading via bpy: /Users/runner/Documents/ComfyUI/input/3d/rigged_human.fbx
+
+[2026-05-19 11:47:40.711] [error] [worker:comfyui-geometrypack] FBX version: 7400
+
+[2026-05-19 11:47:41.208] [error] [worker:comfyui-geometrypack] INFO: Loaded: 32327 vertices, 50000 faces
+
+[2026-05-19 11:47:41.791] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+
+[2026-05-19 11:47:41.794] [error] [comfyui-geometrypack] Health check: ok
+
+[2026-05-19 11:47:41.802] [error] [worker:comfyui-geometrypack] INFO: Found .blend in input folder: 3d/coca_cola.blend
+
+[2026-05-19 11:47:41.820] [error] [worker:comfyui-geometrypack] INFO: Loading via bpy: /Users/runner/Documents/ComfyUI/input/3d/coca_cola.blend
+
+[2026-05-19 11:47:42.155] [error] [worker:comfyui-geometrypack] INFO: Loaded: 36696 vertices, 73216 faces
+
+[2026-05-19 11:47:42.184] [error] [comfyui-geometrypack] Health check: ping (timeout=5.0s)...
+
+[2026-05-19 11:47:42.186] [error] [comfyui-geometrypack] Health check: ok
+
+[2026-05-19 11:47:42.230] [error] [worker:comfyui-geometrypack] INFO: Layout: side_by_side, Mode: fields
+
+[2026-05-19 11:47:42.232] [error] [worker:comfyui-geometrypack] INFO: Mesh 1: Mesh - 36696 vertices, 73216 faces
+[worker:comfyui-geometrypack] INFO: Mesh 2: Mesh - 32327 vertices, 50000 faces
+[2026-05-19 11:47:42.234] [error] 
+[worker:comfyui-geometrypack] INFO: Mesh 1 fields: []
+[worker:comfyui-geometrypack] INFO: Mesh 2 fields: []
+
+[2026-05-19 11:47:42.237] [error] [worker:comfyui-geometrypack] INFO: Common fields: []
+[worker:comfyui-geometrypack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
+[worker:comfyui-geometrypack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
+
+[2026-05-19 11:47:42.282] [error] [worker:comfyui-geometrypack] INFO: Exported STL: /Users/runner/Documents/ComfyUI/output/preview_dual_1_00fba75a.stl
+
+[2026-05-19 11:47:42.306] [error] [worker:comfyui-geometrypack] INFO: Exported STL: /Users/runner/Documents/ComfyUI/output/preview_dual_2_00fba75a.stl
+
+[2026-05-19 11:47:42.381] [error] [worker:comfyui-geometrypack] INFO: Preview ready
+
+[2026-05-19 11:47:42.443] [info]  Prompt executed in 11.64 seconds
+
