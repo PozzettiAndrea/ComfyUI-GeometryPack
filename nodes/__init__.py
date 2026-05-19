@@ -5,20 +5,28 @@
 All geometry processing nodes — Blender, GPU, and main (CGAL/libigl/etc.).
 """
 
+import importlib
 import logging
-logging.getLogger("geometrypack").setLevel(logging.INFO)
 
-try:
-    import bpy
-except ImportError:
-    pass
+log = logging.getLogger("geometrypack")
+log.setLevel(logging.INFO)
 
-# --- Blender nodes ---
-from . import blender_io
-from . import blender_boolean
-from . import blender_remeshing
-from . import blender_texture_remeshing
-from . import blender_uv
+
+def _safe_import(name):
+    """Import a sibling submodule; log and return None if it fails."""
+    try:
+        return importlib.import_module("." + name, __name__)
+    except Exception as e:
+        log.warning("ComfyUI-GeometryPack: skipping %s (%s)", name, e)
+        return None
+
+
+# --- Blender nodes (import defensively: bpy may be broken on some installs) ---
+blender_io = _safe_import("blender_io")
+blender_boolean = _safe_import("blender_boolean")
+blender_remeshing = _safe_import("blender_remeshing")
+blender_texture_remeshing = _safe_import("blender_texture_remeshing")
+blender_uv = _safe_import("blender_uv")
 
 # --- GPU nodes ---
 from . import remeshing_gpu
@@ -53,18 +61,20 @@ from . import decimation_cgal
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 
-# Blender
-NODE_CLASS_MAPPINGS.update(blender_io.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(blender_boolean.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(blender_remeshing.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(blender_texture_remeshing.NODE_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(blender_uv.NODE_CLASS_MAPPINGS)
 
-NODE_DISPLAY_NAME_MAPPINGS.update(blender_io.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(blender_boolean.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(blender_remeshing.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(blender_texture_remeshing.NODE_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(blender_uv.NODE_DISPLAY_NAME_MAPPINGS)
+def _merge(mod):
+    if mod is None:
+        return
+    NODE_CLASS_MAPPINGS.update(getattr(mod, "NODE_CLASS_MAPPINGS", {}))
+    NODE_DISPLAY_NAME_MAPPINGS.update(getattr(mod, "NODE_DISPLAY_NAME_MAPPINGS", {}))
+
+
+# Blender (may be None if the bpy-dependent package failed to import)
+_merge(blender_io)
+_merge(blender_boolean)
+_merge(blender_remeshing)
+_merge(blender_texture_remeshing)
+_merge(blender_uv)
 
 # GPU
 NODE_CLASS_MAPPINGS.update(remeshing_gpu.NODE_CLASS_MAPPINGS)

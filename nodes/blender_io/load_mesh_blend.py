@@ -8,12 +8,9 @@ Load Mesh Blend Node - Load Blender .blend files using bpy.
 import logging
 import os
 
-# Import bpy first so its bundled tbb12.dll wins the loader race against
-# trimesh[easy]'s embreex.libs/tbb12.dll. Reverse order produces
-# STATUS_ENTRYPOINT_NOT_FOUND when bpy's C extension calls into the wrong
-# tbb build.
-import bpy  # noqa: F401  (loaded for DLL-ordering side-effect)
-
+# bpy is imported lazily inside execute() so a broken bpy install
+# (e.g. Windows tbb12.dll mismatch with trimesh[easy]'s embreex) does not
+# prevent the rest of ComfyUI-GeometryPack from loading.
 import numpy as np
 import trimesh as trimesh_module
 

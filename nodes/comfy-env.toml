@@ -23,7 +23,7 @@ mesalib = "*"        # replaces apt: libgl1-mesa-glx, libgl1
 libglu = "*"         # replaces apt: libglu1-mesa
 libglvnd = "*"       # replaces apt: libopengl0
 xorg-libsm = "*"     # libSM.so.6 required by bpy
-mmgpy = ">=0.5.2"
+mmgpy = ">=0.5.2,<0.14"
 pymeshlab = "*"
 
 [cuda]
@@ -54,7 +54,7 @@ pymeshlab = "*"
 embreex = "*"
 
 [target.osx-arm64.pypi-dependencies]
-mmgpy = ">=0.5.2"
+mmgpy = ">=0.5.2,<0.14"
 pymeshlab = "*"
 
 [env_vars]
