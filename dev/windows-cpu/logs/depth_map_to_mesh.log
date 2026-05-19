@@ -8,12 +8,12 @@ Capturing execution frames: depth_map_to_mesh.json
   [ComfyUI]     Inputs: {"image": "example.png"}
   [ComfyUI]   Node 4: GeomPackPreviewMeshVTK
   [ComfyUI]     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[-0.24987848276768215,0.32154187563545744,0.9133299327529744],\\\"focalPoint\\\":[0,0,0],\\\"viewUp\\\":[0
-  [ComfyUI]   Node 6: ImageToMask
   Queuing workflow for execution...
+  [ComfyUI]   Node 6: ImageToMask
   [ComfyUI]     Inputs: {"channel": "red", "image": ["1", 0]}
   [ComfyUI]   Node 7: GeomPackTextureToGeometry
   [ComfyUI]     Inputs: {"height_scale": 1, "backend": "grid", "backend.smooth_normals": "true", "field_name": "field", "invert_height": "false", "skip_black": "false", "black_threshold": 0.01, "report_panel": "false", "mask
-  [ComfyUI] Generated prompt_id: c8279b58-4a5c-4fc7-9d48-9d41596443d0
+  [ComfyUI] Generated prompt_id: 671aa7da-619b-4939-8e7b-e818bb3ab674
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
   [ComfyUI] === Validation PASSED ===
@@ -28,7 +28,7 @@ Capturing execution frames: depth_map_to_mesh.json
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 0 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=44 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=16 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] _from_shm got dict with keys: ['__type__', 'strategy', 'manager_path', 'storage_key', 'storage_size']
   [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZE TensorRef: tensor_size=[1, 768, 768]
   [ComfyUI] [worker:ComfyUI-GeometryPack] [comfy-env] DESERIALIZED tensor shape: torch.Size([1, 768, 768])
@@ -36,13 +36,13 @@ Capturing execution frames: depth_map_to_mesh.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using mask input
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using native resolution: 768x768, range: [0.000, 1.000]
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Generated 589824 points
-  Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=4ms shot=87ms unfreeze=5ms saved=True
-  Frame 3 saved (frame_002.jpg, t=4.4s)
-  [capture-periodic] freeze=4ms shot=98ms unfreeze=6ms saved=True
+  Frame 2 saved (frame_001.jpg, t=2.3s)
+  [capture-periodic] freeze=3ms shot=108ms unfreeze=5ms saved=True
+  Frame 3 saved (frame_002.jpg, t=4.5s)
+  [capture-periodic] freeze=4ms shot=189ms unfreeze=7ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created mesh: 589824 vertices, 1176578 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackTextureToGeometry done (5.20s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackTextureToGeometry done (5.37s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshVTK: mode: 'fields', trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_vtk.PreviewMeshVTKNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -53,30 +53,30 @@ Capturing execution frames: depth_map_to_mesh.json
   Node executed (1 total), capturing...
   [ComfyUI] [SubprocessWorker] created 1 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=45 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=17 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preparing preview: Mesh - 589824 vertices, 1176578 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Visual data - has_visual: True, kind: None, texture: False, vertex_colors: False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP export
-  Frame 4 saved (frame_003.jpg, t=5.6s)
-  [capture-node] freeze=4ms shot=102ms unfreeze=6ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2126\ComfyUI\output\preview_vtk_200d55f1.vtp
-  [capture-loop] iter=50 t=6.1s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=5.7/16.0GB (36%) swap=0.3/2.9GB (12%) cpu=48% browser_rss=0.77GB
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\ComfyUI\output\preview_vtk_7bcf6675.vtp
+  Frame 4 saved (frame_003.jpg, t=5.8s)
+  [capture-node] freeze=3ms shot=101ms unfreeze=3ms saved=True
+  [capture-loop] iter=50 t=6.2s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=5.5/16.0GB (34%) swap=0.3/2.9GB (12%) cpu=46% browser_rss=0.67GB
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (589824 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 589824 vertices, 1176578 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2126\ComfyUI\output\preview_vtk_200d55f1.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\ComfyUI\output\preview_vtk_7bcf6675.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=False, volume=None, area=11.966723990015208, no fields
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshVTK done (5.43s): result: NodeOutput
-  [ComfyUI] Prompt executed in 10.70 seconds
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshVTK done (5.58s): result: NodeOutput
+  [ComfyUI] Prompt executed in 11.03 seconds
   Node executed (2 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=11.0s)
-  [capture-node] freeze=5ms shot=107ms unfreeze=0ms saved=True
-  Execution complete (t=11.0s)
-  Captured 5 unique frames over 11.18s
+  Frame 5 saved (frame_004.jpg, t=11.4s)
+  [capture-node] freeze=4ms shot=134ms unfreeze=0ms saved=True
+  Execution complete (t=11.4s)
+  Captured 5 unique frames over 11.55s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41897/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1779140, canvas=486x384, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41894/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1779173, canvas=0x0, rafFrozen=False
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: depth_map_to_mesh_executed.png
-  [timing] final_screenshot: 1.4s
+  [timing] final_screenshot: 1.5s
     Captured 6 video frames
