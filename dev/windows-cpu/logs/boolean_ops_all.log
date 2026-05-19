@@ -6,8 +6,8 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI] Prompt has 5 nodes
   [ComfyUI]   Node 1: GeomPackCreatePrimitive
   [ComfyUI]     Inputs: {"shape": "sphere", "size": 1, "subdivisions": 4}
-  Queuing workflow for execution...
   [ComfyUI]   Node 2: GeomPackCreatePrimitive
+  Queuing workflow for execution...
   [ComfyUI]     Inputs: {"shape": "cube", "size": 0.8, "subdivisions": 1}
   [ComfyUI]   Node 3: GeomPackBoolean
   [ComfyUI]     Inputs: {"operation": "difference", "backend": "libigl_cgal", "mesh_a": ["1", 0], "mesh_b": ["2", 0]}
@@ -15,7 +15,7 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI]     Inputs: {"operation": "difference", "backend": "blender_exact", "mesh_a": ["1", 0], "mesh_b": ["2", 0]}
   [ComfyUI]   Node 5: GeomPackPreviewMeshMulti
   [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\"focalPoint\\\":[0,0,0],\\\"viewUp\\\":[0,0
-  [ComfyUI] Generated prompt_id: ea268652-8e24-4b7a-bdd9-53c0fcc4b783
+  [ComfyUI] Generated prompt_id: ca57d27a-0a29-4d71-acaa-9988e4b785f8
   [ComfyUI] Calling execution.validate_prompt()...
   [ComfyUI] Validation result: valid=True
   [ComfyUI] === Validation PASSED ===
@@ -24,16 +24,7 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI] [SubprocessWorker] call_method: nodes.primitives.create_primitive.CreatePrimitive.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [comfy-env] geometrypack-nodes: Library/bin has 611 DLLs
-  [ComfyUI] [ComfyUI-GeometryPack] python: C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\python.exe
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI', 'D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack', 'C:\\Users\\stduser\\AppData\\Local\\Programs\\comfy-env\\.pixi\\envs\\geometrypack-nodes\\Lib\\site-packages', 'D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\custom_nodes\\ComfyUI-GeometryPack']
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\python.exe
-  [ComfyUI] [SubprocessWorker] launching cmd=['C:\\Users\\stduser\\.pixi\\bin\\pixi.exe', 'run', '--as-is', '--manifest-path', 'C:\\Users\\stduser\\AppData\\Local\\Programs\\comfy-env\\pixi.toml', '-e', 'geometrypack-nodes', 'python', 'C:\\Users\\stduser\\AppData\\Local\\Temp\\comfyui_pvenv_7la12foi\\persistent_worker.py', 'tcp://127.0.0.1:57123']...
-  Frame 2 saved (frame_001.jpg, t=2.3s)
-  [capture-periodic] freeze=4ms shot=97ms unfreeze=3ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 0 shm blocks
@@ -41,7 +32,7 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI] [SubprocessWorker] call_id=24 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created cube: 8 vertices, 12 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (4.08s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.54s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackCreatePrimitive: shape: 'sphere', size: 1.0, subdivisions: 4
   [ComfyUI] [SubprocessWorker] call_method: nodes.primitives.create_primitive.CreatePrimitive.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -52,9 +43,24 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI] [SubprocessWorker] created 0 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=25 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack]
+  [ComfyUI] === WATCHDOG TICK 1 ===
+  [ComfyUI] [worker:ComfyUI-GeometryPack] Current thread 0x00001710 (most recent call first):
+  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_uk3l6kd4\persistent_worker.py", line 52 in _watchdog
+  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 1012 in run
+  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 1075 in _bootstrap_inner
+  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Programs\comfy-env\.pixi\envs\geometrypack-nodes\Lib\threading.py", line 1032 in _bootstrap
+  [ComfyUI] 
+  [ComfyUI] Thread 0x00000c24 (most recent call first):
+  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_uk3l6kd4\persistent_worker.py", line 86 in wlog
+  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_uk3l6kd4\persistent_worker.py", line 1737 in main
+  [ComfyUI]   File "C:\Users\stduser\AppData\Local\Temp\comfyui_pvenv_uk3l6kd4\persistent_worker.py", line 1807 in <module>
+  [ComfyUI] 
+  [ComfyUI] [worker:ComfyUI-GeometryPack] === END ===
+  [ComfyUI] 
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created sphere: 2562 vertices, 5120 faces
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.29s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.69s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackBoolean: operation: 'difference', backend: dict, mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.boolean.boolean.BooleanNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -65,11 +71,9 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI] [SubprocessWorker] created 2 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=26 sending call_method
-  Frame 3 saved (frame_002.jpg, t=4.4s)
-  [capture-periodic] freeze=3ms shot=114ms unfreeze=4ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Boolean dispatch: libigl_cgal -> GeomPackBoolean_LibiglCGAL
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Boolean dispatch: blender_exact -> GeomPackBoolean_BlenderExact
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackBoolean done (0.25s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackBoolean done (0.94s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackBoolean: operation: 'difference', backend: dict, mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.boolean.boolean.BooleanNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -80,27 +84,11 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI] [SubprocessWorker] created 2 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=27 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Boolean dispatch: blender_exact -> GeomPackBoolean_BlenderExact
+  Frame 2 saved (frame_001.jpg, t=2.3s)
+  [capture-periodic] freeze=6ms shot=126ms unfreeze=7ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Boolean dispatch: libigl_cgal -> GeomPackBoolean_LibiglCGAL
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackBoolean done (0.28s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackBoolean_LibiglCGAL: mesh_a: Trimesh, mesh_b: Trimesh, operation: 'difference'
-  [ComfyUI] [SubprocessWorker] call_method: nodes.boolean.backends.libigl_cgal.BooleanLibiglCGALNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 2 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=28 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: libigl_cgal
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 2562 vertices, 5120 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 8 vertices, 12 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Operation: difference
-  [capture-loop] iter=50 t=5.8s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=4.9/16.0GB (31%) swap=0.3/2.9GB (12%) cpu=34% browser_rss=0.76GB
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Success: 2202 vertices, 4380 faces
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackBoolean_LibiglCGAL done (1.22s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackBoolean done (0.18s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackBoolean_BlenderExact: mesh_a: Trimesh, mesh_b: Trimesh, operation: 'difference'
   [ComfyUI] [SubprocessWorker] call_method: nodes.blender_boolean.boolean.BooleanBlenderExactNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -110,92 +98,73 @@ Capturing execution frames: boolean_ops_all.json
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 2 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=29 sending call_method
-  Node executed (1 total), capturing...
+  [ComfyUI] [SubprocessWorker] call_id=28 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: blender_exact
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 2562 vertices, 5120 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 8 vertices, 12 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Operation: difference
-  Frame 4 saved (frame_003.jpg, t=6.5s)
-  [capture-node] freeze=5ms shot=86ms unfreeze=3ms saved=True
-  [ComfyUI] !!! Exception during processing !!! ComfyUI-GeometryPack: Socket closed but worker process still running.
-  [ComfyUI]   exit code: None
-  [ComfyUI]   worker log (C:\Users\stduser\AppData\Local\Temp\comfy_worker_debug.log, last 20 lines):
-  [ComfyUI]     06:54:10 [worker] Method returned
-  [ComfyUI]     06:54:10 [worker] Serializing result to shm...
-  [ComfyUI]     06:54:10 [worker] Created 1 shm blocks for result
-  [ComfyUI]     06:54:10 [worker] Waiting for request #10...
-  [ComfyUI]     06:54:10 [worker] Waiting for request #11...
-  [ComfyUI]     06:54:10 [worker] Request: call_method nodes.blender_boolean.boolean call_id=29
-  [ComfyUI]     06:54:10 [worker] Reconstructing inputs from shm...
-  [ComfyUI]     06:54:10 [_from_shm] top-level keys: ['mesh_a', 'mesh_b', 'operation']
-  [ComfyUI]     06:54:10 [_from_shm] mesh_a: trimesh shm 'wnsm_132e1b1d' size=185113
-  [ComfyUI]     06:54:10 [_from_shm] mesh_b: trimesh shm 'wnsm_f796fdac' size=1269
-  [ComfyUI]     06:54:10 [worker] Inputs ready: ['mesh_a', 'mesh_b', 'operation']
-  [ComfyUI]     06:54:10 [worker] Importing module nodes.blender_boolean.boolean...
-  [ComfyUI]     06:54:10 [worker] Module imported
-  [ComfyUI]     06:54:10 [worker] Getting class BooleanBlenderExactNode...
-  [ComfyUI]     06:54:10 [worker] Creating instance...
-  [ComfyUI]     06:54:10 [worker] Calling EXECUTE_NORMALIZED...
-  [ComfyUI]     06:54:11 [log] INFO: Backend: blender_exact
-  [ComfyUI]     06:54:11 [log] INFO: Mesh A: 2562 vertices, 5120 faces
-  [ComfyUI]     06:54:11 [log] INFO: Mesh B: 8 vertices, 12 faces
-  [ComfyUI]     06:54:11 [log] INFO: Operation: difference
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\.venv\lib\site-packages\comfy_env\isolation\workers\subprocess.py", line 558, in _send_request
-  [ComfyUI]     response = self._transport.recv(timeout=timeout)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\.venv\lib\site-packages\comfy_env\isolation\workers\_ipc_parent.py", line 164, in recv
-  [ComfyUI]     raw_len = self._recvall(4)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\.venv\lib\site-packages\comfy_env\isolation\workers\_ipc_parent.py", line 188, in _recvall
-  [ComfyUI]     chunk = self._sock.recv(n - len(data))
-  [ComfyUI] ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
-  [ComfyUI] 
-  [ComfyUI] The above exception was the direct cause of the following exception:
-  [ComfyUI] 
-  [ComfyUI] Traceback (most recent call last):
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\ComfyUI\execution.py", line 535, in execute
-  [ComfyUI]     output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\ComfyUI\execution.py", line 335, in get_output_data
-  [ComfyUI]     return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\ComfyUI\execution.py", line 309, in _async_map_node_over_list
-  [ComfyUI]     await process_inputs(input_dict, i)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\ComfyUI\execution.py", line 297, in process_inputs
-  [ComfyUI]     result = f(**inputs)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\.venv\lib\site-packages\comfy_env\isolation\metadata.py", line 556, in proxy
-  [ComfyUI]     result = worker.call_method(
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\.venv\lib\site-packages\comfy_env\isolation\workers\subprocess.py", line 669, in call_method
-  [ComfyUI]     response = self._send_request(request, timeout)
-  [ComfyUI]   File "D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-0646\.venv\lib\site-packages\comfy_env\isolation\workers\subprocess.py", line 589, in _send_request
-  [ComfyUI]     raise RuntimeError(
-  [ComfyUI] RuntimeError: ComfyUI-GeometryPack: Socket closed but worker process still running.
-  [ComfyUI]   exit code: None
-  [ComfyUI]   worker log (C:\Users\stduser\AppData\Local\Temp\comfy_worker_debug.log, last 20 lines):
-  [ComfyUI]     06:54:10 [worker] Method returned
-  [ComfyUI]     06:54:10 [worker] Serializing result to shm...
-  [ComfyUI]     06:54:10 [worker] Created 1 shm blocks for result
-  [ComfyUI]     06:54:10 [worker] Waiting for request #10...
-  [ComfyUI]     06:54:10 [worker] Waiting for request #11...
-  [ComfyUI]     06:54:10 [worker] Request: call_method nodes.blender_boolean.boolean call_id=29
-  [ComfyUI]     06:54:10 [worker] Reconstructing inputs from shm...
-  [ComfyUI]     06:54:10 [_from_shm] top-level keys: ['mesh_a', 'mesh_b', 'operation']
-  [ComfyUI]     06:54:10 [_from_shm] mesh_a: trimesh shm 'wnsm_132e1b1d' size=185113
-  [ComfyUI]     06:54:10 [_from_shm] mesh_b: trimesh shm 'wnsm_f796fdac' size=1269
-  [ComfyUI]     06:54:10 [worker] Inputs ready: ['mesh_a', 'mesh_b', 'operation']
-  [ComfyUI]     06:54:10 [worker] Importing module nodes.blender_boolean.boolean...
-  [ComfyUI]     06:54:10 [worker] Module imported
-  [ComfyUI]     06:54:10 [worker] Getting class BooleanBlenderExactNode...
-  [ComfyUI]     06:54:10 [worker] Creating instance...
-  [ComfyUI]     06:54:10 [worker] Calling EXECUTE_NORMALIZED...
-  [ComfyUI]     06:54:11 [log] INFO: Backend: blender_exact
-  [ComfyUI]     06:54:11 [log] INFO: Mesh A: 2562 vertices, 5120 faces
-  [ComfyUI]     06:54:11 [log] INFO: Mesh B: 8 vertices, 12 faces
-  [ComfyUI]     06:54:11 [log] INFO: Operation: difference
-  [ComfyUI] 
-  [ComfyUI] Prompt executed in 11.37 seconds
-  [capture-loop] iter=100 t=11.6s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=4 ram=4.7/16.0GB (30%) swap=0.3/2.9GB (12%) cpu=29% browser_rss=0.75GB
-  Execution complete (t=11.8s)
-  Execution error: {'prompt_id': '8a9538f7-425c-40b3-9dbe-3a053c2bb78e', 'node_id': '4', 'node_type': 'GeomPackBoolean', 'executed': ['3', '1', '2', '.0.0.1'], 'exception_message': "ComfyUI-GeometryPack: Socket closed but worker process still running.\n  exit code: None\n  worker log (C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy_worker_debug.log, last 20 lines):\n    06:54:10 [worker] Method returned\n    06:54:10 [worker] Serializing result to shm...\n    06:54:10 [worker] Created 1 shm blocks for result\n    06:54:10 [worker] Waiting for request #10...\n    06:54:10 [worker] Waiting for request #11...\n    06:54:10 [worker] Request: call_method nodes.blender_boolean.boolean call_id=29\n    06:54:10 [worker] Reconstructing inputs from shm...\n    06:54:10 [_from_shm] top-level keys: ['mesh_a', 'mesh_b', 'operation']\n    06:54:10 [_from_shm] mesh_a: trimesh shm 'wnsm_132e1b1d' size=185113\n    06:54:10 [_from_shm] mesh_b: trimesh shm 'wnsm_f796fdac' size=1269\n    06:54:10 [worker] Inputs ready: ['mesh_a', 'mesh_b', 'operation']\n    06:54:10 [worker] Importing module nodes.blender_boolean.boolean...\n    06:54:10 [worker] Module imported\n    06:54:10 [worker] Getting class BooleanBlenderExactNode...\n    06:54:10 [worker] Creating instance...\n    06:54:10 [worker] Calling EXECUTE_NORMALIZED...\n    06:54:11 [log] INFO: Backend: blender_exact\n    06:54:11 [log] INFO: Mesh A: 2562 vertices, 5120 faces\n    06:54:11 [log] INFO: Mesh B: 8 vertices, 12 faces\n    06:54:11 [log] INFO: Operation: difference\n", 'exception_type': 'RuntimeError', 'traceback': ['  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 535, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 335, in get_output_data\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 309, in _async_map_node_over_list\n    await process_inputs(input_dict, i)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 297, in process_inputs\n    result = f(**inputs)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\.venv\\lib\\site-packages\\comfy_env\\isolation\\metadata.py", line 556, in proxy\n    result = worker.call_method(\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\.venv\\lib\\site-packages\\comfy_env\\isolation\\workers\\subprocess.py", line 669, in call_method\n    response = self._send_request(request, timeout)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\.venv\\lib\\site-packages\\comfy_env\\isolation\\workers\\subprocess.py", line 589, in _send_request\n    raise RuntimeError(\n'], 'current_inputs': {'mesh_a': ['<trimesh.Trimesh(vertices.shape=(2562, 3), faces.shape=(5120, 3))>'], 'mesh_b': ['<trimesh.Trimesh(vertices.shape=(8, 3), faces.shape=(12, 3))>'], 'operation': ['difference'], 'prompt': ['{\'1\': {\'inputs\': {\'shape\': \'sphere\', \'size\': 1.0, \'subdivisions\': 4}, \'class_type\': \'GeomPackCreatePrimitive\', \'_meta\': {\'title\': \'Create Primitive\'}}, \'2\': {\'inputs\': {\'shape\': \'cube\', \'size\': 0.8, \'subdivisions\': 1}, \'class_type\': \'GeomPackCreatePrimitive\', \'_meta\': {\'title\': \'Create Primitive\'}}, \'3\': {\'inputs\': {\'operation\': \'difference\', \'backend\': \'libigl_cgal\', \'mesh_a\': [\'1\', 0], \'mesh_b\': [\'2\', 0]}, \'class_type\': \'GeomPackBoolean\', \'_meta\': {\'title\': \'Boolean Operations\'}}, \'4\': {\'inputs\': {\'operation\': \'difference\', \'backend\': \'blender_exact\', \'mesh_a\': [\'1\', 0], \'mesh_b\': [\'2\', 0]}, \'class_type\': \'GeomPackBoolean\', \'_meta\': {\'title\': \'Boolean Operations\'}}, \'5\': {\'inputs\': {\'mode\': \'fields\', \'preview_multi\': \'{"show_edges":true,"camera_state":"{\\\\"position\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\"focalPoint\\\\":[0,0,0],\\\\"viewUp\\\\":[0,0,1]}","selected_field":"","selected_channel":"magnitude","selected_colormap":"erdc_rainbow_bright"}\', \'mesh_1\': [\'3\', 0], \'mesh_2\': [\'4\', 0]}, \'class_type\': \'GeomPackPreviewMeshMulti\', \'_meta\': {\'title\': \'Preview Mesh Multi\'}}}'], 'extra_pnginfo': ['{\'workflow\': {\'id\': \'test-boolean-all-0001\', \'revision\': 0, \'last_node_id\': 6, \'last_link_id\': 8, \'nodes\': [{\'id\': 2, \'type\': \'GeomPackCreatePrimitive\', \'pos\': [-600, 100], \'size\': [270, 170.65625], \'flags\': {}, \'order\': 0, \'mode\': 0, \'inputs\': [], \'outputs\': [{\'name\': \'mesh\', \'type\': \'TRIMESH\', \'links\': [2, 4]}], \'properties\': {\'Node name for S&R\': \'GeomPackCreatePrimitive\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'cube\', 0.8, 1]}, {\'id\': 3, \'type\': \'GeomPackBoolean\', \'pos\': [-200, -200], \'size\': [370, 165.3125], \'flags\': {}, \'order\': 2, \'mode\': 0, \'inputs\': [{\'name\': \'mesh_a\', \'type\': \'TRIMESH\', \'link\': 1}, {\'name\': \'mesh_b\', \'type\': \'TRIMESH\', \'link\': 2}], \'outputs\': [{\'name\': \'result_mesh\', \'type\': \'TRIMESH\', \'links\': [5]}, {\'name\': \'info\', \'type\': \'STRING\', \'links\': None}], \'properties\': {\'Node name for S&R\': \'GeomPackBoolean\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'difference\', \'libigl_cgal\']}, {\'id\': 4, \'type\': \'GeomPackBoolean\', \'pos\': [-200, 100], \'size\': [370, 165.3125], \'flags\': {}, \'order\': 3, \'mode\': 0, \'inputs\': [{\'name\': \'mesh_a\', \'type\': \'TRIMESH\', \'link\': 3}, {\'name\': \'mesh_b\', \'type\': \'TRIMESH\', \'link\': 4}], \'outputs\': [{\'name\': \'result_mesh\', \'type\': \'TRIMESH\', \'links\': [6]}, {\'name\': \'info\', \'type\': \'STRING\', \'links\': None}], \'properties\': {\'Node name for S&R\': \'GeomPackBoolean\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'difference\', \'blender_exact\']}, {\'id\': 5, \'type\': \'GeomPackPreviewMeshMulti\', \'pos\': [213.07101477171835, -194.17306733063847], \'size\': [768, 702], \'flags\': {}, \'order\': 4, \'mode\': 0, \'inputs\': [{\'name\': \'mesh_1\', \'type\': \'TRIMESH\', \'link\': 5}, {\'name\': \'mesh_2\', \'shape\': 7, \'type\': \'TRIMESH\', \'link\': 6}, {\'name\': \'mesh_3\', \'shape\': 7, \'type\': \'TRIMESH\', \'link\': None}, {\'name\': \'mesh_4\', \'shape\': 7, \'type\': \'TRIMESH\', \'link\': None}], \'outputs\': [], \'properties\': {\'Node name for S&R\': \'GeomPackPreviewMeshMulti\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'fields\', \'{"show_edges":true,"camera_state":"{\\\\"position\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\"focalPoint\\\\":[0,0,0],\\\\"viewUp\\\\":[0,0,1]}","selected_field":"","selected_channel":"magnitude","selected_colormap":"erdc_rainbow_bright"}\']}, {\'id\': 1, \'type\': \'GeomPackCreatePrimitive\', \'pos\': [-600, -200], \'size\': [270, 170.65625], \'flags\': {}, \'order\': 1, \'mode\': 0, \'inputs\': [], \'outputs\': [{\'name\': \'mesh\', \'type\': \'TRIMESH\', \'links\': [1, 3]}], \'properties\': {\'Node name for S&R\': \'GeomPackCreatePrimitive\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'sphere\', 1, 4]}], \'links\': [[1, 1, 0, 3, 0, \'TRIMESH\'], [2, 2, 0, 3, 1, \'TRIMESH\'], [3, 1, 0, 4, 0, \'TRIMESH\'], [4, 2, 0, 4, 1, \'TRIMESH\'], [5, 3, 0, 5, 0, \'TRIMESH\'], [6, 4, 0, 5, 1, \'TRIMESH\']], \'groups\': [], \'config\': {}, \'extra\': {\'ds\': {\'scale\': 0.8719083213796316, \'offset\': [536.4213213855968, 421.65866536973317]}, \'frontendVersion\': \'1.43.18\', \'workflowRendererVersion\': \'LG\'}, \'version\': 0.4}}']}, 'current_outputs': ['3', '2', '5', '4', '1'], 'timestamp': 1779173655986}
-    Status: FAILED
-    Error: Workflow execution failed: {'prompt_id': '8a9538f7-425c-40b3-9dbe-3a053c2bb78e', 'node_id': '4', 'node_type': 'GeomPackBoolean', 'executed': ['3', '1', '2', '.0.0.1'], 'exception_message': "ComfyUI-GeometryPack: Socket closed but worker process still running.\n  exit code: None\n  worker log (C:\\Users\\stduser\\AppData\\Local\\Temp\\comfy_worker_debug.log, last 20 lines):\n    06:54:10 [worker] Method returned\n    06:54:10 [worker] Serializing result to shm...\n    06:54:10 [worker] Created 1 shm blocks for result\n    06:54:10 [worker] Waiting for request #10...\n    06:54:10 [worker] Waiting for request #11...\n    06:54:10 [worker] Request: call_method nodes.blender_boolean.boolean call_id=29\n    06:54:10 [worker] Reconstructing inputs from shm...\n    06:54:10 [_from_shm] top-level keys: ['mesh_a', 'mesh_b', 'operation']\n    06:54:10 [_from_shm] mesh_a: trimesh shm 'wnsm_132e1b1d' size=185113\n    06:54:10 [_from_shm] mesh_b: trimesh shm 'wnsm_f796fdac' size=1269\n    06:54:10 [worker] Inputs ready: ['mesh_a', 'mesh_b', 'operation']\n    06:54:10 [worker] Importing module nodes.blender_boolean.boolean...\n    06:54:10 [worker] Module imported\n    06:54:10 [worker] Getting class BooleanBlenderExactNode...\n    06:54:10 [worker] Creating instance...\n    06:54:10 [worker] Calling EXECUTE_NORMALIZED...\n    06:54:11 [log] INFO: Backend: blender_exact\n    06:54:11 [log] INFO: Mesh A: 2562 vertices, 5120 faces\n    06:54:11 [log] INFO: Mesh B: 8 vertices, 12 faces\n    06:54:11 [log] INFO: Operation: difference\n", 'exception_type': 'RuntimeError', 'traceback': ['  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 535, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 335, in get_output_data\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 309, in _async_map_node_over_list\n    await process_inputs(input_dict, i)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\ComfyUI\\execution.py", line 297, in process_inputs\n    result = f(**inputs)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\.venv\\lib\\site-packages\\comfy_env\\isolation\\metadata.py", line 556, in proxy\n    result = worker.call_method(\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\.venv\\lib\\site-packages\\comfy_env\\isolation\\workers\\subprocess.py", line 669, in call_method\n    response = self._send_request(request, timeout)\n', '  File "D:\\a\\comfy-gpu-ci\\comfy-gpu-ci\\test_workspaces\\GeometryPack-0646\\.venv\\lib\\site-packages\\comfy_env\\isolation\\workers\\subprocess.py", line 589, in _send_request\n    raise RuntimeError(\n'], 'current_inputs': {'mesh_a': ['<trimesh.Trimesh(vertices.shape=(2562, 3), faces.shape=(5120, 3))>'], 'mesh_b': ['<trimesh.Trimesh(vertices.shape=(8, 3), faces.shape=(12, 3))>'], 'operation': ['difference'], 'prompt': ['{\'1\': {\'inputs\': {\'shape\': \'sphere\', \'size\': 1.0, \'subdivisions\': 4}, \'class_type\': \'GeomPackCreatePrimitive\', \'_meta\': {\'title\': \'Create Primitive\'}}, \'2\': {\'inputs\': {\'shape\': \'cube\', \'size\': 0.8, \'subdivisions\': 1}, \'class_type\': \'GeomPackCreatePrimitive\', \'_meta\': {\'title\': \'Create Primitive\'}}, \'3\': {\'inputs\': {\'operation\': \'difference\', \'backend\': \'libigl_cgal\', \'mesh_a\': [\'1\', 0], \'mesh_b\': [\'2\', 0]}, \'class_type\': \'GeomPackBoolean\', \'_meta\': {\'title\': \'Boolean Operations\'}}, \'4\': {\'inputs\': {\'operation\': \'difference\', \'backend\': \'blender_exact\', \'mesh_a\': [\'1\', 0], \'mesh_b\': [\'2\', 0]}, \'class_type\': \'GeomPackBoolean\', \'_meta\': {\'title\': \'Boolean Operations\'}}, \'5\': {\'inputs\': {\'mode\': \'fields\', \'preview_multi\': \'{"show_edges":true,"camera_state":"{\\\\"position\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\"focalPoint\\\\":[0,0,0],\\\\"viewUp\\\\":[0,0,1]}","selected_field":"","selected_channel":"magnitude","selected_colormap":"erdc_rainbow_bright"}\', \'mesh_1\': [\'3\', 0], \'mesh_2\': [\'4\', 0]}, \'class_type\': \'GeomPackPreviewMeshMulti\', \'_meta\': {\'title\': \'Preview Mesh Multi\'}}}'], 'extra_pnginfo': ['{\'workflow\': {\'id\': \'test-boolean-all-0001\', \'revision\': 0, \'last_node_id\': 6, \'last_link_id\': 8, \'nodes\': [{\'id\': 2, \'type\': \'GeomPackCreatePrimitive\', \'pos\': [-600, 100], \'size\': [270, 170.65625], \'flags\': {}, \'order\': 0, \'mode\': 0, \'inputs\': [], \'outputs\': [{\'name\': \'mesh\', \'type\': \'TRIMESH\', \'links\': [2, 4]}], \'properties\': {\'Node name for S&R\': \'GeomPackCreatePrimitive\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'cube\', 0.8, 1]}, {\'id\': 3, \'type\': \'GeomPackBoolean\', \'pos\': [-200, -200], \'size\': [370, 165.3125], \'flags\': {}, \'order\': 2, \'mode\': 0, \'inputs\': [{\'name\': \'mesh_a\', \'type\': \'TRIMESH\', \'link\': 1}, {\'name\': \'mesh_b\', \'type\': \'TRIMESH\', \'link\': 2}], \'outputs\': [{\'name\': \'result_mesh\', \'type\': \'TRIMESH\', \'links\': [5]}, {\'name\': \'info\', \'type\': \'STRING\', \'links\': None}], \'properties\': {\'Node name for S&R\': \'GeomPackBoolean\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'difference\', \'libigl_cgal\']}, {\'id\': 4, \'type\': \'GeomPackBoolean\', \'pos\': [-200, 100], \'size\': [370, 165.3125], \'flags\': {}, \'order\': 3, \'mode\': 0, \'inputs\': [{\'name\': \'mesh_a\', \'type\': \'TRIMESH\', \'link\': 3}, {\'name\': \'mesh_b\', \'type\': \'TRIMESH\', \'link\': 4}], \'outputs\': [{\'name\': \'result_mesh\', \'type\': \'TRIMESH\', \'links\': [6]}, {\'name\': \'info\', \'type\': \'STRING\', \'links\': None}], \'properties\': {\'Node name for S&R\': \'GeomPackBoolean\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'difference\', \'blender_exact\']}, {\'id\': 5, \'type\': \'GeomPackPreviewMeshMulti\', \'pos\': [213.07101477171835, -194.17306733063847], \'size\': [768, 702], \'flags\': {}, \'order\': 4, \'mode\': 0, \'inputs\': [{\'name\': \'mesh_1\', \'type\': \'TRIMESH\', \'link\': 5}, {\'name\': \'mesh_2\', \'shape\': 7, \'type\': \'TRIMESH\', \'link\': 6}, {\'name\': \'mesh_3\', \'shape\': 7, \'type\': \'TRIMESH\', \'link\': None}, {\'name\': \'mesh_4\', \'shape\': 7, \'type\': \'TRIMESH\', \'link\': None}], \'outputs\': [], \'properties\': {\'Node name for S&R\': \'GeomPackPreviewMeshMulti\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'fields\', \'{"show_edges":true,"camera_state":"{\\\\"position\\\\":[1.2245775204403364,1.2245775204403364,1.2245775204403364],\\\\"focalPoint\\\\":[0,0,0],\\\\"viewUp\\\\":[0,0,1]}","selected_field":"","selected_channel":"magnitude","selected_colormap":"erdc_rainbow_bright"}\']}, {\'id\': 1, \'type\': \'GeomPackCreatePrimitive\', \'pos\': [-600, -200], \'size\': [270, 170.65625], \'flags\': {}, \'order\': 1, \'mode\': 0, \'inputs\': [], \'outputs\': [{\'name\': \'mesh\', \'type\': \'TRIMESH\', \'links\': [1, 3]}], \'properties\': {\'Node name for S&R\': \'GeomPackCreatePrimitive\', \'cnr_id\': \'comfyui-geometrypack\', \'ver\': \'224d843d5a35546212d1fb7babe30efabdf2116c\'}, \'widgets_values\': [\'sphere\', 1, 4]}], \'links\': [[1, 1, 0, 3, 0, \'TRIMESH\'], [2, 2, 0, 3, 1, \'TRIMESH\'], [3, 1, 0, 4, 0, \'TRIMESH\'], [4, 2, 0, 4, 1, \'TRIMESH\'], [5, 3, 0, 5, 0, \'TRIMESH\'], [6, 4, 0, 5, 1, \'TRIMESH\']], \'groups\': [], \'config\': {}, \'extra\': {\'ds\': {\'scale\': 0.8719083213796316, \'offset\': [536.4213213855968, 421.65866536973317]}, \'frontendVersion\': \'1.43.18\', \'workflowRendererVersion\': \'LG\'}, \'version\': 0.4}}']}, 'current_outputs': ['3', '2', '5', '4', '1'], 'timestamp': 1779173655986}
-    Details: Workflow: C:\Users\stduser\AppData\Local\Temp\comfy-test-run-mke8jspm\ComfyUI-GeometryPack\workflows\boolean_ops_all.json
-Node error: GeomPackBoolean
+  Frame 3 saved (frame_002.jpg, t=4.5s)
+  [capture-periodic] freeze=5ms shot=119ms unfreeze=6ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Success: 2202 vertices, 4380 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackBoolean_BlenderExact done (3.09s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackBoolean_LibiglCGAL: mesh_a: Trimesh, mesh_b: Trimesh, operation: 'difference'
+  [ComfyUI] [SubprocessWorker] call_method: nodes.boolean.backends.libigl_cgal.BooleanLibiglCGALNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=29 sending call_method
+  Node executed (1 total), capturing...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: libigl_cgal
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 2562 vertices, 5120 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 8 vertices, 12 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Operation: difference
+  Frame 4 saved (frame_003.jpg, t=5.8s)
+  [capture-node] freeze=6ms shot=121ms unfreeze=46ms saved=True
+  [capture-loop] iter=50 t=6.5s state={'complete': False, 'error': None, 'executedCount': 1, 'wsState': 1} eval_ms=6 ram=5.5/16.0GB (35%) swap=0.2/2.9GB (6%) cpu=63% browser_rss=0.76GB
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Success: 2202 vertices, 4380 faces
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackBoolean_LibiglCGAL done (1.45s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 2 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=30 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 2
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2202 vertices, 4380 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1001\ComfyUI\output\preview_multi_1_8358db14.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2202 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2202 vertices, 4380 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1001\ComfyUI\output\preview_multi_1_8358db14.vtp
+  Node executed (2 total), capturing...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2202 vertices, 4380 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1001\ComfyUI\output\preview_multi_2_8358db14.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2202 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2202 vertices, 4380 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1001\ComfyUI\output\preview_multi_2_8358db14.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x1, Preview ready
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.23s): result: NodeOutput
+  [ComfyUI] Prompt executed in 7.13 seconds
+  Frame 5 saved (frame_004.jpg, t=7.4s)
+  [capture-node] freeze=21ms shot=132ms unfreeze=11ms saved=True
+  Node executed (3 total), capturing...
+  Frame 6 saved (frame_005.jpg, t=7.8s)
+  [capture-node] freeze=297ms shot=348ms unfreeze=11ms saved=True
+  Execution complete (t=8.6s)
+  Captured 6 unique frames over 8.64s
+  [debug] iframes: 1
+  [debug]   iframe[0]: src=http://127.0.0.1:41889/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17791, canvas=368x393, rafFrozen=False
+  [timing] trigger_3d_previews: 0.0s
+  Saved high-quality screenshot: boolean_ops_all_executed.png
+  [timing] final_screenshot: 0.4s
+    Captured 7 video frames
