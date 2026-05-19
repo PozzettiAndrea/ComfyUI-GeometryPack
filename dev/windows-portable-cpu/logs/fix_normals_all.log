@@ -1,28 +1,7 @@
 Capturing execution frames: fix_normals_all.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Node executed (1 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=1.3s)
-  [capture-node] freeze=5ms shot=104ms unfreeze=3ms saved=True
-  Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=1.9s)
-  [capture-node] freeze=6ms shot=100ms unfreeze=3ms saved=True
-  Node executed (4 total), capturing...
-  Frame 4 saved (frame_003.jpg, t=2.3s)
-  [capture-node] freeze=88ms shot=859ms unfreeze=4ms saved=True
-  Node executed (5 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=3.7s)
-  [capture-node] freeze=4ms shot=146ms unfreeze=4ms saved=True
-  Node executed (7 total), capturing...
-  Frame 6 saved (frame_005.jpg, t=4.2s)
-  [capture-node] freeze=5ms shot=127ms unfreeze=0ms saved=True
-  Execution complete (t=4.2s)
-  Captured 6 unique frames over 4.34s
-  [debug] iframes: 2
-  [debug]   iframe[0]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17791, canvas=368x393, rafFrozen=True
-  [debug]   iframe[1]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17791, canvas=368x195, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: fix_normals_all_executed.png
-  [timing] final_screenshot: 0.3s
-    Captured 7 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 8 nodes, missing class_type: [1,2,3,4,5,6,8,9], sample: {"inputs":{"UNKNOWN":"3d/truck.obj"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 8 nodes, missing class_type: [1,2,3,4,5,6,8,9], sample: {"inputs":{"UNKNOWN":"3d/truck.obj"},"_meta":{}}

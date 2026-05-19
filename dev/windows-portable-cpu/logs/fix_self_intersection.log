@@ -1,25 +1,7 @@
 Capturing execution frames: fix_self_intersection.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Frame 2 saved (frame_001.jpg, t=2.3s)
-  [capture-periodic] freeze=3ms shot=160ms unfreeze=3ms saved=True
-  Node executed (1 total), capturing...
-  [capture-node] freeze=5ms shot=108ms unfreeze=5ms saved=False
-  Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=4.5s)
-  [capture-node] freeze=3ms shot=106ms unfreeze=10ms saved=True
-  Node executed (3 total), capturing...
-  Frame 4 saved (frame_003.jpg, t=5.2s)
-  [capture-node] freeze=7ms shot=112ms unfreeze=5ms saved=True
-  Node executed (4 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=6.6s)
-  [capture-node] freeze=4ms shot=118ms unfreeze=0ms saved=True
-  Execution complete (t=6.6s)
-  Captured 5 unique frames over 6.77s
-  [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177913, canvas=0x0, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: fix_self_intersection_executed.png
-  [timing] final_screenshot: 0.4s
-    Captured 6 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 5 nodes, missing class_type: [1,14,17,21,22], sample: {"inputs":{"UNKNOWN":"3d/camelhead.off"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 5 nodes, missing class_type: [1,14,17,21,22], sample: {"inputs":{"UNKNOWN":"3d/camelhead.off"},"_meta":{}}

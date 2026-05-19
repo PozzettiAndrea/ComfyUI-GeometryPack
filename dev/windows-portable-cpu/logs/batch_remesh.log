@@ -1,35 +1,7 @@
 Capturing execution frames: batch_remesh.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Frame 2 saved (frame_001.jpg, t=2.3s)
-  [capture-periodic] freeze=2ms shot=122ms unfreeze=2ms saved=True
-  Node executed (1 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=2.8s)
-  [capture-node] freeze=6ms shot=104ms unfreeze=4ms saved=True
-  Node executed (2 total), capturing...
-  Frame 4 saved (frame_003.jpg, t=3.5s)
-  [capture-node] freeze=4ms shot=112ms unfreeze=3ms saved=True
-  Frame 5 saved (frame_004.jpg, t=5.6s)
-  [capture-periodic] freeze=3ms shot=109ms unfreeze=3ms saved=True
-  [capture-loop] iter=50 t=6.4s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=4 ram=6.9/16.0GB (43%) swap=0.4/2.9GB (14%) cpu=60% browser_rss=0.85GB
-  Node executed (3 total), capturing...
-  Frame 6 saved (frame_005.jpg, t=7.2s)
-  [capture-node] freeze=4ms shot=122ms unfreeze=4ms saved=True
-  Node executed (4 total), capturing...
-  Frame 7 saved (frame_006.jpg, t=7.9s)
-  [capture-node] freeze=4ms shot=126ms unfreeze=14ms saved=True
-  Node executed (5 total), capturing...
-  Frame 8 saved (frame_007.jpg, t=8.3s)
-  [capture-node] freeze=4ms shot=122ms unfreeze=5ms saved=True
-  Node executed (6 total), capturing...
-  Frame 9 saved (frame_008.jpg, t=8.7s)
-  [capture-node] freeze=38ms shot=122ms unfreeze=0ms saved=True
-  Execution complete (t=8.7s)
-  Captured 9 unique frames over 8.92s
-  [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1779135, canvas=622x373, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: batch_remesh_executed.png
-  [timing] final_screenshot: 0.2s
-    Captured 10 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 4 nodes, missing class_type: [1,4,6,11], sample: {"inputs":{"UNKNOWN":4},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 4 nodes, missing class_type: [1,4,6,11], sample: {"inputs":{"UNKNOWN":4},"_meta":{}}

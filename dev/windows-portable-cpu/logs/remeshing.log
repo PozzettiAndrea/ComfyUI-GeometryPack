@@ -1,30 +1,7 @@
 Capturing execution frames: remeshing.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=3ms shot=97ms unfreeze=5ms saved=True
-  Frame 3 saved (frame_002.jpg, t=4.4s)
-  [capture-periodic] freeze=3ms shot=105ms unfreeze=3ms saved=True
-  [capture-loop] iter=50 t=5.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.6/16.0GB (35%) swap=0.8/2.9GB (29%) cpu=57% browser_rss=0.70GB
-  [capture-loop] iter=100 t=11.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.5/16.0GB (34%) swap=0.8/2.9GB (29%) cpu=58% browser_rss=0.60GB
-  [capture-loop] iter=150 t=17.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=5 ram=5.4/16.0GB (34%) swap=0.8/2.9GB (29%) cpu=57% browser_rss=0.60GB
-  [capture-loop] iter=200 t=22.6s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.4/16.0GB (34%) swap=0.8/2.9GB (29%) cpu=58% browser_rss=0.59GB
-  [capture-loop] iter=250 t=28.3s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.4/16.0GB (34%) swap=0.8/2.9GB (29%) cpu=58% browser_rss=0.59GB
-  [capture-loop] iter=300 t=33.9s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.4/16.0GB (34%) swap=0.8/2.9GB (28%) cpu=58% browser_rss=0.58GB
-  [capture-loop] iter=350 t=39.5s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.4/16.0GB (34%) swap=0.8/2.9GB (28%) cpu=57% browser_rss=0.58GB
-  [capture-loop] iter=400 t=45.1s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.4/16.0GB (34%) swap=0.8/2.9GB (28%) cpu=58% browser_rss=0.58GB
-  Node executed (1 total), capturing...
-  Frame 4 saved (frame_003.jpg, t=46.3s)
-  [capture-node] freeze=4ms shot=112ms unfreeze=4ms saved=True
-  Node executed (2 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=47.0s)
-  [capture-node] freeze=3ms shot=109ms unfreeze=3ms saved=True
-  Execution complete (t=47.3s)
-  Captured 5 unique frames over 47.38s
-  [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177913, canvas=370x485, rafFrozen=False
-  [timing] trigger_3d_previews: 1.8s
-  Saved high-quality screenshot: remeshing_executed.png
-  [timing] final_screenshot: 0.3s
-    Captured 6 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 3 nodes, missing class_type: [1,25,27], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 3 nodes, missing class_type: [1,25,27], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}

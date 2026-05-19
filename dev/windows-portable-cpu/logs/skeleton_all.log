@@ -1,32 +1,7 @@
 Capturing execution frames: skeleton_all.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Frame 2 saved (frame_001.jpg, t=2.3s)
-  [capture-periodic] freeze=3ms shot=114ms unfreeze=7ms saved=True
-  Frame 3 saved (frame_002.jpg, t=4.4s)
-  [capture-periodic] freeze=3ms shot=98ms unfreeze=3ms saved=True
-  [capture-loop] iter=50 t=5.7s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=24 ram=5.2/16.0GB (32%) swap=1.0/2.9GB (34%) cpu=32% browser_rss=0.68GB
-  Frame 4 saved (frame_003.jpg, t=6.6s)
-  [capture-periodic] freeze=2ms shot=101ms unfreeze=7ms saved=True
-  [capture-loop] iter=100 t=11.4s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.1/16.0GB (32%) swap=1.0/2.9GB (34%) cpu=12% browser_rss=0.61GB
-  Frame 5 saved (frame_004.jpg, t=15.1s)
-  [capture-periodic] freeze=3ms shot=112ms unfreeze=4ms saved=True
-  [capture-loop] iter=150 t=17.0s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=3 ram=5.2/16.0GB (32%) swap=1.0/2.9GB (34%) cpu=40% browser_rss=0.61GB
-  Frame 6 saved (frame_005.jpg, t=17.4s)
-  [capture-periodic] freeze=3ms shot=114ms unfreeze=4ms saved=True
-  Node executed (1 total), capturing...
-  Frame 7 saved (frame_006.jpg, t=18.0s)
-  [capture-node] freeze=539ms shot=366ms unfreeze=4ms saved=True
-  Node executed (2 total), capturing...
-  Frame 8 saved (frame_007.jpg, t=19.2s)
-  [capture-node] freeze=5ms shot=138ms unfreeze=0ms saved=True
-  Execution complete (t=19.2s)
-  Captured 8 unique frames over 19.49s
-  [debug] iframes: 2
-  [debug]   iframe[0]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17791, canvas=368x393, rafFrozen=True
-  [debug]   iframe[1]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17791, canvas=368x195, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: skeleton_all_executed.png
-  [timing] final_screenshot: 0.2s
-    Captured 9 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 11 nodes, missing class_type: [1,2,3,4,5,6,7,8,9,12,13], sample: {"inputs":{"UNKNOWN":"3d/cow.off"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 11 nodes, missing class_type: [1,2,3,4,5,6,7,8,9,12,13], sample: {"inputs":{"UNKNOWN":"3d/cow.off"},"_meta":{}}

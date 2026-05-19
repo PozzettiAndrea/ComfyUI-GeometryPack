@@ -1,15 +1,7 @@
 Capturing execution frames: preview_mesh_threejs.json
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  Queuing workflow for execution...
-  Node executed (1 total), capturing...
-  Frame 2 saved (frame_001.jpg, t=1.1s)
-  [capture-node] freeze=74ms shot=161ms unfreeze=0ms saved=True
-  Execution complete (t=1.1s)
-  Captured 2 unique frames over 1.33s
-  [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41885/extensions/ComfyUI-GeometryPack/viewer.html?v=17791354856, canvas=486x486, rafFrozen=True
-  [timing] trigger_3d_previews: 0.0s
-  Saved high-quality screenshot: preview_mesh_threejs_executed.png
-  [timing] final_screenshot: 0.2s
-    Captured 3 video frames
+  Validation failed: graphToPrompt produced nodes without class_type: graphToPrompt: 2 nodes, missing class_type: [1,3], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}
+    Status: FAILED
+    Error: Workflow validation failed
+    Details: graphToPrompt produced nodes without class_type: graphToPrompt: 2 nodes, missing class_type: [1,3], sample: {"inputs":{"UNKNOWN":"3d/Stanford_Bunny.stl"},"_meta":{}}
