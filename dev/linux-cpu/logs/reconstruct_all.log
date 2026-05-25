@@ -1,55 +1,57 @@
 Capturing execution frames: reconstruct_all.json
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Prompt has 8 nodes
-  [ComfyUI] Prompt has 8 nodes
-  [ComfyUI]   Node 1: GeomPackLoadMesh
-  [ComfyUI]   Node 1: GeomPackLoadMesh
-  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
-  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
-  [ComfyUI]   Node 2: GeomPackMeshToPointCloud
-  [ComfyUI]   Node 2: GeomPackMeshToPointCloud
-  [ComfyUI]     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Prompt has 8 nodes
+  [ComfyUI] [32m[INFO][0m Prompt has 8 nodes
+  [ComfyUI] [32m[INFO][0m   Node 1: GeomPackLoadMesh
+  [ComfyUI] [32m[INFO][0m   Node 1: GeomPackLoadMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI] [32m[INFO][0m   Node 2: GeomPackMeshToPointCloud
+  [ComfyUI] [32m[INFO][0m   Node 2: GeomPackMeshToPointCloud
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
   Queuing workflow for execution...
-  [ComfyUI]   Node 3: GeomPackReconstructSurface
-  [ComfyUI]   Node 3: GeomPackReconstructSurface
-  [ComfyUI]     Inputs: {"backend": "poisson", "backend.poisson_depth": 8, "backend.poisson_scale": 1.1, "backend.estimate_normals": "true", "backend.normal_radius": 0.1, "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]     Inputs: {"backend": "poisson", "backend.poisson_depth": 8, "backend.poisson_scale": 1.1, "backend.estimate_normals": "true", "backend.normal_radius": 0.1, "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]   Node 4: GeomPackReconstructSurface
-  [ComfyUI]   Node 4: GeomPackReconstructSurface
-  [ComfyUI]     Inputs: {"backend": "ball_pivoting", "backend.ball_radius": 3, "backend.estimate_normals": "true", "backend.normal_radius": 0.5, "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]     Inputs: {"backend": "ball_pivoting", "backend.ball_radius": 3, "backend.estimate_normals": "true", "backend.normal_radius": 0.5, "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]   Node 5: GeomPackReconstructSurface
-  [ComfyUI]   Node 5: GeomPackReconstructSurface
-  [ComfyUI]     Inputs: {"backend": "alpha_shape", "backend.alpha": 8, "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]     Inputs: {"backend": "alpha_shape", "backend.alpha": 8, "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]   Node 6: GeomPackReconstructSurface
-  [ComfyUI]   Node 6: GeomPackReconstructSurface
-  [ComfyUI]     Inputs: {"backend": "convex_hull", "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]     Inputs: {"backend": "convex_hull", "report_panel": "false", "points": ["2", 0]}
-  [ComfyUI]   Node 10: GeomPackPreviewMeshMulti
-  [ComfyUI]   Node 10: GeomPackPreviewMeshMulti
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.8909549
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.8909549
-  [ComfyUI]   Node 14: GeomPackPreviewMeshVTK
-  [ComfyUI]   Node 14: GeomPackPreviewMeshVTK
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.89095497
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.89095497
-  [ComfyUI] Generated prompt_id: 2b6c6840-2e2a-4e9d-92a8-573b378404bb
-  [ComfyUI] Generated prompt_id: 2b6c6840-2e2a-4e9d-92a8-573b378404bb
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] got prompt
-  [ComfyUI] got prompt
+  [ComfyUI] [32m[INFO][0m   Node 3: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m   Node 3: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "poisson", "backend.poisson_depth": 8, "backend.poisson_scale": 1.1, "backend.estimate_normals": "true", "backend.normal_radius": 0.1, "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "poisson", "backend.poisson_depth": 8, "backend.poisson_scale": 1.1, "backend.estimate_normals": "true", "backend.normal_radius": 0.1, "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 4: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m   Node 4: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "ball_pivoting", "backend.ball_radius": 3, "backend.estimate_normals": "true", "backend.normal_radius": 0.5, "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "ball_pivoting", "backend.ball_radius": 3, "backend.estimate_normals": "true", "backend.normal_radius": 0.5, "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 5: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m   Node 5: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "alpha_shape", "backend.alpha": 8, "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "alpha_shape", "backend.alpha": 8, "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 6: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m   Node 6: GeomPackReconstructSurface
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "convex_hull", "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "convex_hull", "report_panel": "false", "points": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 10: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m   Node 10: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.8909549
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.8909549
+  [ComfyUI] [32m[INFO][0m   Node 14: GeomPackPreviewMeshVTK
+  [ComfyUI] [32m[INFO][0m   Node 14: GeomPackPreviewMeshVTK
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.89095497
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_vtk": "{\"show_edges\":false,\"camera_state\":\"{\\\"position\\\":[30.06530722689757,-256.0460141720188,95.11427347765263],\\\"focalPoint\\\":[30.322647094726562,1.89095497
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 0d547710-bacd-4771-856e-1c5008b2b7a7
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 0d547710-bacd-4771-856e-1c5008b2b7a7
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m got prompt
+  [ComfyUI] [32m[INFO][0m got prompt
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
   [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
@@ -58,22 +60,8 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: failed
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [ComfyUI-GeometryPack] Socket unhealthy, restarting worker...
-  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/.ce/envs/geometrypack-nodes/.pixi/envs/default/bin/python
-  [ComfyUI] [ComfyUI-GeometryPack] python: /home/runner/.ce/envs/geometrypack-nodes/.pixi/envs/default/bin/python
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/.ce/envs/geometrypack-nodes/.pixi/envs/default/lib/python3.11/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
-  [ComfyUI] [ComfyUI-GeometryPack] sys_path sent to worker: ['/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/custom_nodes/ComfyUI-GeometryPack', '/home/runner/.ce/envs/geometrypack-nodes/.pixi/envs/default/lib/python3.11/site-packages', '/home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/custom_nodes/ComfyUI-GeometryPack']
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/.ce/envs/geometrypack-nodes/.pixi/envs/default/bin/python
-  [ComfyUI] [SubprocessWorker] is_pixi=True, python=/home/runner/.ce/envs/geometrypack-nodes/.pixi/envs/default/bin/python
-  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/.ce/envs/geometrypack-nodes/pixi.toml', '-e', 'default', 'python', '/tmp/comfyui_pvenv_acqdz6rc/persistent_worker.py', 'abstract://comfy_worker_7b9dabdfc470']...
-  [ComfyUI] [SubprocessWorker] launching cmd=['/home/runner/.pixi/bin/pixi', 'run', '--as-is', '--manifest-path', '/home/runner/.ce/envs/geometrypack-nodes/pixi.toml', '-e', 'default', 'python', '/tmp/comfyui_pvenv_acqdz6rc/persistent_worker.py', 'abstract://comfy_worker_7b9dabdfc470']...
-  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_7b9dabdfc470 (abstract, no filesystem path)
-  [ComfyUI] [SubprocessWorker] socket_addr=abstract://comfy_worker_7b9dabdfc470 (abstract, no filesystem path)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
-  [ComfyUI] [worker:ComfyUI-GeometryPack] ERROR: Failed to import comfy_kitchen, Error: No module named 'comfy_kitchen', fp8 and fp4 support will not be available.
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] worker started/confirmed
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
@@ -86,20 +74,18 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [SubprocessWorker] call_id=88 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/input/3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/input/3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/input/3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
-  Frame 2 saved (frame_001.jpg, t=2.3s)
-  [capture-periodic] freeze=5ms shot=105ms unfreeze=3ms saved=True
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (2.32s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (2.32s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.23s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.23s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshToPointCloud: mode: 'surface_sampling', sample_count: 10000, sampling_method: 'uniform', include_normals: 'true', trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshToPointCloud: mode: 'surface_sampling', sample_count: 10000, sampling_method: 'uniform', include_normals: 'true', trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.conversion.mesh_to_pointcloud.MeshToPointCloudNode.EXECUTE_NORMALIZED
@@ -126,8 +112,8 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Generated point cloud with 10,000 points
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.07s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.07s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.06s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.06s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackReconstructSurface: backend: dict, points: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackReconstructSurface: backend: dict, points: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.reconstruction.reconstruct_surface.ReconstructSurfaceNode.EXECUTE_NORMALIZED
@@ -260,12 +246,12 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Visual data - has_visual: True, kind: None, texture: False, vertex_colors: False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP export
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using fields mode - VTP export
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_vtk_846ee6af.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_vtk_846ee6af.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_vtk_85d64be9.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_vtk_85d64be9.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 points
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 points
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_vtk_846ee6af.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_vtk_846ee6af.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_vtk_85d64be9.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP to: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_vtk_85d64be9.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=False, volume=None, area=None, no fields
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Fields mode info: watertight=False, volume=None, area=None, no fields
   [ComfyUI] [SubprocessWorker] got response: ok
@@ -325,12 +311,12 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Computing alpha shape...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Computing alpha shape...
   Node executed (2 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=2.9s)
-  [capture-node] freeze=76ms shot=116ms unfreeze=5ms saved=True
+  Frame 2 saved (frame_001.jpg, t=0.7s)
+  [capture-node] freeze=76ms shot=116ms unfreeze=4ms saved=True
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackReconstruct_AlphaShape done (1.91s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackReconstruct_AlphaShape done (1.91s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackReconstruct_AlphaShape done (2.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackReconstruct_AlphaShape done (2.13s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackReconstruct_BallPivoting: points: Trimesh, ball_radius: 3.0, estimate_normals: 'true', normal_radius: 0.5
   [ComfyUI] [comfy-env] Running GeomPackReconstruct_BallPivoting: points: Trimesh, ball_radius: 3.0, estimate_normals: 'true', normal_radius: 0.5
   [ComfyUI] [SubprocessWorker] call_method: nodes.reconstruction.backends.ball_pivoting.ReconstructBallPivotingNode.EXECUTE_NORMALIZED
@@ -353,13 +339,13 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [SubprocessWorker] call_id=97 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: ball_pivoting
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: ball_pivoting
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using PyMeshLab Ball Pivoting...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using PyMeshLab Ball Pivoting...
   Node executed (3 total), capturing...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using PyMeshLab Ball Pivoting...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using PyMeshLab Ball Pivoting...
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackReconstruct_BallPivoting done (0.24s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackReconstruct_BallPivoting done (0.24s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackReconstruct_BallPivoting done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackReconstruct_BallPivoting done (0.12s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackReconstruct_Poisson: points: Trimesh, poisson_depth: 8, poisson_scale: 1.1, estimate_normals: 'true', normal_radius: 0.1
   [ComfyUI] [comfy-env] Running GeomPackReconstruct_Poisson: points: Trimesh, poisson_depth: 8, poisson_scale: 1.1, estimate_normals: 'true', normal_radius: 0.1
   [ComfyUI] [SubprocessWorker] call_method: nodes.reconstruction.backends.poisson.ReconstructPoissonNode.EXECUTE_NORMALIZED
@@ -386,15 +372,17 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using normals from input
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using PyMeshLab Poisson reconstruction...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using PyMeshLab Poisson reconstruction...
-  Frame 4 saved (frame_003.jpg, t=4.8s)
-  [capture-node] freeze=3ms shot=119ms unfreeze=3ms saved=True
+  Frame 3 saved (frame_002.jpg, t=2.9s)
+  [capture-node] freeze=3ms shot=135ms unfreeze=9ms saved=True
   Node executed (4 total), capturing...
-  [capture-node] freeze=3ms shot=139ms unfreeze=4ms saved=False
-  [capture-loop] iter=50 t=6.7s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=3 ram=2.6/15.6GB (17%) swap=0.0/3.0GB (0%) cpu=28% browser_rss=1.09GB
+  [capture-node] freeze=3ms shot=127ms unfreeze=3ms saved=False
+  Frame 4 saved (frame_003.jpg, t=5.5s)
+  [capture-periodic] freeze=3ms shot=145ms unfreeze=3ms saved=True
+  [capture-loop] iter=50 t=6.6s state={'complete': False, 'error': None, 'executedCount': 4, 'wsState': 1} eval_ms=2 ram=2.7/15.6GB (17%) swap=0.0/3.0GB (0%) cpu=25% browser_rss=1.09GB
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackReconstruct_Poisson done (4.39s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackReconstruct_Poisson done (4.39s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackReconstruct_Poisson done (5.13s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackReconstruct_Poisson done (5.13s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
@@ -405,77 +393,77 @@ Capturing execution frames: reconstruct_all.json
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 4 shm blocks
-  [ComfyUI] [SubprocessWorker] created 4 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=99 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=99 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 43254 vertices, 86509 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 43254 vertices, 86509 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_1_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_1_5566cbfe.vtp
   Node executed (5 total), capturing...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (43254 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (43254 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 43254 vertices, 86509 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 43254 vertices, 86509 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_1_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_1_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 10000 vertices, 16762 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 10000 vertices, 16762 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_2_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_2_5566cbfe.vtp
-  Frame 5 saved (frame_004.jpg, t=9.4s)
-  [capture-node] freeze=3ms shot=118ms unfreeze=4ms saved=True
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 4 shm blocks
+  [ComfyUI] [SubprocessWorker] created 4 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=99 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=99 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 43472 vertices, 86962 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 43472 vertices, 86962 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_1_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_1_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (43472 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (43472 vertices)
+  Frame 5 saved (frame_004.jpg, t=8.1s)
+  [capture-node] freeze=3ms shot=107ms unfreeze=4ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 43472 vertices, 86962 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 43472 vertices, 86962 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_1_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_1_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 10000 vertices, 16767 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 10000 vertices, 16767 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_2_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_2_9406d748.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (10000 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (10000 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 vertices, 16762 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 vertices, 16762 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_2_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_2_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 5698 vertices, 12030 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 5698 vertices, 12030 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_3_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_3_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (5698 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (5698 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 5698 vertices, 12030 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 5698 vertices, 12030 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_3_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_3_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 4: Mesh - 699 vertices, 1394 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 4: Mesh - 699 vertices, 1394 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_4_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_4_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (699 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (699 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 699 vertices, 1394 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 699 vertices, 1394 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_4_5566cbfe.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1658/ComfyUI/output/preview_multi_4_5566cbfe.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 vertices, 16767 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 vertices, 16767 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_2_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_2_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 5757 vertices, 12144 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 5757 vertices, 12144 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_3_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_3_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (5757 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (5757 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 5757 vertices, 12144 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 5757 vertices, 12144 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_3_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_3_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 4: Mesh - 712 vertices, 1420 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 4: Mesh - 712 vertices, 1420 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_4_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_4_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (712 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (712 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 712 vertices, 1420 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 712 vertices, 1420 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_4_9406d748.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: /home/runner/work/comfy-gpu-ci/comfy-gpu-ci/test_workspaces/GeometryPack-1922/ComfyUI/output/preview_multi_4_9406d748.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x2, Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x2, Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.49s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.49s): result: NodeOutput
-  [ComfyUI] Prompt executed in 9.57 seconds
-  [ComfyUI] Prompt executed in 9.57 seconds
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.50s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.50s): result: NodeOutput
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 8.31 seconds[0m
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 8.31 seconds[0m
   Node executed (6 total), capturing...
-  Frame 6 saved (frame_005.jpg, t=10.0s)
-  [capture-node] freeze=3ms shot=131ms unfreeze=44ms saved=True
-  Execution complete (t=11.3s)
-  Captured 6 unique frames over 11.7s
+  Frame 6 saved (frame_005.jpg, t=8.7s)
+  [capture-node] freeze=3ms shot=194ms unfreeze=0ms saved=True
+  Execution complete (t=8.7s)
+  Captured 6 unique frames over 9.85s
   [debug] iframes: 2
-  [debug]   iframe[0]: src=http://127.0.0.1:41881/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1779210, canvas=486x384, rafFrozen=False
-  [debug]   iframe[1]: src=http://127.0.0.1:41881/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17792, canvas=368x195, rafFrozen=False
+  [debug]   iframe[0]: src=http://127.0.0.1:41888/extensions/ComfyUI-GeometryPack/viewer_vtk.html?v=1779737, canvas=486x384, rafFrozen=True
+  [debug]   iframe[1]: src=http://127.0.0.1:41888/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17797, canvas=368x195, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: reconstruct_all_executed.png
   [timing] final_screenshot: 0.3s
