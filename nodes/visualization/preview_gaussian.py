@@ -42,6 +42,10 @@ class PreviewGaussianNode(io.ComfyNode):
                 io.Custom("EXTRINSICS").Input("extrinsics", tooltip="4x4 camera extrinsics matrix for initial view", optional=True),
                 io.Custom("INTRINSICS").Input("intrinsics", tooltip="3x3 camera intrinsics matrix for FOV", optional=True),
             ],
+            outputs=[
+                io.Custom("EXTRINSICS").Output(display_name="extrinsics"),
+                io.Custom("INTRINSICS").Output(display_name="intrinsics"),
+            ],
         )
 
     @classmethod
@@ -59,11 +63,11 @@ class PreviewGaussianNode(io.ComfyNode):
         """
         if not ply_path:
             log.info("No PLY path provided")
-            return io.NodeOutput(ui={"error": ["No PLY path provided"]})
+            return io.NodeOutput(extrinsics, intrinsics, ui={"error": ["No PLY path provided"]})
 
         if not os.path.exists(ply_path):
             log.info("PLY file not found: %s", ply_path)
-            return io.NodeOutput(ui={"error": [f"File not found: {ply_path}"]})
+            return io.NodeOutput(extrinsics, intrinsics, ui={"error": [f"File not found: {ply_path}"]})
 
         # Get just the filename for the frontend
         filename = os.path.basename(ply_path)
@@ -90,13 +94,37 @@ class PreviewGaussianNode(io.ComfyNode):
             "file_size_mb": [round(file_size_mb, 2)],
         }
 
-        # Add camera parameters if provided
-        if extrinsics is not None:
-            ui_data["extrinsics"] = [extrinsics]
-        if intrinsics is not None:
-            ui_data["intrinsics"] = [intrinsics]
+        # Add camera parameters if provided. The `ui` dict is JSON-
+        # serialized for the WS broadcast (server.py publish_loop), so
+        # Tensors must be converted to plain nested lists or the
+        # publish loop crashes with `Object of type Tensor is not JSON
+        # serializable` and tears down the whole asyncio main loop.
+        def _to_jsonable(x):
+            if x is None:
+                return None
+            # Strip leading singleton batch dims (e.g. [1, 4, 4] -> [4, 4]).
+            try:
+                import torch as _torch
+                if isinstance(x, _torch.Tensor):
+                    t = x.detach().float().cpu()
+                    while t.dim() > 2 and t.shape[0] == 1:
+                        t = t[0]
+                    return t.tolist()
+            except Exception:
+                pass
+            if hasattr(x, "tolist"):
+                try:
+                    return x.tolist()
+                except Exception:
+                    pass
+            return x
 
-        return io.NodeOutput(ui=ui_data)
+        if extrinsics is not None:
+            ui_data["extrinsics"] = [_to_jsonable(extrinsics)]
+        if intrinsics is not None:
+            ui_data["intrinsics"] = [_to_jsonable(intrinsics)]
+
+        return io.NodeOutput(extrinsics, intrinsics, ui=ui_data)
 
 
 NODE_CLASS_MAPPINGS = {
