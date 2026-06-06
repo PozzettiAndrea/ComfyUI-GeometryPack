@@ -1,43 +1,47 @@
 Capturing execution frames: mesh_mesh_distance.json
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
   Queuing workflow for execution...
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Prompt has 5 nodes
-  [ComfyUI] Prompt has 5 nodes
-  [ComfyUI]   Node 3: GeomPackMeshToMeshDistance
-  [ComfyUI]   Node 3: GeomPackMeshToMeshDistance
-  [ComfyUI]     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "true", "mesh_a": ["8", 0], "mesh_b": ["15", 0]}
-  [ComfyUI]     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "true", "mesh_a": ["8", 0], "mesh_b": ["15", 0]}
-  [ComfyUI]   Node 8: GeomPackLoadMesh
-  [ComfyUI]   Node 8: GeomPackLoadMesh
-  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
-  [ComfyUI]     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
-  [ComfyUI]   Node 10: GeomPackMeshToMeshDistance
-  [ComfyUI]   Node 10: GeomPackMeshToMeshDistance
-  [ComfyUI]     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "false", "mesh_a": ["8", 0], "mesh_b": ["16", 0]}
-  [ComfyUI]     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "false", "mesh_a": ["8", 0], "mesh_b": ["16", 0]}
-  [ComfyUI]   Node 15: GeomPackRemesh
-  [ComfyUI]   Node 15: GeomPackRemesh
-  [ComfyUI]     Inputs: {"backend": "pymeshlab_isotropic", "backend.target_edge_length": 1, "backend.iterations": 3, "backend.feature_angle": 30, "backend.adaptive": "false", "report_panel": "false", "trimesh": ["8", 0]}
-  [ComfyUI]     Inputs: {"backend": "pymeshlab_isotropic", "backend.target_edge_length": 1, "backend.iterations": 3, "backend.feature_angle": 30, "backend.adaptive": "false", "report_panel": "false", "trimesh": ["8", 0]}
-  [ComfyUI]   Node 16: GeomPackRemesh
-  [ComfyUI]   Node 16: GeomPackRemesh
-  [ComfyUI]     Inputs: {"backend": "cgal_isotropic", "backend.cgal_edge_length": 1, "backend.cgal_iterations": 3, "backend.protect_boundaries": "true", "report_panel": "false", "trimesh": ["8", 0]}
-  [ComfyUI]     Inputs: {"backend": "cgal_isotropic", "backend.cgal_edge_length": 1, "backend.cgal_iterations": 3, "backend.protect_boundaries": "true", "report_panel": "false", "trimesh": ["8", 0]}
-  [ComfyUI] Generated prompt_id: ca9c302e-0be1-4f06-a1aa-88816e375177
-  [ComfyUI] Generated prompt_id: ca9c302e-0be1-4f06-a1aa-88816e375177
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] got prompt
-  [ComfyUI] got prompt
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Prompt has 5 nodes
+  [ComfyUI] [32m[INFO][0m Prompt has 5 nodes
+  [ComfyUI] [32m[INFO][0m   Node 3: GeomPackMeshToMeshDistance
+  [ComfyUI] [32m[INFO][0m   Node 3: GeomPackMeshToMeshDistance
+  [ComfyUI] [32m[INFO][0m     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "true", "mesh_a": ["8", 0], "mesh_b": ["15", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "true", "mesh_a": ["8", 0], "mesh_b": ["15", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 8: GeomPackLoadMesh
+  [ComfyUI] [32m[INFO][0m   Node 8: GeomPackLoadMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"file_path": "3d/Stanford_Bunny.stl"}
+  [ComfyUI] [32m[INFO][0m   Node 10: GeomPackMeshToMeshDistance
+  [ComfyUI] [32m[INFO][0m   Node 10: GeomPackMeshToMeshDistance
+  [ComfyUI] [32m[INFO][0m     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "false", "mesh_a": ["8", 0], "mesh_b": ["16", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"metric": "hausdorff", "sample_count": 10000, "symmetric": "true", "report_panel": "false", "mesh_a": ["8", 0], "mesh_b": ["16", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 15: GeomPackRemesh
+  [ComfyUI] [32m[INFO][0m   Node 15: GeomPackRemesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "pymeshlab_isotropic", "backend.target_edge_length": 1, "backend.iterations": 3, "backend.feature_angle": 30, "backend.adaptive": "false", "report_panel": "false", "trimesh": ["8", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "pymeshlab_isotropic", "backend.target_edge_length": 1, "backend.iterations": 3, "backend.feature_angle": 30, "backend.adaptive": "false", "report_panel": "false", "trimesh": ["8", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 16: GeomPackRemesh
+  [ComfyUI] [32m[INFO][0m   Node 16: GeomPackRemesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "cgal_isotropic", "backend.cgal_edge_length": 1, "backend.cgal_iterations": 3, "backend.protect_boundaries": "true", "report_panel": "false", "trimesh": ["8", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "cgal_isotropic", "backend.cgal_edge_length": 1, "backend.cgal_iterations": 3, "backend.protect_boundaries": "true", "report_panel": "false", "trimesh": ["8", 0]}
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 00b3e91f-fe8a-45fa-9912-375264b60e08
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 00b3e91f-fe8a-45fa-9912-375264b60e08
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m got prompt
+  [ComfyUI] [32m[INFO][0m got prompt
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/Stanford_Bunny.stl'
   [ComfyUI] [SubprocessWorker] call_method: nodes.io.load_mesh.LoadMesh.EXECUTE_NORMALIZED
@@ -60,8 +64,8 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [SubprocessWorker] call_id=69 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/Stanford_Bunny.stl
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Successfully loaded: 56203 vertices, 112402 faces
@@ -70,8 +74,8 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loaded: 56203 vertices, 112402 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.35s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.35s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.36s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.36s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
@@ -96,8 +100,8 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Remesh dispatch: pymeshlab_isotropic -> GeomPackRemesh_PyMeshLab
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh done (0.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.36s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh done (0.36s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackRemesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing.remesh.RemeshNode.EXECUTE_NORMALIZED
@@ -151,31 +155,28 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, feature_angle=30.0, adaptive=false
   Frame 2 saved (frame_001.jpg, t=2.2s)
-  [capture-periodic] freeze=3ms shot=98ms unfreeze=4ms saved=True
-  Frame 3 saved (frame_002.jpg, t=4.4s)
-  [capture-periodic] freeze=3ms shot=95ms unfreeze=6ms saved=True
-  [capture-loop] iter=50 t=5.8s state={'complete': False, 'error': None, 'executedCount': 0, 'wsState': 1} eval_ms=4 ram=5.5/16.0GB (34%) swap=0.5/2.9GB (18%) cpu=35% browser_rss=0.60GB
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32264 vertices, 64524 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32264 vertices, 64524 faces
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (7.75s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (7.75s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
-  [ComfyUI] [SubprocessWorker] call_method: nodes.distance.mesh_to_mesh_distance.MeshDistanceNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.distance.mesh_to_mesh_distance.MeshDistanceNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [capture-periodic] freeze=2ms shot=85ms unfreeze=3ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32282 vertices, 64560 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 32282 vertices, 64560 faces
   Node executed (1 total), capturing...
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (2.08s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_PyMeshLab done (2.08s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.distance.mesh_to_mesh_distance.MeshDistanceNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.distance.mesh_to_mesh_distance.MeshDistanceNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] created 2 shm blocks
   [ComfyUI] [SubprocessWorker] created 2 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
@@ -198,20 +199,20 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] C:\Users\stduser\AppData\Local\Programs\comfy-env\envs\geometrypack-nodes\.pixi\envs\default\Lib\site-packages\point_cloud_utils\_point_cloud_geometry.py:91: SyntaxWarning: invalid escape sequence '\#'
   [ComfyUI]   p : \#p by 3 array of vertex positions (each row is a vertex)
   [ComfyUI]   p : \#p by 3 array of vertex positions (each row is a vertex)
+  Frame 3 saved (frame_002.jpg, t=3.3s)
+  [capture-node] freeze=4ms shot=73ms unfreeze=1ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Metric: hausdorff, Samples: 10000
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Metric: hausdorff, Samples: 10000
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 56203 vertices, 112402 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32264 vertices, 64524 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32264 vertices, 64524 faces
-  Frame 4 saved (frame_003.jpg, t=8.7s)
-  [capture-node] freeze=4ms shot=112ms unfreeze=5ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.234225
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.234225
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32282 vertices, 64560 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 32282 vertices, 64560 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.038154
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.038154
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.33s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.33s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.47s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.47s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackRemesh_CGAL: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, protect_boundaries: 'true'
   [ComfyUI] [comfy-env] Running GeomPackRemesh_CGAL: trimesh: Trimesh, target_edge_length: 1.0, iterations: 3, protect_boundaries: 'true'
   [ComfyUI] [SubprocessWorker] call_method: nodes.remeshing_cgal.remesh.RemeshCGALNode.EXECUTE_NORMALIZED
@@ -241,15 +242,17 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: target_edge_length=1.0, iterations=3, protect_boundaries=true
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Running CGAL isotropic remesh (target_edge_length=1.0)...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Running CGAL isotropic remesh (target_edge_length=1.0)...
-  Frame 5 saved (frame_004.jpg, t=9.2s)
-  [capture-node] freeze=5ms shot=124ms unfreeze=6ms saved=True
-  [capture-loop] iter=100 t=12.0s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=4 ram=5.4/16.0GB (34%) swap=0.7/2.9GB (23%) cpu=39% browser_rss=0.60GB
+  Frame 4 saved (frame_003.jpg, t=3.7s)
+  [capture-node] freeze=3ms shot=100ms unfreeze=7ms saved=True
+  Frame 5 saved (frame_004.jpg, t=5.9s)
+  [capture-periodic] freeze=2ms shot=84ms unfreeze=3ms saved=True
+  [capture-loop] iter=50 t=6.1s state={'complete': False, 'error': None, 'executedCount': 2, 'wsState': 1} eval_ms=3 ram=5.8/16.0GB (36%) swap=0.6/2.9GB (22%) cpu=36% browser_rss=0.72GB
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 41466 vertices (-14737), 82928 faces (-29474)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 41466 vertices (-14737), 82928 faces (-29474)
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (6.67s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (6.67s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (5.61s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackRemesh_CGAL done (5.61s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshToMeshDistance: metric: 'hausdorff', sample_count: 10000, symmetric: 'true', mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.distance.mesh_to_mesh_distance.MeshDistanceNode.EXECUTE_NORMALIZED
@@ -277,23 +280,23 @@ Capturing execution frames: mesh_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh A: 56203 vertices, 112402 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 41466 vertices, 82928 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh B: 41466 vertices, 82928 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.015354
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.015354
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.120823
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 3.120823
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.26s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.26s): result: NodeOutput
-  [ComfyUI] Prompt executed in 15.64 seconds
-  [ComfyUI] Prompt executed in 15.64 seconds
-  Frame 6 saved (frame_005.jpg, t=15.8s)
-  [capture-node] freeze=4ms shot=128ms unfreeze=5ms saved=True
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.25s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToMeshDistance done (0.25s): result: NodeOutput
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 9.26 seconds[0m
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 9.26 seconds[0m
+  Frame 6 saved (frame_005.jpg, t=9.3s)
+  [capture-node] freeze=2ms shot=101ms unfreeze=2ms saved=True
   Node executed (4 total), capturing...
-  Frame 7 saved (frame_006.jpg, t=16.2s)
-  [capture-node] freeze=3ms shot=100ms unfreeze=3ms saved=True
-  Execution complete (t=16.4s)
-  Captured 7 unique frames over 16.43s
+  Frame 7 saved (frame_006.jpg, t=9.7s)
+  [capture-node] freeze=3ms shot=90ms unfreeze=0ms saved=True
+  Execution complete (t=9.7s)
+  Captured 7 unique frames over 9.85s
   [debug] iframes: 0
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: mesh_mesh_distance_executed.png
-  [timing] final_screenshot: 0.2s
+  [timing] final_screenshot: 0.1s
     Captured 8 video frames

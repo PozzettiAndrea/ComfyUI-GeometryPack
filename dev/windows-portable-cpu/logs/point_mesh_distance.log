@@ -1,47 +1,51 @@
 Capturing execution frames: point_mesh_distance.json
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
   Queuing workflow for execution...
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Prompt has 6 nodes
-  [ComfyUI] Prompt has 6 nodes
-  [ComfyUI]   Node 1: GeomPackCreatePrimitive
-  [ComfyUI]   Node 1: GeomPackCreatePrimitive
-  [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
-  [ComfyUI]     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
-  [ComfyUI]   Node 2: GeomPackCreatePrimitive
-  [ComfyUI]   Node 2: GeomPackCreatePrimitive
-  [ComfyUI]     Inputs: {"shape": "sphere", "size": 2.5, "subdivisions": 2}
-  [ComfyUI]     Inputs: {"shape": "sphere", "size": 2.5, "subdivisions": 2}
-  [ComfyUI]   Node 4: GeomPackMeshToPointCloud
-  [ComfyUI]   Node 4: GeomPackMeshToPointCloud
-  [ComfyUI]     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
-  [ComfyUI]   Node 5: GeomPackPointToMeshDistance
-  [ComfyUI]   Node 5: GeomPackPointToMeshDistance
-  [ComfyUI]     Inputs: {"distance_type": "unsigned", "sign_method": "default", "report_panel": "false", "target_mesh": ["2", 0], "pointcloud": ["4", 0]}
-  [ComfyUI]     Inputs: {"distance_type": "unsigned", "sign_method": "default", "report_panel": "false", "target_mesh": ["2", 0], "pointcloud": ["4", 0]}
-  [ComfyUI]   Node 7: GeomPackCombineMeshes
-  [ComfyUI]   Node 7: GeomPackCombineMeshes
-  [ComfyUI]     Inputs: {"report_panel": "false", "mesh_a": ["1", 0], "mesh_b": ["2", 0]}
-  [ComfyUI]     Inputs: {"report_panel": "false", "mesh_a": ["1", 0], "mesh_b": ["2", 0]}
-  [ComfyUI]   Node 8: GeomPackPreviewMeshDual
-  [ComfyUI]   Node 8: GeomPackPreviewMeshDual
-  [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"s
-  [ComfyUI]     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"s
-  [ComfyUI] Generated prompt_id: 9d7cc530-f124-43f5-b03c-dc6993b8b273
-  [ComfyUI] Generated prompt_id: 9d7cc530-f124-43f5-b03c-dc6993b8b273
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] got prompt
-  [ComfyUI] got prompt
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Prompt has 6 nodes
+  [ComfyUI] [32m[INFO][0m Prompt has 6 nodes
+  [ComfyUI] [32m[INFO][0m   Node 1: GeomPackCreatePrimitive
+  [ComfyUI] [32m[INFO][0m   Node 1: GeomPackCreatePrimitive
+  [ComfyUI] [32m[INFO][0m     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"shape": "cube", "size": 2, "subdivisions": 1}
+  [ComfyUI] [32m[INFO][0m   Node 2: GeomPackCreatePrimitive
+  [ComfyUI] [32m[INFO][0m   Node 2: GeomPackCreatePrimitive
+  [ComfyUI] [32m[INFO][0m     Inputs: {"shape": "sphere", "size": 2.5, "subdivisions": 2}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"shape": "sphere", "size": 2.5, "subdivisions": 2}
+  [ComfyUI] [32m[INFO][0m   Node 4: GeomPackMeshToPointCloud
+  [ComfyUI] [32m[INFO][0m   Node 4: GeomPackMeshToPointCloud
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "surface_sampling", "sample_count": 10000, "sampling_method": "uniform", "include_normals": "true", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 5: GeomPackPointToMeshDistance
+  [ComfyUI] [32m[INFO][0m   Node 5: GeomPackPointToMeshDistance
+  [ComfyUI] [32m[INFO][0m     Inputs: {"distance_type": "unsigned", "sign_method": "default", "report_panel": "false", "target_mesh": ["2", 0], "pointcloud": ["4", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"distance_type": "unsigned", "sign_method": "default", "report_panel": "false", "target_mesh": ["2", 0], "pointcloud": ["4", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 7: GeomPackCombineMeshes
+  [ComfyUI] [32m[INFO][0m   Node 7: GeomPackCombineMeshes
+  [ComfyUI] [32m[INFO][0m     Inputs: {"report_panel": "false", "mesh_a": ["1", 0], "mesh_b": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"report_panel": "false", "mesh_a": ["1", 0], "mesh_b": ["2", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 8: GeomPackPreviewMeshDual
+  [ComfyUI] [32m[INFO][0m   Node 8: GeomPackPreviewMeshDual
+  [ComfyUI] [32m[INFO][0m     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"s
+  [ComfyUI] [32m[INFO][0m     Inputs: {"layout": "side_by_side", "mode": "fields", "opacity_1": 1, "opacity_2": 1, "preview_dual": "{\"show_edges\":false,\"camera_state\":\"\",\"selected_field\":\"\",\"selected_channel\":\"magnitude\",\"s
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 05fcaaa3-14c3-450c-afe4-bc0e3b80502a
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 05fcaaa3-14c3-450c-afe4-bc0e3b80502a
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m got prompt
+  [ComfyUI] [32m[INFO][0m got prompt
   [ComfyUI] [comfy-env] Running GeomPackCreatePrimitive: shape: 'cube', size: 2.0, subdivisions: 1
   [ComfyUI] [comfy-env] Running GeomPackCreatePrimitive: shape: 'cube', size: 2.0, subdivisions: 1
   [ComfyUI] [SubprocessWorker] call_method: nodes.primitives.create_primitive.CreatePrimitive.EXECUTE_NORMALIZED
@@ -66,8 +70,8 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created cube: 8 vertices, 12 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.12s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (1.91s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (1.91s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackMeshToPointCloud: mode: 'surface_sampling', sample_count: 10000, sampling_method: 'uniform', include_normals: 'true', trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackMeshToPointCloud: mode: 'surface_sampling', sample_count: 10000, sampling_method: 'uniform', include_normals: 'true', trimesh: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.conversion.mesh_to_pointcloud.MeshToPointCloudNode.EXECUTE_NORMALIZED
@@ -76,6 +80,8 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  Frame 2 saved (frame_001.jpg, t=2.2s)
+  [capture-periodic] freeze=3ms shot=72ms unfreeze=2ms saved=True
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
   [ComfyUI] [SubprocessWorker] worker started/confirmed
@@ -94,8 +100,8 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Generated point cloud with 10,000 points
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.12s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.93s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackMeshToPointCloud done (0.93s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackCreatePrimitive: shape: 'sphere', size: 2.5, subdivisions: 2
   [ComfyUI] [comfy-env] Running GeomPackCreatePrimitive: shape: 'sphere', size: 2.5, subdivisions: 2
   [ComfyUI] [SubprocessWorker] call_method: nodes.primitives.create_primitive.CreatePrimitive.EXECUTE_NORMALIZED
@@ -120,8 +126,8 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Created sphere: 162 vertices, 320 faces
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.10s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.28s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCreatePrimitive done (0.28s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPointToMeshDistance: distance_type: 'unsigned', sign_method: 'default', target_mesh: Trimesh, pointcloud: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPointToMeshDistance: distance_type: 'unsigned', sign_method: 'default', target_mesh: Trimesh, pointcloud: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.distance.point_to_mesh_distance.PointToMeshDistanceNode.EXECUTE_NORMALIZED
@@ -150,15 +156,15 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Target Mesh: 162 vertices, 320 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using trimesh.proximity.closest_point (unsigned)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Using trimesh.proximity.closest_point (unsigned)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Min: 0.000037, Max: 0.501355, Mean: 0.138166
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Min: 0.000037, Max: 0.501355, Mean: 0.138166
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Distance field added to vertex_attributes['distance']
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Distance field added to vertex_attributes['distance']
   Node executed (1 total), capturing...
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Min: 0.000000, Max: 0.495312, Mean: 0.139279
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Min: 0.000000, Max: 0.495312, Mean: 0.139279
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Distance field added to vertex_attributes['distance']
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Distance field added to vertex_attributes['distance']
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPointToMeshDistance done (0.71s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPointToMeshDistance done (0.71s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPointToMeshDistance done (1.07s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPointToMeshDistance done (1.07s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackCombineMeshes: mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackCombineMeshes: mesh_a: Trimesh, mesh_b: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.combine.combine_meshes.CombineMeshesNode.EXECUTE_NORMALIZED
@@ -179,6 +185,8 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=84 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=84 sending call_method
+  Frame 3 saved (frame_002.jpg, t=4.5s)
+  [capture-node] freeze=2ms shot=68ms unfreeze=2ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Combining 2 meshes
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Combining 2 meshes
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: 8 vertices, 12 faces
@@ -187,10 +195,11 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: 162 vertices, 320 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 170 vertices, 332 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Result: 170 vertices, 332 faces
+  Node executed (2 total), capturing...
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackCombineMeshes done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackCombineMeshes done (0.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCombineMeshes done (0.44s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackCombineMeshes done (0.44s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshDual: layout: 'side_by_side', mode: 'fields', opacity_1: 1.0, opacity_2: 1.0, mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_dual.PreviewMeshDualNode.EXECUTE_NORMALIZED
@@ -211,6 +220,8 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=85 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=85 sending call_method
+  Frame 4 saved (frame_003.jpg, t=5.0s)
+  [capture-node] freeze=3ms shot=77ms unfreeze=3ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Layout: side_by_side, Mode: fields
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 170 vertices, 332 faces
@@ -227,34 +238,33 @@ Capturing execution frames: point_mesh_distance.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2 visual: kind=None, texture=False, vertex_colors=False
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_a2667222.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_a2667222.stl
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_a2667222.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_a2667222.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_367af381.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported STL: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_1_367af381.stl
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_367af381.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting point cloud to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_367af381.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: distance (components: 1)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding scalar field: distance (components: 1)
-  Frame 2 saved (frame_001.jpg, t=1.4s)
-  [capture-node] freeze=31ms shot=149ms unfreeze=8ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 points
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 10000 points
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_a2667222.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_a2667222.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_367af381.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP with fields: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_dual_2_367af381.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Preview ready
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.27s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (0.27s): result: NodeOutput
-  [ComfyUI] Prompt executed in 1.48 seconds
-  [ComfyUI] Prompt executed in 1.48 seconds
+  [capture-loop] iter=50 t=5.9s state={'complete': True, 'error': None, 'executedCount': 3, 'wsState': 1} eval_ms=3 ram=5.6/16.0GB (35%) swap=0.6/2.9GB (22%) cpu=37% browser_rss=0.71GB
   Node executed (3 total), capturing...
-  Frame 3 saved (frame_002.jpg, t=1.9s)
-  [capture-node] freeze=46ms shot=162ms unfreeze=0ms saved=True
-  Execution complete (t=1.8s)
-  Captured 3 unique frames over 2.08s
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (1.09s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshDual done (1.09s): result: NodeOutput
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 5.73 seconds[0m
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 5.73 seconds[0m
+  Frame 5 saved (frame_004.jpg, t=6.0s)
+  [capture-node] freeze=3ms shot=85ms unfreeze=0ms saved=True
+  Execution complete (t=6.1s)
+  Captured 5 unique frames over 6.17s
   [debug] iframes: 1
-  [debug]   iframe[0]: src=http://127.0.0.1:41882/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=177964, canvas=370x485, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_dual.html?v=178078, canvas=0x0, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: point_mesh_distance_executed.png
   [timing] final_screenshot: 0.2s
-    Captured 4 video frames
+    Captured 6 video frames

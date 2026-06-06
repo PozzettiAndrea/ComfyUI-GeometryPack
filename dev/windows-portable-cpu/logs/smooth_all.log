@@ -1,79 +1,85 @@
 Capturing execution frames: smooth_all.json
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
+  [ComfyUI] [32m[INFO][0m Using RAM pressure cache.
   Frame 1 saved (frame_000.jpg, t=0.0s)
   Validating workflow...
   Queuing workflow for execution...
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] === /validate endpoint called ===
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Received JSON with keys: ['prompt']
-  [ComfyUI] Prompt has 8 nodes
-  [ComfyUI] Prompt has 8 nodes
-  [ComfyUI] Prompt has 8 nodes
-  [ComfyUI]   Node 1: GeomPackLoadMesh
-  [ComfyUI]   Node 1: GeomPackLoadMesh
-  [ComfyUI]   Node 1: GeomPackLoadMesh
-  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
-  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
-  [ComfyUI]     Inputs: {"file_path": "3d/cow.off"}
-  [ComfyUI]   Node 2: GeomPackSmoothMesh
-  [ComfyUI]   Node 2: GeomPackSmoothMesh
-  [ComfyUI]   Node 2: GeomPackSmoothMesh
-  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 0.5, "backend.mu": -0.53, "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 0.5, "backend.mu": -0.53, "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 0.5, "backend.mu": -0.53, "trimesh": ["1", 0]}
-  [ComfyUI]   Node 3: GeomPackSmoothMesh
-  [ComfyUI]   Node 3: GeomPackSmoothMesh
-  [ComfyUI]   Node 3: GeomPackSmoothMesh
-  [ComfyUI]     Inputs: {"backend": "laplacian", "backend.iterations": 5, "backend.cotangent_weight": "true", "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "laplacian", "backend.iterations": 5, "backend.cotangent_weight": "true", "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "laplacian", "backend.iterations": 5, "backend.cotangent_weight": "true", "trimesh": ["1", 0]}
-  [ComfyUI]   Node 4: GeomPackSmoothMesh
-  [ComfyUI]   Node 4: GeomPackSmoothMesh
-  [ComfyUI]   Node 4: GeomPackSmoothMesh
-  [ComfyUI]     Inputs: {"backend": "hc_laplacian", "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "hc_laplacian", "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "hc_laplacian", "trimesh": ["1", 0]}
-  [ComfyUI]   Node 5: GeomPackSmoothMesh
-  [ComfyUI]   Node 5: GeomPackSmoothMesh
-  [ComfyUI]   Node 5: GeomPackSmoothMesh
-  [ComfyUI]     Inputs: {"backend": "trimesh_laplacian", "backend.iterations": 7, "backend.lambda_": 0.5, "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "trimesh_laplacian", "backend.iterations": 7, "backend.lambda_": 0.5, "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "trimesh_laplacian", "backend.iterations": 7, "backend.lambda_": 0.5, "trimesh": ["1", 0]}
-  [ComfyUI]   Node 6: GeomPackSmoothMesh
-  [ComfyUI]   Node 6: GeomPackSmoothMesh
-  [ComfyUI]   Node 6: GeomPackSmoothMesh
-  [ComfyUI]     Inputs: {"backend": "trimesh_taubin", "backend.iterations": 10, "backend.lambda_": 0.6, "backend.mu": -0.53, "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "trimesh_taubin", "backend.iterations": 10, "backend.lambda_": 0.6, "backend.mu": -0.53, "trimesh": ["1", 0]}
-  [ComfyUI]     Inputs: {"backend": "trimesh_taubin", "backend.iterations": 10, "backend.lambda_": 0.6, "backend.mu": -0.53, "trimesh": ["1", 0]}
-  [ComfyUI]   Node 8: GeomPackPreviewMeshMulti
-  [ComfyUI]   Node 8: GeomPackPreviewMeshMulti
-  [ComfyUI]   Node 8: GeomPackPreviewMeshMulti
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
-  [ComfyUI]   Node 9: GeomPackPreviewMeshMulti
-  [ComfyUI]   Node 9: GeomPackPreviewMeshMulti
-  [ComfyUI]   Node 9: GeomPackPreviewMeshMulti
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
-  [ComfyUI]     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
-  [ComfyUI] Generated prompt_id: e7871271-5509-4651-8f62-7e10743232de
-  [ComfyUI] Generated prompt_id: e7871271-5509-4651-8f62-7e10743232de
-  [ComfyUI] Generated prompt_id: e7871271-5509-4651-8f62-7e10743232de
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Calling execution.validate_prompt()...
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] Validation result: valid=True
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] === Validation PASSED ===
-  [ComfyUI] got prompt
-  [ComfyUI] got prompt
-  [ComfyUI] got prompt
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m === /validate endpoint called ===
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Received JSON with keys: ['prompt']
+  [ComfyUI] [32m[INFO][0m Prompt has 8 nodes
+  [ComfyUI] [32m[INFO][0m Prompt has 8 nodes
+  [ComfyUI] [32m[INFO][0m Prompt has 8 nodes
+  [ComfyUI] [32m[INFO][0m   Node 1: GeomPackLoadMesh
+  [ComfyUI] [32m[INFO][0m   Node 1: GeomPackLoadMesh
+  [ComfyUI] [32m[INFO][0m   Node 1: GeomPackLoadMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"file_path": "3d/cow.off"}
+  [ComfyUI] [32m[INFO][0m   Node 2: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 2: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 2: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 0.5, "backend.mu": -0.53, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 0.5, "backend.mu": -0.53, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "taubin", "backend.iterations": 5, "backend.lambda_": 0.5, "backend.mu": -0.53, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 3: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 3: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 3: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "laplacian", "backend.iterations": 5, "backend.cotangent_weight": "true", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "laplacian", "backend.iterations": 5, "backend.cotangent_weight": "true", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "laplacian", "backend.iterations": 5, "backend.cotangent_weight": "true", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 4: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 4: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 4: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "hc_laplacian", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "hc_laplacian", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "hc_laplacian", "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 5: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 5: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 5: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "trimesh_laplacian", "backend.iterations": 7, "backend.lambda_": 0.5, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "trimesh_laplacian", "backend.iterations": 7, "backend.lambda_": 0.5, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "trimesh_laplacian", "backend.iterations": 7, "backend.lambda_": 0.5, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 6: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 6: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m   Node 6: GeomPackSmoothMesh
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "trimesh_taubin", "backend.iterations": 10, "backend.lambda_": 0.6, "backend.mu": -0.53, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "trimesh_taubin", "backend.iterations": 10, "backend.lambda_": 0.6, "backend.mu": -0.53, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m     Inputs: {"backend": "trimesh_taubin", "backend.iterations": 10, "backend.lambda_": 0.6, "backend.mu": -0.53, "trimesh": ["1", 0]}
+  [ComfyUI] [32m[INFO][0m   Node 8: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m   Node 8: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m   Node 8: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
+  [ComfyUI] [32m[INFO][0m   Node 9: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m   Node 9: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m   Node 9: GeomPackPreviewMeshMulti
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
+  [ComfyUI] [32m[INFO][0m     Inputs: {"mode": "fields", "preview_multi": "{\"show_edges\":true,\"camera_state\":\"{\\\"position\\\":[-0.8124876310583045,0.33787129680966865,-2.241461606161383],\\\"focalPoint\\\":[0,-0.0000846534967422485
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 73b56e31-ee11-4caf-8b78-32d9099e6ce4
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 73b56e31-ee11-4caf-8b78-32d9099e6ce4
+  [ComfyUI] [32m[INFO][0m Generated prompt_id: 73b56e31-ee11-4caf-8b78-32d9099e6ce4
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Calling execution.validate_prompt()...
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m Validation result: valid=True
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m === Validation PASSED ===
+  [ComfyUI] [32m[INFO][0m got prompt
+  [ComfyUI] [32m[INFO][0m got prompt
+  [ComfyUI] [32m[INFO][0m got prompt
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/cow.off'
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/cow.off'
   [ComfyUI] [comfy-env] Running GeomPackLoadMesh: file_path: '3d/cow.off'
@@ -107,9 +113,9 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Found mesh in input folder: 3d/cow.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/cow.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/cow.off
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/cow.off
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Loading: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\input\3d/cow.off
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Initial mesh: 2761 vertices, 5520 faces
@@ -122,9 +128,9 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.28s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.28s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.28s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.26s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.26s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackLoadMesh done (0.26s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
@@ -155,15 +161,15 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] call_id=162 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=162 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=162 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: trimesh_taubin -> GeomPackSmooth_TrimeshTaubin
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: trimesh_taubin -> GeomPackSmooth_TrimeshTaubin
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: trimesh_taubin -> GeomPackSmooth_TrimeshTaubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: hc_laplacian -> GeomPackSmooth_HCLaplacian
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: hc_laplacian -> GeomPackSmooth_HCLaplacian
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: hc_laplacian -> GeomPackSmooth_HCLaplacian
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.30s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.30s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.30s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
@@ -194,84 +200,6 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] call_id=163 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=163 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=163 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: hc_laplacian -> GeomPackSmooth_HCLaplacian
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: hc_laplacian -> GeomPackSmooth_HCLaplacian
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: hc_laplacian -> GeomPackSmooth_HCLaplacian
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=164 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=164 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=164 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: laplacian -> GeomPackSmooth_Laplacian
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: laplacian -> GeomPackSmooth_Laplacian
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: laplacian -> GeomPackSmooth_Laplacian
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=165 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=165 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=165 sending call_method
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: taubin -> GeomPackSmooth_Taubin
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: taubin -> GeomPackSmooth_Taubin
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: taubin -> GeomPackSmooth_Taubin
@@ -308,6 +236,84 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=164 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=164 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=164 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: trimesh_taubin -> GeomPackSmooth_TrimeshTaubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: trimesh_taubin -> GeomPackSmooth_TrimeshTaubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: trimesh_taubin -> GeomPackSmooth_TrimeshTaubin
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=165 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=165 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=165 sending call_method
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: laplacian -> GeomPackSmooth_Laplacian
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: laplacian -> GeomPackSmooth_Laplacian
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Smooth dispatch: laplacian -> GeomPackSmooth_Laplacian
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.12s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackSmoothMesh: backend: dict, trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth.SmoothMeshNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] call_id=166 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=166 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=166 sending call_method
@@ -317,15 +323,15 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.10s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshTaubin: trimesh: Trimesh, iterations: 10, lambda_: 0.6, mu: -0.53
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshTaubin: trimesh: Trimesh, iterations: 10, lambda_: 0.6, mu: -0.53
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshTaubin: trimesh: Trimesh, iterations: 10, lambda_: 0.6, mu: -0.53
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.trimesh_taubin.SmoothTrimeshTaubinNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.trimesh_taubin.SmoothTrimeshTaubinNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.trimesh_taubin.SmoothTrimeshTaubinNode.EXECUTE_NORMALIZED
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmoothMesh done (0.11s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_HCLaplacian: trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_HCLaplacian: trimesh: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_HCLaplacian: trimesh: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.hc_laplacian.SmoothHCLaplacianNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.hc_laplacian.SmoothHCLaplacianNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.hc_laplacian.SmoothHCLaplacianNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -350,34 +356,82 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] call_id=167 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=167 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=167 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: trimesh_taubin
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: trimesh_taubin
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: trimesh_taubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: hc_laplacian
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: hc_laplacian
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: hc_laplacian
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=10, lambda=0.600, mu=-0.530
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=10, lambda=0.600, mu=-0.530
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=10, lambda=0.600, mu=-0.530
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003891, max: 0.020931
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003891, max: 0.020931
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003891, max: 0.020931
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [SubprocessWorker] got response: ok
+  [ComfyUI] [comfy-env] GeomPackSmooth_HCLaplacian done (0.16s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_HCLaplacian done (0.16s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_HCLaplacian done (0.16s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_Taubin: trimesh: Trimesh, iterations: 5, lambda_: 0.5, mu: -0.53
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_Taubin: trimesh: Trimesh, iterations: 5, lambda_: 0.5, mu: -0.53
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_Taubin: trimesh: Trimesh, iterations: 5, lambda_: 0.5, mu: -0.53
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.taubin.SmoothTaubinNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.taubin.SmoothTaubinNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.taubin.SmoothTaubinNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] worker started/confirmed
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] sending request via socket...
+  [ComfyUI] [SubprocessWorker] call_id=168 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=168 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=168 sending call_method
   Node executed (1 total), capturing...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: taubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: taubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: taubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, lambda=0.500, mu=-0.530
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, lambda=0.500, mu=-0.530
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, lambda=0.500, mu=-0.530
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.013246, max: 0.069047
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.013246, max: 0.069047
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.013246, max: 0.069047
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003815, max: 0.025956
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003815, max: 0.025956
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003815, max: 0.025956
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshTaubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshTaubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshTaubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_HCLaplacian: trimesh: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_HCLaplacian: trimesh: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_HCLaplacian: trimesh: Trimesh
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.hc_laplacian.SmoothHCLaplacianNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.hc_laplacian.SmoothHCLaplacianNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.hc_laplacian.SmoothHCLaplacianNode.EXECUTE_NORMALIZED
+  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.30s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.30s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.30s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshTaubin: trimesh: Trimesh, iterations: 10, lambda_: 0.6, mu: -0.53
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshTaubin: trimesh: Trimesh, iterations: 10, lambda_: 0.6, mu: -0.53
+  [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshTaubin: trimesh: Trimesh, iterations: 10, lambda_: 0.6, mu: -0.53
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.trimesh_taubin.SmoothTrimeshTaubinNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.trimesh_taubin.SmoothTrimeshTaubinNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.trimesh_taubin.SmoothTrimeshTaubinNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -399,27 +453,33 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=168 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=168 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=168 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: hc_laplacian
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: hc_laplacian
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: hc_laplacian
+  [ComfyUI] [SubprocessWorker] call_id=169 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=169 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=169 sending call_method
+  Frame 2 saved (frame_001.jpg, t=1.5s)
+  [capture-node] freeze=3ms shot=100ms unfreeze=2ms saved=True
+  Node executed (2 total), capturing...
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: trimesh_taubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: trimesh_taubin
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: trimesh_taubin
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=10, lambda=0.600, mu=-0.530
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=10, lambda=0.600, mu=-0.530
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=10, lambda=0.600, mu=-0.530
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003891, max: 0.020931
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003891, max: 0.020931
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003891, max: 0.020931
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.013246, max: 0.069047
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.013246, max: 0.069047
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.013246, max: 0.069047
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmooth_HCLaplacian done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_HCLaplacian done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_HCLaplacian done (0.14s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshTaubin done (0.34s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshTaubin done (0.34s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshTaubin done (0.34s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackSmooth_Laplacian: trimesh: Trimesh, iterations: 5, cotangent_weight: 'true'
   [ComfyUI] [comfy-env] Running GeomPackSmooth_Laplacian: trimesh: Trimesh, iterations: 5, cotangent_weight: 'true'
   [ComfyUI] [comfy-env] Running GeomPackSmooth_Laplacian: trimesh: Trimesh, iterations: 5, cotangent_weight: 'true'
@@ -447,15 +507,18 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=169 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=169 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=169 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=170 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=170 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=170 sending call_method
+  Frame 3 saved (frame_002.jpg, t=1.9s)
+  [capture-node] freeze=13ms shot=118ms unfreeze=3ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: laplacian
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: laplacian
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: laplacian
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
+  Node executed (3 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, cotangent_weight=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, cotangent_weight=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, cotangent_weight=True
@@ -468,15 +531,15 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmooth_Laplacian done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_Laplacian done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_Laplacian done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_Taubin: trimesh: Trimesh, iterations: 5, lambda_: 0.5, mu: -0.53
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_Taubin: trimesh: Trimesh, iterations: 5, lambda_: 0.5, mu: -0.53
-  [ComfyUI] [comfy-env] Running GeomPackSmooth_Taubin: trimesh: Trimesh, iterations: 5, lambda_: 0.5, mu: -0.53
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.taubin.SmoothTaubinNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.taubin.SmoothTaubinNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.smoothing.smooth_backends.taubin.SmoothTaubinNode.EXECUTE_NORMALIZED
+  [ComfyUI] [comfy-env] GeomPackSmooth_Laplacian done (0.27s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_Laplacian done (0.27s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_Laplacian done (0.27s): result: NodeOutput
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
+  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
+  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
   [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
@@ -492,143 +555,92 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
   [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
-  [ComfyUI] [SubprocessWorker] created 1 shm blocks
+  [ComfyUI] [SubprocessWorker] created 4 shm blocks
+  [ComfyUI] [SubprocessWorker] created 4 shm blocks
+  [ComfyUI] [SubprocessWorker] created 4 shm blocks
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
   [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=170 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=170 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=170 sending call_method
-  Frame 2 saved (frame_001.jpg, t=1.3s)
-  [capture-node] freeze=6ms shot=131ms unfreeze=10ms saved=True
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: taubin
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: taubin
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Backend: taubin
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Input: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, lambda=0.500, mu=-0.530
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, lambda=0.500, mu=-0.530
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=5, lambda=0.500, mu=-0.530
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003815, max: 0.025956
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003815, max: 0.025956
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Avg vertex displacement: 0.003815, max: 0.025956
+  [ComfyUI] [SubprocessWorker] call_id=171 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=171 sending call_method
+  [ComfyUI] [SubprocessWorker] call_id=171 sending call_method
+  Frame 4 saved (frame_003.jpg, t=2.3s)
+  [capture-node] freeze=4ms shot=94ms unfreeze=7ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   Node executed (4 total), capturing...
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_Taubin done (0.14s): result: NodeOutput
-  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
-  [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh, mesh_3: Trimesh, mesh_4: Trimesh
-  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] call_method: nodes.visualization.preview_mesh_multi.PreviewMeshMultiNode.EXECUTE_NORMALIZED
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [SubprocessWorker] acquired lock, ensuring started...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ping (timeout=5.0s)...
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [ComfyUI-GeometryPack] Health check: ok
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] worker started/confirmed
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] serializing kwargs to shm...
-  [ComfyUI] [SubprocessWorker] created 4 shm blocks
-  [ComfyUI] [SubprocessWorker] created 4 shm blocks
-  [ComfyUI] [SubprocessWorker] created 4 shm blocks
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] sending request via socket...
-  [ComfyUI] [SubprocessWorker] call_id=171 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=171 sending call_method
-  [ComfyUI] [SubprocessWorker] call_id=171 sending call_method
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 4
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_e109ac94.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_5c794522.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_e109ac94.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5c794522.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_e109ac94.vtp
+  Frame 5 saved (frame_004.jpg, t=2.7s)
+  [capture-node] freeze=3ms shot=88ms unfreeze=3ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_5c794522.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 3: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_e109ac94.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5c794522.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_e109ac94.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_3_5c794522.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 4: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 4: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 4: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_e109ac94.vtp
-  Frame 3 saved (frame_002.jpg, t=1.7s)
-  [capture-node] freeze=5ms shot=128ms unfreeze=5ms saved=True
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_5c794522.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_e109ac94.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_e109ac94.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_5c794522.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_4_5c794522.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x2, Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x2, Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x2, Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.39s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.39s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.39s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (1.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (1.03s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (1.03s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshLaplacian: trimesh: Trimesh, iterations: 7, lambda_: 0.5
   [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshLaplacian: trimesh: Trimesh, iterations: 7, lambda_: 0.5
   [ComfyUI] [comfy-env] Running GeomPackSmooth_TrimeshLaplacian: trimesh: Trimesh, iterations: 7, lambda_: 0.5
@@ -669,6 +681,8 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=7, lambda=0.500
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=7, lambda=0.500
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Parameters: iterations=7, lambda=0.500
+  Frame 6 saved (frame_005.jpg, t=3.5s)
+  [capture-node] freeze=226ms shot=194ms unfreeze=2ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Output: 2761 vertices, 5520 faces
@@ -678,9 +692,9 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshLaplacian done (0.18s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshLaplacian done (0.18s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshLaplacian done (0.18s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshLaplacian done (0.93s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshLaplacian done (0.93s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackSmooth_TrimeshLaplacian done (0.93s): result: NodeOutput
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh
   [ComfyUI] [comfy-env] Running GeomPackPreviewMeshMulti: mode: 'fields', mesh_1: Trimesh, mesh_2: Trimesh
@@ -711,62 +725,63 @@ Capturing execution frames: smooth_all.json
   [ComfyUI] [SubprocessWorker] call_id=173 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=173 sending call_method
   [ComfyUI] [SubprocessWorker] call_id=173 sending call_method
+  Node executed (6 total), capturing...
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 2
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 2
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mode: fields, Meshes: 2
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 1: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f1b2decc.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_157e8b5e.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_f1b2decc.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_1_157e8b5e.vtp
+  Frame 7 saved (frame_006.jpg, t=4.4s)
+  [capture-node] freeze=3ms shot=110ms unfreeze=3ms saved=True
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Mesh 2: Mesh - 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f1b2decc.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exporting mesh to VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_157e8b5e.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Adding normals field (2761 vertices)
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Export complete: 2761 vertices, 5520 faces
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f1b2decc.vtp
-  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-1618\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_f1b2decc.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_157e8b5e.vtp
+  [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Exported VTP: D:\a\comfy-gpu-ci\comfy-gpu-ci\test_workspaces\GeometryPack-2335\portable-comfyui\ComfyUI_windows_portable\ComfyUI\output\preview_multi_2_157e8b5e.vtp
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x1, Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x1, Preview ready
   [ComfyUI] [worker:ComfyUI-GeometryPack] INFO: Grid: 2x1, Preview ready
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
   [ComfyUI] [SubprocessWorker] got response: ok
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.34s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.34s): result: NodeOutput
-  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.34s): result: NodeOutput
-  [ComfyUI] Prompt executed in 2.30 seconds
-  [ComfyUI] Prompt executed in 2.30 seconds
-  [ComfyUI] Prompt executed in 2.30 seconds
-  Frame 4 saved (frame_003.jpg, t=2.2s)
-  [capture-node] freeze=341ms shot=601ms unfreeze=3ms saved=True
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.72s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.72s): result: NodeOutput
+  [ComfyUI] [comfy-env] GeomPackPreviewMeshMulti done (0.72s): result: NodeOutput
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 4.76 seconds[0m
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 4.76 seconds[0m
+  [ComfyUI] [32m[INFO][0m [32mPrompt executed in 4.76 seconds[0m
   Node executed (7 total), capturing...
-  Frame 5 saved (frame_004.jpg, t=3.5s)
-  [capture-node] freeze=4ms shot=141ms unfreeze=0ms saved=True
-  Execution complete (t=3.5s)
-  Captured 5 unique frames over 3.64s
+  Frame 8 saved (frame_007.jpg, t=5.1s)
+  [capture-node] freeze=3ms shot=99ms unfreeze=0ms saved=True
+  Execution complete (t=5.1s)
+  Captured 8 unique frames over 5.25s
   [debug] iframes: 2
-  [debug]   iframe[0]: src=http://127.0.0.1:41882/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17796, canvas=368x393, rafFrozen=True
-  [debug]   iframe[1]: src=http://127.0.0.1:41882/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17796, canvas=368x195, rafFrozen=True
+  [debug]   iframe[0]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17807, canvas=368x393, rafFrozen=True
+  [debug]   iframe[1]: src=http://127.0.0.1:41893/extensions/ComfyUI-GeometryPack/viewer_multi.html?v=17807, canvas=368x195, rafFrozen=True
   [timing] trigger_3d_previews: 0.0s
   Saved high-quality screenshot: smooth_all_executed.png
-  [timing] final_screenshot: 0.3s
-    Captured 6 video frames
+  [timing] final_screenshot: 0.2s
+    Captured 9 video frames
