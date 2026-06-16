@@ -21,6 +21,7 @@ def cumesh_dc_remesh(
     grid_resolution: int = 128,
     fill_holes_first: bool = True,
     band: float = 1.0,
+    project_back: float = 0.0,
 ) -> Tuple[Optional[trimesh_module.Trimesh], str]:
     """
     GPU-accelerated dual-contouring remeshing using CuMesh.
@@ -78,7 +79,7 @@ def cumesh_dc_remesh(
             scale=(grid_resolution + 3 * band) / grid_resolution * scale,
             resolution=grid_resolution,
             band=band,
-            project_back=0.0,
+            project_back=project_back,
             verbose=True,
             bvh=bvh,
         )
@@ -131,8 +132,10 @@ class RemeshGPUNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
+                io.Int.Input("grid_resolution", default=512, min=32, max=2048, step=16, tooltip="Dual-contouring voxel grid resolution -- the main detail knob. Higher = finer surface capture + more (pre-simplify) faces + slower/more VRAM; lower = coarser/faster.", optional=True),
                 io.Int.Input("target_face_count", default=500000, min=1000, max=5000000, step=1000, tooltip="Target number of output faces after simplification.", optional=True),
                 io.Float.Input("remesh_band", default=1.0, min=0.1, max=5.0, step=0.1, tooltip="Band width for dual-contouring. Affects surface detail capture. Higher = smoother but may lose fine details.", optional=True),
+                io.Float.Input("project_back", default=0.0, min=0.0, max=2.0, step=0.05, tooltip="Re-project dual-contouring vertices back onto the input surface for higher fidelity/sharper detail (0 = off).", optional=True),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="remeshed_mesh"),
@@ -141,7 +144,8 @@ class RemeshGPUNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, target_face_count=500000, remesh_band=1.0):
+    def execute(cls, trimesh, target_face_count=500000, remesh_band=1.0,
+                grid_resolution=512, project_back=0.0):
         """Apply GPU-accelerated CuMesh remeshing."""
         import torch
         import cumesh as CuMesh
@@ -151,13 +155,12 @@ class RemeshGPUNode(io.ComfyNode):
 
         log.info("Backend: cumesh (CUDA)")
         log.info("Input: %s vertices, %s faces", f"{initial_vertices:,}", f"{initial_faces:,}")
-        log.info("Parameters: target_face_count=%s, remesh_band=%s", f"{target_face_count:,}", remesh_band)
-
-        # Hardcoded resolution = 512 (same as TRELLIS2)
-        grid_resolution = 512
+        log.info("Parameters: grid_resolution=%s, target_face_count=%s, remesh_band=%s, project_back=%s",
+                 grid_resolution, f"{target_face_count:,}", remesh_band, project_back)
 
         remeshed_mesh, error = cumesh_dc_remesh(
-            trimesh, grid_resolution, fill_holes_first=False, band=remesh_band
+            trimesh, int(grid_resolution), fill_holes_first=False,
+            band=remesh_band, project_back=project_back,
         )
         if remeshed_mesh is None:
             raise ValueError(f"CuMesh remeshing failed: {error}")
@@ -198,6 +201,8 @@ class RemeshGPUNode(io.ComfyNode):
         remeshed_mesh.metadata = trimesh.metadata.copy()
         remeshed_mesh.metadata['remeshing'] = {
             'algorithm': 'cumesh',
+            'grid_resolution': int(grid_resolution),
+            'project_back': float(project_back),
             'remesh_band': remesh_band,
             'target_face_count': target_face_count,
             'original_vertices': len(trimesh.vertices),

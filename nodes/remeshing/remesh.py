@@ -47,6 +47,8 @@ class RemeshNode(io.ComfyNode):
         "cgal_edge_length": "target_edge_length",
         "cgal_iterations": "iterations",
         "gpu_target_face_count": "target_face_count",
+        "gpu_grid_resolution": "grid_resolution",
+        "gpu_project_back": "project_back",
     }
 
     @classmethod
@@ -135,8 +137,10 @@ class RemeshNode(io.ComfyNode):
                     ]),
                     # ---- GPU backend ----
                     io.DynamicCombo.Option("gpu_cumesh", [
+                        io.Int.Input("gpu_grid_resolution", default=512, min=32, max=2048, step=16, tooltip="Dual-contouring grid resolution -- the main detail knob. Higher = finer detail + more faces + slower/more VRAM; lower = coarser/faster."),
                         io.Int.Input("gpu_target_face_count", default=500000, min=1000, max=5000000, step=1000, tooltip="Target faces after simplification."),
                         io.Float.Input("remesh_band", default=1.0, min=0.1, max=5.0, step=0.1, tooltip="Band width for dual-contouring. Higher = smoother."),
+                        io.Float.Input("gpu_project_back", default=0.0, min=0.0, max=2.0, step=0.05, tooltip="Re-project DC vertices back onto the input surface for sharper fidelity (0 = off)."),
                     ]),
                 ]),
             ],
