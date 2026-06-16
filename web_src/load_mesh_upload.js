@@ -146,7 +146,9 @@ app.registerExtension({
                 if (!w || !w.value) { alert("Pick or upload a mesh first."); return; }
                 iframe = document.createElement("iframe");
                 iframe.style.cssText = "width:100%;height:100%;border:none;background:#2a2a2a;";
-                iframe.src = `/extensions/${EXTENSION_FOLDER}/viewer.html?v=` + Date.now();
+                // VTK viewer: robust OBJ/PLY/STL/VTP reader (+ the download progress bar),
+                // unlike the Three.js viewer.html whose OBJLoader chokes on some OBJs.
+                iframe.src = `/extensions/${EXTENSION_FOLDER}/viewer_vtk.html?v=` + Date.now();
                 viewWidget = node.addDOMWidget("loadmesh_view3d", "MESH_PREVIEW", iframe, { getValue() { return ""; }, setValue() { } });
                 viewWidget.computeSize = (width) => [width || 360, width || 360];
                 iframe.addEventListener("load", () => setTimeout(sendMesh, 150));
