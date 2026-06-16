@@ -27,6 +27,22 @@ from . import mesh_io
 from comfy_api.latest import io
 
 
+def _n_faces(m):
+    f = getattr(m, "faces", None)
+    return len(f) if f is not None else 0
+
+
+def _load_mesh_worker(file_path):
+    """Top-level worker (picklable) for the process pool: load one mesh file.
+    Returns the trimesh (or None on failure). True CPU parallelism for parsing,
+    unlike threads (trimesh's OBJ parser is largely GIL-bound Python)."""
+    try:
+        m, _err = mesh_io.load_mesh_file(file_path)
+        return m
+    except Exception:
+        return None
+
+
 class LoadMeshBatch(io.ComfyNode):
     """
     Load multiple meshes from a folder (batch loading).
@@ -45,8 +61,9 @@ class LoadMeshBatch(io.ComfyNode):
                 io.Int.Input("start_index", default=0, min=0, max=100000),
                 io.Int.Input("max_meshes", default=-1, min=-1, max=100000),
                 io.Boolean.Input("use_multithreading", default=True,
-                    tooltip="Load files in parallel across CPU cores (mesh I/O + numpy OBJ "
-                            "parsing release the GIL, so this is faster for big batches)."),
+                    tooltip="Load files in parallel across CPU cores using a process pool "
+                            "(real parallelism for the CPU-bound OBJ parsing; falls back to "
+                            "serial on error)."),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="meshes", is_output_list=True),
@@ -141,40 +158,38 @@ class LoadMeshBatch(io.ComfyNode):
             mesh_files = mesh_files[:max_meshes]
             log.info("Loading up to %d meshes", max_meshes)
 
-        # Load all meshes (optionally in parallel). Mesh I/O + numpy OBJ parsing
-        # release the GIL, so a thread pool across CPU cores speeds up big batches
-        # without the cost of pickling large meshes back from worker processes.
+        # Load all meshes, optionally in parallel. trimesh's OBJ parser is mostly
+        # GIL-bound Python, so threads barely help -- use a PROCESS pool for real
+        # CPU parallelism (the parse cost dwarfs the pickle-back of the result).
         total = len(mesh_files)
-        import threading
-        _counter = {"n": 0}
-        _lock = threading.Lock()
+        paths = [os.path.join(full_folder_path, f) for f in mesh_files]
 
-        def _load_one(filename):
-            file_path = os.path.join(full_folder_path, filename)
-            try:
-                m, err = mesh_io.load_mesh_file(file_path)
-            except Exception as e:
-                m, err = None, str(e)
-            with _lock:
-                _counter["n"] += 1
-                n = _counter["n"]
+        def _record(i, filename, m, loaded):
             if m is not None:
+                loaded.append(m)
                 log.info("[%d/%d] Loaded %s: %d vertices, %d faces",
-                         n, total, filename, len(m.vertices), len(getattr(m, "faces", []) or []))
+                         i, total, filename, len(m.vertices), _n_faces(m))
             else:
-                log.warning("[%d/%d] Failed to load %s: %s", n, total, filename, err)
-            return m
+                log.warning("[%d/%d] Failed to load %s", i, total, filename)
 
+        loaded_meshes = []
+        used_parallel = False
         if use_multithreading and total > 1:
-            from concurrent.futures import ThreadPoolExecutor
+            from concurrent.futures import ProcessPoolExecutor
             workers = min(total, (os.cpu_count() or 4))
-            log.info("Loading %d meshes with %d worker threads", total, workers)
-            with ThreadPoolExecutor(max_workers=workers) as ex:
-                results = list(ex.map(_load_one, mesh_files))  # preserves input order
-        else:
-            results = [_load_one(f) for f in mesh_files]
+            log.info("Loading %d meshes across %d processes", total, workers)
+            try:
+                with ProcessPoolExecutor(max_workers=workers) as ex:
+                    for i, m in enumerate(ex.map(_load_mesh_worker, paths), 1):
+                        _record(i, mesh_files[i - 1], m, loaded_meshes)
+                used_parallel = True
+            except Exception as e:
+                log.warning("Parallel load failed (%s); falling back to serial", e)
+                loaded_meshes = []
 
-        loaded_meshes = [m for m in results if m is not None]
+        if not used_parallel:
+            for i, (filename, path) in enumerate(zip(mesh_files, paths), 1):
+                _record(i, filename, _load_mesh_worker(path), loaded_meshes)
 
         if len(loaded_meshes) == 0:
             raise ValueError(f"Failed to load any meshes from folder: {full_folder_path}")
