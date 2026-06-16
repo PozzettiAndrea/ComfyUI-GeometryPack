@@ -23,6 +23,7 @@ viewers = [
     "fbx", "fbx_debug", "fbx_compare",
     "bvh", "fbx_animation", "compare_smpl_bvh",
     "text_report",
+    "ultimate_inspection",
 ]
 for viewer in viewers:
     try:
@@ -42,6 +43,9 @@ try:
             shutil.copy2(src, dst)
 except ImportError:
     pass
+
+# Copy GeometryPack-local frontend JS (tracked source -> served web/js, since web/ is generated)
+copy_files(SCRIPT_DIR / "web_src", SCRIPT_DIR / "web" / "js", "*.js")
 
 # Copy assets
 copy_files(SCRIPT_DIR / "assets", COMFYUI_DIR / "input" / "3d", "**/*")
