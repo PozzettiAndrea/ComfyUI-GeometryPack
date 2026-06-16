@@ -70,20 +70,24 @@ def _edge_flip(V, F, criterion, iterations, feature_angle=30.0, seed=0):
         p = F[f0, (i0 + 1) % 3]
         q = F[f0, (i0 + 2) % 3]
 
+        # boundary vertices: RXMesh excludes any flip touching one of them.
+        bvert = np.zeros(N, dtype=bool)
+        bv = np.unique(E[~intr])
+        if bv.size:
+            bvert[bv] = True
+        touches_boundary = bvert[a] | bvert[b] | bvert[c] | bvert[d]
+
         # --- criterion ---
         if criterion == "delaunay":
             ang = _angles(V[a] - V[c], V[b] - V[c]) + _angles(V[a] - V[d], V[b] - V[d])
             crit = ang > (np.pi + 1e-6)
-        else:  # valence (Botsch-Kobbelt)
+        else:  # valence (Botsch-Kobbelt): minimize SUM of squared valence deviation
             deg = np.bincount(E.reshape(-1), minlength=N)
-            ideal = np.full(N, 6, dtype=np.int64)
-            bverts = np.unique(E[~intr])           # vertices on boundary edges
-            if bverts.size:
-                ideal[bverts] = 4
-            bef = (np.abs(deg[a] - ideal[a]) + np.abs(deg[b] - ideal[b])
-                   + np.abs(deg[c] - ideal[c]) + np.abs(deg[d] - ideal[d]))
-            aft = (np.abs(deg[a] - 1 - ideal[a]) + np.abs(deg[b] - 1 - ideal[b])
-                   + np.abs(deg[c] + 1 - ideal[c]) + np.abs(deg[d] + 1 - ideal[d]))
+            ideal = np.where(bvert, 4, 6).astype(np.int64)   # interior 6, boundary 4
+            da = deg[a] - ideal[a]; db = deg[b] - ideal[b]
+            dc = deg[c] - ideal[c]; dd = deg[d] - ideal[d]
+            bef = da * da + db * db + dc * dc + dd * dd
+            aft = ((da - 1) ** 2 + (db - 1) ** 2 + (dc + 1) ** 2 + (dd + 1) ** 2)
             crit = aft < bef
 
         # --- guards (all vectorized) ---
@@ -108,18 +112,23 @@ def _edge_flip(V, F, criterion, iterations, feature_angle=30.0, seed=0):
         cd = (np.minimum(c, d).astype(np.int64) * N + np.maximum(c, d))
         dup = np.isin(cd, ek)
 
-        ok = crit & area_ok & no_fold & not_feature & (c != d) & ~dup
+        ok = crit & area_ok & no_fold & not_feature & (c != d) & ~dup & ~touches_boundary
         cand = np.flatnonzero(ok)
         if cand.size == 0:
             break
 
-        # --- Luby maximal independent set: a flip wins iff it out-ranks every
-        #     other candidate touching either of its two faces ---
+        # --- Luby maximal independent set, VERTEX-disjoint: a flip wins iff it
+        #     out-ranks every other candidate sharing any of its 4 vertices
+        #     (a,b,c,d). Vertex-disjoint subsumes face-disjoint (so topology is
+        #     safe) AND keeps each flip's valence change independent -- without
+        #     this, two flips sharing only a vertex are scored on stale valence
+        #     and the valence criterion oscillates. ---
         prio = rng.permutation(cand.size)
-        facemax = np.full(len(F), -1, dtype=np.int64)
-        np.maximum.at(facemax, f0[cand], prio)
-        np.maximum.at(facemax, f1[cand], prio)
-        win = (prio == facemax[f0[cand]]) & (prio == facemax[f1[cand]])
+        vmax = np.full(N, -1, dtype=np.int64)
+        for varr in (a, b, c, d):
+            np.maximum.at(vmax, varr[cand], prio)
+        win = ((prio == vmax[a[cand]]) & (prio == vmax[b[cand]])
+               & (prio == vmax[c[cand]]) & (prio == vmax[d[cand]]))
         W = cand[win]
         # also ensure no two winners produce the same new edge
         _, uidx = np.unique(cd[W], return_index=True)
