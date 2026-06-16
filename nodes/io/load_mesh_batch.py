@@ -44,6 +44,9 @@ class LoadMeshBatch(io.ComfyNode):
                 io.String.Input("folder_path", default="3d", multiline=False),
                 io.Int.Input("start_index", default=0, min=0, max=100000),
                 io.Int.Input("max_meshes", default=-1, min=-1, max=100000),
+                io.Boolean.Input("use_multithreading", default=True,
+                    tooltip="Load files in parallel across CPU cores (mesh I/O + numpy OBJ "
+                            "parsing release the GIL, so this is faster for big batches)."),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="meshes", is_output_list=True),
@@ -55,7 +58,7 @@ class LoadMeshBatch(io.ComfyNode):
 
 
     @classmethod
-    def execute(cls, folder_path, start_index, max_meshes):
+    def execute(cls, folder_path, start_index, max_meshes, use_multithreading=True):
         """
         Load multiple meshes from a folder.
 
@@ -138,23 +141,40 @@ class LoadMeshBatch(io.ComfyNode):
             mesh_files = mesh_files[:max_meshes]
             log.info("Loading up to %d meshes", max_meshes)
 
-        # Load all meshes
-        loaded_meshes = []
-        for i, filename in enumerate(mesh_files):
+        # Load all meshes (optionally in parallel). Mesh I/O + numpy OBJ parsing
+        # release the GIL, so a thread pool across CPU cores speeds up big batches
+        # without the cost of pickling large meshes back from worker processes.
+        total = len(mesh_files)
+        import threading
+        _counter = {"n": 0}
+        _lock = threading.Lock()
+
+        def _load_one(filename):
             file_path = os.path.join(full_folder_path, filename)
             try:
-                loaded_mesh, error = mesh_io.load_mesh_file(file_path)
-                if loaded_mesh is None:
-                    log.warning("Failed to load %s: %s", filename, error)
-                    continue
-
-                loaded_meshes.append(loaded_mesh)
-                log.info("[%d/%d] Loaded %s: %d vertices, %d faces",
-                         i + 1, len(mesh_files), filename,
-                         len(loaded_mesh.vertices), len(loaded_mesh.faces))
+                m, err = mesh_io.load_mesh_file(file_path)
             except Exception as e:
-                log.warning("Error loading %s: %s", filename, e)
-                continue
+                m, err = None, str(e)
+            with _lock:
+                _counter["n"] += 1
+                n = _counter["n"]
+            if m is not None:
+                log.info("[%d/%d] Loaded %s: %d vertices, %d faces",
+                         n, total, filename, len(m.vertices), len(getattr(m, "faces", []) or []))
+            else:
+                log.warning("[%d/%d] Failed to load %s: %s", n, total, filename, err)
+            return m
+
+        if use_multithreading and total > 1:
+            from concurrent.futures import ThreadPoolExecutor
+            workers = min(total, (os.cpu_count() or 4))
+            log.info("Loading %d meshes with %d worker threads", total, workers)
+            with ThreadPoolExecutor(max_workers=workers) as ex:
+                results = list(ex.map(_load_one, mesh_files))  # preserves input order
+        else:
+            results = [_load_one(f) for f in mesh_files]
+
+        loaded_meshes = [m for m in results if m is not None]
 
         if len(loaded_meshes) == 0:
             raise ValueError(f"Failed to load any meshes from folder: {full_folder_path}")
