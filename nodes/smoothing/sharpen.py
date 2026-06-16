@@ -62,6 +62,24 @@ class SharpenMeshNode(io.ComfyNode):
             node_id="GeomPackSharpenMesh",
             display_name="Sharpen Mesh",
             category="geompack/smoothing",
+            description=(
+                "Sharpen / de-noise a mesh by edge-preserving normal filtering, then move "
+                "vertices to match the filtered normals: flat regions get smoothed while "
+                "sharp feature edges are kept (or enhanced). Choose a method in 'backend'; "
+                "each exposes its own knobs (hover any widget for details).\n"
+                "\n"
+                "GUIDED NORMAL (Zhang et al. 2015) is a 2-stage bilateral filter: "
+                "(1) for every face it picks a 'guidance' normal from the flattest "
+                "sub-neighborhood, so the filter knows where the true surface is; "
+                "(2) it averages each face normal with its neighbors, weighting by face "
+                "area, spatial distance (sigma_s) and how much the guidance normals differ "
+                "(sigma_r). Faces across a sharp edge have very different guidance normals "
+                "-> near-zero weight -> the edge survives; faces on the same flat region get "
+                "averaged -> noise removed. sigma_r is in DEGREES (angle at which normals "
+                "stop blending: small = sharper, large = smoother); sigma_s is the spatial "
+                "reach in multiples of average edge length. use_gpu runs a faithful "
+                "vectorized torch port (CUDA), ~17x faster on large meshes."
+            ),
             enable_expand=True,
             is_output_node=True,
             inputs=[
@@ -150,15 +168,17 @@ class SharpenMeshNode(io.ComfyNode):
                             "normals. More iterations give better convergence."
                         )),
                         io.Float.Input("sigma_s", default=1.0, min=0.1, max=10.0, step=0.1, tooltip=(
-                            "Spatial weight sigma as a multiple of average edge length. "
-                            "Controls the neighborhood size for normal filtering. "
-                            "Larger = smoother but may blur sharp features."
+                            "SPATIAL scale = neighborhood size as a multiple of the average "
+                            "edge length. How far (in surface distance) a neighbor face still "
+                            "influences the filter. Larger = wider smoothing (can blur small "
+                            "features); smaller = more local. Default 1.0 (~one ring)."
                         )),
-                        io.Float.Input("sigma_r", default=0.35, min=0.01, max=1.0, step=0.01, tooltip=(
-                            "Normal similarity threshold. Controls which normals are "
-                            "averaged together. Smaller = more aggressive edge "
-                            "preservation. 0.35 corresponds to roughly 40 degree "
-                            "dihedral angle threshold."
+                        io.Float.Input("sigma_r_degrees", default=20.0, min=1.0, max=120.0, step=1.0, tooltip=(
+                            "RANGE scale, in DEGREES: the angle between two faces' normals at "
+                            "which they stop being averaged together (the edge-preservation "
+                            "knob). SMALLER (e.g. 10 deg) = only near-parallel faces blend = "
+                            "sharper. LARGER (e.g. 45 deg) = more faces blend = smoother. "
+                            "Default 20 deg."
                         )),
                         io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
                             "Run the faithful vectorized torch port instead of the per-face "

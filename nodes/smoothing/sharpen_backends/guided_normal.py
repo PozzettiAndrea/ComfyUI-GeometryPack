@@ -197,15 +197,18 @@ class SharpenGuidedNormalNode(io.ComfyNode):
                     "normals. More iterations give better convergence."
                 )),
                 io.Float.Input("sigma_s", default=1.0, min=0.1, max=10.0, step=0.1, tooltip=(
-                    "Spatial weight sigma as a multiple of average edge length. "
-                    "Controls the neighborhood size for normal filtering. "
-                    "Larger = smoother but may blur sharp features."
+                    "SPATIAL scale = neighborhood size as a multiple of the average edge "
+                    "length. Controls how far (in surface distance) a neighbor face still "
+                    "influences the filter. Larger = wider smoothing (can blur small "
+                    "features); smaller = more local. Default 1.0 (~one ring)."
                 )),
-                io.Float.Input("sigma_r", default=0.35, min=0.01, max=1.0, step=0.01, tooltip=(
-                    "Normal similarity threshold. Controls which normals are "
-                    "averaged together. Smaller = more aggressive edge "
-                    "preservation. 0.35 corresponds to roughly 40 degree "
-                    "dihedral angle threshold."
+                io.Float.Input("sigma_r_degrees", default=20.0, min=1.0, max=120.0, step=1.0, tooltip=(
+                    "RANGE scale, in DEGREES: the angle between two faces' normals at which "
+                    "they stop being averaged together (the edge-preservation knob). "
+                    "Internally converted to a unit-normal distance via 2*sin(theta/2). "
+                    "SMALLER (e.g. 10 deg) = only near-parallel faces blend = sharper, "
+                    "stronger edge preservation. LARGER (e.g. 45 deg) = more faces blend = "
+                    "smoother, softer edges. Default 20 deg."
                 )),
                 io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
                     "Run the faithful vectorized torch port instead of the per-face Python "
@@ -224,13 +227,18 @@ class SharpenGuidedNormalNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, normal_iterations=5, vertex_iterations=10,
-                sigma_s=1.0, sigma_r=0.35, use_gpu="false"):
+                sigma_s=1.0, sigma_r_degrees=20.0, use_gpu="false"):
+        import math
         gpu = (use_gpu == "true")
         algorithm = "guided_normal_gpu" if gpu else "guided_normal"
+        # Range weight works on unit-normal distances; a difference angle of theta
+        # between two unit normals is a chord of length 2*sin(theta/2). Let the user
+        # think in degrees and convert to that internal sigma here.
+        sigma_r = 2.0 * math.sin(math.radians(sigma_r_degrees) / 2.0)
         log.info("Backend: %s", algorithm)
         log.info("Input: %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
-        log.info("Parameters: normal_iter=%d, vertex_iter=%d, sigma_s=%.2f, sigma_r=%.3f, use_gpu=%s",
-                 normal_iterations, vertex_iterations, sigma_s, sigma_r, use_gpu)
+        log.info("Parameters: normal_iter=%d, vertex_iter=%d, sigma_s=%.2f, sigma_r=%.3f (%.1f deg), use_gpu=%s",
+                 normal_iterations, vertex_iterations, sigma_s, sigma_r, sigma_r_degrees, use_gpu)
 
         initial_vertices = len(trimesh.vertices)
         initial_faces = len(trimesh.faces)
@@ -274,7 +282,7 @@ class SharpenGuidedNormalNode(io.ComfyNode):
             f"Normal Iterations: {normal_iterations}\n"
             f"Vertex Iterations: {vertex_iterations}\n"
             f"Sigma S: {sigma_s}\n"
-            f"Sigma R: {sigma_r}\n"
+            f"Sigma R: {sigma_r_degrees} deg (= {sigma_r:.3f} normal-dist)\n"
             f"Use GPU: {use_gpu}"
         )
 
