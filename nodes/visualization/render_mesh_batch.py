@@ -181,14 +181,19 @@ def _render_mesh_array(mesh, title, o):
 
 
 def _render_worker(payload):
-    """ProcessPool worker (software path). payload = (spec, title, opts) where
-    spec is ("path", filepath) or ("mesh", trimesh). The parent started Xvfb
-    WITHOUT a GL context (fork-safe); each child makes its own software context.
+    """ProcessPool worker. payload = (spec, title, opts) where spec is
+    ("path", filepath) or ("mesh", trimesh). Each child makes its OWN GL context
+    (fork-safe: the parent holds no context). GPU children unset DISPLAY so VTK
+    picks EGL per-process; software children use the parent-started Xvfb.
     Returns the array, or ("ERR", message, res) on failure."""
+    import os
     try:
+        spec, title, o = payload
+        if o.get("gpu"):
+            # Force a per-process EGL (GPU) context; don't attach to any X display.
+            os.environ.pop("DISPLAY", None)
         import pyvista as pv
         pv.OFF_SCREEN = True
-        spec, title, o = payload
         if spec[0] == "path":
             from ..io import mesh_io
             mesh, err = mesh_io.load_mesh_file(spec[1])
@@ -279,6 +284,7 @@ class RenderMeshBatch(io.ComfyNode):
             "revert_yz": bool(_s(revert_yz_flip, False)),
             "three": three,
             "titled": bool(_s(show_title, True)),
+            "gpu": gpu,  # workers set up EGL (gpu) vs Xvfb/OSMesa (software)
         }
 
         try:
@@ -294,15 +300,19 @@ class RenderMeshBatch(io.ComfyNode):
         titles = [_mesh_title(m, i) for i, m in enumerate(meshes)]
         imgs = [None] * len(meshes)
 
-        if (not gpu) and len(meshes) > 1:
-            # ---- software path: parallelise across CPU cores via processes ----
-            # Start the shared virtual display ONCE in the parent WITHOUT creating
-            # a GL context (so the fork stays safe); each child makes its own.
-            try:
-                if os.name != "nt" and not os.environ.get("DISPLAY"):
-                    pv.start_xvfb()
-            except Exception as e:
-                log.debug("[PreviewMeshBatch] start_xvfb: %s", e)
+        def _run_pool():
+            """Render across CPU cores via a process pool (max workers). Each worker
+            renders in its OWN GL context and returns the small image (not the mesh),
+            so this parallelises the CPU-heavy prep for BOTH gpu (per-process EGL) and
+            software (shared Xvfb). Returns True on success, False -> serial fallback."""
+            # Software children share a parent-started Xvfb (started WITH NO GL context
+            # so the fork stays safe). GPU children unset DISPLAY -> their own EGL.
+            if not gpu:
+                try:
+                    if os.name != "nt" and not os.environ.get("DISPLAY"):
+                        pv.start_xvfb()
+                except Exception as e:
+                    log.debug("[PreviewMeshBatch] start_xvfb: %s", e)
 
             payloads = []
             for i, mesh in enumerate(meshes):
@@ -315,56 +325,47 @@ class RenderMeshBatch(io.ComfyNode):
                 payloads.append((spec, titles[i], opts))
 
             from concurrent.futures import ProcessPoolExecutor
-            workers = min(len(meshes), (os.cpu_count() or 4))
-            log.info("[PreviewMeshBatch] software render: %d mesh(es) @ %dpx across %d processes",
-                     len(meshes), res, workers)
-            with ProcessPoolExecutor(max_workers=workers) as ex:
-                gen = ex.map(_render_worker, payloads)
-                if tqdm is not None:
-                    gen = tqdm(gen, total=len(meshes), desc="Preview Mesh Batch", unit="mesh")
-                for i, out in enumerate(gen):
-                    if isinstance(out, tuple) and out and out[0] == "ERR":
-                        log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], out[1])
-                        imgs[i] = np.ones((res, res, 3), np.float32)
-                    else:
-                        imgs[i] = out
-                    if pbar is not None:
-                        pbar.update(1)
-        else:
-            # ---- serial path (GPU, or single mesh): REUSE one plotter/GL context ----
-            # Recreating the EGL window per mesh dominates the per-mesh time; keep one
-            # plotter alive and clear()+redraw between meshes. Recreate only after a
-            # failure so one bad mesh can't poison the rest of the batch.
+            workers = min(len(meshes), (os.cpu_count() or 4))  # max available
+            log.info("[PreviewMeshBatch] %s render: %d mesh(es) @ %dpx across %d processes",
+                     "gpu" if gpu else "software", len(meshes), res, workers)
+            try:
+                with ProcessPoolExecutor(max_workers=workers) as ex:
+                    gen = ex.map(_render_worker, payloads)
+                    if tqdm is not None:
+                        gen = tqdm(gen, total=len(meshes), desc="Preview Mesh Batch", unit="mesh")
+                    for i, out in enumerate(gen):
+                        if isinstance(out, tuple) and out and out[0] == "ERR":
+                            log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], out[1])
+                            imgs[i] = np.ones((res, res, 3), np.float32)
+                        else:
+                            imgs[i] = out
+                        if pbar is not None:
+                            pbar.update(1)
+                return True
+            except Exception as e:
+                log.warning("[PreviewMeshBatch] parallel render failed (%s); serial fallback", e)
+                return False
+
+        done = _run_pool() if len(meshes) > 1 else False
+
+        if not done:
+            # ---- serial path (single mesh, or pool fallback) ----
+            # Fresh plotter per mesh (default lights -> shading). Reuse+clear() dropped
+            # the lights AND barely helped (cost is geometry upload + GPU readback).
             backend = _setup_offscreen(gpu)
-            log.info("[PreviewMeshBatch] backend: %s | %d mesh(es) @ %dpx%s%s (reusing context)",
+            log.info("[PreviewMeshBatch] serial backend: %s | %d mesh(es) @ %dpx%s%s",
                      backend, len(meshes), res, " 3-plane" if three else "", " CC" if show_cc else "")
             it = enumerate(meshes)
             if tqdm is not None:
                 it = tqdm(list(it), desc="Preview Mesh Batch", unit="mesh")
-            p = None
-            try:
-                p = _make_plotter(opts)
-                for i, mesh in it:
-                    try:
-                        p.clear()
-                        _draw_into(p, _prep_poly(mesh, opts), titles[i], opts)
-                        imgs[i] = _screenshot_arr(p)
-                    except Exception as e:
-                        log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], e)
-                        imgs[i] = np.ones((res, res, 3), np.float32)
-                        try:
-                            p.close()
-                        except Exception:
-                            pass
-                        p = _make_plotter(opts)  # fresh context after a failure
-                    if pbar is not None:
-                        pbar.update(1)
-            finally:
-                if p is not None:
-                    try:
-                        p.close()
-                    except Exception:
-                        pass
+            for i, mesh in it:
+                try:
+                    imgs[i] = _render_mesh_array(mesh, titles[i], opts)
+                except Exception as e:
+                    log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], e)
+                    imgs[i] = np.ones((res, res, 3), np.float32)
+                if pbar is not None:
+                    pbar.update(1)
 
         h = max(a.shape[0] for a in imgs)
         w = max(a.shape[1] for a in imgs)
