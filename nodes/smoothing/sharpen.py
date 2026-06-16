@@ -54,6 +54,7 @@ class SharpenMeshNode(io.ComfyNode):
         "guided_normal":  "GeomPackSharpen_GuidedNormal",
         "fast_effective":  "GeomPackSharpen_FastEffective",
         "non_iterative":  "GeomPackSharpen_NonIterative",
+        "curvature_guided": "GeomPackSharpen_CurvatureGuided",
     }
 
     @classmethod
@@ -224,6 +225,39 @@ class SharpenMeshNode(io.ComfyNode):
                             "Controls sensitivity to projection distance (how far "
                             "the vertex moves toward each face plane). Smaller = "
                             "more feature-preserving."
+                        )),
+                    ]),
+                    io.DynamicCombo.Option("curvature_guided", [
+                        io.Int.Input("iterations", default=5, min=0, max=100, step=1, tooltip=(
+                            "Edge-aware diffusion passes on the CURVATURE field (2nd-order). "
+                            "Unlike guided_normal (which flattens curved regions), this filters "
+                            "curvature magnitude and reconstructs via a Laplacian solve, so it "
+                            "denoises within a region WITHOUT flattening cylinders/fillets. "
+                            "More = stronger agreement / wider reach. 0 = identity."
+                        )),
+                        io.Float.Input("sigma_s", default=2.0, min=0.1, max=10.0, step=0.1, tooltip=(
+                            "Spatial scale (x average edge length) for curvature diffusion."
+                        )),
+                        io.Float.Input("sigma_r_degrees", default=20.0, min=1.0, max=120.0, step=1.0, tooltip=(
+                            "Range scale in DEGREES: normal-difference angle at which curvature "
+                            "STOPS diffusing across an edge. Smaller = sharper feature preservation."
+                        )),
+                        io.Float.Input("anchor_weight", default=0.1, min=0.001, max=10.0, step=0.001, display_mode="number", tooltip=(
+                            "How strongly the reconstruction sticks to the input positions "
+                            "(Tikhonov lambda). LOWER = stronger curvature-domain reshaping; "
+                            "HIGHER = stay close to input. Default 0.1."
+                        )),
+                        io.Float.Input("direction_blend", default=0.0, min=0.0, max=1.0, step=0.05, tooltip=(
+                            "0 = filter curvature MAGNITUDE only (spheres/cylinders are a fixed "
+                            "point, no flattening, but positional noise survives). >0 also "
+                            "smooths the direction to denoise positions, at some flattening risk "
+                            "in curved regions. Try 0.3-0.6 to denoise; 0 to purely uniformize."
+                        )),
+                        io.Int.Input("cg_iters", default=200, min=10, max=2000, step=10, tooltip=(
+                            "Max preconditioned-CG iterations for the reconstruction solve."
+                        )),
+                        io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
+                            "Run on CUDA (recommended -- torch sparse mat-vecs). false = CPU torch."
                         )),
                     ]),
                 ]),
