@@ -43,7 +43,7 @@ def _tri_normals(V, T):
     return np.cross(V[T[:, 1]] - V[T[:, 0]], V[T[:, 2]] - V[T[:, 0]])
 
 
-def _edge_flip(V, F, criterion, iterations, seed=0):
+def _edge_flip(V, F, criterion, iterations, feature_angle=30.0, seed=0):
     """Vectorized edge flipping. Returns (new_F, total_flips)."""
     import igl
 
@@ -91,15 +91,24 @@ def _edge_flip(V, F, criterion, iterations, seed=0):
         new1 = np.stack([c, d, q], axis=1)
         n0 = _tri_normals(V, new0); n1 = _tri_normals(V, new1)
         area_ok = (np.linalg.norm(n0, axis=1) > 1e-12) & (np.linalg.norm(n1, axis=1) > 1e-12)
-        old_n = _tri_normals(V, F[f0]) + _tri_normals(V, F[f1])
-        no_fold = np.sum(old_n * (n0 + n1), axis=1) >= 0.0       # don't create a fold
+        nf0 = _tri_normals(V, F[f0]); nf1 = _tri_normals(V, F[f1])
+        no_fold = np.sum((nf0 + nf1) * (n0 + n1), axis=1) >= 0.0   # don't create a fold
+
+        # feature-edge lock: never flip an edge whose dihedral (angle between the
+        # two adjacent face normals) exceeds feature_angle -- that's a crease that
+        # must be preserved. feature_angle >= 180 disables the lock.
+        nf0u = nf0 / (np.linalg.norm(nf0, axis=1, keepdims=True) + 1e-20)
+        nf1u = nf1 / (np.linalg.norm(nf1, axis=1, keepdims=True) + 1e-20)
+        dihedral = np.degrees(np.arccos(np.clip(np.sum(nf0u * nf1u, axis=1), -1.0, 1.0)))
+        not_feature = dihedral <= feature_angle
+
         # would the new edge (c,d) already exist? -> non-manifold; skip
         ek = (np.minimum(E[:, 0], E[:, 1]).astype(np.int64) * N
               + np.maximum(E[:, 0], E[:, 1]))
         cd = (np.minimum(c, d).astype(np.int64) * N + np.maximum(c, d))
         dup = np.isin(cd, ek)
 
-        ok = crit & area_ok & no_fold & (c != d) & ~dup
+        ok = crit & area_ok & no_fold & not_feature & (c != d) & ~dup
         cand = np.flatnonzero(ok)
         if cand.size == 0:
             break
@@ -155,6 +164,11 @@ class EdgeFlipNode(io.ComfyNode):
                     "delaunay = maximize min angle (flip when opposite angles sum > 180 deg). "
                     "valence = Botsch-Kobbelt connectivity regularization (flip toward ideal "
                     "valence 6/4).")),
+                io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=1.0, tooltip=(
+                    "Preserve sharp edges: any edge whose dihedral (angle between the two "
+                    "adjacent face normals) exceeds this is LOCKED and never flipped, so "
+                    "creases/feature lines survive. Lower = protect more edges (CAD: ~20-45). "
+                    "Set 180 to disable protection and flip everything.")),
                 io.Int.Input("iterations", default=10, min=1, max=100, step=1, tooltip=(
                     "Max flip passes. Each pass flips a conflict-free set and re-evaluates; "
                     "stops early once no edge wants to flip (converged).")),
@@ -168,18 +182,24 @@ class EdgeFlipNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, criterion="delaunay", iterations=10, seed=0):
+    def execute(cls, trimesh, criterion="delaunay", feature_angle=30.0, iterations=10, seed=0):
         import time
 
         V = np.asarray(trimesh.vertices, dtype=np.float64)
         F = np.asarray(trimesh.faces, dtype=np.int64)
         nv, nf = len(V), len(F)
-        log.info("Edge Flip: %s | %d verts %d faces | iters=%d", criterion, nv, nf, iterations)
+        log.info("Edge Flip: %s | %d verts %d faces | feature=%.0fdeg iters=%d",
+                 criterion, nv, nf, feature_angle, iterations)
 
         min_ang_before = float(np.degrees(np.min(trimesh.face_angles))) if nf else 0.0
+        # how many edges are locked as features (dihedral > feature_angle)
+        try:
+            n_features = int((np.degrees(trimesh.face_adjacency_angles) > feature_angle).sum())
+        except Exception:
+            n_features = 0
 
         t0 = time.perf_counter()
-        F_new, flips = _edge_flip(V, F, criterion, iterations, seed)
+        F_new, flips = _edge_flip(V, F, criterion, iterations, feature_angle, seed)
         elapsed = time.perf_counter() - t0
 
         result = trimesh_module.Trimesh(vertices=V, faces=F_new, process=False)
@@ -192,7 +212,8 @@ class EdgeFlipNode(io.ComfyNode):
                     result.vertex_attributes[k] = vals
                 except Exception:
                     pass
-        result.metadata["edge_flip"] = {"criterion": criterion, "iterations": iterations, "flips": flips}
+        result.metadata["edge_flip"] = {"criterion": criterion, "feature_angle": feature_angle,
+                                        "iterations": iterations, "flips": flips}
 
         min_ang_after = float(np.degrees(np.min(result.face_angles))) if nf else 0.0
 
@@ -200,6 +221,7 @@ class EdgeFlipNode(io.ComfyNode):
             f"Edge Flip ({criterion}):\n"
             f"\n"
             f"Flips: {flips:,}\n"
+            f"Feature edges preserved: {n_features:,} (dihedral > {feature_angle:.0f} deg)\n"
             f"Vertices: {nv:,} (unchanged)\n"
             f"Faces: {nf:,} (unchanged)\n"
             f"Min angle: {min_ang_before:.2f} deg -> {min_ang_after:.2f} deg\n"
