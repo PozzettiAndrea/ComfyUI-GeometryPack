@@ -1,10 +1,10 @@
-// Load Mesh: drag-n-drop / upload + inline "View 3D", for GeomPackLoadMesh.
-//
-// Upload mirrors ComfyUI's official Load Image: drop a mesh (or click the
-// button) -> POST to /upload/image with subfolder=3d -> lands in input/3d/ and
-// is added to the file_path combo. View 3D mounts the shared vtk.js viewer
-// (viewer.html) inline in the node and postMessages the selected file's URL.
+// Load Mesh: drag-n-drop / upload (with progress bar) + inline "View 3D",
+// for GeomPackLoadMesh. Upload mirrors ComfyUI's official Load Image
+// (POST /upload/image, subfolder=3d) but via XHR so we get upload progress.
 import { app } from "../../../scripts/app.js";
+
+const TAG = "[LoadMeshUpload]";
+console.log(`${TAG} script loaded`);
 
 const EXTENSION_FOLDER = (() => {
     const m = import.meta.url.match(/\/extensions\/([^/]+)\//);
@@ -15,36 +15,49 @@ const EXTS = [".obj", ".ply", ".stl", ".off", ".gltf", ".glb", ".fbx", ".dae", "
 const ACCEPT = EXTS.join(",");
 const isMesh = (name) => EXTS.some((x) => name.toLowerCase().endsWith(x));
 
-// Upload one file to input/3d/ via ComfyUI's generic upload route.
-// Returns the combo value (relative-to-input path, e.g. "3d/foo.obj").
-async function uploadMesh(file) {
-    const body = new FormData();
-    body.append("image", file, file.name);   // route's field name is "image"
-    body.append("subfolder", "3d");
-    body.append("type", "input");
-    body.append("overwrite", "true");          // skip image-hash dedup path
-    const r = await fetch("/upload/image", { method: "POST", body });
-    if (r.status !== 200) throw new Error(`${r.status} ${await r.text()}`);
-    const d = await r.json();
-    const sub = (d.subfolder || "").replace(/\\/g, "/");
-    return sub ? `${sub}/${d.name}` : d.name;
+// XHR upload so we can report upload progress (fetch can't). Returns combo value.
+function uploadMesh(file, onProgress) {
+    return new Promise((resolve, reject) => {
+        const body = new FormData();
+        body.append("image", file, file.name);
+        body.append("subfolder", "3d");
+        body.append("type", "input");
+        body.append("overwrite", "true");
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/upload/image");
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total, e.loaded, e.total);
+        };
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                try {
+                    const d = JSON.parse(xhr.responseText);
+                    const sub = (d.subfolder || "").replace(/\\/g, "/");
+                    resolve(sub ? `${sub}/${d.name}` : d.name);
+                } catch (e) { reject(e); }
+            } else {
+                reject(new Error(`${xhr.status} ${xhr.responseText}`));
+            }
+        };
+        xhr.onerror = () => reject(new Error("network error"));
+        if (onProgress) onProgress(0, 0, file.size);
+        xhr.send(body);
+    });
 }
 
-// Build a /view URL for an input-relative combo value ("3d/foo.obj").
 function viewUrlFor(value) {
     const parts = String(value).replace(/\\/g, "/").split("/");
     const fname = parts.pop();
-    const subfolder = parts.join("/");
-    return `/view?filename=${encodeURIComponent(fname)}&type=input&subfolder=${encodeURIComponent(subfolder)}`;
+    return `/view?filename=${encodeURIComponent(fname)}&type=input&subfolder=${encodeURIComponent(parts.join("/"))}`;
 }
 
 function fileWidget(node) {
-    return node.widgets?.find((w) => w.name === "file_path");
+    return node.widgets?.find((x) => x.name === "file_path");
 }
 
 function selectValue(node, val) {
     const w = fileWidget(node);
-    if (!w) return;
+    if (!w) { console.warn(`${TAG} no file_path widget`); return; }
     w.options = w.options || {};
     w.options.values = w.options.values || [];
     if (!w.options.values.includes(val)) w.options.values.push(val);
@@ -53,82 +66,97 @@ function selectValue(node, val) {
     node.setDirtyCanvas(true, true);
 }
 
-async function uploadList(node, files) {
-    const meshes = [...files].filter((f) => isMesh(f.name));
-    if (!meshes.length) return false;
-    for (const f of meshes) {
-        try { selectValue(node, await uploadMesh(f)); }
-        catch (e) { console.error("[GeomPack] mesh upload failed", e); alert("Mesh upload failed: " + e.message); }
-    }
-    return true;
-}
-
 app.registerExtension({
     name: "geompack.loadmesh.upload",
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackLoadMesh") return;
+        console.log(`${TAG} registering for GeomPackLoadMesh`);
 
         const onCreated = nodeType.prototype.onNodeCreated;
         nodeType.prototype.onNodeCreated = function () {
             const r = onCreated?.apply(this, arguments);
             const node = this;
 
-            // hidden file picker
-            const input = document.createElement("input");
-            input.type = "file";
-            input.accept = ACCEPT;
-            input.multiple = true;
-            input.style.display = "none";
-            input.addEventListener("change", async () => {
-                await uploadList(node, input.files);
-                input.value = "";
+            // --- progress bar (DOM widget; collapses to 0 height when idle) ---
+            const wrap = document.createElement("div");
+            wrap.style.cssText = "width:100%;padding:0 6px;box-sizing:border-box;display:none;";
+            const label = document.createElement("div");
+            label.style.cssText = "font:10px monospace;color:#bbb;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
+            const track = document.createElement("div");
+            track.style.cssText = "width:100%;height:6px;background:rgba(255,255,255,0.18);border-radius:3px;overflow:hidden;";
+            const bar = document.createElement("div");
+            bar.style.cssText = "width:0%;height:100%;background:#00c8ff;transition:width 0.1s linear;";
+            track.appendChild(bar); wrap.appendChild(label); wrap.appendChild(track);
+            const progWidget = node.addDOMWidget("upload_progress", "div", wrap, {
+                getValue() { return ""; }, setValue() { },
             });
+            progWidget.computeSize = (w) => (wrap.style.display === "none" ? [w, 0] : [w, 26]);
+            const showProgress = (name, frac) => {
+                wrap.style.display = "block";
+                const pct = Math.max(0, Math.min(100, Math.round((frac || 0) * 100)));
+                label.textContent = `⬆ ${name} — ${pct}%`;
+                bar.style.width = pct + "%";
+                node.setDirtyCanvas(true, true);
+            };
+            const hideProgress = () => { wrap.style.display = "none"; node.setDirtyCanvas(true, true); };
+
+            async function uploadList(files) {
+                const meshes = [...files].filter((f) => isMesh(f.name));
+                if (!meshes.length) { console.warn(`${TAG} no mesh files in selection/drop`); return false; }
+                for (const f of meshes) {
+                    try {
+                        showProgress(f.name, 0);
+                        const val = await uploadMesh(f, (frac) => showProgress(f.name, frac));
+                        selectValue(node, val);
+                        console.log(`${TAG} uploaded -> ${val}`);
+                    } catch (e) {
+                        console.error(`${TAG} upload failed for ${f.name}`, e);
+                        alert("Mesh upload failed: " + e.message);
+                    } finally {
+                        hideProgress();
+                    }
+                }
+                return true;
+            }
+            node._gpUploadList = uploadList;
+
+            // hidden file picker + upload button
+            const input = document.createElement("input");
+            input.type = "file"; input.accept = ACCEPT; input.multiple = true; input.style.display = "none";
+            input.addEventListener("change", async () => { await uploadList(input.files); input.value = ""; });
             document.body.appendChild(input);
+            node.addWidget("button", "⬆ upload / drop mesh", null, () => { console.log(`${TAG} upload button clicked`); input.click(); });
 
-            node.addWidget("button", "⬆ upload / drop mesh", null, () => input.click());
-
-            // --- inline View 3D (collapsed by default) ---
-            let iframe = null;
-            let viewWidget = null;
+            // inline View 3D
+            let iframe = null, viewWidget = null;
             const collapse = () => {
                 if (viewWidget && node.widgets) {
-                    const i = node.widgets.indexOf(viewWidget);
-                    if (i >= 0) node.widgets.splice(i, 1);
+                    const i = node.widgets.indexOf(viewWidget); if (i >= 0) node.widgets.splice(i, 1);
                 }
-                if (iframe) iframe.remove();
-                iframe = null; viewWidget = null;
-                node.setDirtyCanvas(true, true);
+                if (iframe) iframe.remove(); iframe = null; viewWidget = null; node.setDirtyCanvas(true, true);
             };
             const sendMesh = () => {
                 const w = fileWidget(node);
-                if (iframe?.contentWindow && w?.value) {
-                    iframe.contentWindow.postMessage(
-                        { type: "LOAD_MESH", filepath: viewUrlFor(w.value), timestamp: Date.now() }, "*");
-                }
+                if (iframe?.contentWindow && w?.value)
+                    iframe.contentWindow.postMessage({ type: "LOAD_MESH", filepath: viewUrlFor(w.value), timestamp: Date.now() }, "*");
             };
-            const toggleView = () => {
+            node.addWidget("button", "👁 view 3d", null, () => {
                 if (iframe) { collapse(); return; }
                 const w = fileWidget(node);
                 if (!w || !w.value) { alert("Pick or upload a mesh first."); return; }
                 iframe = document.createElement("iframe");
                 iframe.style.cssText = "width:100%;height:100%;border:none;background:#2a2a2a;";
                 iframe.src = `/extensions/${EXTENSION_FOLDER}/viewer.html?v=` + Date.now();
-                viewWidget = node.addDOMWidget("loadmesh_view3d", "MESH_PREVIEW", iframe, {
-                    getValue() { return ""; }, setValue() { /* noop */ },
-                });
+                viewWidget = node.addDOMWidget("loadmesh_view3d", "MESH_PREVIEW", iframe, { getValue() { return ""; }, setValue() { } });
                 viewWidget.computeSize = (width) => [width || 360, width || 360];
                 iframe.addEventListener("load", () => setTimeout(sendMesh, 150));
                 setTimeout(sendMesh, 600);
-                node.setSize([Math.max(node.size[0], 380), node.size[1] + 380]);
-                node.setDirtyCanvas(true, true);
-            };
-            node.addWidget("button", "👁 view 3d", null, toggleView);
-            node._gpReloadView = () => { if (iframe) sendMesh(); };
+                node.setSize([Math.max(node.size[0], 380), node.size[1] + 380]); node.setDirtyCanvas(true, true);
+            });
 
             return r;
         };
 
-        // drag-drop a mesh straight onto the node
         const onDragOver = nodeType.prototype.onDragOver;
         nodeType.prototype.onDragOver = function (e) {
             if ([...(e?.dataTransfer?.items || [])].some((it) => it.kind === "file")) return true;
@@ -136,8 +164,8 @@ app.registerExtension({
         };
         const onDragDrop = nodeType.prototype.onDragDrop;
         nodeType.prototype.onDragDrop = async function (e) {
-            const handled = await uploadList(this, e?.dataTransfer?.files || []);
-            if (handled) return true;
+            console.log(`${TAG} drop; files=${e?.dataTransfer?.files?.length}`);
+            if (this._gpUploadList && await this._gpUploadList(e?.dataTransfer?.files || [])) return true;
             return onDragDrop?.apply(this, arguments) ?? false;
         };
     },
