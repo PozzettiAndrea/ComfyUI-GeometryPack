@@ -109,7 +109,7 @@ class RemeshNode(io.ComfyNode):
                     ]),
                     io.DynamicCombo.Option("quadwild", [
                         io.Float.Input("qw_sharp_angle", default=35.0, min=0.0, max=180.0, step=1.0, tooltip="Dihedral angle threshold for sharp feature detection."),
-                        io.Float.Input("qw_alpha", default=0.02, min=0.005, max=0.1, step=0.005, display_mode="number", tooltip="Balance regularity vs isometry. Lower = more regular quads."),
+                        io.Float.Input("qw_alpha", default=0.02, min=0.005, max=0.1, step=0.005, display_mode="number", tooltip="Balances quad-grid REGULARITY vs feature ALIGNMENT (QuadWild's BiMDF alpha weight). Lower (~0.005) = a more uniform, regular quad grid with fewer singularities (irregular vertices), but the quad edges follow surface features/curvature less. Higher (~0.1) = allows more singularities so the quad flow bends to align with curvature and sharp edges, at the cost of grid uniformity. Typical 0.005-0.1; default 0.02."),
                         io.Float.Input("qw_scale_factor", default=1.0, min=0.1, max=10.0, step=0.1, tooltip="Quad size multiplier. Larger = bigger quads, fewer faces. Used only when target_vertices and target_edge_length are both 0."),
                         io.Int.Input("qw_target_vertices", default=0, min=0, max=20000000, step=100, tooltip="Target output vertices (0 = off, use scale_factor). Back-solved from input mesh area; overrides scale_factor."),
                         io.Float.Input("qw_target_edge_length", default=0.0, min=0.0, max=1000.0, step=0.001, display_mode="number", tooltip="Target quad edge length (0 = off). Overrides BOTH scale_factor and target_vertices."),
