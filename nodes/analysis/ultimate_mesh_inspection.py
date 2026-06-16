@@ -29,11 +29,23 @@ metadata['file_path']) without processing for those Tier-0 counts.
 
 import json
 import logging
+import os
+import uuid
 
 import numpy as np
 import trimesh as trimesh_module
 
 from comfy_api.latest import io
+
+# vertex (point) fields vs face (cell) fields -- used to qualify field names for the
+# vtk.js viewer, which prefixes point data with "point:" and cell data with "cell:".
+_VERTEX_FIELDS = {"boundary_vertex", "nonmanifold_vertex", "valence"}
+
+
+def _qualify(field):
+    if not field:
+        return None
+    return ("point:" if field in _VERTEX_FIELDS else "cell:") + field
 
 log = logging.getLogger("geometrypack")
 
@@ -64,6 +76,31 @@ def _nonmanifold_and_boundary_edges(mesh):
     nm_edges = np.array(nm_edges).reshape(-1, 2) if nm_edges else np.zeros((0, 2), int)
     bnd_edges = np.array(bnd_edges).reshape(-1, 2) if bnd_edges else np.zeros((0, 2), int)
     return nm_edges, bnd_edges
+
+
+def _winding_inconsistent_faces(mesh):
+    """Per-face mask of faces touching an inconsistently-wound manifold edge.
+
+    For two faces sharing an undirected edge {a,b}, consistent orientation means one
+    traverses a->b and the other b->a (opposite directed edges). If BOTH traverse it
+    the same way, the winding flips across that edge -> both faces flagged.
+    """
+    from trimesh.grouping import group_rows
+    try:
+        F = len(mesh.faces)
+        es = mesh.edges_sorted        # (3F,2) undirected
+        ed = mesh.edges               # (3F,2) directed (face order)
+        ef = mesh.edges_face          # (3F,) face index per directed edge
+        pairs = group_rows(es, require_count=2)  # (k,2) row-index pairs of manifold edges
+        mask = np.zeros(F, dtype=bool)
+        if len(pairs):
+            same_dir = np.all(ed[pairs[:, 0]] == ed[pairs[:, 1]], axis=1)  # True = flipped
+            bad = pairs[same_dir]
+            if len(bad):
+                mask[np.unique(ef[bad.reshape(-1)])] = True
+        return mask
+    except Exception:
+        return None
 
 
 def _boundary_loops(bnd_edges):
@@ -151,8 +188,9 @@ class UltimateMeshInspection(io.ComfyNode):
                             "duplicate/degenerate counts reflect the file, not trimesh's auto-clean."),
                 io.Boolean.Input("check_nonmanifold_vertices", default=True, optional=True,
                     tooltip="Detect bowtie / non-manifold vertices (per-vertex; skipped above ~400k faces)."),
-                io.Boolean.Input("check_self_intersection", default=False, optional=True,
-                    tooltip="Detect self-intersecting face pairs (expensive; needs pymeshlab)."),
+                io.Boolean.Input("check_self_intersection", default=True, optional=True,
+                    tooltip="Detect self-intersecting faces (uses pymeshlab; can be slow on huge "
+                            "meshes -- turn off for speed). Lights up the offending faces."),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="mesh"),
@@ -182,8 +220,8 @@ class UltimateMeshInspection(io.ComfyNode):
         S = {}     # structured stats
         rows = []  # (group, label, value, field_or_None)
 
-        def row(group, label, value, field=None):
-            rows.append((group, label, value, field))
+        def row(group, label, value, field=None, focus=None):
+            rows.append((group, label, value, field, focus))
 
         # ---- Tier 0: numerics / sanity ----
         nonfinite = int(np.count_nonzero(~np.isfinite(verts)))
@@ -204,7 +242,11 @@ class UltimateMeshInspection(io.ComfyNode):
 
         if F == 0:
             report = cls._format(rows, raw_note)
-            return io.NodeOutput(mesh, report, json.dumps(S))
+            ui_rows = [{"group": g, "label": l, "value": str(v), "field": _qualify(f), "focus": fo}
+                       for (g, l, v, f, fo) in rows]
+            return io.NodeOutput(mesh, report, json.dumps(S),
+                                 ui={"mesh_file": [], "report": [ui_rows],
+                                     "vertex_count": [V], "face_count": [0], "is_watertight": [False]})
 
         faces = np.asarray(mesh.faces)
 
@@ -240,12 +282,20 @@ class UltimateMeshInspection(io.ComfyNode):
         is_sliver = (face_min_ang < 10.0) & ~is_degenerate
         is_needle = (aspect > 20.0) & ~is_degenerate
         is_cap = (face_max_ang > 150.0) & ~is_degenerate
+        fcent = tv.mean(1)  # (F,3) face centroids (for camera focus on a worst face)
+        worst_min_face = int(np.argmin(face_min_ang))
         worst_q_face = int(np.argmin(Q))
+        worst_aspect_face = int(np.argmax(aspect))
+        worst_area_face = int(np.argmin(areas))
+        is_worst_min_angle = np.zeros(F, np.float32); is_worst_min_angle[worst_min_face] = 1.0
         is_worst_quality = np.zeros(F, np.float32); is_worst_quality[worst_q_face] = 1.0
+        is_worst_aspect = np.zeros(F, np.float32); is_worst_aspect[worst_aspect_face] = 1.0
+        is_smallest_area = np.zeros(F, np.float32); is_smallest_area[worst_area_face] = 1.0
 
         amn, amx, ame, ast = _stats(face_min_ang)
         qmn, qmx, qme, qst = _stats(Q)
         armn, armx, arme, arst = _stats(aspect)
+        aa_mn, aa_mx, aa_me, aa_st = _stats(areas)
         pct_lt30 = float(100.0 * np.count_nonzero(face_min_ang < 30.0) / F)
         pct_q_lt01 = float(100.0 * np.count_nonzero(Q < 0.1) / F)
         S["element_quality"] = {
@@ -255,12 +305,20 @@ class UltimateMeshInspection(io.ComfyNode):
             "degenerate": int(is_degenerate.sum()), "sliver": int(is_sliver.sum()),
             "needle": int(is_needle.sum()), "cap": int(is_cap.sum()),
         }
-        row("Element quality", "min angle (deg)", f"worst {amn:.2f} | mean {ame:.2f} +/- {ast:.2f}", "min_angle_deg")
+        row("Element quality", "min angle - worst", f"{amn:.2f} deg (face {worst_min_face})",
+            "is_worst_min_angle", fcent[worst_min_face].tolist())
+        row("Element quality", "min angle - mean", f"{ame:.2f} +/- {ast:.2f} deg", "min_angle_deg")
         row("Element quality", "% faces min-angle < 30", f"{pct_lt30:.2f}%", "min_angle_deg")
-        row("Element quality", "triangle Q (1=ideal)", f"worst {qmn:.3f} | mean {qme:.3f} +/- {qst:.3f}", "tri_quality")
+        row("Element quality", "triangle Q - worst", f"{qmn:.3f} (face {worst_q_face})",
+            "is_worst_quality", fcent[worst_q_face].tolist())
+        row("Element quality", "triangle Q - mean", f"{qme:.3f} +/- {qst:.3f} (1=ideal)", "tri_quality")
         row("Element quality", "% faces Q < 0.1", f"{pct_q_lt01:.2f}%", "tri_quality")
-        row("Element quality", "aspect ratio", f"worst {armx:.2f} | mean {arme:.2f} +/- {arst:.2f}", "aspect_ratio")
-        row("Element quality", "worst triangle (by Q)", f"face {worst_q_face} (Q={Q[worst_q_face]:.3g})", "is_worst_quality")
+        row("Element quality", "aspect ratio - worst", f"{armx:.2f} (face {worst_aspect_face})",
+            "is_worst_aspect", fcent[worst_aspect_face].tolist())
+        row("Element quality", "aspect ratio - mean", f"{arme:.2f} +/- {arst:.2f}", "aspect_ratio")
+        row("Element quality", "area - smallest", f"{aa_mn:.3g} (face {worst_area_face})",
+            "is_smallest_area", fcent[worst_area_face].tolist())
+        row("Element quality", "area - mean", f"{aa_me:.3g} +/- {aa_st:.3g}", "face_area")
         row("Degenerate", "zero-area", int(is_degenerate.sum()), "is_degenerate")
         row("Degenerate", "slivers (min-ang<10)", int(is_sliver.sum()), "is_sliver")
         row("Degenerate", "needles (aspect>20)", int(is_needle.sum()), "is_needle")
@@ -285,6 +343,7 @@ class UltimateMeshInspection(io.ComfyNode):
             winding_ok = bool(mesh.is_winding_consistent)
         except Exception:
             winding_ok = None
+        wind_mask = _winding_inconsistent_faces(mesh)
         try:
             watertight = bool(mesh.is_watertight)
         except Exception:
@@ -312,7 +371,13 @@ class UltimateMeshInspection(io.ComfyNode):
                          "boundary_edges": n_boundary, "boundary_loops": n_loops,
                          "nonmanifold_edges": n_nm_edges, "components": n_comp}
         row("Topology", "watertight", watertight, "touches_boundary")
-        row("Topology", "winding consistent", winding_ok)
+        if wind_mask is not None and wind_mask.any():
+            nwf = int(wind_mask.sum())
+            row("Topology", "winding consistent", f"{winding_ok} ({nwf} flipped faces)",
+                "winding_inconsistent", fcent[int(np.argmax(wind_mask))].tolist())
+        else:
+            row("Topology", "winding consistent", winding_ok,
+                "winding_inconsistent" if wind_mask is not None else None)
         row("Topology", "boundary edges", n_boundary, "touches_boundary")
         row("Topology", "boundary loops (holes)", n_loops, "touches_boundary")
         if loop_len_note:
@@ -344,7 +409,12 @@ class UltimateMeshInspection(io.ComfyNode):
             irregular = int(np.count_nonzero((valence != 6) & interior))
         else:
             pct_v6, irregular = 0.0, 0
-        S["regularity"] = {"pct_interior_valence6": pct_v6, "irregular_interior_vertices": irregular}
+        max_val_vert = int(np.argmax(valence)) if V else 0
+        max_val = int(valence.max()) if V else 0
+        S["regularity"] = {"pct_interior_valence6": pct_v6, "irregular_interior_vertices": irregular,
+                           "max_valence": max_val}
+        row("Regularity", "max vertex valence", f"{max_val} (vertex {max_val_vert})",
+            "valence", verts[max_val_vert].tolist() if V else None)
         row("Regularity", "% interior verts valence 6", f"{pct_v6:.1f}%", "valence")
         row("Regularity", "irregular interior verts", irregular, "valence")
 
@@ -387,11 +457,17 @@ class UltimateMeshInspection(io.ComfyNode):
                 row("Topology", "non-manifold (bowtie) verts", int(nmv.sum()), "nonmanifold_vertex")
                 S["topology"]["nonmanifold_vertices"] = int(nmv.sum())
 
-        # ---- Tier 4: self-intersection (gated) ----
+        # ---- Tier 4: self-intersection (gated; default on) ----
+        si_mask = None
         if check_self_intersection:
-            n_si = cls._self_intersections(mesh)
-            row("Geometry", "self-intersecting face pairs", n_si if n_si is not None else "n/a (need pymeshlab)")
-            S["geometry"] = {"self_intersecting_pairs": n_si}
+            si_mask = cls._self_intersections(mesh)  # (F,) bool or None
+            if si_mask is None:
+                row("Geometry", "self-intersecting faces", "n/a (pymeshlab unavailable)")
+            else:
+                n_si = int(si_mask.sum())
+                focus = fcent[int(np.argmax(si_mask))].tolist() if n_si else None
+                row("Geometry", "self-intersecting faces", n_si, "is_self_intersecting", focus)
+                S["geometry"] = {"self_intersecting_faces": n_si}
 
         # ---- bake highlight fields onto the mesh ----
         try:
@@ -424,6 +500,14 @@ class UltimateMeshInspection(io.ComfyNode):
             mesh.face_attributes["is_needle"] = is_needle.astype(np.float32)
             mesh.face_attributes["is_cap"] = is_cap.astype(np.float32)
             mesh.face_attributes["is_worst_quality"] = is_worst_quality
+            mesh.face_attributes["is_worst_min_angle"] = is_worst_min_angle
+            mesh.face_attributes["is_worst_aspect"] = is_worst_aspect
+            mesh.face_attributes["face_area"] = areas.astype(np.float32)
+            mesh.face_attributes["is_smallest_area"] = is_smallest_area
+            mesh.face_attributes["is_self_intersecting"] = (
+                si_mask.astype(np.float32) if si_mask is not None else np.zeros(F, np.float32))
+            mesh.face_attributes["winding_inconsistent"] = (
+                wind_mask.astype(np.float32) if wind_mask is not None else np.zeros(F, np.float32))
             mesh.face_attributes["touches_boundary"] = boundary_face
             mesh.face_attributes["touches_nonmanifold_edge"] = nm_face
             mesh.face_attributes["is_inverted"] = is_inverted
@@ -434,19 +518,43 @@ class UltimateMeshInspection(io.ComfyNode):
             log.warning("Could not bake all fields: %s", e)
 
         report = cls._format(rows, raw_note)
+
+        # export a VTP (with all baked fields) for the embedded vtk.js viewer
+        mesh_file = None
+        try:
+            import folder_paths
+            from ..visualization._vtp_export import export_mesh_with_scalars_vtp
+            out_dir = folder_paths.get_output_directory()
+            mesh_file = f"ultimate_inspect_{uuid.uuid4().hex[:8]}.vtp"
+            export_mesh_with_scalars_vtp(mesh, os.path.join(out_dir, mesh_file))
+        except Exception as e:
+            log.warning("VTP export for viewer failed: %s", e)
+
+        ui_rows = [{"group": g, "label": l, "value": str(v), "field": _qualify(f), "focus": fo}
+                   for (g, l, v, f, fo) in rows]
+        ui_data = {
+            "mesh_file": [mesh_file] if mesh_file else [],
+            "report": [ui_rows],
+            "vertex_count": [V],
+            "face_count": [F],
+            "is_watertight": [bool(watertight)],
+        }
         log.info("[UltimateMeshInspection] V=%d F=%d watertight=%s genus=%s", V, F, watertight,
                  S["topology"].get("genus"))
-        return io.NodeOutput(mesh, report, json.dumps(S))
+        return io.NodeOutput(mesh, report, json.dumps(S), ui=ui_data)
 
     @staticmethod
     def _self_intersections(mesh):
+        """Return a per-face boolean mask of self-intersecting faces (pymeshlab), or None."""
         try:
             import pymeshlab as ml
             ms = ml.MeshSet()
             ms.add_mesh(ml.Mesh(np.asarray(mesh.vertices), np.asarray(mesh.faces)))
-            ms.compute_selection_by_self_intersections_per_face()
-            m = ms.current_mesh()
-            return int(np.count_nonzero(m.face_selection_array()))
+            try:
+                ms.compute_selection_by_self_intersections_per_face()
+            except Exception:
+                ms.apply_filter("compute_selection_by_self_intersections_per_face")  # older API name
+            return np.asarray(ms.current_mesh().face_selection_array(), dtype=bool)
         except Exception as e:
             log.info("self-intersection check unavailable: %s", e)
             return None
@@ -455,7 +563,7 @@ class UltimateMeshInspection(io.ComfyNode):
     def _format(rows, note):
         lines = [f"=== Ultimate Mesh Inspection{note} ===", ""]
         cur = None
-        for group, label, value, field in rows:
+        for group, label, value, field, _focus in rows:
             if group != cur:
                 lines.append(f"[{group}]")
                 cur = group

@@ -22,6 +22,109 @@ log = logging.getLogger("geometrypack")
 
 
 def export_mesh_with_scalars_vtp(trimesh: trimesh_module.Trimesh, filepath: str):
+    """Export trimesh to a .vtp with scalar attributes, BINARY + uncompressed.
+
+    Binary (base64) is ~3-4x smaller than ASCII and is parsed by vtk.js as a typed
+    array instead of parseFloat-ing millions of text numbers on the main thread --
+    that text parse is what froze the browser on large meshes. It is LOSSLESS (full
+    float32 / int connectivity). MUST be uncompressed: the bundled vtk.js has no
+    zlib, so it can read ascii/binary VTP but not zlib-compressed VTP.
+
+    Falls back to the ASCII writer if the `vtk` module is unavailable or anything
+    goes wrong, so exports never hard-fail.
+    """
+    try:
+        _export_binary_vtp(trimesh, filepath)
+    except Exception as e:
+        log.warning("Binary VTP export failed (%s); falling back to ASCII writer", e)
+        _export_ascii_vtp(trimesh, filepath)
+
+
+def _vtk_ready(name, arr):
+    """Contiguous, dtype-trimmed copy for VTK: 0/1 masks -> uint8, else float32."""
+    is_mask = (name.startswith("is_") or name.startswith("touches_")
+               or name in ("boundary_vertex", "nonmanifold_vertex", "winding_inconsistent"))
+    dt = np.uint8 if is_mask else np.float32
+    return np.ascontiguousarray(np.asarray(arr).astype(dt))
+
+
+def _export_binary_vtp(trimesh: trimesh_module.Trimesh, filepath: str):
+    """Write a binary, uncompressed .vtp via the vtk XML writer (lossless)."""
+    import vtk
+    from vtk.util import numpy_support as nps
+
+    is_pc = is_point_cloud(trimesh)
+    verts = np.ascontiguousarray(np.asarray(trimesh.vertices, dtype=np.float32))
+    n_verts = len(verts)
+
+    poly = vtk.vtkPolyData()
+    pts = vtk.vtkPoints()
+    pts.SetData(nps.numpy_to_vtk(verts, deep=1))
+    poly.SetPoints(pts)
+
+    if is_pc:
+        offsets = np.arange(0, n_verts + 1, dtype=np.int64)
+        conn = np.arange(n_verts, dtype=np.int64)
+        ca = vtk.vtkCellArray()
+        ca.SetData(nps.numpy_to_vtkIdTypeArray(offsets, deep=1),
+                   nps.numpy_to_vtkIdTypeArray(conn, deep=1))
+        if n_verts < 2_000_000_000 and hasattr(ca, "ConvertTo32BitStorage"):
+            ca.ConvertTo32BitStorage()  # int32 connectivity ~halves the cell bytes
+        poly.SetVerts(ca)
+    else:
+        faces = np.asarray(trimesh.faces)
+        n_faces = len(faces)
+        conn = np.ascontiguousarray(faces.reshape(-1).astype(np.int64))
+        offsets = np.arange(0, 3 * (n_faces + 1), 3, dtype=np.int64)
+        ca = vtk.vtkCellArray()
+        ca.SetData(nps.numpy_to_vtkIdTypeArray(offsets, deep=1),
+                   nps.numpy_to_vtkIdTypeArray(conn, deep=1))
+        if n_verts < 2_000_000_000 and hasattr(ca, "ConvertTo32BitStorage"):
+            ca.ConvertTo32BitStorage()  # int32 connectivity ~halves the cell bytes
+        poly.SetPolys(ca)
+
+    # PointData: vertex normals (built-in) + vertex_attributes
+    point_data = poly.GetPointData()
+    if not is_pc and hasattr(trimesh, "vertex_normals"):
+        try:
+            nrm = np.asarray(trimesh.vertex_normals, dtype=np.float32)
+            if nrm.shape == (n_verts, 3):
+                a = nps.numpy_to_vtk(np.ascontiguousarray(nrm), deep=1)
+                a.SetName("normals")
+                point_data.AddArray(a)
+        except Exception as e:
+            log.warning("Could not export normals: %s", e)
+    if getattr(trimesh, "vertex_attributes", None):
+        for name, vals in trimesh.vertex_attributes.items():
+            v = np.asarray(vals)
+            if v.ndim > 1 and v.shape[1] > 4:
+                continue
+            a = nps.numpy_to_vtk(_vtk_ready(name, v), deep=1)
+            a.SetName(name)
+            point_data.AddArray(a)
+
+    # CellData: face_attributes (meshes only)
+    if not is_pc and getattr(trimesh, "face_attributes", None):
+        cell_data = poly.GetCellData()
+        for name, vals in trimesh.face_attributes.items():
+            v = np.asarray(vals)
+            if v.ndim > 1 and v.shape[1] > 4:
+                continue
+            a = nps.numpy_to_vtk(_vtk_ready(name, v), deep=1)
+            a.SetName(name)
+            cell_data.AddArray(a)
+
+    writer = vtk.vtkXMLPolyDataWriter()
+    writer.SetFileName(filepath)
+    writer.SetInputData(poly)
+    writer.SetDataModeToBinary()      # base64 binary DataArrays (vtk.js reads these)
+    writer.SetCompressorTypeToNone()  # NO zlib -- vtk.js cannot inflate
+    writer.Write()
+    log.info("Exported binary VTP: %s (%d verts, %d %s)", filepath, n_verts,
+             n_verts if is_pc else len(trimesh.faces), "points" if is_pc else "faces")
+
+
+def _export_ascii_vtp(trimesh: trimesh_module.Trimesh, filepath: str):
     """
     Export trimesh to VTK PolyData XML format (.vtp) with scalar attributes.
 

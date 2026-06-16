@@ -86,6 +86,76 @@ def _pad_inner_edges(neighbors, adj_pairs, face_to_adj, m):
     return IE, IEM
 
 
+def _build_topology_vectorized(F, adj, n, m, rings):
+    """Vectorized equivalent of the per-face Python topology build.
+
+    Produces the SAME padded arrays as _pad_patches + _pad_inner_edges, but via
+    sparse boolean reachability instead of O(m*K*deg) interpreted set loops --
+    which hang on large meshes at rings>=2.
+
+    Patch(f) = faces within `rings` shared-vertex hops of f (incl. self), exactly
+    the BFS the Python version grows. Inner edges of a patch = adjacency edges
+    whose BOTH faces lie in the patch. Index order within a row may differ from
+    the Python version, but every downstream use is an order-independent reduce
+    (sum / amax / argmin over sorted indices), so results are unchanged.
+
+    Returns (P[m,K], M[m,K] bool, K, IE[m,Emax], IEM[m,Emax] bool).
+    """
+    import scipy.sparse as sp
+
+    rings = max(1, int(rings))
+    # face<->vertex incidence; FF = face-face "shares >=1 vertex" (incl. self)
+    rows = np.repeat(np.arange(m, dtype=np.int64), 3)
+    A = sp.csr_matrix((np.ones(3 * m, dtype=np.int8), (rows, F.ravel())), shape=(m, n))
+    FF = (A @ A.T).astype(bool).tocsr()
+    S = FF
+    for _ in range(rings - 1):
+        S = (S @ FF).astype(bool)
+    S = S.tocsr()
+    S.sort_indices()
+
+    # --- padded patches from S rows (column indices are sorted per row) ---
+    cnts = np.diff(S.indptr).astype(np.int64)
+    K = int(cnts.max()) if m else 1
+    K = max(1, K)
+    P = np.zeros((m, K), dtype=np.int64)
+    M = np.zeros((m, K), dtype=bool)
+    rep = np.repeat(np.arange(m, dtype=np.int64), cnts)
+    pos = np.arange(S.nnz, dtype=np.int64) - np.repeat(S.indptr[:-1].astype(np.int64), cnts)
+    P[rep, pos] = S.indices
+    M[rep, pos] = True
+
+    # --- inner edges: edge ai is inner to face i iff i in patch(fa)&patch(fb) ---
+    # (S symmetric -> fa in patch(i) <=> i in patch(fa)); chunk over edges to cap memory.
+    Scsc = S.tocsc()
+    fa = np.ascontiguousarray(adj[:, 0])
+    fb = np.ascontiguousarray(adj[:, 1])
+    E = len(adj)
+    step = max(1, 2_000_000 // max(1, K))
+    ir_parts, ic_parts = [], []
+    for s in range(0, E, step):
+        e = min(E, s + step)
+        I = Scsc[:, fa[s:e]].multiply(Scsc[:, fb[s:e]]).tocoo()
+        ir_parts.append(I.row.astype(np.int64))
+        ic_parts.append(I.col.astype(np.int64) + s)   # local col -> global edge id
+    ir = np.concatenate(ir_parts) if ir_parts else np.zeros(0, np.int64)
+    ic = np.concatenate(ic_parts) if ic_parts else np.zeros(0, np.int64)
+
+    ecnts = np.bincount(ir, minlength=m).astype(np.int64)
+    Emax = int(ecnts.max()) if len(ecnts) else 1
+    Emax = max(1, Emax)
+    IE = np.zeros((m, Emax), dtype=np.int64)
+    IEM = np.zeros((m, Emax), dtype=bool)
+    order = np.argsort(ir, kind="stable")
+    ir, ic = ir[order], ic[order]
+    starts = np.zeros(m + 1, dtype=np.int64)
+    np.cumsum(ecnts, out=starts[1:])
+    pos2 = np.arange(len(ir), dtype=np.int64) - np.repeat(starts[:-1], ecnts)
+    IE[ir, pos2] = ic
+    IEM[ir, pos2] = True
+    return P, M, K, IE, IEM
+
+
 def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
                        neighborhood_rings=1):
     import torch
@@ -102,19 +172,27 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
     n = len(V0)
 
     # --- one-time topology (CPU), constant across iterations ---
+    # Vectorized sparse build (bit-equivalent sets); the old pure-Python per-face
+    # set loops hang on large meshes at rings>=2. Fall back to Python on failure.
     t_topo = time.perf_counter()
-    vtf = _build_vertex_to_faces(n, Ff)
-    neighbors = _build_vertex_based_face_neighbors(Ff, vtf, include_central=True, rings=neighborhood_rings)
-    face_to_adj = [[] for _ in range(m)]
-    for ai in range(len(adj)):
-        fa, fb = adj[ai]
-        face_to_adj[fa].append(ai)
-        face_to_adj[fb].append(ai)
-    P_np, M_np, K = _pad_patches(neighbors, m)
-    IE_np, IEM_np = _pad_inner_edges(neighbors, adj, face_to_adj, m)
-    log.info("[guided_normal_gpu] topology build (CPU): %.3fs  (m=%d faces, n=%d verts, "
+    try:
+        P_np, M_np, K, IE_np, IEM_np = _build_topology_vectorized(Ff, adj, n, m, neighborhood_rings)
+        topo_mode = "vectorized"
+    except Exception as ex:
+        log.warning("[guided_normal_gpu] vectorized topology failed (%s); using Python fallback", ex)
+        vtf = _build_vertex_to_faces(n, Ff)
+        neighbors = _build_vertex_based_face_neighbors(Ff, vtf, include_central=True, rings=neighborhood_rings)
+        face_to_adj = [[] for _ in range(m)]
+        for ai in range(len(adj)):
+            fa, fb = adj[ai]
+            face_to_adj[fa].append(ai)
+            face_to_adj[fb].append(ai)
+        P_np, M_np, K = _pad_patches(neighbors, m)
+        IE_np, IEM_np = _pad_inner_edges(neighbors, adj, face_to_adj, m)
+        topo_mode = "python-fallback"
+    log.info("[guided_normal_gpu] topology build (%s): %.3fs  (m=%d faces, n=%d verts, "
              "K=%d, Emax=%d, rings=%d)",
-             time.perf_counter() - t_topo, m, n, K, IE_np.shape[1], neighborhood_rings)
+             topo_mode, time.perf_counter() - t_topo, m, n, K, IE_np.shape[1], neighborhood_rings)
 
     dev = _torch_device()
     eps = 1e-12

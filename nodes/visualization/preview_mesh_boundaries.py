@@ -68,6 +68,64 @@ def _edge_values(mesh, field_name, reduction):
     return np.asarray(adj_edges, dtype=np.int64), np.asarray(vals, dtype=np.float64), used, avail
 
 
+def _edge_clusters(edges, min_edges):
+    """Group feature edges into connected clusters; keep the big ones, color each.
+
+    Builds the undirected feature-edge graph, finds connected components, and
+    keeps every component with MORE than `min_edges` edges. No cycle / genus /
+    closure check -- chains, loops and branching webs are all kept as long as
+    they're large enough. Each kept cluster gets a distinct 1-based id (for
+    per-cluster coloring).
+
+    edges: int array [M,2] of vertex-index pairs (undirected).
+    Returns (cluster_edges[K,2], cluster_id[K] 1-based, stats dict).
+    """
+    import numpy as np
+    from collections import defaultdict
+
+    adj = defaultdict(set)
+    seen = set()
+    for a, b in edges:
+        a, b = int(a), int(b)
+        if a == b:
+            continue
+        key = (a, b) if a < b else (b, a)
+        if key in seen:
+            continue
+        seen.add(key)
+        adj[a].add(b)
+        adj[b].add(a)
+
+    visited = set()
+    out_edges, out_id = [], []
+    n_clusters = n_dropped = 0
+
+    for start in list(adj.keys()):
+        if start in visited:
+            continue
+        comp, stack = [], [start]
+        visited.add(start)
+        while stack:
+            v = stack.pop()
+            comp.append(v)
+            for w in adj[v]:
+                if w not in visited:
+                    visited.add(w)
+                    stack.append(w)
+        comp_edges = [(v, w) for v in comp for w in adj[v] if v < w]
+        if len(comp_edges) <= min_edges:
+            n_dropped += 1
+            continue
+        n_clusters += 1
+        for e in comp_edges:
+            out_edges.append(e)
+            out_id.append(n_clusters)
+
+    ce = np.asarray(out_edges, dtype=np.int64).reshape(-1, 2)
+    cid = np.asarray(out_id, dtype=np.int64)
+    return ce, cid, {"clusters": n_clusters, "dropped": n_dropped}
+
+
 class PreviewMeshBoundaries(io.ComfyNode):
     """Threshold mesh edges by an adjacent-face metric (dihedral, etc.) and preview in VTK.js."""
 
@@ -87,6 +145,15 @@ class PreviewMeshBoundaries(io.ComfyNode):
                 io.Combo.Input("reduction", options=["auto", "angle", "abs_diff", "l2"], default="auto",
                     tooltip="How to combine the two faces' values into one per-edge number. "
                             "angle = degrees between vectors (dihedral for normals)."),
+                io.Combo.Input("mode", options=["edges", "loops"], default="edges",
+                    tooltip="edges = show every passing edge. loops = group passing edges into "
+                            "connected clusters, drop small ones (<= min_edges), and color each "
+                            "remaining cluster a distinct color. No cycle/closure check -- chains, "
+                            "loops and branching webs are all kept. Coincident vertices are merged "
+                            "first so clusters connect across split hard edges."),
+                io.Int.Input("min_edges", default=10, min=0, max=100000, step=1,
+                    tooltip="loops mode only: keep clusters with MORE than this many edges. "
+                            "Smaller clusters are discarded as noise."),
                 io.Float.Input("threshold", default=30.0, min=0.0, max=100000.0, step=1.0,
                     tooltip="Edges pass when their value meets the threshold (dihedral in degrees)."),
                 io.Combo.Input("comparison", options=[">=", "<="], default=">=",
@@ -99,22 +166,49 @@ class PreviewMeshBoundaries(io.ComfyNode):
 
     @classmethod
     def execute(cls, mesh, face_field="face_normals", reduction="auto",
-                threshold=30.0, comparison=">=", show_surface=True):
+                threshold=30.0, comparison=">=", mode="edges", min_edges=10,
+                show_surface=True):
         import numpy as np
         import pyvista as pv
         import folder_paths
 
-        adj_edges, vals, used_field, avail = _edge_values(mesh, face_field, reduction)
+        # loops mode needs coincident vertices merged so feature edges share
+        # indices and can connect into closed cycles (also fixes missing
+        # face_adjacency across split hard edges). Work on a copy.
+        work = mesh
+        if mode == "loops":
+            try:
+                work = mesh.copy()
+                work.merge_vertices()
+            except Exception as e:
+                log.warning("[PreviewMeshBoundaries] merge_vertices failed: %s", e)
+                work = mesh
+
+        adj_edges, vals, used_field, avail = _edge_values(work, face_field, reduction)
         if comparison == "<=":
             passing = vals <= threshold
         else:
             passing = vals >= threshold
         edges = adj_edges[passing] if len(adj_edges) else np.zeros((0, 2), np.int64)
         ev = vals[passing] if len(vals) else np.zeros(0)
+
+        cluster_id_cell = None
+        cluster_stats = None
+        if mode == "loops":
+            # value lookup keyed by the undirected edge, to keep edge_value after filtering
+            val_map = {}
+            for (a, b), v in zip(edges, ev):
+                a, b = int(a), int(b)
+                val_map[(a, b) if a < b else (b, a)] = float(v)
+            edges, cluster_ids, cluster_stats = _edge_clusters(edges, int(min_edges))
+            ev = np.array([val_map.get((int(a), int(b)) if a < b else (int(b), int(a)), 0.0)
+                           for a, b in edges], dtype=np.float64)
+            cluster_id_cell = cluster_ids.astype(np.float32)
+
         K = int(len(edges))
 
-        points = np.asarray(mesh.vertices, dtype=np.float64)
-        faces = np.asarray(getattr(mesh, "faces", np.zeros((0, 3), int)), dtype=np.int64)
+        points = np.asarray(work.vertices, dtype=np.float64)
+        faces = np.asarray(getattr(work, "faces", np.zeros((0, 3), int)), dtype=np.int64)
         F = int(len(faces)) if show_surface else 0
 
         # Build explicitly: pv.PolyData(points) alone would add one VERT cell per
@@ -135,6 +229,12 @@ class PreviewMeshBoundaries(io.ComfyNode):
                 boundary.append(np.zeros(F)); edge_value.append(np.zeros(F))
             combined.cell_data["boundary"] = np.concatenate(boundary).astype(np.float32)
             combined.cell_data["edge_value"] = np.concatenate(edge_value).astype(np.float32)
+            if cluster_id_cell is not None:
+                cid = [cluster_id_cell] if K else []
+                if F:
+                    cid.append(np.zeros(F, np.float32))
+                if cid:
+                    combined.cell_data["cluster_id"] = np.concatenate(cid).astype(np.float32)
 
         tmp = folder_paths.get_temp_directory()
         os.makedirs(tmp, exist_ok=True)
@@ -142,14 +242,28 @@ class PreviewMeshBoundaries(io.ComfyNode):
         # ASCII VTP -> reliably parsed by the VTK.js XMLPolyDataReader (incl. Lines).
         combined.save(os.path.join(tmp, filename), binary=False)
 
-        summary = (f"boundaries: {K} edge(s) {comparison} {threshold:g} via "
-                   f"reduce={reduction} on '{used_field}'. "
-                   f"available face fields: {avail or ['(none)']}")
+        fields = ["boundary", "edge_value"]
+        if cluster_id_cell is not None:
+            fields.append("cluster_id")
+
+        if mode == "loops":
+            s = cluster_stats or {"clusters": 0, "dropped": 0}
+            summary = (f"loops: {s['clusters']} cluster(s) kept ({K} edge(s), each >{int(min_edges)} "
+                       f"edges) at {comparison} {threshold:g} via reduce={reduction} on "
+                       f"'{used_field}'. dropped {s['dropped']} small cluster(s). "
+                       f"color by 'cluster_id' to tell them apart. "
+                       f"available face fields: {avail or ['(none)']}")
+            if s["clusters"] == 0:
+                summary += (" -- no clusters this big: lower min_edges or the threshold.")
+        else:
+            summary = (f"boundaries: {K} edge(s) {comparison} {threshold:g} via "
+                       f"reduce={reduction} on '{used_field}'. "
+                       f"available face fields: {avail or ['(none)']}")
         log.info("[PreviewMeshBoundaries] %s", summary)
         return io.NodeOutput(ui={
             "mesh_file": [filename],
             "boundary_edges": [K],
-            "field_names": [["boundary", "edge_value"]],
+            "field_names": [fields],
             "summary": [summary],
         })
 
