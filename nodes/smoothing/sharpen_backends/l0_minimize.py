@@ -81,21 +81,29 @@ class SharpenL0MinimizeNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
-                io.Float.Input("alpha", default=0.001, min=0.0001, max=0.1, step=0.0001, tooltip=(
-                    "Initial regularization weight for L0 minimization. "
-                    "Controls the threshold below which normal differences "
-                    "are snapped to zero. Smaller = gentler start, "
-                    "larger = more aggressive initial flattening."
+                io.Float.Input("alpha", default=0.001, min=0.0001, max=4.0, step=0.0001, tooltip=(
+                    "Angle threshold -- SCALE-INVARIANT (face angles, not mesh size / vertex "
+                    "count). Snaps adjacent faces whose dihedral angle is below it.\n"
+                    "alpha = 2*(1 - cos theta), range 0..4. Approx:\n"
+                    "  0.001 ~ 1.8 deg\n  0.01 ~ 5.7 deg\n  0.1 ~ 18 deg\n"
+                    "  0.5 ~ 41 deg\n  2.0 = 90 deg\n  4.0 = 180 deg\nGrows by beta each iteration."
                 )),
                 io.Float.Input("beta", default=2.0, min=1.1, max=10.0, step=0.1, tooltip=(
-                    "Growth rate for alpha each iteration. Alpha is multiplied "
-                    "by beta each step. 2.0 doubles per iteration. "
-                    "Higher = faster convergence to piecewise-flat."
+                    "Multiplies alpha after each iteration (escalates the angle threshold). "
+                    "NO effect with iterations=1. Use several iterations to see it work."
                 )),
                 io.Int.Input("iterations", default=10, min=1, max=50, step=1, tooltip=(
-                    "Number of L0 optimization iterations. The algorithm "
-                    "gradually increases the threshold, snapping more normals "
-                    "flat each step."
+                    "L0 iterations. Each is one gentle vertex pass at the current alpha, then "
+                    "alpha *= beta. iterations=1 = a single small pass (often barely visible); "
+                    "use more (and/or higher alpha) for stronger flattening. Denser meshes "
+                    "need more iterations to spread flatness."
+                )),
+                io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
+                    "Run the vectorized torch implementation instead of the pure-Python "
+                    "loop. Uses CUDA when available (else vectorized CPU torch) -- orders "
+                    "of magnitude faster on large meshes. The GPU path snaps adjacent "
+                    "normals via a symmetric area-weighted bilateral accumulation, so "
+                    "results can differ slightly from the CPU path."
                 )),
             ],
             outputs=[
@@ -105,27 +113,33 @@ class SharpenL0MinimizeNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, alpha=0.001, beta=2.0, iterations=10):
-        log.info("Backend: l0_minimize")
+    def execute(cls, trimesh, alpha=0.001, beta=2.0, iterations=10, use_gpu="false"):
+        gpu = (use_gpu == "true")
+        algorithm = "l0_minimize_gpu" if gpu else "l0_minimize"
+        log.info("Backend: %s", algorithm)
         log.info("Input: %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
-        log.info("Parameters: alpha=%.4f, beta=%.1f, iterations=%d",
-                 alpha, beta, iterations)
+        log.info("Parameters: alpha=%.4f, beta=%.1f, iterations=%d, use_gpu=%s",
+                 alpha, beta, iterations, use_gpu)
 
         initial_vertices = len(trimesh.vertices)
         initial_faces = len(trimesh.faces)
 
-        sharpened, error = _l0_minimize_sharpen(
-            trimesh, alpha, beta, iterations,
-        )
+        device = "cpu"
+        if gpu:
+            from .l0_minimize_gpu import _l0_minimize_gpu
+            sharpened, error, device = _l0_minimize_gpu(trimesh, alpha, beta, iterations)
+        else:
+            sharpened, error = _l0_minimize_sharpen(trimesh, alpha, beta, iterations)
 
         if sharpened is None:
-            raise ValueError(f"Sharpening failed (l0_minimize): {error}")
+            raise ValueError(f"Sharpening failed ({algorithm}): {error}")
 
         # Copy metadata
         if hasattr(trimesh, "metadata") and trimesh.metadata:
             sharpened.metadata = trimesh.metadata.copy()
         sharpened.metadata["sharpening"] = {
-            "algorithm": "l0_minimize",
+            "algorithm": algorithm,
+            "device": device,
             "original_vertices": initial_vertices,
             "original_faces": initial_faces,
         }
@@ -144,10 +158,11 @@ class SharpenL0MinimizeNode(io.ComfyNode):
         param_text = (
             f"Alpha: {alpha}\n"
             f"Beta: {beta}\n"
-            f"Iterations: {iterations}"
+            f"Iterations: {iterations}\n"
+            f"Use GPU: {use_gpu}"
         )
 
-        info = f"""Sharpen Mesh Results (l0_minimize):
+        info = f"""Sharpen Mesh Results ({algorithm}, device={device}):
 
 {param_text}
 
