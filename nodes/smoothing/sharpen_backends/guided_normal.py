@@ -187,10 +187,11 @@ class SharpenGuidedNormalNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
-                io.Int.Input("normal_iterations", default=5, min=1, max=50, step=1, tooltip=(
+                io.Int.Input("normal_iterations", default=5, min=1, max=200, step=1, tooltip=(
                     "Iterations for guided bilateral normal filtering. "
                     "More iterations produce smoother/flatter regions while "
-                    "preserving sharp edges."
+                    "preserving sharp edges. This is the main strength knob; "
+                    "high values (50-200) progressively flatten."
                 )),
                 io.Int.Input("vertex_iterations", default=10, min=1, max=100, step=1, tooltip=(
                     "Iterations for updating vertex positions to match filtered "
@@ -311,6 +312,9 @@ Displacement:
   Average: {avg_disp:.6f}
   Maximum: {max_disp:.6f}
 """
+        if len(sharpened.vertices) == len(trimesh.vertices):
+            sharpened.vertex_attributes["sharpen_displacement_magnitude"] = disp.astype(np.float32)
+
         return io.NodeOutput(sharpened, info, ui={"text": [info]})
 
 

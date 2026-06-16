@@ -159,10 +159,11 @@ class SharpenMeshNode(io.ComfyNode):
                         )),
                     ]),
                     io.DynamicCombo.Option("guided_normal", [
-                        io.Int.Input("normal_iterations", default=5, min=1, max=50, step=1, tooltip=(
+                        io.Int.Input("normal_iterations", default=5, min=1, max=200, step=1, tooltip=(
                             "Iterations for guided bilateral normal filtering. "
                             "More iterations produce smoother/flatter regions while "
-                            "preserving sharp edges."
+                            "preserving sharp edges. Main strength knob; high values "
+                            "(50-200) progressively flatten."
                         )),
                         io.Int.Input("vertex_iterations", default=10, min=1, max=100, step=1, tooltip=(
                             "Iterations for updating vertex positions to match filtered "

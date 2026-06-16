@@ -243,6 +243,9 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
                 f"Vertices: {iv:,} (unchanged)\nFaces: {ifc:,} (unchanged)\n\n"
                 f"Displacement:\n  Average: {float(np.mean(disp)):.6f}\n  Maximum: {float(np.max(disp)):.6f}\n")
         log.info("[curvature_guided] device=%s avg_disp=%.6f", dev, float(np.mean(disp)))
+        if len(sharpened.vertices) == len(trimesh.vertices):
+            sharpened.vertex_attributes["sharpen_displacement_magnitude"] = disp.astype(np.float32)
+
         return io.NodeOutput(sharpened, info, ui={"text": [info]})
 
 

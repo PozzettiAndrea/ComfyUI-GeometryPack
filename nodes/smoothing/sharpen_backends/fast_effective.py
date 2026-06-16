@@ -166,6 +166,9 @@ Displacement:
   Average: {avg_disp:.6f}
   Maximum: {max_disp:.6f}
 """
+        if len(sharpened.vertices) == len(trimesh.vertices):
+            sharpened.vertex_attributes["sharpen_displacement_magnitude"] = disp.astype(np.float32)
+
         return io.NodeOutput(sharpened, info, ui={"text": [info]})
 
 
