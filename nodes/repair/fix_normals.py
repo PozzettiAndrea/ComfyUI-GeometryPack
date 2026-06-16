@@ -27,6 +27,7 @@ class FixNormalsNode(io.ComfyNode):
         "igl_winding":     "GeomPackFixNormals_IglWinding",
         "igl_raycast":     "GeomPackFixNormals_IglRaycast",
         "igl_signed_dist": "GeomPackFixNormals_IglSignedDist",
+        "cumesh":          "GeomPackFixNormals_CuMesh",
     }
 
     @classmethod
@@ -45,6 +46,7 @@ class FixNormalsNode(io.ComfyNode):
                     io.DynamicCombo.Option("igl_winding", []),
                     io.DynamicCombo.Option("igl_raycast", []),
                     io.DynamicCombo.Option("igl_signed_dist", []),
+                    io.DynamicCombo.Option("cumesh", []),
                 ]),
             ],
             outputs=[
