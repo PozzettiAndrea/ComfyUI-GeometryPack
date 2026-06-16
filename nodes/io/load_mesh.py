@@ -83,6 +83,13 @@ class LoadMesh(io.ComfyNode):
         return sorted(mesh_files)
 
     @classmethod
+    def validate_inputs(cls, **kwargs):
+        """Accept any file_path (execute() resolves/raises). This skips the combo
+        "Value not in list" check so just-uploaded meshes -- added to the widget
+        client-side but not in the cached INPUT_TYPES options -- still validate."""
+        return True
+
+    @classmethod
     def fingerprint_inputs(cls, file_path):
         """Force re-execution when file changes."""
         if COMFYUI_INPUT_FOLDER is not None:
