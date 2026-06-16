@@ -181,17 +181,12 @@ def _render_mesh_array(mesh, title, o):
 
 
 def _render_worker(payload):
-    """ProcessPool worker. payload = (spec, title, opts) where spec is
-    ("path", filepath) or ("mesh", trimesh). Each child makes its OWN GL context
-    (fork-safe: the parent holds no context). GPU children unset DISPLAY so VTK
-    picks EGL per-process; software children use the parent-started Xvfb.
+    """ProcessPool worker (SOFTWARE path only). payload = (spec, title, opts) where
+    spec is ("path", filepath) or ("mesh", trimesh). The parent started Xvfb with no
+    GL context (fork-safe); each child makes its own software context.
     Returns the array, or ("ERR", message, res) on failure."""
-    import os
     try:
         spec, title, o = payload
-        if o.get("gpu"):
-            # Force a per-process EGL (GPU) context; don't attach to any X display.
-            os.environ.pop("DISPLAY", None)
         import pyvista as pv
         pv.OFF_SCREEN = True
         if spec[0] == "path":
@@ -284,7 +279,6 @@ class RenderMeshBatch(io.ComfyNode):
             "revert_yz": bool(_s(revert_yz_flip, False)),
             "three": three,
             "titled": bool(_s(show_title, True)),
-            "gpu": gpu,  # workers set up EGL (gpu) vs Xvfb/OSMesa (software)
         }
 
         try:
@@ -301,18 +295,18 @@ class RenderMeshBatch(io.ComfyNode):
         imgs = [None] * len(meshes)
 
         def _run_pool():
-            """Render across CPU cores via a process pool (max workers). Each worker
-            renders in its OWN GL context and returns the small image (not the mesh),
-            so this parallelises the CPU-heavy prep for BOTH gpu (per-process EGL) and
-            software (shared Xvfb). Returns True on success, False -> serial fallback."""
-            # Software children share a parent-started Xvfb (started WITH NO GL context
-            # so the fork stays safe). GPU children unset DISPLAY -> their own EGL.
-            if not gpu:
-                try:
-                    if os.name != "nt" and not os.environ.get("DISPLAY"):
-                        pv.start_xvfb()
-                except Exception as e:
-                    log.debug("[PreviewMeshBatch] start_xvfb: %s", e)
+            """SOFTWARE-only: render across CPU cores via a process pool (max workers).
+            Each worker renders in its own software GL context and returns the small
+            image (not the mesh). Returns True on success, False -> serial fallback.
+            (GPU does NOT use this -- multiple EGL contexts gave 'bad X server' fallbacks
+            and were slower than serial; GPU goes through the per-mesh serial path.)"""
+            # Children share a parent-started Xvfb (started WITH NO GL context so the
+            # fork stays safe).
+            try:
+                if os.name != "nt" and not os.environ.get("DISPLAY"):
+                    pv.start_xvfb()
+            except Exception as e:
+                log.debug("[PreviewMeshBatch] start_xvfb: %s", e)
 
             payloads = []
             for i, mesh in enumerate(meshes):
@@ -326,8 +320,8 @@ class RenderMeshBatch(io.ComfyNode):
 
             from concurrent.futures import ProcessPoolExecutor
             workers = min(len(meshes), (os.cpu_count() or 4))  # max available
-            log.info("[PreviewMeshBatch] %s render: %d mesh(es) @ %dpx across %d processes",
-                     "gpu" if gpu else "software", len(meshes), res, workers)
+            log.info("[PreviewMeshBatch] software render: %d mesh(es) @ %dpx across %d processes",
+                     len(meshes), res, workers)
             try:
                 with ProcessPoolExecutor(max_workers=workers) as ex:
                     gen = ex.map(_render_worker, payloads)
@@ -346,7 +340,8 @@ class RenderMeshBatch(io.ComfyNode):
                 log.warning("[PreviewMeshBatch] parallel render failed (%s); serial fallback", e)
                 return False
 
-        done = _run_pool() if len(meshes) > 1 else False
+        # Process pool ONLY for the software path; GPU uses the serial per-mesh path.
+        done = _run_pool() if ((not gpu) and len(meshes) > 1) else False
 
         if not done:
             # ---- serial path (single mesh, or pool fallback) ----
