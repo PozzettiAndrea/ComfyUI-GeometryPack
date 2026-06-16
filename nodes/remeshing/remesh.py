@@ -96,7 +96,8 @@ class RemeshNode(io.ComfyNode):
                         io.Float.Input("anisotropy", default=0.04, min=0.005, max=0.5, step=0.005, display_mode="number", tooltip="Anisotropy factor. Lower = more anisotropic. Typical: 0.02-0.1."),
                     ]),
                     io.DynamicCombo.Option("pmp_uniform", [
-                        io.Float.Input("pmp_edge_length", default=1.0, min=0.001, max=100.0, step=0.01, display_mode="number", tooltip="Target edge length for uniform remeshing."),
+                        io.Float.Input("pmp_edge_length", default=1.0, min=0.001, max=100.0, step=0.01, display_mode="number", tooltip="Target edge length for uniform remeshing. Used only when target_vertices is 0."),
+                        io.Int.Input("pmp_target_vertices", default=0, min=0, max=20000000, step=100, tooltip="Target output vertices (0 = off, use edge_length). Back-solved from input mesh area; overrides edge_length. Approximate."),
                         io.Int.Input("pmp_iterations", default=10, min=1, max=100, step=1, tooltip="Number of remeshing iterations."),
                         io.Combo.Input("pmp_use_projection", options=["true", "false"], default="true", tooltip="Project vertices back onto input surface."),
                     ]),
