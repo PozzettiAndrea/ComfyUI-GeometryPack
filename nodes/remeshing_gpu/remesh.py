@@ -136,6 +136,13 @@ class RemeshGPUNode(io.ComfyNode):
                 io.Int.Input("target_face_count", default=500000, min=1000, max=5000000, step=1000, tooltip="Target number of output faces after simplification.", optional=True),
                 io.Float.Input("remesh_band", default=1.0, min=0.1, max=5.0, step=0.1, tooltip="Band width for dual-contouring. Affects surface detail capture. Higher = smoother but may lose fine details.", optional=True),
                 io.Float.Input("project_back", default=0.0, min=0.0, max=2.0, step=0.05, tooltip="Re-project dual-contouring vertices back onto the input surface for higher fidelity/sharper detail (0 = off).", optional=True),
+                # ---- optional post-remesh cleanup passes ----
+                io.Combo.Input("remove_degenerate_faces", options=["true", "false"], default="false", tooltip="Cleanup: drop zero-area / sliver faces.", optional=True),
+                io.Combo.Input("remove_duplicate_faces", options=["true", "false"], default="false", tooltip="Cleanup: drop exact-duplicate faces.", optional=True),
+                io.Combo.Input("repair_non_manifold_edges", options=["true", "false"], default="false", tooltip="Cleanup: mend non-manifold edges (fix variant).", optional=True),
+                io.Combo.Input("remove_non_manifold_faces", options=["true", "false"], default="false", tooltip="Cleanup: drop faces that create non-manifold edges.", optional=True),
+                io.Float.Input("remove_small_components_min_area", default=0.0, min=0.0, max=1.0, step=0.001, display_mode="number", tooltip="Cleanup: drop floating connected components below this area (0 = off). Great for recon/Tripo crumbs.", optional=True),
+                io.Combo.Input("remove_unreferenced_vertices", options=["true", "false"], default="false", tooltip="Cleanup: drop orphan vertices (no face uses them).", optional=True),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="remeshed_mesh"),
@@ -145,7 +152,10 @@ class RemeshGPUNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, target_face_count=500000, remesh_band=1.0,
-                grid_resolution=512, project_back=0.0):
+                grid_resolution=512, project_back=0.0,
+                remove_degenerate_faces="false", remove_duplicate_faces="false",
+                repair_non_manifold_edges="false", remove_non_manifold_faces="false",
+                remove_small_components_min_area=0.0, remove_unreferenced_vertices="false"):
         """Apply GPU-accelerated CuMesh remeshing."""
         import torch
         import cumesh as CuMesh
@@ -189,6 +199,33 @@ class RemeshGPUNode(io.ComfyNode):
         # Unify after simplify (on smaller mesh, should work)
         cumesh_obj.unify_face_orientations()
         log.info("Unified face orientations (post-simplify)")
+
+        # Optional cleanup passes (on the simplified mesh, before final read).
+        # Order: per-face removals -> small components -> orphan vertices last.
+        def _clean(name, fn):
+            try:
+                fn()
+                log.info("Cleanup: %s", name)
+            except Exception as e:
+                log.warning("Cleanup %s failed: %s", name, e)
+
+        if remove_degenerate_faces == "true":
+            _clean("remove_degenerate_faces", cumesh_obj.remove_degenerate_faces)
+        if remove_duplicate_faces == "true":
+            _clean("remove_duplicate_faces", cumesh_obj.remove_duplicate_faces)
+        if repair_non_manifold_edges == "true":
+            _clean("repair_non_manifold_edges", cumesh_obj.repair_non_manifold_edges)
+        if remove_non_manifold_faces == "true":
+            _clean("remove_non_manifold_faces", cumesh_obj.remove_non_manifold_faces)
+        try:
+            _min_area = float(remove_small_components_min_area or 0.0)
+        except Exception:
+            _min_area = 0.0
+        if _min_area > 0.0:
+            _clean("remove_small_connected_components",
+                   lambda: cumesh_obj.remove_small_connected_components(_min_area))
+        if remove_unreferenced_vertices == "true":
+            _clean("remove_unreferenced_vertices", cumesh_obj.remove_unreferenced_vertices)
 
         final_verts, final_faces = cumesh_obj.read()
         remeshed_mesh = trimesh_module.Trimesh(
