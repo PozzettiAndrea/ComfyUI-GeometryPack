@@ -64,9 +64,11 @@ class RemeshNode(io.ComfyNode):
                 io.DynamicCombo.Input("backend", tooltip="Remeshing algorithm and backend", options=[
                     # ---- Main env backends ----
                     io.DynamicCombo.Option("pymeshlab_isotropic", [
-                        io.Float.Input("target_edge_length", default=1.00, min=0.001, max=10.0, step=0.01, display_mode="number", tooltip="Target edge length for output triangles. Value is relative to mesh scale."),
+                        io.Float.Input("target_edge_length", default=1.00, min=0.0001, max=10.0, step=0.0001, display_mode="number", tooltip="Target edge length for output triangles, in world units (relative to mesh scale). Used only when target_vertices and target_faces are both 0."),
+                        io.Int.Input("target_vertices", default=0, min=0, max=20000000, step=100, tooltip="Target output vertex count (0 = off). Back-solves the edge length from the mesh area; overrides target_edge_length. Approximate."),
+                        io.Int.Input("target_faces", default=0, min=0, max=40000000, step=100, tooltip="Target output face count (0 = off). Back-solves the edge length from the mesh area; overrides target_vertices and target_edge_length. Approximate."),
                         io.Int.Input("iterations", default=3, min=1, max=20, step=1, tooltip="Number of remeshing passes. More iterations = smoother result, slower processing."),
-                        io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=1.0, tooltip="Angle threshold (degrees) for feature edge detection."),
+                        io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=1.0, tooltip="Angle threshold (degrees) for feature/crease edge detection -- edges sharper than this are preserved. Lower = preserve more edges; 180 = none."),
                         io.Combo.Input("adaptive", options=["true", "false"], default="false", tooltip="Use curvature-adaptive edge lengths."),
                     ]),
                     io.DynamicCombo.Option("instant_meshes", [
@@ -140,7 +142,7 @@ class RemeshNode(io.ComfyNode):
                     io.DynamicCombo.Option("gpu_cumesh", [
                         io.Int.Input("gpu_grid_resolution", default=512, min=32, max=2048, step=16, tooltip="Dual-contouring grid resolution -- the main detail knob. Higher = finer detail + more faces + slower/more VRAM; lower = coarser/faster."),
                         io.Int.Input("gpu_target_face_count", default=500000, min=1000, max=5000000, step=1000, tooltip="Target faces after simplification."),
-                        io.Float.Input("remesh_band", default=1.0, min=0.1, max=5.0, step=0.1, tooltip="Band width for dual-contouring. Higher = smoother."),
+                        io.Float.Input("remesh_band", default=1.0, min=0.1, max=5.0, step=0.1, tooltip="Thickness of the voxel shell dual-contouring evaluates around the surface, in VOXELS (real width = band x scale/grid_resolution). Robustness-vs-detail knob, NOT the main detail knob (that's grid_resolution). 1.0 (default) = one-voxel shell, right almost always. 0.5 = hugs the surface: keeps thin walls + sharp detail but can leave holes if input is noisy / resolution too low. 2-3 = thicker: fills gaps, robust on messy/non-watertight input, smoother -- but fuses nearby thin walls and rounds detail; slower. Above ~3 rarely helps. Holes -> raise band; thin features vanishing -> lower band; crisper detail -> raise grid_resolution."),
                         io.Float.Input("gpu_project_back", default=0.0, min=0.0, max=2.0, step=0.05, tooltip="Re-project DC vertices back onto the input surface for sharper fidelity (0 = off)."),
                         io.Combo.Input("remove_degenerate_faces", options=["true", "false"], default="false", tooltip="Cleanup: drop zero-area / sliver faces."),
                         io.Combo.Input("remove_duplicate_faces", options=["true", "false"], default="false", tooltip="Cleanup: drop exact-duplicate faces."),
