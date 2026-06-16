@@ -110,21 +110,27 @@ class SharpenMeshNode(io.ComfyNode):
                         )),
                     ]),
                     io.DynamicCombo.Option("l0_minimize", [
-                        io.Float.Input("alpha", default=0.001, min=0.0001, max=0.1, step=0.0001, tooltip=(
-                            "Initial regularization weight for L0 minimization. "
-                            "Controls the threshold below which normal differences "
-                            "are snapped to zero. Smaller = gentler start, "
-                            "larger = more aggressive initial flattening."
+                        io.Float.Input("alpha", default=0.001, min=0.0001, max=4.0, step=0.0001, tooltip=(
+                            "Angle threshold -- SCALE-INVARIANT (depends on the angle between "
+                            "faces, NOT on mesh size or vertex/face count). Adjacent faces whose "
+                            "dihedral angle is below it get snapped flat.\n"
+                            "alpha = 2*(1 - cos theta), range 0..4. Approx:\n"
+                            "  0.001 ~ 1.8 deg\n  0.01 ~ 5.7 deg\n  0.1 ~ 18 deg\n"
+                            "  0.5 ~ 41 deg\n  2.0 = 90 deg\n  4.0 = 180 deg\n"
+                            "Grows by 'beta' each iteration."
                         )),
                         io.Float.Input("beta", default=2.0, min=1.1, max=10.0, step=0.1, tooltip=(
-                            "Growth rate for alpha each iteration. Alpha is multiplied "
-                            "by beta each step. 2.0 doubles per iteration. "
-                            "Higher = faster convergence to piecewise-flat."
+                            "Multiplies alpha after each iteration, so the angle threshold "
+                            "escalates and progressively flattens sharper transitions. "
+                            "NOTE: has NO effect with iterations=1 (alpha is only multiplied "
+                            "between iterations). Use several iterations to see beta work."
                         )),
                         io.Int.Input("iterations", default=10, min=1, max=50, step=1, tooltip=(
-                            "Number of L0 optimization iterations. The algorithm "
-                            "gradually increases the threshold, snapping more normals "
-                            "flat each step."
+                            "Number of L0 iterations. Each does ONE gentle vertex pass at the "
+                            "current alpha, then alpha *= beta. With iterations=1 you get a "
+                            "single small pass at the initial alpha (often barely visible) -- "
+                            "use more iterations (and/or higher alpha) for stronger, propagated "
+                            "flattening. Denser meshes need more iterations to spread flatness."
                         )),
                     ]),
                     io.DynamicCombo.Option("guided_normal", [
