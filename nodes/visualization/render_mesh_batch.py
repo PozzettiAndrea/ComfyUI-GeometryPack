@@ -12,6 +12,8 @@ Options:
   * revert_yz_flip -> swap Y/Z axes (undo a y/z flip)
   * three_plane    -> 2x2 grid: iso(random) view, then XY, YZ, XZ
   * use_gpu        -> try native/EGL offscreen (fast), software fallback
+                      When OFF, rendering is parallelised across CPU cores with a
+                      process pool (software rasterisation is embarrassingly parallel).
 Progress shown via tqdm + the ComfyUI bar.
 """
 
@@ -89,6 +91,87 @@ def _add_geometry(p, poly, mesh_opacity, edges, edge_opacity, show_cc):
             pass
 
 
+def _render_mesh_array(mesh, title, o):
+    """Render one mesh to a float32 [0,1] HWC array using options dict `o`.
+    Shared by the serial path and the (software) multiprocessing workers."""
+    import random
+    import numpy as np
+    import pyvista as pv
+
+    poly = pv.wrap(mesh)
+    if o["revert_yz"]:
+        pts = np.asarray(poly.points).copy()
+        pts[:, [1, 2]] = pts[:, [2, 1]]
+        poly.points = pts
+
+    res, bg_rgb, tcol, fs = o["res"], o["bg_rgb"], o["text_color"], o["fs"]
+    titled = o["titled"]
+
+    def _surf(p):
+        _add_geometry(p, poly, o["m_op"], o["edges"], o["e_op"], o["show_cc"])
+
+    if o["three"]:
+        p = pv.Plotter(shape=(2, 2), off_screen=True, window_size=[res, res])
+        for (r, c, label) in [(0, 0, "iso"), (0, 1, "XY"), (1, 0, "YZ"), (1, 1, "XZ")]:
+            p.subplot(r, c)
+            p.background_color = bg_rgb
+            _surf(p)
+            if label == "iso":
+                p.view_isometric()
+                try:
+                    p.camera.azimuth = random.uniform(0, 360)
+                    p.camera.elevation = random.uniform(-25, 25)
+                except Exception:
+                    pass
+                cap = title if titled else ""
+            else:
+                getattr(p, f"view_{label.lower()}")()
+                cap = label + (f"  {title}" if titled else "")
+            if cap:
+                p.add_text(cap, font_size=max(7, fs - 3), color=tcol)
+        shot = p.screenshot(return_img=True)
+        p.close()
+    else:
+        p = pv.Plotter(off_screen=True, window_size=[res, res])
+        p.background_color = bg_rgb
+        _surf(p)
+        if titled:
+            p.add_title(title, font_size=fs, color=tcol)
+        p.view_isometric()
+        shot = p.screenshot(return_img=True)
+        p.close()
+
+    arr = np.asarray(shot, dtype=np.float32) / 255.0
+    if arr.ndim == 3 and arr.shape[-1] == 4:
+        arr = arr[..., :3]
+    return arr
+
+
+def _render_worker(payload):
+    """ProcessPool worker (software path). payload = (spec, title, opts) where
+    spec is ("path", filepath) or ("mesh", trimesh). The parent started Xvfb
+    WITHOUT a GL context (fork-safe); each child makes its own software context.
+    Returns the array, or ("ERR", message, res) on failure."""
+    try:
+        import pyvista as pv
+        pv.OFF_SCREEN = True
+        spec, title, o = payload
+        if spec[0] == "path":
+            from ..io import mesh_io
+            mesh, err = mesh_io.load_mesh_file(spec[1])
+            if mesh is None:
+                return ("ERR", f"load failed: {err}", o["res"])
+        else:
+            mesh = spec[1]
+        return _render_mesh_array(mesh, title, o)
+    except Exception as e:
+        try:
+            res = payload[2]["res"]
+        except Exception:
+            res = 512
+        return ("ERR", str(e), res)
+
+
 class RenderMeshBatch(io.ComfyNode):
     """Render each mesh in a batch (PyVista offscreen), titled by filename."""
 
@@ -119,7 +202,8 @@ class RenderMeshBatch(io.ComfyNode):
                 io.Boolean.Input("show_title", default=True,
                     tooltip="Draw the mesh filename as the title."),
                 io.Boolean.Input("use_gpu", default=True,
-                    tooltip="Try GPU/native (EGL) offscreen for speed; software fallback."),
+                    tooltip="Try GPU/native (EGL) offscreen for speed. When OFF, render is "
+                            "parallelised across CPU cores with a process pool."),
             ],
             outputs=[
                 io.Image.Output(display_name="images"),
@@ -131,7 +215,7 @@ class RenderMeshBatch(io.ComfyNode):
     def execute(cls, meshes, resolution=512, background="white", mesh_opacity=1.0,
                 show_edges=False, edge_opacity=1.0, show_connected_components=False,
                 revert_yz_flip=False, three_plane=False, show_title=True, use_gpu=True):
-        import random
+        import os
         import numpy as np
         import torch
         import pyvista as pv
@@ -140,14 +224,9 @@ class RenderMeshBatch(io.ComfyNode):
             return (x[0] if x else d) if isinstance(x, list) else x
         res = int(_s(resolution, 512))
         bg = _s(background, "white")
-        m_op = float(_s(mesh_opacity, 1.0))
-        edges = bool(_s(show_edges, False))
-        e_op = float(_s(edge_opacity, 1.0))
-        show_cc = bool(_s(show_connected_components, False))
-        revert_yz = bool(_s(revert_yz_flip, False))
-        three = bool(_s(three_plane, False))
-        titled = bool(_s(show_title, True))
         gpu = bool(_s(use_gpu, True))
+        three = bool(_s(three_plane, False))
+        show_cc = bool(_s(show_connected_components, False))
 
         if len(meshes) == 1 and isinstance(meshes[0], list):
             meshes = meshes[0]
@@ -155,82 +234,85 @@ class RenderMeshBatch(io.ComfyNode):
         if not meshes:
             raise ValueError("Preview Mesh Batch Render: no meshes provided.")
 
-        backend = _setup_offscreen(gpu)
-        log.info("[PreviewMeshBatch] backend: %s | %d mesh(es) @ %dpx%s%s",
-                 backend, len(meshes), res, " 3-plane" if three else "",
-                 " CC" if show_cc else "")
-
         bg_rgb = {"white": "white", "black": "black", "gray": (0.5, 0.5, 0.5)}.get(bg, "white")
-        text_color = "black" if bg == "white" else "white"
-        fs = max(8, int(res / 45))
+        opts = {
+            "res": res, "bg_rgb": bg_rgb,
+            "text_color": "black" if bg == "white" else "white",
+            "fs": max(8, int(res / 45)),
+            "m_op": float(_s(mesh_opacity, 1.0)),
+            "edges": bool(_s(show_edges, False)),
+            "e_op": float(_s(edge_opacity, 1.0)),
+            "show_cc": show_cc,
+            "revert_yz": bool(_s(revert_yz_flip, False)),
+            "three": three,
+            "titled": bool(_s(show_title, True)),
+        }
 
-        try:
-            from tqdm import tqdm
-            iterator = tqdm(list(enumerate(meshes)), desc="Preview Mesh Batch", unit="mesh")
-        except Exception:
-            iterator = enumerate(meshes)
         try:
             from comfy.utils import ProgressBar
             pbar = ProgressBar(len(meshes))
         except Exception:
             pbar = None
+        try:
+            from tqdm import tqdm
+        except Exception:
+            tqdm = None
 
-        def _render_one(poly, title):
-            if three:
-                p = pv.Plotter(shape=(2, 2), off_screen=True, window_size=[res, res])
-                cells = [
-                    (0, 0, "iso"), (0, 1, "XY"), (1, 0, "YZ"), (1, 1, "XZ"),
-                ]
-                for (r, c, label) in cells:
-                    p.subplot(r, c)
-                    p.background_color = bg_rgb
-                    _add_geometry(p, poly, m_op, edges, e_op, show_cc)
-                    if label == "iso":
-                        p.view_isometric()
-                        try:  # "random" initial view
-                            p.camera.azimuth = random.uniform(0, 360)
-                            p.camera.elevation = random.uniform(-25, 25)
-                        except Exception:
-                            pass
-                        cap = title if titled else ""
-                    else:
-                        getattr(p, f"view_{label.lower()}")()
-                        cap = f"{label}" + (f"  {title}" if titled else "")
-                    if cap:
-                        p.add_text(cap, font_size=max(7, fs - 3), color=text_color)
-                shot = p.screenshot(return_img=True)
-                p.close()
-                return shot
-            p = pv.Plotter(off_screen=True, window_size=[res, res])
-            p.background_color = bg_rgb
-            _add_geometry(p, poly, m_op, edges, e_op, show_cc)
-            if titled:
-                p.add_title(title, font_size=fs, color=text_color)
-            p.view_isometric()
-            shot = p.screenshot(return_img=True)
-            p.close()
-            return shot
+        titles = [_mesh_title(m, i) for i, m in enumerate(meshes)]
+        imgs = [None] * len(meshes)
 
-        imgs, titles = [], []
-        for i, mesh in iterator:
-            title = _mesh_title(mesh, i)
-            titles.append(title)
+        if (not gpu) and len(meshes) > 1:
+            # ---- software path: parallelise across CPU cores via processes ----
+            # Start the shared virtual display ONCE in the parent WITHOUT creating
+            # a GL context (so the fork stays safe); each child makes its own.
             try:
-                poly = pv.wrap(mesh)
-                if revert_yz:
-                    pts = np.asarray(poly.points).copy()
-                    pts[:, [1, 2]] = pts[:, [2, 1]]
-                    poly.points = pts
-                shot = _render_one(poly, title)
-                arr = np.asarray(shot, dtype=np.float32) / 255.0
-                if arr.ndim == 3 and arr.shape[-1] == 4:
-                    arr = arr[..., :3]
-                imgs.append(arr)
+                if os.name != "nt" and not os.environ.get("DISPLAY"):
+                    pv.start_xvfb()
             except Exception as e:
-                log.error("[PreviewMeshBatch] render failed for %s: %s", title, e)
-                imgs.append(np.ones((res, res, 3), np.float32))
-            if pbar is not None:
-                pbar.update(1)
+                log.debug("[PreviewMeshBatch] start_xvfb: %s", e)
+
+            payloads = []
+            for i, mesh in enumerate(meshes):
+                fp = None
+                try:
+                    fp = (mesh.metadata or {}).get("file_path")
+                except Exception:
+                    pass
+                spec = ("path", fp) if (fp and os.path.isfile(fp)) else ("mesh", mesh)
+                payloads.append((spec, titles[i], opts))
+
+            from concurrent.futures import ProcessPoolExecutor
+            workers = min(len(meshes), (os.cpu_count() or 4))
+            log.info("[PreviewMeshBatch] software render: %d mesh(es) @ %dpx across %d processes",
+                     len(meshes), res, workers)
+            with ProcessPoolExecutor(max_workers=workers) as ex:
+                gen = ex.map(_render_worker, payloads)
+                if tqdm is not None:
+                    gen = tqdm(gen, total=len(meshes), desc="Preview Mesh Batch", unit="mesh")
+                for i, out in enumerate(gen):
+                    if isinstance(out, tuple) and out and out[0] == "ERR":
+                        log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], out[1])
+                        imgs[i] = np.ones((res, res, 3), np.float32)
+                    else:
+                        imgs[i] = out
+                    if pbar is not None:
+                        pbar.update(1)
+        else:
+            # ---- serial path (GPU, or single mesh) ----
+            backend = _setup_offscreen(gpu)
+            log.info("[PreviewMeshBatch] backend: %s | %d mesh(es) @ %dpx%s%s",
+                     backend, len(meshes), res, " 3-plane" if three else "", " CC" if show_cc else "")
+            it = enumerate(meshes)
+            if tqdm is not None:
+                it = tqdm(list(it), desc="Preview Mesh Batch", unit="mesh")
+            for i, mesh in it:
+                try:
+                    imgs[i] = _render_mesh_array(mesh, titles[i], opts)
+                except Exception as e:
+                    log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], e)
+                    imgs[i] = np.ones((res, res, 3), np.float32)
+                if pbar is not None:
+                    pbar.update(1)
 
         h = max(a.shape[0] for a in imgs)
         w = max(a.shape[1] for a in imgs)
