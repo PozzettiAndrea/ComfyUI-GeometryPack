@@ -131,9 +131,11 @@ class RemeshNode(io.ComfyNode):
                         io.Float.Input("voxel_size", default=1, min=0.001, max=1.0, step=0.01, display_mode="number", tooltip="Voxel size. Smaller = more detail. Output is always watertight."),
                     ]),
                     io.DynamicCombo.Option("blender_sharp", [
-                        io.Int.Input("octree_depth", default=6, min=1, max=10, step=1, tooltip="Resolution. Higher = more detail, more faces."),
-                        io.Float.Input("scale", default=0.9, min=0.0, max=1.0, step=0.05, display_mode="number", tooltip="Ratio of output size to input bounding box."),
-                        io.Float.Input("sharpness", default=1.0, min=0.0, max=5.0, step=0.1, display_mode="number", tooltip="Edge sharpness."),
+                        io.Int.Input("octree_depth", default=6, min=1, max=12, step=1, tooltip="Octree resolution -- the detail knob. Power of 2: each +1 roughly QUADRUPLES face count and halves voxel size. 6 is a sane start; 8-9 is high detail; 10+ can be very heavy."),
+                        io.Float.Input("scale", default=0.9, min=0.0, max=0.99, step=0.05, display_mode="number", tooltip="Octree fit relative to the bounding box (0-0.99). Higher = grid hugs the mesh tighter = finer effective resolution; too close to 1.0 can clip the outer shell. 0.9 default."),
+                        io.Float.Input("sharpness", default=1.0, min=0.0, max=2.0, step=0.1, display_mode="number", tooltip="How aggressively dual-contouring snaps to sharp edges/corners. Higher = crisper edges but can spike on noisy input; lower = rounder. 0-2 is Blender's normal slider range (1.0 default); capped at 2 here since higher just over-sharpens."),
+                        io.Combo.Input("remove_disconnected", options=["true", "false"], default="true", tooltip="Delete small disconnected (floating) pieces after remeshing. ON by default (matches Blender)."),
+                        io.Float.Input("disconnected_threshold", default=1.0, min=0.0, max=1.0, step=0.05, display_mode="number", tooltip="Size cutoff for removal, relative to the largest component. Higher = remove more aggressively (1.0 ~ keep only the main body); lower = keep more; 0 = keep everything. Only used when remove_disconnected is on."),
                     ]),
                     io.DynamicCombo.Option("blender_blocks", [
                         io.Int.Input("octree_depth", default=6, min=1, max=10, step=1, tooltip="Resolution. Higher = more detail, more faces."),
