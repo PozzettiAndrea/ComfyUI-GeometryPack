@@ -79,9 +79,13 @@ class RemeshNode(io.ComfyNode):
                         io.Float.Input("crease_angle", default=0.0, min=0.0, max=180.0, step=1.0, tooltip="Angle threshold for preserving sharp edges. 0 = no preservation."),
                     ]),
                     io.DynamicCombo.Option("quadriflow", [
-                        io.Int.Input("target_face_count", default=5000, min=100, max=5000000, step=100, tooltip="Target output faces. Creates quad-dominant mesh with good topology."),
-                        io.Combo.Input("preserve_sharp", options=["true", "false"], default="false", tooltip="Preserve sharp edges during remeshing."),
-                        io.Combo.Input("preserve_boundary", options=["true", "false"], default="true", tooltip="Preserve mesh boundary edges during remeshing."),
+                        io.Int.Input("target_face_count", default=5000, min=100, max=5000000, step=100, tooltip="Target output faces (quad-dominant). QuadriFlow hits this fairly accurately."),
+                        io.Combo.Input("preserve_sharp", options=["true", "false"], default="false", tooltip="Align quads to sharp edges and keep them crisp. QuadriFlow's sharp threshold is HARDCODED at 60 deg (an edge is 'sharp' if adjacent face normals deviate > 60 deg) -- not adjustable from the binding. Turn ON for CAD/mechanical parts."),
+                        io.Combo.Input("preserve_boundary", options=["true", "false"], default="true", tooltip="Keep mesh boundary/open edges fixed (for open meshes)."),
+                        io.Combo.Input("adaptive_scale", options=["false", "true"], default="false", tooltip="Curvature-adaptive quad sizing: smaller quads where curvature is high, larger on flats. Great for CAD; spends faces where detail is."),
+                        io.Combo.Input("minimum_cost_flow", options=["false", "true"], default="false", tooltip="Min-cost-flow solver for the integer step -> cleaner connectivity / better singularities. Slower, more regular."),
+                        io.Combo.Input("aggressive_sat", options=["false", "true"], default="false", tooltip="SAT solver for a fully-integer, seamless result with fewest singularities (highest quality). Slowest."),
+                        io.Int.Input("seed", default=0, min=0, max=2000000000, step=1, tooltip="Random seed for field initialization (reproducible results)."),
                     ]),
                     io.DynamicCombo.Option("mmg_adaptive", [
                         io.Float.Input("hausd", default=0.01, min=0.0001, max=10.0, step=0.001, display_mode="number", tooltip="Hausdorff distance: max deviation from original surface."),
