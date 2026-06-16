@@ -100,9 +100,17 @@ def _render_mesh_array(mesh, title, o):
 
     poly = pv.wrap(mesh)
     if o["revert_yz"]:
-        pts = np.asarray(poly.points).copy()
+        # Deep-copy so we never mutate the upstream mesh. Swapping Y/Z is a
+        # reflection: it flips face winding/normals (which can make a lit surface
+        # render dark/inside-out), so rebuild normals afterwards.
+        poly = poly.copy(deep=True)
+        pts = np.asarray(poly.points, dtype=np.float64).copy()
         pts[:, [1, 2]] = pts[:, [2, 1]]
         poly.points = pts
+        try:
+            poly.flip_normals()
+        except Exception:
+            pass
 
     res, bg_rgb, tcol, fs = o["res"], o["bg_rgb"], o["text_color"], o["fs"]
     titled = o["titled"]
@@ -123,9 +131,11 @@ def _render_mesh_array(mesh, title, o):
                     p.camera.elevation = random.uniform(-25, 25)
                 except Exception:
                     pass
+                p.reset_camera()
                 cap = title if titled else ""
             else:
                 getattr(p, f"view_{label.lower()}")()
+                p.reset_camera()
                 cap = label + (f"  {title}" if titled else "")
             if cap:
                 p.add_text(cap, font_size=max(7, fs - 3), color=tcol)
@@ -138,6 +148,7 @@ def _render_mesh_array(mesh, title, o):
         if titled:
             p.add_title(title, font_size=fs, color=tcol)
         p.view_isometric()
+        p.reset_camera()
         shot = p.screenshot(return_img=True)
         p.close()
 
