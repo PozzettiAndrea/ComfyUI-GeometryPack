@@ -24,6 +24,7 @@ viewers = [
     "bvh", "fbx_animation", "compare_smpl_bvh",
     "text_report",
     "ultimate_inspection",
+    "slicer",
 ]
 for viewer in viewers:
     try:
