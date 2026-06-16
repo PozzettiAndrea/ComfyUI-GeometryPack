@@ -114,6 +114,7 @@ class SharpenL0MinimizeNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, alpha=0.001, beta=2.0, iterations=10, use_gpu="false"):
+        import time
         gpu = (use_gpu == "true")
         algorithm = "l0_minimize_gpu" if gpu else "l0_minimize"
         log.info("Backend: %s", algorithm)
@@ -125,11 +126,13 @@ class SharpenL0MinimizeNode(io.ComfyNode):
         initial_faces = len(trimesh.faces)
 
         device = "cpu"
+        t0 = time.perf_counter()
         if gpu:
             from .l0_minimize_gpu import _l0_minimize_gpu
             sharpened, error, device = _l0_minimize_gpu(trimesh, alpha, beta, iterations)
         else:
             sharpened, error = _l0_minimize_sharpen(trimesh, alpha, beta, iterations)
+        elapsed = time.perf_counter() - t0
 
         if sharpened is None:
             raise ValueError(f"Sharpening failed ({algorithm}): {error}")
@@ -159,7 +162,8 @@ class SharpenL0MinimizeNode(io.ComfyNode):
             f"Alpha: {alpha}\n"
             f"Beta: {beta}\n"
             f"Iterations: {iterations}\n"
-            f"Use GPU: {use_gpu}"
+            f"Use GPU: {use_gpu}\n"
+            f"Time: {elapsed:.2f}s"
         )
 
         info = f"""Sharpen Mesh Results ({algorithm}, device={device}):

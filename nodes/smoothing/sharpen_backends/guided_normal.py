@@ -236,6 +236,7 @@ class SharpenGuidedNormalNode(io.ComfyNode):
     def execute(cls, trimesh, normal_iterations=5, vertex_iterations=10,
                 neighborhood_rings=1, sigma_s=1.0, sigma_r_degrees=20.0, use_gpu="false"):
         import math
+        import time
         gpu = (use_gpu == "true")
         algorithm = "guided_normal_gpu" if gpu else "guided_normal"
         # Range weight works on unit-normal distances; a difference angle of theta
@@ -251,6 +252,7 @@ class SharpenGuidedNormalNode(io.ComfyNode):
         initial_faces = len(trimesh.faces)
 
         device = "cpu"
+        t0 = time.perf_counter()
         if gpu:
             from .guided_normal_gpu import _guided_normal_gpu
             sharpened, error, device = _guided_normal_gpu(
@@ -262,6 +264,7 @@ class SharpenGuidedNormalNode(io.ComfyNode):
                 trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
                 neighborhood_rings=neighborhood_rings,
             )
+        elapsed = time.perf_counter() - t0
 
         if sharpened is None:
             raise ValueError(f"Sharpening failed ({algorithm}): {error}")
@@ -293,7 +296,8 @@ class SharpenGuidedNormalNode(io.ComfyNode):
             f"Neighborhood Rings: {neighborhood_rings}\n"
             f"Sigma S: {sigma_s}\n"
             f"Sigma R: {sigma_r_degrees} deg (= {sigma_r:.3f} normal-dist)\n"
-            f"Use GPU: {use_gpu}"
+            f"Use GPU: {use_gpu}\n"
+            f"Time: {elapsed:.2f}s"
         )
 
         info = f"""Sharpen Mesh Results ({algorithm}, device={device}):

@@ -16,6 +16,7 @@ GPU work.
 """
 
 import logging
+import time
 
 import numpy as np
 import trimesh as trimesh_module
@@ -101,6 +102,7 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
     n = len(V0)
 
     # --- one-time topology (CPU), constant across iterations ---
+    t_topo = time.perf_counter()
     vtf = _build_vertex_to_faces(n, Ff)
     neighbors = _build_vertex_based_face_neighbors(Ff, vtf, include_central=True, rings=neighborhood_rings)
     face_to_adj = [[] for _ in range(m)]
@@ -110,6 +112,9 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
         face_to_adj[fb].append(ai)
     P_np, M_np, K = _pad_patches(neighbors, m)
     IE_np, IEM_np = _pad_inner_edges(neighbors, adj, face_to_adj, m)
+    log.info("[guided_normal_gpu] topology build (CPU): %.3fs  (m=%d faces, n=%d verts, "
+             "K=%d, Emax=%d, rings=%d)",
+             time.perf_counter() - t_topo, m, n, K, IE_np.shape[1], neighborhood_rings)
 
     dev = _torch_device()
     eps = 1e-12
@@ -127,10 +132,21 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
     ones_f = torch.ones(m, device=dev)
     arange_m = torch.arange(m, device=dev)
 
+    def _sync():
+        if dev.type == "cuda":
+            torch.cuda.synchronize()
+
+    # one-time host->device transfer cost
+    _sync()
+    log.info("[guided_normal_gpu] host->device upload + setup: %.3fs (device=%s)",
+             time.perf_counter() - t_topo, dev)
+
     # chunk the O(K^2) max-pairwise-diff so (chunk * K * K) stays bounded
     chunk = max(1, min(m, 4_000_000 // max(1, K * K)))
 
-    for _ in range(int(normal_iterations)):
+    for it in range(int(normal_iterations)):
+        _sync()
+        t_it = time.perf_counter()
         v0, v1, v2 = V[F[:, 0]], V[F[:, 1]], V[F[:, 2]]
         cross = torch.cross(v1 - v0, v2 - v0, dim=1)
         area2 = cross.norm(dim=1, keepdim=True)
@@ -162,6 +178,10 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
             pair = mb.unsqueeze(2) & mb.unsqueeze(1)              # (c, K, K)
             d = torch.where(pair, d, torch.zeros_like(d))
             maxdiff[s:e] = d.flatten(1).amax(dim=1)
+        _sync()
+        t_maxdiff = time.perf_counter()
+        log.info("[guided_normal_gpu] iter %d:   O(K^2) maxdiff: %.3fs (K=%d, chunk=%d, "
+                 "%d chunks)", it, t_maxdiff - t_it, K, chunk, (m + chunk - 1) // chunk)
 
         # inner-edge total variation over each patch
         tv = (normals[adj_a] - normals[adj_b]).norm(dim=1)       # (E,)
@@ -186,6 +206,10 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
         w_total = w.sum(1, keepdim=True)
         filtered = torch.where(w_total > eps, n_acc / (w_total + eps), normals)
         filtered_normals = filtered / (filtered.norm(dim=1, keepdim=True) + eps)
+        _sync()
+        t_filt = time.perf_counter()
+        log.info("[guided_normal_gpu] iter %d:   normal-filter block (incl. maxdiff): %.3fs",
+                 it, t_filt - t_it)
 
         # --- interleaved vertex update to match the filtered normals ---
         for _ in range(int(vertex_iterations)):
@@ -202,6 +226,10 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
             new_V[moved] /= counts[moved].unsqueeze(1)
             new_V[~moved] = V[~moved]
             V = new_V
+        _sync()
+        t_vtx = time.perf_counter()
+        log.info("[guided_normal_gpu] iter %d:   vertex update (%d sub-iters): %.3fs  |  "
+                 "iter total: %.3fs", it, int(vertex_iterations), t_vtx - t_filt, t_vtx - t_it)
 
     Vout = V.detach().cpu().numpy().astype(np.float64)
     result = trimesh_module.Trimesh(vertices=Vout,
