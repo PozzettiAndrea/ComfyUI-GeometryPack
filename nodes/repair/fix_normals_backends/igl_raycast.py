@@ -22,6 +22,9 @@ class FixNormalsIglRaycastNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
+                io.Int.Input("rays_minimum", default=10, min=1, max=1000, step=1, tooltip="Minimum rays cast per face for the inside/outside vote. More rays = more robust on noisy / self-intersecting meshes, slower."),
+                io.Combo.Input("use_parity", options=["true", "false"], default="false", tooltip="Decide orientation by ray-hit parity (odd/even) instead of front/back hit counts. Parity suits watertight meshes; front/back voting is more robust on open meshes."),
+                io.Combo.Input("facet_wise", options=["false", "true"], default="false", tooltip="Orient each facet independently instead of per connected component. Usually leave off (per-component is more coherent and avoids salt-and-pepper flips)."),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="fixed_mesh"),
@@ -30,47 +33,39 @@ class FixNormalsIglRaycastNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh):
+    def execute(cls, trimesh, rays_minimum=10, use_parity="false", facet_wise="false"):
         import igl
+        import igl.embree
 
         fixed_mesh = trimesh.copy()
 
         was_consistent = fixed_mesh.is_winding_consistent
 
-        V = np.asarray(fixed_mesh.vertices, dtype=np.float64)
-        F = np.asarray(fixed_mesh.faces, dtype=np.int64)
+        V = np.ascontiguousarray(fixed_mesh.vertices, dtype=np.float64)
+        F = np.ascontiguousarray(fixed_mesh.faces, dtype=np.int64)
 
-        # Compute face normals
-        face_normals = igl.per_face_normals(V, F, np.array([1., 1., 1.]))
+        # Batched, per-component raycast reorientation (Takayama et al. 2014) via
+        # Embree. Replaces the old per-face Python ray loop (one igl.ray_mesh_intersect
+        # call per face + an unscaled 1e-6 epsilon): a single call casts all rays over
+        # the BVH and orients each connected component coherently.
+        # Returns I = per-face flip flags, C = connected-component ids.
+        I, C = igl.embree.reorient_facets_raycast(
+            V, F,
+            -1,                      # rays_total: -1 => auto (scaled by face area)
+            int(rays_minimum),       # rays_minimum per face
+            facet_wise == "true",    # per-facet vs per-component
+            use_parity == "true",    # parity vs front/back voting
+            False,                   # is_verbose
+        )
 
-        # Compute face centroids
-        face_centroids = (V[F[:, 0]] + V[F[:, 1]] + V[F[:, 2]]) / 3.0
-
-        # Small offset to avoid self-intersection
-        eps = 1e-6
-
-        flip_mask = np.zeros(len(F), dtype=bool)
-
-        for i in range(len(F)):
-            origin = face_centroids[i] + face_normals[i] * eps
-            direction = face_normals[i]
-
-            # Cast ray and get hits
-            hits = igl.ray_mesh_intersect(
-                np.ascontiguousarray(origin, dtype=np.float64),
-                np.ascontiguousarray(direction, dtype=np.float64),
-                V, F
-            )
-
-            # Odd number of hits = pointing inward
-            if hits is not None and len(hits) % 2 == 1:
-                flip_mask[i] = True
+        flip_mask = np.asarray(I, dtype=bool)
 
         # Flip faces by reversing vertex order
         F_out = F.copy()
         F_out[flip_mask] = F_out[flip_mask][:, [0, 2, 1]]
 
         num_flipped = int(np.sum(flip_mask))
+        num_components = (int(np.asarray(C).max()) + 1) if len(np.asarray(C)) else 0
         fixed_mesh.faces = F_out
 
         log.info("igl_raycast: flipped %d/%d faces", num_flipped, len(F))
@@ -80,15 +75,16 @@ class FixNormalsIglRaycastNode(io.ComfyNode):
         info = (
             f"Normal Orientation Fix:\n"
             f"\n"
-            f"Method: igl_raycast\n"
+            f"Method: igl_raycast (embree, {'parity' if use_parity == 'true' else 'front/back'}, rays_min={rays_minimum})\n"
             f"Before: {'Consistent' if was_consistent else 'Inconsistent'}\n"
             f"After:  {'Consistent' if is_consistent else 'Inconsistent'}\n"
             f"Faces Flipped: {num_flipped}\n"
+            f"Components: {num_components}\n"
             f"\n"
             f"Vertices: {len(fixed_mesh.vertices):,}\n"
             f"Faces: {len(fixed_mesh.faces):,}\n"
             f"\n"
-            f"Note: Raycasting works best on closed meshes without self-intersections\n"
+            f"Note: Batched Embree raycast (Takayama 2014), oriented per connected component\n"
             f"{'[OK] Normals are now consistently oriented!' if is_consistent else '[WARN] Some inconsistencies may remain (check mesh topology)'}"
         )
 

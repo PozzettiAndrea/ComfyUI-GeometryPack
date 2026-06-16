@@ -22,6 +22,7 @@ class FixNormalsIglSignedDistNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
+                io.Combo.Input("sd_sign_type", options=["fast_winding_number", "winding_number", "pseudonormal"], default="fast_winding_number", tooltip="Sign oracle for the inside/outside test. fast_winding_number (default, recommended) gives a geometric sign that reliably re-orients inverted meshes. winding_number / pseudonormal derive their near-surface sign from the existing face orientation, so they mainly tidy mostly-correct watertight meshes and may NOT fix a wholly-inverted mesh."),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="fixed_mesh"),
@@ -30,8 +31,15 @@ class FixNormalsIglSignedDistNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh):
+    def execute(cls, trimesh, sd_sign_type="fast_winding_number"):
         import igl
+
+        sign_types = {
+            "fast_winding_number": igl.SIGNED_DISTANCE_TYPE_FAST_WINDING_NUMBER,
+            "winding_number": igl.SIGNED_DISTANCE_TYPE_WINDING_NUMBER,
+            "pseudonormal": igl.SIGNED_DISTANCE_TYPE_PSEUDONORMAL,
+        }
+        sign_type = sign_types.get(sd_sign_type, igl.SIGNED_DISTANCE_TYPE_FAST_WINDING_NUMBER)
 
         fixed_mesh = trimesh.copy()
 
@@ -53,15 +61,17 @@ class FixNormalsIglSignedDistNode(io.ComfyNode):
         # Query points offset along normal direction (outside if normal correct)
         query_points = face_centroids + face_normals * eps
 
-        # Compute signed distance using pseudonormal method
+        # Compute signed distance using the selected sign oracle
         S, I, C, N = igl.signed_distance(
             np.ascontiguousarray(query_points, dtype=np.float64),
             V, F,
-            igl.SIGNED_DISTANCE_TYPE_PSEUDONORMAL
+            sign_type
         )
 
-        # Positive signed distance = inside mesh = normal points inward
-        flip_mask = S > 0
+        # Standard convention (this igl build): signed distance < 0 = inside.
+        # The probe sits just OUTSIDE a correctly-oriented face (S > 0). If it instead
+        # lands inside (S < 0), the face normal points inward -> flip the face.
+        flip_mask = S < 0
 
         # Flip faces by reversing vertex order
         F_out = F.copy()
@@ -77,7 +87,7 @@ class FixNormalsIglSignedDistNode(io.ComfyNode):
         info = (
             f"Normal Orientation Fix:\n"
             f"\n"
-            f"Method: igl_signed_dist\n"
+            f"Method: igl_signed_dist ({sd_sign_type})\n"
             f"Before: {'Consistent' if was_consistent else 'Inconsistent'}\n"
             f"After:  {'Consistent' if is_consistent else 'Inconsistent'}\n"
             f"Faces Flipped: {num_flipped}\n"
