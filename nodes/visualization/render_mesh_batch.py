@@ -91,13 +91,18 @@ def _add_geometry(p, poly, mesh_opacity, edges, edge_opacity, show_cc):
             pass
 
 
-def _render_mesh_array(mesh, title, o):
-    """Render one mesh to a float32 [0,1] HWC array using options dict `o`.
-    Shared by the serial path and the (software) multiprocessing workers."""
-    import random
+def _make_plotter(o):
+    """Create an offscreen plotter (2x2 for three-plane, else single)."""
+    import pyvista as pv
+    if o["three"]:
+        return pv.Plotter(shape=(2, 2), off_screen=True, window_size=[o["res"], o["res"]])
+    return pv.Plotter(off_screen=True, window_size=[o["res"], o["res"]])
+
+
+def _prep_poly(mesh, o):
+    """Wrap a trimesh as PolyData, applying the optional Y/Z revert."""
     import numpy as np
     import pyvista as pv
-
     poly = pv.wrap(mesh)
     if o["revert_yz"]:
         # Deep-copy so we never mutate the upstream mesh. Swapping Y/Z is a
@@ -111,19 +116,24 @@ def _render_mesh_array(mesh, title, o):
             poly.flip_normals()
         except Exception:
             pass
+    return poly
 
-    res, bg_rgb, tcol, fs = o["res"], o["bg_rgb"], o["text_color"], o["fs"]
-    titled = o["titled"]
 
-    def _surf(p):
+def _draw_into(p, poly, title, o):
+    """Populate an already-created, freshly p.clear()'d plotter with the mesh and
+    requested view(s). Titles/captions use named add_text so they replace cleanly
+    when the plotter is reused across meshes."""
+    import random
+    bg_rgb, tcol, fs, titled = o["bg_rgb"], o["text_color"], o["fs"], o["titled"]
+
+    def _surf():
         _add_geometry(p, poly, o["m_op"], o["edges"], o["e_op"], o["show_cc"])
 
     if o["three"]:
-        p = pv.Plotter(shape=(2, 2), off_screen=True, window_size=[res, res])
         for (r, c, label) in [(0, 0, "iso"), (0, 1, "XY"), (1, 0, "YZ"), (1, 1, "XZ")]:
             p.subplot(r, c)
             p.background_color = bg_rgb
-            _surf(p)
+            _surf()
             if label == "iso":
                 p.view_isometric()
                 try:
@@ -138,24 +148,36 @@ def _render_mesh_array(mesh, title, o):
                 p.reset_camera()
                 cap = label + (f"  {title}" if titled else "")
             if cap:
-                p.add_text(cap, font_size=max(7, fs - 3), color=tcol)
-        shot = p.screenshot(return_img=True)
-        p.close()
+                p.add_text(cap, font_size=max(7, fs - 3), color=tcol, name=f"cap_{r}{c}")
     else:
-        p = pv.Plotter(off_screen=True, window_size=[res, res])
         p.background_color = bg_rgb
-        _surf(p)
+        _surf()
         if titled:
-            p.add_title(title, font_size=fs, color=tcol)
+            p.add_text(title, position="upper_edge", font_size=fs, color=tcol, name="gp_title")
         p.view_isometric()
         p.reset_camera()
-        shot = p.screenshot(return_img=True)
-        p.close()
 
+
+def _screenshot_arr(p):
+    import numpy as np
+    shot = p.screenshot(return_img=True)
     arr = np.asarray(shot, dtype=np.float32) / 255.0
     if arr.ndim == 3 and arr.shape[-1] == 4:
         arr = arr[..., :3]
     return arr
+
+
+def _render_mesh_array(mesh, title, o):
+    """One-shot render with its own plotter -- used by the process-pool workers."""
+    p = _make_plotter(o)
+    try:
+        _draw_into(p, _prep_poly(mesh, o), title, o)
+        return _screenshot_arr(p)
+    finally:
+        try:
+            p.close()
+        except Exception:
+            pass
 
 
 def _render_worker(payload):
@@ -309,21 +331,40 @@ class RenderMeshBatch(io.ComfyNode):
                     if pbar is not None:
                         pbar.update(1)
         else:
-            # ---- serial path (GPU, or single mesh) ----
+            # ---- serial path (GPU, or single mesh): REUSE one plotter/GL context ----
+            # Recreating the EGL window per mesh dominates the per-mesh time; keep one
+            # plotter alive and clear()+redraw between meshes. Recreate only after a
+            # failure so one bad mesh can't poison the rest of the batch.
             backend = _setup_offscreen(gpu)
-            log.info("[PreviewMeshBatch] backend: %s | %d mesh(es) @ %dpx%s%s",
+            log.info("[PreviewMeshBatch] backend: %s | %d mesh(es) @ %dpx%s%s (reusing context)",
                      backend, len(meshes), res, " 3-plane" if three else "", " CC" if show_cc else "")
             it = enumerate(meshes)
             if tqdm is not None:
                 it = tqdm(list(it), desc="Preview Mesh Batch", unit="mesh")
-            for i, mesh in it:
-                try:
-                    imgs[i] = _render_mesh_array(mesh, titles[i], opts)
-                except Exception as e:
-                    log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], e)
-                    imgs[i] = np.ones((res, res, 3), np.float32)
-                if pbar is not None:
-                    pbar.update(1)
+            p = None
+            try:
+                p = _make_plotter(opts)
+                for i, mesh in it:
+                    try:
+                        p.clear()
+                        _draw_into(p, _prep_poly(mesh, opts), titles[i], opts)
+                        imgs[i] = _screenshot_arr(p)
+                    except Exception as e:
+                        log.error("[PreviewMeshBatch] render failed for %s: %s", titles[i], e)
+                        imgs[i] = np.ones((res, res, 3), np.float32)
+                        try:
+                            p.close()
+                        except Exception:
+                            pass
+                        p = _make_plotter(opts)  # fresh context after a failure
+                    if pbar is not None:
+                        pbar.update(1)
+            finally:
+                if p is not None:
+                    try:
+                        p.close()
+                    except Exception:
+                        pass
 
         h = max(a.shape[0] for a in imgs)
         w = max(a.shape[1] for a in imgs)
