@@ -38,6 +38,7 @@ class RemeshNode(io.ComfyNode):
         "blender_sharp":       "GeomPackRemesh_BlenderSharp",
         "blender_blocks":      "GeomPackRemesh_BlenderBlocks",
         "gpu_cumesh":          "GeomPackRemesh_GPU",
+        "faithc":              "GeomPackRemesh_FaithC",
     }
 
     # Some frontend param names differ from backend param names
@@ -153,6 +154,15 @@ class RemeshNode(io.ComfyNode):
                         io.Combo.Input("remove_non_manifold_faces", options=["true", "false"], default="false", tooltip="Cleanup: drop faces that create non-manifold edges."),
                         io.Float.Input("remove_small_components_min_area", default=0.0, min=0.0, max=1.0, step=0.001, display_mode="number", tooltip="Cleanup: drop floating components below this area (0 = off). Great for recon/Tripo crumbs."),
                         io.Combo.Input("remove_unreferenced_vertices", options=["true", "false"], default="false", tooltip="Cleanup: drop orphan vertices (no face uses them)."),
+                    ]),
+                    io.DynamicCombo.Option("faithc", [
+                        io.Int.Input("faithc_max_level", default=7, min=4, max=10, step=1, tooltip="FaithC octree depth = grid resolution (2^level: 7=128, 8=256, 9=512). The main density knob; power-of-2 only, so this IS the grid resolution. Higher = finer + more faces + more VRAM."),
+                        io.Int.Input("faithc_min_level", default=4, min=1, max=7, step=1, tooltip="Coarsest octree level where traversal starts (<= max_level). Default 4; rarely changed."),
+                        io.Float.Input("faithc_lambda_n", default=1.0, min=0.0, max=10.0, step=0.1, tooltip="QEF normal-alignment weight: higher = anchors snap onto surface tangent planes -> sharper, more faithful edges. Default 1.0."),
+                        io.Float.Input("faithc_lambda_d", default=0.1, min=0.0, max=10.0, step=0.05, tooltip="QEF distance/regularization weight: higher = anchors pulled to voxel centers -> more regular, blunts detail. Default 0.1."),
+                        io.Float.Input("faithc_weight_power", default=1.0, min=0.1, max=4.0, step=0.1, tooltip="Exponent on per-constraint QEF weights. >1 emphasizes the most confident surface samples. Advanced; leave 1.0."),
+                        io.Combo.Input("faithc_clamp_anchors", options=["false", "true"], default="false", tooltip="Clamp anchors to voxel bounds + reproject onto the surface. Removes spikes on noisy/thin geometry at slight cost to sharpness."),
+                        io.Combo.Input("faithc_triangulation", options=["auto", "length", "angle", "normal_abs", "normal", "simple_02", "simple_13"], default="auto", tooltip="Quad->triangle split. auto (recommended), length=shorter diagonal, angle=best triangle quality, normal/normal_abs=align to surface normal, simple_02/13=fixed diagonal."),
                     ]),
                 ]),
             ],
