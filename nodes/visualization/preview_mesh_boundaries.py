@@ -117,7 +117,10 @@ class PreviewMeshBoundaries(io.ComfyNode):
         faces = np.asarray(getattr(mesh, "faces", np.zeros((0, 3), int)), dtype=np.int64)
         F = int(len(faces)) if show_surface else 0
 
-        combined = pv.PolyData(points)
+        # Build explicitly: pv.PolyData(points) alone would add one VERT cell per
+        # point, throwing off the cell_data length. Start empty -> no verts.
+        combined = pv.PolyData()
+        combined.points = points
         if F:
             combined.faces = np.hstack([np.full((F, 1), 3, np.int64), faces]).ravel()
         if K:
