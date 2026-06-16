@@ -207,6 +207,14 @@ class SharpenGuidedNormalNode(io.ComfyNode):
                     "preservation. 0.35 corresponds to roughly 40 degree "
                     "dihedral angle threshold."
                 )),
+                io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
+                    "Run the faithful vectorized torch port instead of the per-face Python "
+                    "loops. Uses CUDA when available (else vectorized CPU torch) -- much "
+                    "faster on large meshes. Topology (1-ring patches + inner edges) is "
+                    "built once on CPU, then every iteration runs on the GPU. Same "
+                    "min-range-metric guidance and bilateral filter as the CPU path; results "
+                    "can differ slightly (float32 vs float64)."
+                )),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="sharpened_mesh"),
@@ -216,27 +224,37 @@ class SharpenGuidedNormalNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, normal_iterations=5, vertex_iterations=10,
-                sigma_s=1.0, sigma_r=0.35):
-        log.info("Backend: guided_normal")
+                sigma_s=1.0, sigma_r=0.35, use_gpu="false"):
+        gpu = (use_gpu == "true")
+        algorithm = "guided_normal_gpu" if gpu else "guided_normal"
+        log.info("Backend: %s", algorithm)
         log.info("Input: %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
-        log.info("Parameters: normal_iter=%d, vertex_iter=%d, sigma_s=%.2f, sigma_r=%.3f",
-                 normal_iterations, vertex_iterations, sigma_s, sigma_r)
+        log.info("Parameters: normal_iter=%d, vertex_iter=%d, sigma_s=%.2f, sigma_r=%.3f, use_gpu=%s",
+                 normal_iterations, vertex_iterations, sigma_s, sigma_r, use_gpu)
 
         initial_vertices = len(trimesh.vertices)
         initial_faces = len(trimesh.faces)
 
-        sharpened, error = _guided_normal_sharpen(
-            trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
-        )
+        device = "cpu"
+        if gpu:
+            from .guided_normal_gpu import _guided_normal_gpu
+            sharpened, error, device = _guided_normal_gpu(
+                trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
+            )
+        else:
+            sharpened, error = _guided_normal_sharpen(
+                trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
+            )
 
         if sharpened is None:
-            raise ValueError(f"Sharpening failed (guided_normal): {error}")
+            raise ValueError(f"Sharpening failed ({algorithm}): {error}")
 
         # Copy metadata
         if hasattr(trimesh, "metadata") and trimesh.metadata:
             sharpened.metadata = trimesh.metadata.copy()
         sharpened.metadata["sharpening"] = {
-            "algorithm": "guided_normal",
+            "algorithm": algorithm,
+            "device": device,
             "original_vertices": initial_vertices,
             "original_faces": initial_faces,
         }
@@ -256,10 +274,11 @@ class SharpenGuidedNormalNode(io.ComfyNode):
             f"Normal Iterations: {normal_iterations}\n"
             f"Vertex Iterations: {vertex_iterations}\n"
             f"Sigma S: {sigma_s}\n"
-            f"Sigma R: {sigma_r}"
+            f"Sigma R: {sigma_r}\n"
+            f"Use GPU: {use_gpu}"
         )
 
-        info = f"""Sharpen Mesh Results (guided_normal):
+        info = f"""Sharpen Mesh Results ({algorithm}, device={device}):
 
 {param_text}
 

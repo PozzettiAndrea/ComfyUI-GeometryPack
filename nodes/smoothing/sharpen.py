@@ -160,6 +160,12 @@ class SharpenMeshNode(io.ComfyNode):
                             "preservation. 0.35 corresponds to roughly 40 degree "
                             "dihedral angle threshold."
                         )),
+                        io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
+                            "Run the faithful vectorized torch port instead of the per-face "
+                            "Python loops. Uses CUDA when available (else vectorized CPU torch) "
+                            "-- much faster on large meshes. Same guidance + bilateral filter; "
+                            "results can differ slightly (float32 vs float64)."
+                        )),
                     ]),
                     io.DynamicCombo.Option("fast_effective", [
                         io.Float.Input("threshold_T", default=0.5, min=1e-10, max=1.0, step=0.01, tooltip=(
