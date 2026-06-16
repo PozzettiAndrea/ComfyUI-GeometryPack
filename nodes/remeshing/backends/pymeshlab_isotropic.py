@@ -11,7 +11,8 @@ from comfy_api.latest import io
 log = logging.getLogger("geometrypack")
 
 
-def _pymeshlab_isotropic_remesh(mesh, target_edge_length, iterations=3, adaptive=False, feature_angle=30.0):
+def _pymeshlab_isotropic_remesh(mesh, target_edge_length, iterations=3, adaptive=False,
+                                feature_angle=30.0, reproject=True):
     """Apply isotropic remeshing using PyMeshLab."""
     import pymeshlab
 
@@ -30,7 +31,8 @@ def _pymeshlab_isotropic_remesh(mesh, target_edge_length, iterations=3, adaptive
             targetlen=pymeshlab.PercentageValue(target_pct),
             iterations=iterations,
             adaptive=adaptive,
-            featuredeg=feature_angle
+            featuredeg=feature_angle,
+            reprojectflag=reproject
         )
     except AttributeError:
         try:
@@ -38,7 +40,8 @@ def _pymeshlab_isotropic_remesh(mesh, target_edge_length, iterations=3, adaptive
                 targetlen=pymeshlab.PercentageValue(target_pct),
                 iterations=iterations,
                 adaptive=adaptive,
-                featuredeg=feature_angle
+                featuredeg=feature_angle,
+                reprojectflag=reproject
             )
         except AttributeError:
             raise RuntimeError(
@@ -72,6 +75,7 @@ class RemeshPyMeshLabNode(io.ComfyNode):
                 io.Int.Input("iterations", default=3, min=1, max=20, step=1, tooltip="Number of remeshing passes."),
                 io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=1.0, tooltip="Angle threshold (degrees) for feature/crease edge detection -- edges sharper than this are preserved. Lower = preserve more edges; 180 = none."),
                 io.Combo.Input("adaptive", options=["true", "false"], default="false", tooltip="Use curvature-adaptive edge lengths."),
+                io.Combo.Input("reproject", options=["true", "false"], default="true", tooltip="Reproject vertices back onto the original surface after each iteration (Botsch back-projection). true = stay faithful to the input surface (recommended); false = pure tangential smoothing, which lets vertices drift off the surface."),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="remeshed_mesh"),
@@ -81,7 +85,7 @@ class RemeshPyMeshLabNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, target_edge_length=1.0, target_vertices=0, target_faces=0,
-                iterations=3, feature_angle=30.0, adaptive="false"):
+                iterations=3, feature_angle=30.0, adaptive="false", reproject="true"):
         import math
 
         # Resolve edge length from a target vertex/face count if given (0 = off). For an
@@ -106,12 +110,13 @@ class RemeshPyMeshLabNode(io.ComfyNode):
 
         log.info("Backend: pymeshlab_isotropic")
         log.info("Input: %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
-        log.info("Parameters: %s, iterations=%s, feature_angle=%s, adaptive=%s",
-                 note, iterations, feature_angle, adaptive)
+        log.info("Parameters: %s, iterations=%s, feature_angle=%s, adaptive=%s, reproject=%s",
+                 note, iterations, feature_angle, adaptive, reproject)
 
         remeshed_mesh = _pymeshlab_isotropic_remesh(
             trimesh, edge, iterations,
-            adaptive=(adaptive == "true"), feature_angle=feature_angle
+            adaptive=(adaptive == "true"), feature_angle=feature_angle,
+            reproject=(reproject == "true")
         )
 
         remeshed_mesh.metadata = trimesh.metadata.copy()
@@ -123,6 +128,7 @@ class RemeshPyMeshLabNode(io.ComfyNode):
             'iterations': iterations,
             'feature_angle': feature_angle,
             'adaptive': adaptive == "true",
+            'reproject': reproject == "true",
         }
 
         log.info("Output: %d vertices, %d faces", len(remeshed_mesh.vertices), len(remeshed_mesh.faces))
