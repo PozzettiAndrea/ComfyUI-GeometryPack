@@ -167,6 +167,13 @@ class SharpenMeshNode(io.ComfyNode):
                             "Iterations for updating vertex positions to match filtered "
                             "normals. More iterations give better convergence."
                         )),
+                        io.Int.Input("neighborhood_rings", default=1, min=1, max=4, step=1, tooltip=(
+                            "Face neighborhood size (k-ring) for guidance + filtering. "
+                            "1 = faces sharing a vertex (standard). Higher = wider footprint, "
+                            "so each pass hits HARDER / reaches farther (stronger than just "
+                            "more iterations) -- but cost & memory grow ~rings^2. Try 2 for a "
+                            "noticeably stronger effect."
+                        )),
                         io.Float.Input("sigma_s", default=1.0, min=0.1, max=10.0, step=0.1, tooltip=(
                             "SPATIAL scale = neighborhood size as a multiple of the average "
                             "edge length. How far (in surface distance) a neighbor face still "

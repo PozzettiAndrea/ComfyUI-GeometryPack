@@ -18,7 +18,7 @@ log = logging.getLogger("geometrypack")
 
 
 def _guided_normal_sharpen(mesh, normal_iterations, vertex_iterations,
-                           sigma_s, sigma_r):
+                           sigma_s, sigma_r, neighborhood_rings=1):
     """Guided mesh normal filtering with interleaved vertex update.
 
     Matches GuidedMeshNormalFiltering::updateFilteredNormalsLocalScheme from
@@ -47,7 +47,7 @@ def _guided_normal_sharpen(mesh, normal_iterations, vertex_iterations,
     # Build vertex-based face neighbor structures
     vert_to_faces = _build_vertex_to_faces(len(V), F)
     # Guided neighborhood: vertex-based including central face
-    guided_neighbors = _build_vertex_based_face_neighbors(F, vert_to_faces, include_central=True)
+    guided_neighbors = _build_vertex_based_face_neighbors(F, vert_to_faces, include_central=True, rings=neighborhood_rings)
     # Filtering neighborhood: same vertex-based including central
     filter_neighbors = guided_neighbors
 
@@ -196,6 +196,13 @@ class SharpenGuidedNormalNode(io.ComfyNode):
                     "Iterations for updating vertex positions to match filtered "
                     "normals. More iterations give better convergence."
                 )),
+                io.Int.Input("neighborhood_rings", default=1, min=1, max=4, step=1, tooltip=(
+                    "Size of the face neighborhood (k-ring) used for both guidance and "
+                    "filtering. 1 = faces sharing a vertex (standard). Higher = wider "
+                    "footprint, so each pass hits HARDER and reaches farther (stronger "
+                    "than just adding iterations) -- but cost and memory grow quickly "
+                    "(patch size ~ rings^2). Try 2 for a noticeably stronger effect."
+                )),
                 io.Float.Input("sigma_s", default=1.0, min=0.1, max=10.0, step=0.1, tooltip=(
                     "SPATIAL scale = neighborhood size as a multiple of the average edge "
                     "length. Controls how far (in surface distance) a neighbor face still "
@@ -227,7 +234,7 @@ class SharpenGuidedNormalNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, normal_iterations=5, vertex_iterations=10,
-                sigma_s=1.0, sigma_r_degrees=20.0, use_gpu="false"):
+                neighborhood_rings=1, sigma_s=1.0, sigma_r_degrees=20.0, use_gpu="false"):
         import math
         gpu = (use_gpu == "true")
         algorithm = "guided_normal_gpu" if gpu else "guided_normal"
@@ -237,8 +244,8 @@ class SharpenGuidedNormalNode(io.ComfyNode):
         sigma_r = 2.0 * math.sin(math.radians(sigma_r_degrees) / 2.0)
         log.info("Backend: %s", algorithm)
         log.info("Input: %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
-        log.info("Parameters: normal_iter=%d, vertex_iter=%d, sigma_s=%.2f, sigma_r=%.3f (%.1f deg), use_gpu=%s",
-                 normal_iterations, vertex_iterations, sigma_s, sigma_r, sigma_r_degrees, use_gpu)
+        log.info("Parameters: normal_iter=%d, vertex_iter=%d, rings=%d, sigma_s=%.2f, sigma_r=%.3f (%.1f deg), use_gpu=%s",
+                 normal_iterations, vertex_iterations, neighborhood_rings, sigma_s, sigma_r, sigma_r_degrees, use_gpu)
 
         initial_vertices = len(trimesh.vertices)
         initial_faces = len(trimesh.faces)
@@ -248,10 +255,12 @@ class SharpenGuidedNormalNode(io.ComfyNode):
             from .guided_normal_gpu import _guided_normal_gpu
             sharpened, error, device = _guided_normal_gpu(
                 trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
+                neighborhood_rings=neighborhood_rings,
             )
         else:
             sharpened, error = _guided_normal_sharpen(
                 trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
+                neighborhood_rings=neighborhood_rings,
             )
 
         if sharpened is None:
@@ -281,6 +290,7 @@ class SharpenGuidedNormalNode(io.ComfyNode):
         param_text = (
             f"Normal Iterations: {normal_iterations}\n"
             f"Vertex Iterations: {vertex_iterations}\n"
+            f"Neighborhood Rings: {neighborhood_rings}\n"
             f"Sigma S: {sigma_s}\n"
             f"Sigma R: {sigma_r_degrees} deg (= {sigma_r:.3f} normal-dist)\n"
             f"Use GPU: {use_gpu}"

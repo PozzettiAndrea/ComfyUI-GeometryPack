@@ -85,7 +85,8 @@ def _pad_inner_edges(neighbors, adj_pairs, face_to_adj, m):
     return IE, IEM
 
 
-def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigma_r):
+def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
+                       neighborhood_rings=1):
     import torch
 
     V0 = np.asarray(mesh.vertices, dtype=np.float64)
@@ -101,7 +102,7 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
 
     # --- one-time topology (CPU), constant across iterations ---
     vtf = _build_vertex_to_faces(n, Ff)
-    neighbors = _build_vertex_based_face_neighbors(Ff, vtf, include_central=True)
+    neighbors = _build_vertex_based_face_neighbors(Ff, vtf, include_central=True, rings=neighborhood_rings)
     face_to_adj = [[] for _ in range(m)]
     for ai in range(len(adj)):
         fa, fb = adj[ai]

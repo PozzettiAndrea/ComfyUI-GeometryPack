@@ -93,20 +93,36 @@ def _build_vertex_to_faces(n_verts, F):
     return vtf
 
 
-def _build_vertex_based_face_neighbors(F, vert_to_faces, include_central=True):
-    """Build vertex-based face neighbor lists.
+def _build_vertex_based_face_neighbors(F, vert_to_faces, include_central=True, rings=1):
+    """Build vertex-based face neighbor lists (k-ring patches).
 
-    Two faces are neighbors if they share at least one vertex.
-    Returns list of sorted index lists, one per face.
+    Two faces are 1-ring neighbors if they share at least one vertex. With
+    rings>1 the patch is grown outward `rings` times: each step adds every face
+    touching a vertex of the faces added in the previous step. Larger rings =
+    wider filtering footprint (stronger per-pass effect, more cost).
+    Returns a list of sorted index lists, one per face.
     """
     m = len(F)
+    rings = max(1, int(rings))
     neighbors = []
     for fi in range(m):
-        nbrs = set()
-        for vi in F[fi]:
-            for fj in vert_to_faces[vi]:
-                nbrs.add(fj)
+        face_set = {fi}
+        frontier_verts = set(int(v) for v in F[fi])
+        for _ in range(rings):
+            new_faces = set()
+            for vi in frontier_verts:
+                for fj in vert_to_faces[vi]:
+                    if fj not in face_set:
+                        new_faces.add(fj)
+            if not new_faces:
+                break
+            face_set |= new_faces
+            # Next frontier = vertices of the newly added faces.
+            frontier_verts = set()
+            for fj in new_faces:
+                for vi in F[fj]:
+                    frontier_verts.add(int(vi))
         if not include_central:
-            nbrs.discard(fi)
-        neighbors.append(sorted(nbrs))
+            face_set.discard(fi)
+        neighbors.append(sorted(face_set))
     return neighbors
