@@ -59,7 +59,7 @@ class DecimateMeshNode(io.ComfyNode):
                         io.Int.Input("aggressiveness", default=7, min=1, max=15, step=1, tooltip="How aggressively to simplify. Higher = faster but lower quality. Default 7."),
                     ]),
                     io.DynamicCombo.Option("vertex_clustering", [
-                        io.Float.Input("cluster_threshold", default=1.0, min=0.1, max=10.0, step=0.1, tooltip="Clustering cell size as percentage of bounding box diagonal. Larger = more aggressive reduction."),
+                        io.Float.Input("cluster_threshold", default=1.0, min=1e-6, max=10.0, step=1e-6, display_mode="number", tooltip="Clustering cell size as a percentage of the bounding-box diagonal. Larger = bigger cells = more aggressive reduction; very small (down to 1e-6%) = barely any merging. Vertices within one cell collapse to a point."),
                     ]),
 
                     io.DynamicCombo.Option("decimate_pro", [

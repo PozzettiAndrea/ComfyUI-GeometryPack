@@ -58,7 +58,7 @@ class DecimateVertexClusteringNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
-                io.Float.Input("cluster_threshold", default=1.0, min=0.1, max=10.0, step=0.1, tooltip="Clustering cell size as percentage of bounding box diagonal. Larger = more aggressive reduction."),
+                io.Float.Input("cluster_threshold", default=1.0, min=1e-6, max=10.0, step=1e-6, display_mode="number", tooltip="Clustering cell size as a percentage of the bounding-box diagonal. Larger = bigger cells = more aggressive reduction; very small (down to 1e-6%) = barely any merging. Vertices within one cell collapse to a point."),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="decimated_mesh"),
