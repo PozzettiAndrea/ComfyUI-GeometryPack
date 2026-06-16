@@ -172,24 +172,38 @@ class LoadMeshBatch(io.ComfyNode):
             else:
                 log.warning("[%d/%d] Failed to load %s", i, total, filename)
 
+        # ComfyUI UI progress bar (lazy import so it never breaks the metadata scan)
+        def _mk_pbar():
+            try:
+                from comfy.utils import ProgressBar
+                return ProgressBar(total)
+            except Exception:
+                return None
+
         loaded_meshes = []
         used_parallel = False
         if use_multithreading and total > 1:
             from concurrent.futures import ProcessPoolExecutor
             workers = min(total, (os.cpu_count() or 4))
             log.info("Loading %d meshes across %d processes", total, workers)
+            pbar = _mk_pbar()
             try:
                 with ProcessPoolExecutor(max_workers=workers) as ex:
                     for i, m in enumerate(ex.map(_load_mesh_worker, paths), 1):
                         _record(i, mesh_files[i - 1], m, loaded_meshes)
+                        if pbar is not None:
+                            pbar.update(1)
                 used_parallel = True
             except Exception as e:
                 log.warning("Parallel load failed (%s); falling back to serial", e)
                 loaded_meshes = []
 
         if not used_parallel:
+            pbar = _mk_pbar()
             for i, (filename, path) in enumerate(zip(mesh_files, paths), 1):
                 _record(i, filename, _load_mesh_worker(path), loaded_meshes)
+                if pbar is not None:
+                    pbar.update(1)
 
         if len(loaded_meshes) == 0:
             raise ValueError(f"Failed to load any meshes from folder: {full_folder_path}")
