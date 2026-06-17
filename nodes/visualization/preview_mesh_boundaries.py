@@ -60,6 +60,18 @@ def _edge_values(mesh, field_name, reduction):
         vals = np.degrees(np.arccos(cos))
     elif red == "l2":
         vals = np.linalg.norm(np.atleast_2d(A) - np.atleast_2d(B), axis=1)
+    elif red in ("max", "mean", "min"):
+        # reduce the two adjacent faces' SCALAR value (first component if vector) ->
+        # threshold edges by the LEVEL of a face field (e.g. curvature_angle_deg),
+        # not its jump. max = either side curved, mean = average, min = both curved.
+        a = A.reshape(len(A), -1)[:, 0]
+        b = B.reshape(len(B), -1)[:, 0]
+        if red == "max":
+            vals = np.maximum(a, b)
+        elif red == "min":
+            vals = np.minimum(a, b)
+        else:
+            vals = 0.5 * (a + b)
     else:  # abs_diff (first component if vector)
         a = A.reshape(len(A), -1)[:, 0]
         b = B.reshape(len(B), -1)[:, 0]
@@ -126,6 +138,47 @@ def _edge_clusters(edges, min_edges):
     return ce, cid, {"clusters": n_clusters, "dropped": n_dropped}
 
 
+def _face_regions(n_faces, adj_pairs, wall_mask):
+    """Flood-fill faces into connected regions ("CADable patches"), cutting at the
+    wall (feature) edges. Two faces sharing an adjacency edge are in the same
+    region iff that edge is NOT a wall. Faces walled off on all sides become a
+    region of one. Returns (region_id[n_faces] 1-based, n_regions).
+    """
+    import numpy as np
+
+    if n_faces == 0:
+        return np.zeros(0, np.int64), 0
+    adj_pairs = np.asarray(adj_pairs).reshape(-1, 2)
+    wall = np.asarray(wall_mask, dtype=bool)
+    keep = adj_pairs[~wall] if len(adj_pairs) else np.zeros((0, 2), np.int64)
+
+    try:
+        import scipy.sparse as sp
+        from scipy.sparse.csgraph import connected_components
+        data = np.ones(len(keep), dtype=np.int8)
+        g = sp.coo_matrix((data, (keep[:, 0], keep[:, 1])), shape=(n_faces, n_faces))
+        n_reg, labels = connected_components(g, directed=False, connection="weak")
+        return (labels + 1).astype(np.int64), int(n_reg)
+    except Exception:
+        parent = list(range(n_faces))
+
+        def find(x):
+            r = x
+            while parent[r] != r:
+                r = parent[r]
+            while parent[x] != r:
+                parent[x], x = r, parent[x]
+            return r
+
+        for a, b in keep:
+            ra, rb = find(int(a)), find(int(b))
+            if ra != rb:
+                parent[rb] = ra
+        roots = np.array([find(i) for i in range(n_faces)])
+        uniq, inv = np.unique(roots, return_inverse=True)
+        return (inv + 1).astype(np.int64), int(len(uniq))
+
+
 class PreviewMeshBoundaries(io.ComfyNode):
     """Threshold mesh edges by an adjacent-face metric (dihedral, etc.) and preview in VTK.js."""
 
@@ -142,15 +195,16 @@ class PreviewMeshBoundaries(io.ComfyNode):
                     tooltip="Per-FACE field to compare across each edge. 'face_normals' (+angle) "
                             "gives the dihedral angle. Or any face_attributes key (listed in the "
                             "summary)."),
-                io.Combo.Input("reduction", options=["auto", "angle", "abs_diff", "l2"], default="auto",
+                io.Combo.Input("reduction", options=["auto", "angle", "abs_diff", "l2", "max", "mean", "min"], default="auto",
                     tooltip="How to combine the two faces' values into one per-edge number. "
                             "angle = degrees between vectors (dihedral for normals)."),
-                io.Combo.Input("mode", options=["edges", "loops"], default="edges",
+                io.Combo.Input("mode", options=["edges", "loops", "regions"], default="edges",
                     tooltip="edges = show every passing edge. loops = group passing edges into "
-                            "connected clusters, drop small ones (<= min_edges), and color each "
-                            "remaining cluster a distinct color. No cycle/closure check -- chains, "
-                            "loops and branching webs are all kept. Coincident vertices are merged "
-                            "first so clusters connect across split hard edges."),
+                            "connected clusters (color by cluster_id). regions = treat the passing "
+                            "edges as walls and flood-fill the FACES into connected patches "
+                            "delimited by those edges -- CADable surface segmentation; color faces "
+                            "by region_id. Coincident vertices are merged first so adjacency is "
+                            "correct across split hard edges."),
                 io.Int.Input("min_edges", default=10, min=0, max=100000, step=1,
                     tooltip="loops mode only: keep clusters with MORE than this many edges. "
                             "Smaller clusters are discarded as noise."),
@@ -172,11 +226,10 @@ class PreviewMeshBoundaries(io.ComfyNode):
         import pyvista as pv
         import folder_paths
 
-        # loops mode needs coincident vertices merged so feature edges share
-        # indices and can connect into closed cycles (also fixes missing
-        # face_adjacency across split hard edges). Work on a copy.
+        # loops/regions need coincident vertices merged so feature edges share
+        # indices and face_adjacency is complete across split hard edges. Copy.
         work = mesh
-        if mode == "loops":
+        if mode in ("loops", "regions"):
             try:
                 work = mesh.copy()
                 work.merge_vertices()
@@ -194,6 +247,12 @@ class PreviewMeshBoundaries(io.ComfyNode):
 
         cluster_id_cell = None
         cluster_stats = None
+        region_id_faces = None
+        region_stats = None
+
+        faces = np.asarray(getattr(work, "faces", np.zeros((0, 3), int)), dtype=np.int64)
+        n_faces = int(len(faces))
+
         if mode == "loops":
             # value lookup keyed by the undirected edge, to keep edge_value after filtering
             val_map = {}
@@ -204,17 +263,20 @@ class PreviewMeshBoundaries(io.ComfyNode):
             ev = np.array([val_map.get((int(a), int(b)) if a < b else (int(b), int(a)), 0.0)
                            for a, b in edges], dtype=np.float64)
             cluster_id_cell = cluster_ids.astype(np.float32)
+        elif mode == "regions":
+            # passing edges are "walls"; flood-fill faces into patches between them
+            adj_pairs = np.asarray(getattr(work, "face_adjacency", np.zeros((0, 2), int)))
+            region_id_faces, n_regions = _face_regions(n_faces, adj_pairs, passing)
+            region_stats = {"regions": int(n_regions)}
 
         K = int(len(edges))
-
-        points = np.asarray(work.vertices, dtype=np.float64)
-        faces = np.asarray(getattr(work, "faces", np.zeros((0, 3), int)), dtype=np.int64)
-        F = int(len(faces)) if show_surface else 0
+        # regions mode always needs the faces (the patches ARE the faces)
+        F = n_faces if (show_surface or mode == "regions") else 0
 
         # Build explicitly: pv.PolyData(points) alone would add one VERT cell per
         # point, throwing off the cell_data length. Start empty -> no verts.
         combined = pv.PolyData()
-        combined.points = points
+        combined.points = np.asarray(work.vertices, dtype=np.float64)
         if F:
             combined.faces = np.hstack([np.full((F, 1), 3, np.int64), faces]).ravel()
         if K:
@@ -230,11 +292,14 @@ class PreviewMeshBoundaries(io.ComfyNode):
             combined.cell_data["boundary"] = np.concatenate(boundary).astype(np.float32)
             combined.cell_data["edge_value"] = np.concatenate(edge_value).astype(np.float32)
             if cluster_id_cell is not None:
-                cid = [cluster_id_cell] if K else []
-                if F:
-                    cid.append(np.zeros(F, np.float32))
+                cid = ([cluster_id_cell] if K else []) + ([np.zeros(F, np.float32)] if F else [])
                 if cid:
                     combined.cell_data["cluster_id"] = np.concatenate(cid).astype(np.float32)
+            if region_id_faces is not None:
+                rid = ([np.zeros(K, np.float32)] if K else []) + \
+                      ([region_id_faces.astype(np.float32)] if F else [])
+                if rid:
+                    combined.cell_data["region_id"] = np.concatenate(rid).astype(np.float32)
 
         tmp = folder_paths.get_temp_directory()
         os.makedirs(tmp, exist_ok=True)
@@ -245,6 +310,8 @@ class PreviewMeshBoundaries(io.ComfyNode):
         fields = ["boundary", "edge_value"]
         if cluster_id_cell is not None:
             fields.append("cluster_id")
+        if region_id_faces is not None:
+            fields.append("region_id")
 
         if mode == "loops":
             s = cluster_stats or {"clusters": 0, "dropped": 0}
@@ -255,6 +322,11 @@ class PreviewMeshBoundaries(io.ComfyNode):
                        f"available face fields: {avail or ['(none)']}")
             if s["clusters"] == 0:
                 summary += (" -- no clusters this big: lower min_edges or the threshold.")
+        elif mode == "regions":
+            r = region_stats or {"regions": 0}
+            summary = (f"regions: {r['regions']} patch(es) delimited by {K} feature edge(s) "
+                       f"at {comparison} {threshold:g} via reduce={reduction} on '{used_field}'. "
+                       f"color faces by 'region_id'. available face fields: {avail or ['(none)']}")
         else:
             summary = (f"boundaries: {K} edge(s) {comparison} {threshold:g} via "
                        f"reduce={reduction} on '{used_field}'. "

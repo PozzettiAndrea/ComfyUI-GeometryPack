@@ -63,13 +63,15 @@ class ComputeCurvatureNode(io.ComfyNode):
                     "angle-defect Gaussian (fast on large meshes, scalar only).")),
                 io.Combo.Input("primary_output", options=[
                     "mean", "gaussian", "max_principal", "min_principal",
-                    "abs_max_principal", "dominant_signed", "shape_index"
+                    "abs_max_principal", "dominant_signed", "angle_deg", "shape_index"
                 ], default="mean", tooltip=(
                     "Which scalar becomes the canonical 'curvature' field (all fields are "
                     "attached regardless). abs_max_principal = MAGNITUDE of the strongest "
                     "principal curvature (>=0; ~0 flat, ~1/r on a fillet) -- threshold this to "
                     "separate flat from curved. dominant_signed = same but keeps sign "
-                    "(negative=concave, positive=convex). shape_index classifies local shape "
+                    "(negative=concave, positive=convex). angle_deg = curvature as a "
+                    "DIHEDRAL-EQUIVALENT angle in degrees (turn over one edge length) -- "
+                    "threshold it like a crease angle. shape_index classifies local shape "
                     "(-1 cup .. 0 saddle .. +1 cap).")),
                 io.Int.Input("radius", default=5, min=1, max=12, step=1, tooltip=(
                     "Neighborhood size (k-ring, in average edge lengths) for the quadric fit. "
@@ -162,6 +164,18 @@ class ComputeCurvatureNode(io.ComfyNode):
         dominant = np.where(np.abs(k1) >= np.abs(k2), k1, k2)
         shape_index = cls._shape_index(k1, k2)
 
+        # "Dihedral-equivalent" angle: how many DEGREES the surface turns over one
+        # mean edge length (theta = kappa * L). This puts curvature in the SAME units
+        # as a per-edge dihedral angle, so you can threshold it the way you'd threshold
+        # a crease. ~0 on flats; a fillet of radius r meshed at edge length L reads
+        # ~degrees(L/r). (Unlike a raw dihedral it's defined inside a smooth fillet,
+        # not just at sharp creases.)
+        try:
+            mean_edge_len = float(np.mean(mesh.edges_unique_length))
+        except Exception:
+            mean_edge_len = 1.0
+        angle_deg = np.degrees(abs_max * mean_edge_len)
+
         fields = {
             "curvature_mean": mean,
             "curvature_gaussian": gaussian,
@@ -169,6 +183,7 @@ class ComputeCurvatureNode(io.ComfyNode):
             "curvature_k2": k2,
             "curvature_abs_max": abs_max,
             "curvature_dominant": dominant,
+            "curvature_angle_deg": angle_deg,
             "curvature_shape_index": shape_index,
         }
 
@@ -195,9 +210,18 @@ class ComputeCurvatureNode(io.ComfyNode):
             "mean": "curvature_mean", "gaussian": "curvature_gaussian",
             "max_principal": "curvature_k1", "min_principal": "curvature_k2",
             "abs_max_principal": "curvature_abs_max", "dominant_signed": "curvature_dominant",
-            "shape_index": "curvature_shape_index",
+            "angle_deg": "curvature_angle_deg", "shape_index": "curvature_shape_index",
         }
         mesh.vertex_attributes["curvature"] = mesh.vertex_attributes[primary_map[primary_output]].copy()
+
+        # Also attach per-FACE versions (mean over each face's 3 vertices) so face-field
+        # consumers like Preview Mesh Boundaries can threshold edges by curvature the
+        # same way they threshold dihedral angle (face_normals + 'angle').
+        Fidx = np.asarray(mesh.faces)
+        for name, f in fields.items():
+            mesh.face_attributes[name] = np.ascontiguousarray(
+                np.asarray(f, dtype=np.float32)[Fidx].mean(axis=1), dtype=np.float32)
+        mesh.face_attributes["curvature"] = mesh.face_attributes[primary_map[primary_output]].copy()
 
         mesh.metadata = (mesh.metadata.copy() if mesh.metadata else {})
         mesh.metadata["curvature"] = {
