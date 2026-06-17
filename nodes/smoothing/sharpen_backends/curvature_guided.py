@@ -68,12 +68,23 @@ def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight,
     eps = 1e-12
 
     # --- cotangent Laplacian (symmetric) as a torch sparse tensor ---
-    L = igl.cotmatrix(V0, Ff).tocoo()
+    # Use the INTRINSIC-DELAUNAY cotmatrix: it intrinsically flips to the Delaunay
+    # triangulation of the same surface (geometry unchanged) so all cotangent weights
+    # are NON-NEGATIVE -> no spurious curvature spikes / sign flips from obtuse slivers
+    # on CAD tessellations (Fisher-Springborn-Schroeder-Bobenko 2007). Falls back to the
+    # plain cotmatrix if unavailable.
+    try:
+        Lcsc = igl.intrinsic_delaunay_cotmatrix(V0, Ff)[0]
+        L = Lcsc.tocoo()
+    except Exception:
+        L = igl.cotmatrix(V0, Ff).tocoo()
     Lidx = torch.tensor(np.vstack([L.row, L.col]), dtype=torch.long, device=dev)
     Lval = torch.tensor(L.data, dtype=torch.float32, device=dev)
     Lsp = torch.sparse_coo_tensor(Lidx, Lval, (n, n)).coalesce()
 
-    M = igl.massmatrix(V0, Ff, igl.MASSMATRIX_TYPE_VORONOI)
+    # BARYCENTRIC mass is always strictly positive (Voronoi can go negative/tiny on
+    # obtuse triangles, and the 1e-12 clamp then manufactures huge fake curvature).
+    M = igl.massmatrix(V0, Ff, igl.MASSMATRIX_TYPE_BARYCENTRIC)
     Mdiag = torch.tensor(np.asarray(M.diagonal(), dtype=np.float64), dtype=torch.float32, device=dev)
     Mdiag = torch.clamp(Mdiag, min=1e-12)
 
