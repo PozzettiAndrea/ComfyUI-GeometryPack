@@ -47,8 +47,9 @@ class ComputeCurvatureNode(io.ComfyNode):
                 "Gaussian=k1*k2, and principal = H +/- sqrt(max(0,H^2-K)).\n"
                 "\n"
                 "Outputs fields: curvature_mean, curvature_gaussian, curvature_k1, "
-                "curvature_k2, curvature_abs_max, curvature_shape_index, plus a 'curvature' "
-                "alias set to your chosen primary. radius controls the neighborhood (quadric "
+                "curvature_k2, curvature_abs_max (MAGNITUDE of strongest curvature, >=0), "
+                "curvature_dominant (same but signed: -=concave, +=convex), "
+                "curvature_shape_index, plus a 'curvature' alias set to your chosen primary. radius controls the neighborhood (quadric "
                 "only); larger = smoother/less noisy but blurs features. smoothing_iterations "
                 "diffuses the field; clamp_percentile clips outliers (slivers) so they don't "
                 "dominate the range."
@@ -61,11 +62,15 @@ class ComputeCurvatureNode(io.ComfyNode):
                     "CAD, gives principal directions). ddg = cotangent-Laplacian mean + "
                     "angle-defect Gaussian (fast on large meshes, scalar only).")),
                 io.Combo.Input("primary_output", options=[
-                    "mean", "gaussian", "max_principal", "min_principal", "abs_max_principal", "shape_index"
+                    "mean", "gaussian", "max_principal", "min_principal",
+                    "abs_max_principal", "dominant_signed", "shape_index"
                 ], default="mean", tooltip=(
                     "Which scalar becomes the canonical 'curvature' field (all fields are "
-                    "attached regardless). abs_max_principal is good for feature/edge detection; "
-                    "shape_index classifies local shape (-1 cup .. 0 saddle .. +1 cap).")),
+                    "attached regardless). abs_max_principal = MAGNITUDE of the strongest "
+                    "principal curvature (>=0; ~0 flat, ~1/r on a fillet) -- threshold this to "
+                    "separate flat from curved. dominant_signed = same but keeps sign "
+                    "(negative=concave, positive=convex). shape_index classifies local shape "
+                    "(-1 cup .. 0 saddle .. +1 cap).")),
                 io.Int.Input("radius", default=5, min=1, max=12, step=1, tooltip=(
                     "Neighborhood size (k-ring, in average edge lengths) for the quadric fit. "
                     "Larger = smoother, more noise-robust, but blurs sharp features. ~3 for "
@@ -149,7 +154,12 @@ class ComputeCurvatureNode(io.ComfyNode):
             k1 = mean + root
             k2 = mean - root
 
-        abs_max = np.where(np.abs(k1) >= np.abs(k2), k1, k2)
+        # abs_max = MAGNITUDE of the strongest principal curvature (>= 0): ~0 on a
+        # flat, ~1/r on a fillet of radius r -- the field to threshold for
+        # flat-vs-curved, independent of concave/convex. `dominant` keeps the sign
+        # (negative = concave / inner round, positive = convex / outer round).
+        abs_max = np.maximum(np.abs(k1), np.abs(k2))
+        dominant = np.where(np.abs(k1) >= np.abs(k2), k1, k2)
         shape_index = cls._shape_index(k1, k2)
 
         fields = {
@@ -158,6 +168,7 @@ class ComputeCurvatureNode(io.ComfyNode):
             "curvature_k1": k1,
             "curvature_k2": k2,
             "curvature_abs_max": abs_max,
+            "curvature_dominant": dominant,
             "curvature_shape_index": shape_index,
         }
 
@@ -183,7 +194,8 @@ class ComputeCurvatureNode(io.ComfyNode):
         primary_map = {
             "mean": "curvature_mean", "gaussian": "curvature_gaussian",
             "max_principal": "curvature_k1", "min_principal": "curvature_k2",
-            "abs_max_principal": "curvature_abs_max", "shape_index": "curvature_shape_index",
+            "abs_max_principal": "curvature_abs_max", "dominant_signed": "curvature_dominant",
+            "shape_index": "curvature_shape_index",
         }
         mesh.vertex_attributes["curvature"] = mesh.vertex_attributes[primary_map[primary_output]].copy()
 
