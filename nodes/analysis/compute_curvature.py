@@ -80,9 +80,21 @@ class ComputeCurvatureNode(io.ComfyNode):
                 io.Int.Input("smoothing_iterations", default=0, min=0, max=50, step=1, tooltip=(
                     "Explicit cotangent-Laplacian diffusion of the curvature fields. 0 = off. "
                     "A few passes denoise the field without re-fitting.")),
+                io.Combo.Input("clamp_to_resolution", options=["true", "false"], default="true", tooltip=(
+                    "AUTOMATICALLY cap curvature the mesh can't actually represent. A fillet "
+                    "finer than the local triangles is just the fit blowing up at a sharp edge "
+                    "/ sliver -- this caps |kappa| per vertex so the radius can't be smaller "
+                    "than min_radius_edges x the LOCAL edge length, killing those spikes. "
+                    "On by default (sampling theory: curvature is only valid where kappa*edge "
+                    "is small).")),
+                io.Float.Input("min_radius_edges", default=1.0, min=0.25, max=8.0, step=0.25, tooltip=(
+                    "Resolution clamp strength: smallest trustworthy radius of curvature, in "
+                    "units of the LOCAL edge length. 1.0 = cap where radius == local edge "
+                    "(remove pure sub-triangle artifacts); 2-3 = stricter (only keep fillets "
+                    "spanning several triangles). Only used when clamp_to_resolution is on.")),
                 io.Float.Input("clamp_percentile", default=1.0, min=0.0, max=20.0, step=0.5, tooltip=(
-                    "Clip each field to its [p, 100-p] percentile range so a handful of sliver "
-                    "triangles don't blow out the dynamic range. 0 = off. 1.0 is a safe default.")),
+                    "Additionally clip each field to its [p, 100-p] percentile range so a few "
+                    "remaining outliers don't blow out the dynamic range. 0 = off. 1.0 safe.")),
                 io.Combo.Input("preclean", options=["true", "false"], default="true", tooltip=(
                     "Merge duplicate vertices, drop degenerate faces, and fix normals before "
                     "estimating (recommended: degenerate triangles are the main failure mode, "
@@ -106,7 +118,8 @@ class ComputeCurvatureNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, method="quadric_fit", primary_output="mean",
-                radius=5, smoothing_iterations=0, clamp_percentile=1.0, preclean="true"):
+                radius=5, smoothing_iterations=0, clamp_to_resolution="true",
+                min_radius_edges=1.0, clamp_percentile=1.0, preclean="true"):
         import igl
         import scipy.sparse as sp
 
@@ -155,6 +168,35 @@ class ComputeCurvatureNode(io.ComfyNode):
             root = np.sqrt(np.clip(mean * mean - gaussian, 0.0, None))
             k1 = mean + root
             k2 = mean - root
+
+        # --- automatic resolution clamp -------------------------------------------
+        # A fillet finer than the LOCAL triangles cannot be real geometry -- it's the
+        # quadric fit blowing up at a sharp edge / sliver. Sampling theory says
+        # curvature is only trustworthy where kappa*edge is small (Vasa et al. CGF
+        # 2016: eps <= 1/(16*K*rho^2)) -- equivalently the radius 1/kappa must exceed
+        # the local sample spacing (Amenta-Bern epsilon-sampling / local feature size).
+        # So cap |kappa| per vertex so the radius can't be finer than
+        # `min_radius_edges` x the LOCAL edge length. Kills the spurious spikes
+        # automatically; every derived field inherits the cap.
+        if clamp_to_resolution == "true" and len(F):
+            ev = np.asarray(mesh.edges_unique)
+            el = np.asarray(mesh.edges_unique_length, dtype=np.float64)
+            loc = np.zeros(n, dtype=np.float64)
+            cnt = np.zeros(n, dtype=np.float64)
+            np.add.at(loc, ev[:, 0], el)
+            np.add.at(loc, ev[:, 1], el)
+            np.add.at(cnt, ev[:, 0], 1.0)
+            np.add.at(cnt, ev[:, 1], 1.0)
+            loc = loc / np.maximum(cnt, 1.0)                 # per-vertex local edge length
+            loc[loc <= 0] = (float(np.mean(el)) if len(el) else 1.0)
+            kcap = 1.0 / (max(1e-6, float(min_radius_edges)) * loc)   # max |kappa| per vertex
+            k1 = np.clip(k1, -kcap, kcap)
+            k2 = np.clip(k2, -kcap, kcap)
+
+        # Recompute dependents from the (possibly clamped) principals so everything is
+        # consistent (a no-op when nothing was clamped).
+        mean = 0.5 * (k1 + k2)
+        gaussian = k1 * k2
 
         # abs_max = MAGNITUDE of the strongest principal curvature (>= 0): ~0 on a
         # flat, ~1/r on a fillet of radius r -- the field to threshold for
