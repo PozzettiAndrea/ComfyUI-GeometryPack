@@ -250,12 +250,6 @@ class SharpenMeshNode(io.ComfyNode):
                             "(Tikhonov lambda). LOWER = stronger curvature-domain reshaping; "
                             "HIGHER = stay close to input. Default 0.1."
                         )),
-                        io.Float.Input("direction_blend", default=0.0, min=0.0, max=1.0, step=0.05, tooltip=(
-                            "0 = filter curvature MAGNITUDE only (spheres/cylinders are a fixed "
-                            "point, no flattening, but positional noise survives). >0 also "
-                            "smooths the direction to denoise positions, at some flattening risk "
-                            "in curved regions. Try 0.3-0.6 to denoise; 0 to purely uniformize."
-                        )),
                         io.Int.Input("cg_iters", default=200, min=10, max=2000, step=10, tooltip=(
                             "Max preconditioned-CG iterations for the reconstruction solve."
                         )),

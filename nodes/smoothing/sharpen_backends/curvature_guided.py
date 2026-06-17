@@ -50,8 +50,7 @@ def _torch_device(use_gpu):
     return torch.device("cpu")
 
 
-def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu,
-                      direction_blend=0.0):
+def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu):
     import torch
     import igl
 
@@ -79,10 +78,9 @@ def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight,
     def spmm(A, X):
         return torch.sparse.mm(A, X)
 
-    delta = spmm(Lsp, X0)                       # (n,3) differential coords
+    delta = spmm(Lsp, X0)                       # (n,3) differential coords (mean-curv normal)
     dmag = delta.norm(dim=1)                    # (n,)
-    Hmag = dmag / (2.0 * Mdiag)                 # pointwise |mean curvature|
-    direction = delta / (dmag.unsqueeze(1) + eps)
+    Hmag = dmag / (2.0 * Mdiag)                 # pointwise |mean curvature| (for guidance)
 
     # --- 1-ring directed edges (both directions) for the bilateral filter ---
     E = np.vstack([Ff[:, [0, 1]], Ff[:, [1, 2]], Ff[:, [2, 0]]])
@@ -119,30 +117,19 @@ def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight,
     wsum = torch.ones(n, device=dev)               # self weight 1.0
     wsum.index_add_(0, src, w)
 
-    # --- edge-aware diffusion of the SCALAR curvature magnitude ---
-    Hf = Hmag.clone()
+    # --- edge-aware diffusion of the mean-curvature-normal VECTOR (delta) ---
+    # Filter the SIGNED vector, not the magnitude |H|: opposite-pointing noise then
+    # CANCELS. A noisy flat (delta = random directions) averages toward 0 -> truly flat
+    # (spurious bumps removed); a noisy curved region averages toward its consistent
+    # curvature normal -> filled. (Averaging |H|, a magnitude, instead rectifies noise to
+    # a positive floor and INJECTS curvature everywhere -- the bug this replaces.) The
+    # curvature-range weight `w` stops diffusion at curvature steps, so a real fillet next
+    # to a flat keeps its curvature instead of being flattened by the flat.
+    delta_f = delta.clone()
     for _ in range(int(iterations)):
-        acc = Hf.clone()                        # self term
-        acc.index_add_(0, src, w * Hf[dst])
-        Hf = acc / wsum
-
-    # Optionally also smooth the delta DIRECTION. magnitude-only (blend=0) keeps each
-    # vertex's own orientation -> a sphere/cylinder is a fixed point (no flattening) but
-    # positional noise (wrong directions) survives. blend>0 mixes in an edge-aware
-    # smoothed direction, which denoises positions at some flattening risk in curved
-    # regions (the curvature range weight still keeps curvature-regions distinct).
-    if direction_blend > 0.0:
-        vdf = delta.clone()
-        for _ in range(int(iterations)):
-            acc = vdf.clone()
-            acc.index_add_(0, src, w.unsqueeze(1) * vdf[dst])
-            vdf = acc / wsum.unsqueeze(1)
-        unit_v = vdf / (vdf.norm(dim=1, keepdim=True) + eps)
-        direction = direction * (1.0 - direction_blend) + unit_v * direction_blend
-        direction = direction / (direction.norm(dim=1, keepdim=True) + eps)
-
-    # rebuild target delta with smoothed magnitude and (optionally) smoothed direction
-    delta_f = (2.0 * Hf * Mdiag).unsqueeze(1) * direction
+        acc = delta_f.clone()                   # self term
+        acc.index_add_(0, src, w.unsqueeze(1) * delta_f[dst])
+        delta_f = acc / wsum.unsqueeze(1)
 
     # --- reconstruct: (L^T L + lam I) x = L^T delta_f + lam x0  (L symmetric) ---
     scale = float((Lval * Lval).mean().item())   # ~ magnitude of (L^T L) diagonal
@@ -213,12 +200,6 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
                     "How strongly the reconstruction sticks to the input positions "
                     "(Tikhonov lambda, relative to the Laplacian scale). LOWER = stronger "
                     "curvature-domain reshaping; HIGHER = stay close to input. Default 0.1.")),
-                io.Float.Input("direction_blend", default=0.0, min=0.0, max=1.0, step=0.05, tooltip=(
-                    "0 = filter curvature MAGNITUDE only, keeping each vertex's own normal "
-                    "direction -> spheres/cylinders are a fixed point (no flattening), but "
-                    "positional noise survives. >0 mixes in an edge-aware smoothed direction "
-                    "to also denoise positions, at some flattening risk in curved regions. "
-                    "Try 0.3-0.6 to denoise; 0 to purely uniformize curvature.")),
                 io.Int.Input("cg_iters", default=200, min=10, max=2000, step=10, tooltip=(
                     "Max preconditioned-CG iterations for the reconstruction solve. "
                     "Increase if the result looks under-converged on large meshes.")),
@@ -234,16 +215,15 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, iterations=5, sigma_s=2.0, curvature_sigma=0.5,
-                anchor_weight=0.1, direction_blend=0.0, cg_iters=200, use_gpu="true"):
+                anchor_weight=0.1, cg_iters=200, use_gpu="true"):
         import time
         iv, ifc = len(trimesh.vertices), len(trimesh.faces)
-        log.info("Backend: curvature_guided | %d verts %d faces | iters=%d sigma_s=%.2f curv_sigma=%.2f anchor=%.3f dirblend=%.2f gpu=%s",
-                 iv, ifc, iterations, sigma_s, curvature_sigma, anchor_weight, direction_blend, use_gpu)
+        log.info("Backend: curvature_guided | %d verts %d faces | iters=%d sigma_s=%.2f curv_sigma=%.2f anchor=%.3f gpu=%s",
+                 iv, ifc, iterations, sigma_s, curvature_sigma, anchor_weight, use_gpu)
 
         t0 = time.perf_counter()
         sharpened, error, dev = _curvature_guided(
-            trimesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu == "true",
-            direction_blend=direction_blend)
+            trimesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu == "true")
         elapsed = time.perf_counter() - t0
         if sharpened is None:
             raise ValueError(f"Sharpening failed (curvature_guided): {error}")
@@ -259,7 +239,7 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
         disp = np.linalg.norm(np.asarray(sharpened.vertices) - np.asarray(trimesh.vertices), axis=1)
         info = (f"Sharpen Mesh Results (curvature_guided, device={dev}):\n\n"
                 f"Iterations: {iterations}\nSigma S: {sigma_s}\nCurvature sigma: {curvature_sigma}\n"
-                f"Anchor weight: {anchor_weight}\nDirection blend: {direction_blend}\n"
+                f"Anchor weight: {anchor_weight}\n"
                 f"Time: {elapsed:.2f}s\n\n"
                 f"Vertices: {iv:,} (unchanged)\nFaces: {ifc:,} (unchanged)\n\n"
                 f"Displacement:\n  Average: {float(np.mean(disp)):.6f}\n  Maximum: {float(np.max(disp)):.6f}\n")
