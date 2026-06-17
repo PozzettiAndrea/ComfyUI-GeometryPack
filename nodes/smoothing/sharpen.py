@@ -189,6 +189,15 @@ class SharpenMeshNode(io.ComfyNode):
                             "sharper. LARGER (e.g. 45 deg) = more faces blend = smoother. "
                             "Default 20 deg."
                         )),
+                        io.Float.Input("vertex_anchor", default=0.5, min=0.01, max=10.0, step=0.01, display_mode="number", tooltip=(
+                            "Drag-back strength of the foldless vertex update: each vertex is "
+                            "pulled toward its ORIGINAL position while moving to match the "
+                            "filtered normals. This regularization keeps strong smoothing "
+                            "STABLE -- it stops the update from overshooting at creases, "
+                            "collapsing triangles, and folding (which the old sweep did at high "
+                            "iteration counts). LOWER (~0.05) = stronger smoothing; HIGHER "
+                            "(~2.0) = gentler. Default 0.5."
+                        )),
                         io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
                             "Run the faithful vectorized torch port instead of the per-face "
                             "Python loops. Uses CUDA when available (else vectorized CPU torch) "

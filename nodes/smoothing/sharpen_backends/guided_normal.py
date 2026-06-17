@@ -9,7 +9,7 @@ import trimesh as trimesh_module
 from comfy_api.latest import io
 from ._helpers import (
     _compute_face_geometry,
-    _update_vertices_from_normals,
+    _update_vertices_regularized,
     _build_vertex_to_faces,
     _build_vertex_based_face_neighbors,
 )
@@ -18,7 +18,7 @@ log = logging.getLogger("geometrypack")
 
 
 def _guided_normal_sharpen(mesh, normal_iterations, vertex_iterations,
-                           sigma_s, sigma_r, neighborhood_rings=1):
+                           sigma_s, sigma_r, neighborhood_rings=1, vertex_anchor=0.5):
     """Guided mesh normal filtering with interleaved vertex update.
 
     Matches GuidedMeshNormalFiltering::updateFilteredNormalsLocalScheme from
@@ -38,6 +38,8 @@ def _guided_normal_sharpen(mesh, normal_iterations, vertex_iterations,
 
     if len(V) == 0 or len(F) == 0:
         return None, "Empty mesh (no vertices or faces)."
+
+    V_anchor = V.copy()                  # fixed original positions (drag-back data term)
 
     m = len(F)
     adj_pairs = np.asarray(mesh.face_adjacency)
@@ -161,8 +163,9 @@ def _guided_normal_sharpen(mesh, normal_iterations, vertex_iterations,
         f_norms = np.linalg.norm(filtered, axis=1, keepdims=True)
         filtered_normals = filtered / (f_norms + 1e-12)
 
-        # --- Step 3: Interleaved vertex update (matching C++ reference) ---
-        V = _update_vertices_from_normals(V, F, filtered_normals, vertex_iterations)
+        # --- Step 3: regularized foldless vertex update (drag-back to anchor) ---
+        V = _update_vertices_regularized(V, F, filtered_normals, vertex_iterations,
+                                         V_anchor, anchor=vertex_anchor)
 
         log.debug("Guided normal iteration %d/%d complete", normal_iter + 1, normal_iterations)
 
@@ -218,6 +221,14 @@ class SharpenGuidedNormalNode(io.ComfyNode):
                     "stronger edge preservation. LARGER (e.g. 45 deg) = more faces blend = "
                     "smoother, softer edges. Default 20 deg."
                 )),
+                io.Float.Input("vertex_anchor", default=0.5, min=0.01, max=10.0, step=0.01, display_mode="number", tooltip=(
+                    "Drag-back strength of the foldless vertex update: each vertex is pulled "
+                    "toward its ORIGINAL position while it moves to match the filtered normals. "
+                    "This regularization is what makes strong smoothing STABLE -- it stops the "
+                    "old projection sweep from overshooting at creases, collapsing triangles, "
+                    "and folding. LOWER (e.g. 0.05) = stronger smoothing (moves more); HIGHER "
+                    "(e.g. 2.0) = gentler, stays near the input. Default 0.5."
+                )),
                 io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
                     "Run the faithful vectorized torch port instead of the per-face Python "
                     "loops. Uses CUDA when available (else vectorized CPU torch) -- much "
@@ -235,7 +246,8 @@ class SharpenGuidedNormalNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, trimesh, normal_iterations=5, vertex_iterations=10,
-                neighborhood_rings=1, sigma_s=1.0, sigma_r_degrees=20.0, use_gpu="false"):
+                neighborhood_rings=1, sigma_s=1.0, sigma_r_degrees=20.0,
+                vertex_anchor=0.5, use_gpu="false"):
         import math
         import time
         gpu = (use_gpu == "true")
@@ -246,8 +258,8 @@ class SharpenGuidedNormalNode(io.ComfyNode):
         sigma_r = 2.0 * math.sin(math.radians(sigma_r_degrees) / 2.0)
         log.info("Backend: %s", algorithm)
         log.info("Input: %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
-        log.info("Parameters: normal_iter=%d, vertex_iter=%d, rings=%d, sigma_s=%.2f, sigma_r=%.3f (%.1f deg), use_gpu=%s",
-                 normal_iterations, vertex_iterations, neighborhood_rings, sigma_s, sigma_r, sigma_r_degrees, use_gpu)
+        log.info("Parameters: normal_iter=%d, vertex_iter=%d, rings=%d, sigma_s=%.2f, sigma_r=%.3f (%.1f deg), vertex_anchor=%.3f, use_gpu=%s",
+                 normal_iterations, vertex_iterations, neighborhood_rings, sigma_s, sigma_r, sigma_r_degrees, vertex_anchor, use_gpu)
 
         initial_vertices = len(trimesh.vertices)
         initial_faces = len(trimesh.faces)
@@ -258,12 +270,12 @@ class SharpenGuidedNormalNode(io.ComfyNode):
             from .guided_normal_gpu import _guided_normal_gpu
             sharpened, error, device = _guided_normal_gpu(
                 trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
-                neighborhood_rings=neighborhood_rings,
+                neighborhood_rings=neighborhood_rings, vertex_anchor=vertex_anchor,
             )
         else:
             sharpened, error = _guided_normal_sharpen(
                 trimesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
-                neighborhood_rings=neighborhood_rings,
+                neighborhood_rings=neighborhood_rings, vertex_anchor=vertex_anchor,
             )
         elapsed = time.perf_counter() - t0
 

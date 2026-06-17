@@ -156,8 +156,47 @@ def _build_topology_vectorized(F, adj, n, m, rings):
     return P, M, K, IE, IEM
 
 
+def _anti_flip_step_torch(V, F, step, eta=0.1, max_rounds=20):
+    """torch port of _helpers._anti_flip_step: cap the per-vertex displacement so
+    no triangle folds (signed-area barrier). Halves the step of vertices touching
+    any would-invert face, repeated to convergence; freezes residual offenders.
+    Guarantees every face keeps signed area >= eta * current > 0.
+    """
+    import torch
+    a, b, c = F[:, 0], F[:, 1], F[:, 2]
+    e1 = V[b] - V[a]
+    e2 = V[c] - V[a]
+    n0 = torch.cross(e1, e2, dim=1)
+    A0 = n0.norm(dim=1)
+    n0u = n0 / (A0.unsqueeze(1) + 1e-20)
+    thresh = eta * A0
+    n = V.shape[0]
+    s = step.clone()
+    for _ in range(max_rounds):
+        Vc = V + s
+        sa = (torch.cross(Vc[b] - Vc[a], Vc[c] - Vc[a], dim=1) * n0u).sum(1)
+        bad = sa < thresh
+        if not bool(bad.any()):
+            return s
+        badv = torch.zeros(n, dtype=torch.bool, device=V.device)
+        badv[a[bad]] = True
+        badv[b[bad]] = True
+        badv[c[bad]] = True
+        s[badv] *= 0.5
+    Vc = V + s
+    sa = (torch.cross(Vc[b] - Vc[a], Vc[c] - Vc[a], dim=1) * n0u).sum(1)
+    bad = sa < thresh
+    if bool(bad.any()):
+        badv = torch.zeros(n, dtype=torch.bool, device=V.device)
+        badv[a[bad]] = True
+        badv[b[bad]] = True
+        badv[c[bad]] = True
+        s[badv] = 0.0
+    return s
+
+
 def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigma_r,
-                       neighborhood_rings=1):
+                       neighborhood_rings=1, vertex_anchor=0.5):
     import torch
 
     V0 = np.asarray(mesh.vertices, dtype=np.float64)
@@ -197,6 +236,7 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
     dev = _torch_device()
     eps = 1e-12
     V = torch.as_tensor(V0, dtype=torch.float32, device=dev)
+    V_anchor = V.clone()                       # fixed original positions (drag-back data term)
     F = torch.as_tensor(Ff, dtype=torch.long, device=dev)
     adj_a = torch.as_tensor(adj[:, 0], dtype=torch.long, device=dev)
     adj_b = torch.as_tensor(adj[:, 1], dtype=torch.long, device=dev)
@@ -289,21 +329,27 @@ def _guided_normal_gpu(mesh, normal_iterations, vertex_iterations, sigma_s, sigm
         log.info("[guided_normal_gpu] iter %d:   normal-filter block (incl. maxdiff): %.3fs",
                  it, t_filt - t_it)
 
-        # --- interleaved vertex update to match the filtered normals ---
+        # --- regularized point-to-plane vertex update (drag-back to anchor) ---
+        # Each vertex solves (sum_f n n^T + lam I) x = sum_f n (n.c_f) + lam x0.
+        # The lam*I + anchor make the per-vertex 3x3 well-conditioned and stop the
+        # drift/collapse that the bare Jacobi sweep suffers; a signed-area barrier
+        # then guarantees no triangle folds.
+        nf = filtered_normals
+        nnT = nf.unsqueeze(2) * nf.unsqueeze(1)                  # (m,3,3)
+        eye3 = torch.eye(3, device=dev)
         for _ in range(int(vertex_iterations)):
             cen = (V[F[:, 0]] + V[F[:, 1]] + V[F[:, 2]]) / 3.0
-            new_V = torch.zeros_like(V)
-            counts = torch.zeros(n, device=dev)
+            rhs_face = nf * (nf * cen).sum(1, keepdim=True)      # (m,3)
+            M = torch.zeros(n, 3, 3, device=dev)
+            rhs = torch.zeros(n, 3, device=dev)
             for k in range(3):
                 vid = F[:, k]
-                Vv = V[vid]
-                d = ((Vv - cen) * filtered_normals).sum(1, keepdim=True)
-                new_V.index_add_(0, vid, Vv - d * filtered_normals)
-                counts.index_add_(0, vid, ones_f)
-            moved = counts > 0
-            new_V[moved] /= counts[moved].unsqueeze(1)
-            new_V[~moved] = V[~moved]
-            V = new_V
+                M.index_add_(0, vid, nnT)
+                rhs.index_add_(0, vid, rhs_face)
+            M = M + vertex_anchor * eye3
+            rhs = rhs + vertex_anchor * V_anchor
+            new_V = torch.linalg.solve(M, rhs.unsqueeze(2)).squeeze(2)
+            V = V + _anti_flip_step_torch(V, F, new_V - V)
         _sync()
         t_vtx = time.perf_counter()
         log.info("[guided_normal_gpu] iter %d:   vertex update (%d sub-iters): %.3fs  |  "

@@ -24,8 +24,87 @@ def _compute_face_geometry(V, F):
     return normals, centroids, areas
 
 
+def _anti_flip_step(V, F, step, eta=0.1, max_rounds=20):
+    """Cap a proposed per-vertex displacement so NO triangle folds (signed-area
+    barrier line search, as in inversion-free geometric optimization / IPC).
+
+    For the current orientation (winding normal of each face), a face is allowed
+    only down to `eta` of its current area; any face that would drop below that
+    (or invert) has the step of its incident vertices halved, repeated until none
+    violate. Remaining offenders are frozen. Guarantees the returned step keeps
+    every face's signed area >= eta * current > 0, i.e. no fold, for any input.
+
+    V: (n,3) current positions. step: (n,3) proposed displacement. Returns the
+    capped step (n,3).
+    """
+    a, b, c = F[:, 0], F[:, 1], F[:, 2]
+    e1 = V[b] - V[a]
+    e2 = V[c] - V[a]
+    n0 = np.cross(e1, e2)
+    A0 = np.linalg.norm(n0, axis=1)                     # 2 * current area
+    n0u = n0 / (A0[:, None] + 1e-20)                    # current winding normal
+    thresh = eta * A0
+    s = step.copy()
+    for _ in range(max_rounds):
+        Vc = V + s
+        sa = np.einsum('ij,ij->i', np.cross(Vc[b] - Vc[a], Vc[c] - Vc[a]), n0u)
+        bad = sa < thresh
+        if not bad.any():
+            return s
+        bv = np.unique(F[bad].ravel())
+        s[bv] *= 0.5
+    # backstop: freeze any vertex still touching a folded face
+    Vc = V + s
+    sa = np.einsum('ij,ij->i', np.cross(Vc[b] - Vc[a], Vc[c] - Vc[a]), n0u)
+    bad = sa < thresh
+    if bad.any():
+        s[np.unique(F[bad].ravel())] = 0.0
+    return s
+
+
+def _update_vertices_regularized(V, F, target_normals, vertex_iterations,
+                                 V_anchor, anchor=0.5, anti_flip=True):
+    """Reliable foldless point-to-plane vertex update (drag-back regularized).
+
+    The bare Jacobi projection sweep (`_update_vertices_from_normals`) is only
+    marginally stable: iterated many times it overshoots at creases, oscillates,
+    and collapses/inverts triangles. Instead solve, per vertex, the regularized
+    point-to-plane least squares EXACTLY each pass:
+
+        (sum_{f in i} n_f n_f^T + anchor*I) x_i = sum_f n_f (n_f . c_f) + anchor*x0_i
+
+    where c_f is the current face centroid, n_f the filtered target normal, and x0
+    the FIXED original position. anchor*I + the drag-back data term make each 3x3
+    well-conditioned and stop the drift/collapse; a signed-area barrier then caps
+    the step so no triangle folds. Numerically matches the GPU port.
+
+    anchor: drag-back strength. Lower = stronger smoothing (moves more), higher =
+    gentler (stays near input).
+    """
+    V = V.copy()
+    n = len(V)
+    nf = np.ascontiguousarray(target_normals, dtype=np.float64)
+    nnT = nf[:, :, None] * nf[:, None, :]                    # (m,3,3)
+    eye = np.eye(3)
+    for _ in range(int(vertex_iterations)):
+        cen = (V[F[:, 0]] + V[F[:, 1]] + V[F[:, 2]]) / 3.0
+        rhs_face = nf * np.einsum('ij,ij->i', nf, cen)[:, None]   # (m,3)
+        M = np.zeros((n, 3, 3))
+        rhs = np.zeros((n, 3))
+        for k in range(3):
+            np.add.at(M, F[:, k], nnT)
+            np.add.at(rhs, F[:, k], rhs_face)
+        M += anchor * eye
+        rhs += anchor * V_anchor
+        new_V = np.linalg.solve(M, rhs[:, :, None])[:, :, 0]
+        if anti_flip:
+            new_V = V + _anti_flip_step(V, F, new_V - V)
+        V = new_V
+    return V
+
+
 def _update_vertices_from_normals(V, F, target_normals, vertex_iterations,
-                                  fixed_boundary=False):
+                                  fixed_boundary=False, relax=1.0, anti_flip=True):
     """Update vertex positions to match target face normals via iterative
     projection. For each iteration, projects each vertex onto the planes
     defined by the target normals of its adjacent faces, then averages.
@@ -79,7 +158,14 @@ def _update_vertices_from_normals(V, F, target_normals, vertex_iterations,
         mask = counts > 0
         new_V[mask] /= counts[mask, None]
         new_V[~mask] = V[~mask]
-        V = new_V
+
+        # Strong point-to-plane direction, capped by a signed-area barrier so no
+        # triangle can fold (the guided_normal update is orientation-blind and
+        # overshoots/inverts at preserved creases without this guard).
+        step = relax * (new_V - V)
+        if anti_flip:
+            step = _anti_flip_step(V, F, step)
+        V = V + step
 
     return V
 
