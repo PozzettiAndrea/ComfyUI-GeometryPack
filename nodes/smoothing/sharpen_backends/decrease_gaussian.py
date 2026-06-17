@@ -43,7 +43,8 @@ def _boundary_vertices(F, n):
     return bv
 
 
-def _decrease_gaussian_gpu(mesh, iterations, strength, anchor_weight, use_gpu):
+def _decrease_gaussian_gpu(mesh, iterations, strength, anchor_weight, use_gpu,
+                           regularizer="reduce", irls_eps=0.01):
     import torch
     from .guided_normal_gpu import _anti_flip_step_torch, _torch_device
 
@@ -90,7 +91,16 @@ def _decrease_gaussian_gpu(mesh, iterations, strength, anchor_weight, use_gpu):
         K.index_add_(0, i1, -be)
         K.index_add_(0, i2, -ga)
         K[bmask] = 0.0                              # boundary defect isn't curvature
-        Ka, Kb, Kc = K[i0], K[i1], K[i2]
+        # 'reduce' = L2 (minimize sum K^2: lowers |K| everywhere, spreads it thin).
+        # 'developable' = L1 via IRLS reweight w=1/(|K|+eps): pushes small K to 0
+        # (flat/cylinder/cone patches) and CONCENTRATES K onto sparse seams -> the
+        # surface becomes piecewise zero-Gaussian-curvature (developable).
+        if regularizer == "developable":
+            w = 1.0 / (K.abs() + float(irls_eps))
+        else:
+            w = torch.ones_like(K)
+        WK = w * K
+        Ka, Kb, Kc = WK[i0], WK[i1], WK[i2]
 
         # dE/dx = sum_v 2 K_v * grad K_v,  grad K_v = -sum_{angle at v} grad(angle)
         grad = torch.zeros((n, 3), device=dev)
@@ -142,6 +152,16 @@ class SharpenDecreaseGaussianNode(io.ComfyNode):
                     "Tikhonov lambda -- how strongly vertices are held to their ORIGINAL "
                     "positions while Gaussian curvature is reduced. LOWER = flatten harder "
                     "(bigger shape change); HIGHER = stay close to input. Default 0.5.")),
+                io.Combo.Input("regularizer", options=["developable", "reduce"], default="developable", tooltip=(
+                    "developable = L1/sparsity on K (push small K to 0, CONCENTRATE it onto "
+                    "sparse seams) -> piecewise ZERO-Gaussian-curvature: planes + cylinders + "
+                    "cones kept smooth, only the seams curve. This is the CAD-friendly mode "
+                    "(keeps fillets/cylinders, doesn't facet them). reduce = L2 (lower |K| "
+                    "everywhere, spreads it thin -- gentler, less structured).")),
+                io.Float.Input("irls_eps", default=0.005, min=0.0005, max=0.5, step=0.0005, display_mode="number", tooltip=(
+                    "(developable mode) Sparsity epsilon of the IRLS L1 reweight w=1/(|K|+eps). "
+                    "SMALLER = more aggressively sparse / L0-like (crisper developable patches, "
+                    "sharper seams); LARGER = softer. Default 0.005.")),
                 io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
                     "Run on CUDA (recommended). false = CPU torch.")),
             ],
@@ -152,14 +172,16 @@ class SharpenDecreaseGaussianNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, iterations=20, strength=0.05, anchor_weight=0.5, use_gpu="true"):
+    def execute(cls, trimesh, iterations=20, strength=0.05, anchor_weight=0.5,
+                regularizer="developable", irls_eps=0.005, use_gpu="true"):
         import time
         iv, ifc = len(trimesh.vertices), len(trimesh.faces)
-        log.info("Backend: decrease_gaussian | %d verts %d faces | iters=%d strength=%.3f anchor=%.3f gpu=%s",
-                 iv, ifc, iterations, strength, anchor_weight, use_gpu)
+        log.info("Backend: decrease_gaussian | %d verts %d faces | iters=%d strength=%.3f anchor=%.3f reg=%s eps=%.4f gpu=%s",
+                 iv, ifc, iterations, strength, anchor_weight, regularizer, irls_eps, use_gpu)
         t0 = time.perf_counter()
         sharpened, error, dev = _decrease_gaussian_gpu(
-            trimesh, iterations, strength, anchor_weight, use_gpu == "true")
+            trimesh, iterations, strength, anchor_weight, use_gpu == "true",
+            regularizer=regularizer, irls_eps=irls_eps)
         elapsed = time.perf_counter() - t0
         if sharpened is None:
             raise ValueError(f"Sharpening failed (decrease_gaussian): {error}")
@@ -169,6 +191,7 @@ class SharpenDecreaseGaussianNode(io.ComfyNode):
         sharpened.metadata["sharpening"] = {
             "algorithm": "decrease_gaussian", "device": str(dev),
             "iterations": iterations, "strength": strength, "anchor_weight": anchor_weight,
+            "regularizer": regularizer, "irls_eps": irls_eps,
         }
         disp = np.linalg.norm(np.asarray(sharpened.vertices) - np.asarray(trimesh.vertices), axis=1)
         info = (f"Sharpen Mesh Results (decrease_gaussian, device={dev}):\n\n"

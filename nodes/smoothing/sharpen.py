@@ -254,6 +254,15 @@ class SharpenMeshNode(io.ComfyNode):
                             "Tikhonov lambda: how strongly vertices stay at their ORIGINAL "
                             "positions while K is reduced. LOWER = flatten harder (bigger shape "
                             "change toward developable); HIGHER = stay close to input. Default 0.5.")),
+                        io.Combo.Input("regularizer", options=["developable", "reduce"], default="developable", tooltip=(
+                            "developable = L1/sparsity on Gaussian curvature: push small K to 0 "
+                            "and CONCENTRATE it onto sparse seams -> piecewise zero-Gaussian "
+                            "(planes+cylinders+cones kept smooth, only seams curve). The CAD mode "
+                            "(doesn't facet fillets). reduce = L2: lower |K| everywhere (gentler). "
+                            "On real Tripo meshes developable removes ~35-50% of spurious K.")),
+                        io.Float.Input("irls_eps", default=0.005, min=0.0005, max=0.5, step=0.0005, display_mode="number", tooltip=(
+                            "(developable) IRLS L1 sparsity epsilon w=1/(|K|+eps). SMALLER = more "
+                            "L0-like (crisper developable patches / sharper seams). Default 0.005.")),
                         io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
                             "Run on CUDA (recommended). false = CPU torch.")),
                     ]),
