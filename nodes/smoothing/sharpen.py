@@ -56,6 +56,7 @@ class SharpenMeshNode(io.ComfyNode):
         "non_iterative":  "GeomPackSharpen_NonIterative",
         "curvature_guided": "GeomPackSharpen_CurvatureGuided",
         "decrease_gaussian": "GeomPackSharpen_DecreaseGaussian",
+        "taubin_sharpen": "GeomPackSharpen_Taubin",
     }
 
     @classmethod
@@ -263,6 +264,27 @@ class SharpenMeshNode(io.ComfyNode):
                         io.Float.Input("irls_eps", default=0.005, min=0.0005, max=0.5, step=0.0005, display_mode="number", tooltip=(
                             "(developable) IRLS L1 sparsity epsilon w=1/(|K|+eps). SMALLER = more "
                             "L0-like (crisper developable patches / sharper seams). Default 0.005.")),
+                        io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
+                            "Run on CUDA (recommended). false = CPU torch.")),
+                    ]),
+                    io.DynamicCombo.Option("taubin_sharpen", [
+                        io.Float.Input("lambda_", default=0.5, min=0.01, max=1.0, step=0.01, tooltip=(
+                            "Taubin low-pass shrink step. Higher = stronger smoothing per pass "
+                            "(coarser feature scale -> coarser detail amplified).")),
+                        io.Float.Input("mu", default=-0.53, min=-1.0, max=-0.01, step=0.01, tooltip=(
+                            "Taubin un-shrink step (negative). |mu| > lambda keeps the low-pass "
+                            "shrink-free. Typical -0.53 for lambda=0.5.")),
+                        io.Int.Input("iterations", default=10, min=1, max=200, step=1, tooltip=(
+                            "Taubin low-pass passes. MORE = smoother reference = sharpens "
+                            "BROADER features; FEWER = sharpens fine detail.")),
+                        io.Float.Input("enhancement", default=0.6, min=0.0, max=5.0, step=0.05, display_mode="number", tooltip=(
+                            "Unsharp strength alpha: V_out = V0 + alpha*(V0 - low-pass). 0 = no "
+                            "change, 1 = double the detail, >1 = aggressive. Pure Taubin "
+                            "sharpening (built only from the Taubin smoother, stable). The "
+                            "foldless barrier prevents triangle inversion.")),
+                        io.Combo.Input("anti_flip", options=["true", "false"], default="true", tooltip=(
+                            "Pass the displacement through the signed-area barrier so no "
+                            "triangle folds (only matters at high enhancement).")),
                         io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
                             "Run on CUDA (recommended). false = CPU torch.")),
                     ]),
