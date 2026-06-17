@@ -24,7 +24,7 @@ from comfy_api.latest import io
 log = logging.getLogger("geometrypack")
 
 
-def _edge_values(mesh, field_name, reduction):
+def _edge_values(mesh, field_name, reduction, wide_dihedral=0):
     """Return (adj_edges[M,2] vertex idx, values[M], used_field_name, available_fields)."""
     import numpy as np
 
@@ -44,6 +44,25 @@ def _edge_values(mesh, field_name, reduction):
     else:
         field = np.asarray(mesh.face_normals, dtype=np.float64)
         used = f"face_normals (']{field_name}' not found)"
+
+    # WIDE DIHEDRAL: optionally average each face's field over `wide_dihedral` rings of
+    # edge-adjacent faces (area-weighted) BEFORE the per-edge reduction. With reduction
+    # 'angle' on face_normals this turns the raw 2-face dihedral into the angle between
+    # broadened, multi-face normals -- so a feature smeared over many faces (a chamfer /
+    # fine fillet) shows up as one larger turn instead of many tiny per-edge angles.
+    # (Trade-off: it also rounds genuinely-sharp single-edge creases; 2-4 is a good range.)
+    if wide_dihedral and int(wide_dihedral) > 0:
+        areas = np.asarray(mesh.area_faces, dtype=np.float64)
+        a0, a1 = adj[:, 0], adj[:, 1]
+        f2 = field.reshape(len(field), -1).astype(np.float64)
+        for _ in range(int(wide_dihedral)):
+            acc = f2 * areas[:, None]
+            wsum = areas.copy()
+            np.add.at(acc, a0, f2[a1] * areas[a1, None]); np.add.at(wsum, a0, areas[a1])
+            np.add.at(acc, a1, f2[a0] * areas[a0, None]); np.add.at(wsum, a1, areas[a0])
+            f2 = acc / np.maximum(wsum[:, None], 1e-12)
+        field = f2.reshape(field.shape)
+        used += f" +{int(wide_dihedral)}ring"
 
     A = field[adj[:, 0]]
     B = field[adj[:, 1]]
@@ -198,6 +217,13 @@ class PreviewMeshBoundaries(io.ComfyNode):
                 io.Combo.Input("reduction", options=["auto", "angle", "abs_diff", "l2", "max", "mean", "min"], default="auto",
                     tooltip="How to combine the two faces' values into one per-edge number. "
                             "angle = degrees between vectors (dihedral for normals)."),
+                io.Int.Input("wide_dihedral", default=0, min=0, max=20, step=1,
+                    tooltip="WIDE dihedral: average each face's field over this many rings of "
+                            "neighbour faces before measuring the angle. 0 = raw 2-face dihedral. "
+                            ">0 turns it into the angle between BROADENED multi-face normals, so a "
+                            "feature smeared over many faces (chamfer / fine fillet) reads as ONE "
+                            "larger turn instead of many tiny per-edge angles. 2-4 is a good range; "
+                            "higher also rounds genuinely-sharp single-edge creases."),
                 io.Combo.Input("mode", options=["edges", "loops", "regions"], default="edges",
                     tooltip="edges = show every passing edge. loops = group passing edges into "
                             "connected clusters (color by cluster_id). regions = treat the passing "
@@ -221,7 +247,7 @@ class PreviewMeshBoundaries(io.ComfyNode):
     @classmethod
     def execute(cls, mesh, face_field="face_normals", reduction="auto",
                 threshold=30.0, comparison=">=", mode="edges", min_edges=10,
-                show_surface=True):
+                wide_dihedral=0, show_surface=True):
         import numpy as np
         import pyvista as pv
         import folder_paths
@@ -237,7 +263,7 @@ class PreviewMeshBoundaries(io.ComfyNode):
                 log.warning("[PreviewMeshBoundaries] merge_vertices failed: %s", e)
                 work = mesh
 
-        adj_edges, vals, used_field, avail = _edge_values(work, face_field, reduction)
+        adj_edges, vals, used_field, avail = _edge_values(work, face_field, reduction, wide_dihedral)
         if comparison == "<=":
             passing = vals <= threshold
         else:
