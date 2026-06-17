@@ -229,21 +229,26 @@ class SharpenMeshNode(io.ComfyNode):
                         )),
                     ]),
                     io.DynamicCombo.Option("curvature_guided", [
+                        io.Combo.Input("regularizer", options=["tv", "bilateral"], default="tv", tooltip=(
+                            "tv = TOTAL-VARIATION on the curvature field (Chambolle-Pock) -> "
+                            "PIECEWISE-CONSTANT curvature: genuine regions of constant curvature "
+                            "(planes/cylinders/spheres) with crisp jumps. bilateral = edge-aware "
+                            "diffusion (denoises but makes smooth ramps, not plateaus)."
+                        )),
+                        io.Float.Input("tv_weight", default=0.5, min=0.02, max=8.0, step=0.02, display_mode="number", tooltip=(
+                            "TV strength (tv mode), relative to median curvature. Higher = flatter, "
+                            "fewer/larger constant-curvature regions; lower = more detail."
+                        )),
                         io.Int.Input("iterations", default=5, min=0, max=100, step=1, tooltip=(
-                            "Edge-aware diffusion passes on the CURVATURE field (2nd-order). "
-                            "Unlike guided_normal (which flattens curved regions), this filters "
-                            "curvature magnitude and reconstructs via a Laplacian solve, so it "
-                            "denoises within a region WITHOUT flattening cylinders/fillets. "
-                            "More = stronger agreement / wider reach. 0 = identity."
+                            "tv: scales Chambolle-Pock passes (~iters x 30). bilateral: diffusion "
+                            "passes on the curvature field. More = stronger / wider reach."
                         )),
                         io.Float.Input("sigma_s", default=2.0, min=0.1, max=10.0, step=0.1, tooltip=(
-                            "Spatial scale (x average edge length) for curvature diffusion."
+                            "(bilateral mode) Spatial scale (x average edge length)."
                         )),
                         io.Float.Input("curvature_sigma", default=0.5, min=0.02, max=5.0, step=0.02, display_mode="number", tooltip=(
-                            "CURVATURE range scale (relative to the mesh's curvature spread). The "
-                            "faithful 2nd-order analog of guided_normal's range: curvature diffuses "
-                            "WITHIN a curvature-region and stops at curvature steps (flat<->fillet) "
-                            "-> piecewise-constant curvature. Smaller = crisper region boundaries."
+                            "(bilateral mode) CURVATURE range scale (relative to curvature spread). "
+                            "Smaller = crisper region boundaries. (tv mode uses tv_weight.)"
                         )),
                         io.Float.Input("anchor_weight", default=0.1, min=0.001, max=10.0, step=0.001, display_mode="number", tooltip=(
                             "How strongly the reconstruction sticks to the input positions "

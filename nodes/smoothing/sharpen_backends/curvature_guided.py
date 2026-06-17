@@ -1,30 +1,33 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
-"""Curvature-domain guided sharpening backend (GPU, prototype).
+"""Curvature-domain guided sharpening backend (GPU).
 
 The second-order analogue of guided_normal. Where guided_normal filters face
-NORMALS (first order) and reconstructs by plane projection, this filters the
-mesh CURVATURE and reconstructs by a Laplacian-domain solve.
+NORMALS (first order) and reconstructs by plane projection, this regularises the
+mesh CURVATURE field and reconstructs by a Laplacian-domain solve.
 
 Pipeline (all on torch / CUDA):
-  1. delta = L x          -- the differential (Laplacian) coordinates; |delta_i|
-                             is the (area-weighted) mean-curvature normal, so
-                             H_i = |delta_i| / (2 A_i) is pointwise mean curvature.
-  2. Edge-aware bilateral filter of the SCALAR curvature |H| over the 1-ring,
-     range-weighted by NORMAL difference so it diffuses curvature WITHIN a region
-     but stops at sharp edges -> "increase curvature agreement within regions".
-     We filter the magnitude only and keep each vertex's own delta DIRECTION, so
-     a perfect sphere/cylinder is a fixed point (no flattening).
-  3. Rebuild target delta_f = (2 H_f A_i) * (delta_i / |delta_i|).
-  4. Reconstruct positions: minimise ||L x - delta_f||^2 + lambda||x - x0||^2,
-     i.e. solve (L^T L + lambda I) x = L^T delta_f + lambda x0 with a diagonally
-     preconditioned conjugate gradient (sparse mat-vecs -> GPU friendly).
+  1. delta = L x  -- differential (Laplacian) coordinates; delta_i is the (integrated)
+     mean-curvature NORMAL (|delta_i| ~ 2 H_i A_i). We work with the signed VECTOR delta
+     (not |H|): filtering the magnitude rectifies noise to a positive floor and injects
+     curvature, whereas the signed vector lets opposite-pointing noise cancel.
+  2. Regularise the delta field, two modes:
+       - 'tv'        : TOTAL-VARIATION denoising via Chambolle-Pock
+                       (min 1/2||u-delta||^2 + alpha*sum_edges||u_j-u_i||). L1 of the
+                       gradient => PIECEWISE-CONSTANT curvature with crisp jumps = genuine
+                       regions of constant curvature (planes/cylinders/spheres).
+       - 'bilateral' : edge-aware bilateral diffusion of delta (curvature-range weighted).
+                       Denoises (variance down) but yields smooth RAMPS, not plateaus.
+  3. Reconstruct positions: minimise ||L x - delta_f||^2 + lambda||x - x0||^2 via CGLS on
+     the stacked [L; sqrt(lambda) I] -- never forms L^T L (whose condition number ~1/h^4
+     under-converges in float32).
 
-References: Laplacian/differential-coordinate surface editing (Sorkine et al.
-2004; Lipman et al. 2004); curvature-domain shape processing (Eigensatz et al.
-2008). This is a linearised (quadratic-bending) prototype.
-"""
+References: differential-coordinate / Laplacian surface editing (Sorkine et al. 2004;
+Lipman et al. 2004); curvature-domain shape processing (Eigensatz, Sumner, Pauly 2008);
+TV denoising (Rudin-Osher-Fatemi 1992; Chambolle-Pock 2011). Bilateral mode mirrors
+guided normal filtering (Zhang et al. 2015) one order up; TV mode is the piecewise-
+constant analog (the L0/TV second-order twin of piecewise-flat normals)."""
 
 import logging
 
@@ -50,7 +53,8 @@ def _torch_device(use_gpu):
     return torch.device("cpu")
 
 
-def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu):
+def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu,
+                      regularizer="tv", tv_weight=0.5):
     import torch
     import igl
 
@@ -125,49 +129,88 @@ def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight,
     # a positive floor and INJECTS curvature everywhere -- the bug this replaces.) The
     # curvature-range weight `w` stops diffusion at curvature steps, so a real fillet next
     # to a flat keeps its curvature instead of being flattened by the flat.
-    delta_f = delta.clone()
-    for _ in range(int(iterations)):
-        acc = delta_f.clone()                   # self term
-        acc.index_add_(0, src, w.unsqueeze(1) * delta_f[dst])
-        delta_f = acc / wsum.unsqueeze(1)
+    if regularizer == "tv":
+        # --- TOTAL-VARIATION denoise of the curvature-normal field (Chambolle-Pock) ----
+        # min_u 1/2||u - delta||^2 + alpha * sum_{edges} ||u_j - u_i||_2.  The L1 of the
+        # gradient yields a PIECEWISE-CONSTANT field with crisp jumps -> genuine regions of
+        # constant curvature (a bilateral low-pass only makes ramps, never plateaus). Fully
+        # matrix-free: gradient = u[j]-u[i], transpose = scatter. (Chambolle & Pock 2011.)
+        und = np.unique(np.sort(np.vstack([Ff[:, [0, 1]], Ff[:, [1, 2]], Ff[:, [2, 0]]]), axis=1), axis=0)
+        ui = torch.tensor(und[:, 0], dtype=torch.long, device=dev)
+        uj = torch.tensor(und[:, 1], dtype=torch.long, device=dev)
+        ne = und.shape[0]
+        deg = torch.zeros(n, device=dev)
+        deg.index_add_(0, ui, torch.ones(ne, device=dev))
+        deg.index_add_(0, uj, torch.ones(ne, device=dev))
+        Knorm = float(torch.sqrt(2.0 * deg.max()).clamp(min=1.0).item())   # ||grad|| bound
+        tau = 1.0 / Knorm
+        sig = 1.0 / Knorm
+        med = float(delta.norm(dim=1).median().clamp(min=eps).item())
+        alpha = float(tv_weight) * med            # data-scaled => mesh-independent strength
+        u = delta.clone()
+        ubar = u.clone()
+        pdual = torch.zeros((ne, 3), device=dev)
+        n_cp = max(50, int(iterations) * 30)
+        for _ in range(n_cp):
+            pdual = pdual + sig * (ubar[uj] - ubar[ui])         # dual ascent (gradient)
+            pn = pdual.norm(dim=1, keepdim=True).clamp(min=eps)
+            pdual = pdual * torch.clamp(alpha / pn, max=1.0)    # project onto ||.||_2 <= alpha
+            KTp = torch.zeros((n, 3), device=dev)               # divergence (grad^T)
+            KTp.index_add_(0, ui, -pdual)
+            KTp.index_add_(0, uj, pdual)
+            v = u - tau * KTp
+            u_new = (tau * delta + v) / (tau + 1.0)             # prox of 1/2||u-delta||^2
+            ubar = u_new + (u_new - u)                          # over-relax (theta=1)
+            u = u_new
+        delta_f = u
+        used_filter = f"tv({n_cp})"
+    else:
+        # --- edge-aware bilateral diffusion of the delta VECTOR (denoise, not constancy) -
+        delta_f = delta.clone()
+        for _ in range(int(iterations)):
+            acc = delta_f.clone()
+            acc.index_add_(0, src, w.unsqueeze(1) * delta_f[dst])
+            delta_f = acc / wsum.unsqueeze(1)
+        used_filter = f"bilateral({int(iterations)})"
 
-    # --- reconstruct: (L^T L + lam I) x = L^T delta_f + lam x0  (L symmetric) ---
-    scale = float((Lval * Lval).mean().item())   # ~ magnitude of (L^T L) diagonal
+    # --- reconstruct: minimize ||L x - delta_f||^2 + lam ||x - x0||^2 via CGLS on the
+    # STACKED operator [L; sqrt(lam) I]. Never forms L^T L (which squares the condition
+    # number ~1/h^4 and silently under-converges in float32). ---
+    scale = float((Lval * Lval).mean().item())
     lam = float(anchor_weight) * scale
-    b = spmm(Lsp, delta_f) + lam * X0
+    sl = lam ** 0.5
 
-    def matvec(X):
-        return spmm(Lsp, spmm(Lsp, X)) + lam * X
+    def Aop(x):                      # A x = [L x ; sqrt(lam) x]
+        return spmm(Lsp, x), sl * x
 
-    # diagonal (Jacobi) preconditioner: diag(L^T L)_i = sum_k L_ik^2
-    diagLL = torch.zeros(n, device=dev)
-    diagLL.index_add_(0, Lidx[0], Lval * Lval)
-    Minv = 1.0 / (diagLL + lam)
+    def ATop(y1, y2):                # A^T [y1; y2] = L y1 + sqrt(lam) y2   (L symmetric)
+        return spmm(Lsp, y1) + sl * y2
 
-    # preconditioned CG over the 3 position columns simultaneously
     X = X0.clone()
-    r = b - matvec(X)
-    z = Minv.unsqueeze(1) * r
-    p = z.clone()
-    rz = (r * z).sum(0)
-    r0 = torch.sqrt((r * r).sum(0)).max().item()
+    r1 = delta_f - spmm(Lsp, X)
+    r2 = sl * X0 - sl * X
+    s = ATop(r1, r2)
+    p = s.clone()
+    gamma = (s * s).sum(0)
+    g0 = torch.sqrt(gamma).max().item()
     used = 0
     for _ in range(int(cg_iters)):
         used += 1
-        Ap = matvec(p)
-        alpha = rz / ((p * Ap).sum(0) + 1e-20)
-        X = X + p * alpha
-        r = r - Ap * alpha
-        if torch.sqrt((r * r).sum(0)).max().item() < 1e-6 * (r0 + 1e-12):
+        q1, q2 = Aop(p)
+        a = gamma / ((q1 * q1).sum(0) + (q2 * q2).sum(0) + 1e-20)
+        X = X + p * a
+        r1 = r1 - q1 * a
+        r2 = r2 - q2 * a
+        s = ATop(r1, r2)
+        g2 = (s * s).sum(0)
+        if torch.sqrt(g2).max().item() < 1e-7 * (g0 + 1e-12):
             break
-        z = Minv.unsqueeze(1) * r
-        rz_new = (r * z).sum(0)
-        p = z + p * (rz_new / (rz + 1e-20))
-        rz = rz_new
+        p = s + p * (g2 / (gamma + 1e-20))
+        gamma = g2
 
     Vout = X.detach().cpu().numpy().astype(np.float64)
     result = trimesh_module.Trimesh(vertices=Vout, faces=np.asarray(mesh.faces, dtype=np.int32), process=False)
-    info_dev = f"{dev} (cg {used} iters)"
+    info_dev = f"{dev} ({used_filter}, cgls {used} iters)"
     return result, "", info_dev
 
 
@@ -184,18 +227,25 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
+                io.Combo.Input("regularizer", options=["tv", "bilateral"], default="tv", tooltip=(
+                    "tv = TOTAL-VARIATION (Chambolle-Pock) on the curvature field -> "
+                    "PIECEWISE-CONSTANT curvature with crisp jumps: genuine regions of constant "
+                    "curvature (planes/cylinders/spheres). bilateral = edge-aware diffusion: "
+                    "denoises but only makes smooth ramps, not plateaus. Use tv for "
+                    "region/primitive structure, bilateral for gentle denoise.")),
+                io.Float.Input("tv_weight", default=0.5, min=0.02, max=8.0, step=0.02, display_mode="number", tooltip=(
+                    "TV strength (tv mode only), relative to the median curvature. HIGHER = "
+                    "flatter, fewer/larger constant-curvature regions (merges fine variation); "
+                    "LOWER = more, smaller regions (keeps detail). Default 0.5.")),
                 io.Int.Input("iterations", default=5, min=0, max=100, step=1, tooltip=(
-                    "Edge-aware diffusion passes on the curvature field. More = stronger "
-                    "curvature agreement within regions / wider reach. 0 = identity.")),
+                    "tv mode: scales the number of Chambolle-Pock passes (~iterations x 30). "
+                    "bilateral mode: edge-aware diffusion passes. More = stronger / wider reach.")),
                 io.Float.Input("sigma_s", default=2.0, min=0.1, max=10.0, step=0.1, tooltip=(
-                    "Spatial scale (x average edge length) for the curvature diffusion.")),
+                    "(bilateral mode only) Spatial scale (x average edge length).")),
                 io.Float.Input("curvature_sigma", default=0.5, min=0.02, max=5.0, step=0.02, display_mode="number", tooltip=(
-                    "CURVATURE range scale, relative to the mesh's curvature spread (std of |H|). "
-                    "The faithful second-order analog of guided_normal's range weight: curvature "
-                    "diffuses WITHIN a curvature-region and STOPS at curvature steps (e.g. "
-                    "flat<->fillet), pushing toward piecewise-constant curvature. SMALLER = "
-                    "sharper region boundaries (less cross-region blending); LARGER = more "
-                    "blending across curvature differences. Default 0.5.")),
+                    "(bilateral mode only) CURVATURE range scale, relative to the mesh's curvature "
+                    "spread. SMALLER = sharper region boundaries; LARGER = more cross-region "
+                    "blending. (tv mode uses tv_weight instead.)")),
                 io.Float.Input("anchor_weight", default=0.1, min=0.001, max=10.0, step=0.001, display_mode="number", tooltip=(
                     "How strongly the reconstruction sticks to the input positions "
                     "(Tikhonov lambda, relative to the Laplacian scale). LOWER = stronger "
@@ -214,16 +264,17 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, iterations=5, sigma_s=2.0, curvature_sigma=0.5,
-                anchor_weight=0.1, cg_iters=200, use_gpu="true"):
+    def execute(cls, trimesh, regularizer="tv", tv_weight=0.5, iterations=5, sigma_s=2.0,
+                curvature_sigma=0.5, anchor_weight=0.1, cg_iters=200, use_gpu="true"):
         import time
         iv, ifc = len(trimesh.vertices), len(trimesh.faces)
-        log.info("Backend: curvature_guided | %d verts %d faces | iters=%d sigma_s=%.2f curv_sigma=%.2f anchor=%.3f gpu=%s",
-                 iv, ifc, iterations, sigma_s, curvature_sigma, anchor_weight, use_gpu)
+        log.info("Backend: curvature_guided | %d verts %d faces | reg=%s tv_w=%.2f iters=%d sigma_s=%.2f curv_sigma=%.2f anchor=%.3f gpu=%s",
+                 iv, ifc, regularizer, tv_weight, iterations, sigma_s, curvature_sigma, anchor_weight, use_gpu)
 
         t0 = time.perf_counter()
         sharpened, error, dev = _curvature_guided(
-            trimesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu == "true")
+            trimesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu == "true",
+            regularizer=regularizer, tv_weight=tv_weight)
         elapsed = time.perf_counter() - t0
         if sharpened is None:
             raise ValueError(f"Sharpening failed (curvature_guided): {error}")
@@ -232,14 +283,15 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
             sharpened.metadata = trimesh.metadata.copy()
         sharpened.metadata["sharpening"] = {
             "algorithm": "curvature_guided", "device": str(dev),
+            "regularizer": regularizer, "tv_weight": tv_weight,
             "iterations": iterations, "sigma_s": sigma_s,
             "curvature_sigma": curvature_sigma, "anchor_weight": anchor_weight,
         }
 
         disp = np.linalg.norm(np.asarray(sharpened.vertices) - np.asarray(trimesh.vertices), axis=1)
         info = (f"Sharpen Mesh Results (curvature_guided, device={dev}):\n\n"
-                f"Iterations: {iterations}\nSigma S: {sigma_s}\nCurvature sigma: {curvature_sigma}\n"
-                f"Anchor weight: {anchor_weight}\n"
+                f"Regularizer: {regularizer} (tv_weight={tv_weight})\n"
+                f"Iterations: {iterations}\nAnchor weight: {anchor_weight}\n"
                 f"Time: {elapsed:.2f}s\n\n"
                 f"Vertices: {iv:,} (unchanged)\nFaces: {ifc:,} (unchanged)\n\n"
                 f"Displacement:\n  Average: {float(np.mean(disp)):.6f}\n  Maximum: {float(np.max(disp)):.6f}\n")
