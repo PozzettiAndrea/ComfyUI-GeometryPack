@@ -50,7 +50,7 @@ def _torch_device(use_gpu):
     return torch.device("cpu")
 
 
-def _curvature_guided(mesh, iterations, sigma_s, sigma_r, anchor_weight, cg_iters, use_gpu,
+def _curvature_guided(mesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu,
                       direction_blend=0.0):
     import torch
     import igl
@@ -90,14 +90,33 @@ def _curvature_guided(mesh, iterations, sigma_s, sigma_r, anchor_weight, cg_iter
     src = torch.tensor(ed[:, 0], dtype=torch.long, device=dev)   # accumulate into i
     dst = torch.tensor(ed[:, 1], dtype=torch.long, device=dev)   # neighbour j
 
-    VN = torch.tensor(np.asarray(mesh.vertex_normals, dtype=np.float64), dtype=torch.float32, device=dev)
     avg_edge = float(np.mean(np.linalg.norm(V0[E[:, 0]] - V0[E[:, 1]], axis=1)))
     ss2 = 2.0 * (sigma_s * avg_edge) ** 2
-    sr2 = 2.0 * (sigma_r ** 2)
     dpos = (X0[src] - X0[dst]).pow(2).sum(1)
-    dnrm = (VN[src] - VN[dst]).pow(2).sum(1)
-    w = torch.exp(-dpos / (ss2 + eps)) * torch.exp(-dnrm / (sr2 + eps))   # (E,)
-    wsum = torch.ones(n, device=dev)            # self weight 1.0
+    ws = torch.exp(-dpos / (ss2 + eps))            # spatial weight (E,)
+    ws_sum = torch.ones(n, device=dev)
+    ws_sum.index_add_(0, src, ws)
+
+    # GUIDANCE curvature: a couple of spatial-only smoothing passes of |H| give a
+    # robust region signal -- the second-order analog of guided_normal's guidance
+    # normal (a denoised estimate of "what curvature is this region").
+    Hguide = Hmag.clone()
+    for _ in range(2):
+        acc = Hguide.clone()
+        acc.index_add_(0, src, ws * Hguide[dst])
+        Hguide = acc / ws_sum
+
+    # RANGE weight on CURVATURE difference (data-scaled): diffuse curvature WITHIN a
+    # curvature-region and STOP at curvature steps (e.g. flat<->fillet). This is the
+    # faithful second-order analog of guided_normal's normal range weight -- it pushes
+    # the surface toward PIECEWISE-CONSTANT CURVATURE, keeping the region boundaries
+    # crisp instead of blurring them.
+    curv_scale = torch.clamp(Hguide.std(), min=eps)
+    sigma_curv2 = 2.0 * (curvature_sigma * curv_scale) ** 2
+    dcurv = (Hguide[src] - Hguide[dst]).pow(2)
+    wr = torch.exp(-dcurv / (sigma_curv2 + eps))
+    w = ws * wr                                    # (E,) spatial x curvature-range
+    wsum = torch.ones(n, device=dev)               # self weight 1.0
     wsum.index_add_(0, src, w)
 
     # --- edge-aware diffusion of the SCALAR curvature magnitude ---
@@ -111,7 +130,7 @@ def _curvature_guided(mesh, iterations, sigma_s, sigma_r, anchor_weight, cg_iter
     # vertex's own orientation -> a sphere/cylinder is a fixed point (no flattening) but
     # positional noise (wrong directions) survives. blend>0 mixes in an edge-aware
     # smoothed direction, which denoises positions at some flattening risk in curved
-    # regions (the sigma_r range weight still protects sharp edges either way).
+    # regions (the curvature range weight still keeps curvature-regions distinct).
     if direction_blend > 0.0:
         vdf = delta.clone()
         for _ in range(int(iterations)):
@@ -183,9 +202,13 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
                     "curvature agreement within regions / wider reach. 0 = identity.")),
                 io.Float.Input("sigma_s", default=2.0, min=0.1, max=10.0, step=0.1, tooltip=(
                     "Spatial scale (x average edge length) for the curvature diffusion.")),
-                io.Float.Input("sigma_r_degrees", default=20.0, min=1.0, max=120.0, step=1.0, tooltip=(
-                    "Range scale in DEGREES: normal-difference angle at which curvature "
-                    "STOPS diffusing across an edge. Smaller = sharper feature preservation.")),
+                io.Float.Input("curvature_sigma", default=0.5, min=0.02, max=5.0, step=0.02, display_mode="number", tooltip=(
+                    "CURVATURE range scale, relative to the mesh's curvature spread (std of |H|). "
+                    "The faithful second-order analog of guided_normal's range weight: curvature "
+                    "diffuses WITHIN a curvature-region and STOPS at curvature steps (e.g. "
+                    "flat<->fillet), pushing toward piecewise-constant curvature. SMALLER = "
+                    "sharper region boundaries (less cross-region blending); LARGER = more "
+                    "blending across curvature differences. Default 0.5.")),
                 io.Float.Input("anchor_weight", default=0.1, min=0.001, max=10.0, step=0.001, display_mode="number", tooltip=(
                     "How strongly the reconstruction sticks to the input positions "
                     "(Tikhonov lambda, relative to the Laplacian scale). LOWER = stronger "
@@ -210,18 +233,16 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, iterations=5, sigma_s=2.0, sigma_r_degrees=20.0,
+    def execute(cls, trimesh, iterations=5, sigma_s=2.0, curvature_sigma=0.5,
                 anchor_weight=0.1, direction_blend=0.0, cg_iters=200, use_gpu="true"):
-        import math
         import time
-        sigma_r = 2.0 * math.sin(math.radians(sigma_r_degrees) / 2.0)
         iv, ifc = len(trimesh.vertices), len(trimesh.faces)
-        log.info("Backend: curvature_guided | %d verts %d faces | iters=%d sigma_s=%.2f sigma_r=%.1fdeg anchor=%.3f dirblend=%.2f gpu=%s",
-                 iv, ifc, iterations, sigma_s, sigma_r_degrees, anchor_weight, direction_blend, use_gpu)
+        log.info("Backend: curvature_guided | %d verts %d faces | iters=%d sigma_s=%.2f curv_sigma=%.2f anchor=%.3f dirblend=%.2f gpu=%s",
+                 iv, ifc, iterations, sigma_s, curvature_sigma, anchor_weight, direction_blend, use_gpu)
 
         t0 = time.perf_counter()
         sharpened, error, dev = _curvature_guided(
-            trimesh, iterations, sigma_s, sigma_r, anchor_weight, cg_iters, use_gpu == "true",
+            trimesh, iterations, sigma_s, curvature_sigma, anchor_weight, cg_iters, use_gpu == "true",
             direction_blend=direction_blend)
         elapsed = time.perf_counter() - t0
         if sharpened is None:
@@ -232,12 +253,12 @@ class SharpenCurvatureGuidedNode(io.ComfyNode):
         sharpened.metadata["sharpening"] = {
             "algorithm": "curvature_guided", "device": str(dev),
             "iterations": iterations, "sigma_s": sigma_s,
-            "sigma_r_degrees": sigma_r_degrees, "anchor_weight": anchor_weight,
+            "curvature_sigma": curvature_sigma, "anchor_weight": anchor_weight,
         }
 
         disp = np.linalg.norm(np.asarray(sharpened.vertices) - np.asarray(trimesh.vertices), axis=1)
         info = (f"Sharpen Mesh Results (curvature_guided, device={dev}):\n\n"
-                f"Iterations: {iterations}\nSigma S: {sigma_s}\nSigma R: {sigma_r_degrees} deg\n"
+                f"Iterations: {iterations}\nSigma S: {sigma_s}\nCurvature sigma: {curvature_sigma}\n"
                 f"Anchor weight: {anchor_weight}\nDirection blend: {direction_blend}\n"
                 f"Time: {elapsed:.2f}s\n\n"
                 f"Vertices: {iv:,} (unchanged)\nFaces: {ifc:,} (unchanged)\n\n"

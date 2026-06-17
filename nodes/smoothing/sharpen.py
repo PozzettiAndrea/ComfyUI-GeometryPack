@@ -239,9 +239,11 @@ class SharpenMeshNode(io.ComfyNode):
                         io.Float.Input("sigma_s", default=2.0, min=0.1, max=10.0, step=0.1, tooltip=(
                             "Spatial scale (x average edge length) for curvature diffusion."
                         )),
-                        io.Float.Input("sigma_r_degrees", default=20.0, min=1.0, max=120.0, step=1.0, tooltip=(
-                            "Range scale in DEGREES: normal-difference angle at which curvature "
-                            "STOPS diffusing across an edge. Smaller = sharper feature preservation."
+                        io.Float.Input("curvature_sigma", default=0.5, min=0.02, max=5.0, step=0.02, display_mode="number", tooltip=(
+                            "CURVATURE range scale (relative to the mesh's curvature spread). The "
+                            "faithful 2nd-order analog of guided_normal's range: curvature diffuses "
+                            "WITHIN a curvature-region and stops at curvature steps (flat<->fillet) "
+                            "-> piecewise-constant curvature. Smaller = crisper region boundaries."
                         )),
                         io.Float.Input("anchor_weight", default=0.1, min=0.001, max=10.0, step=0.001, display_mode="number", tooltip=(
                             "How strongly the reconstruction sticks to the input positions "
