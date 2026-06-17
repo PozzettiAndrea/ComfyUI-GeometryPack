@@ -55,6 +55,7 @@ class SharpenMeshNode(io.ComfyNode):
         "fast_effective":  "GeomPackSharpen_FastEffective",
         "non_iterative":  "GeomPackSharpen_NonIterative",
         "curvature_guided": "GeomPackSharpen_CurvatureGuided",
+        "decrease_gaussian": "GeomPackSharpen_DecreaseGaussian",
     }
 
     @classmethod
@@ -236,6 +237,24 @@ class SharpenMeshNode(io.ComfyNode):
                             "the vertex moves toward each face plane). Smaller = "
                             "more feature-preserving."
                         )),
+                    ]),
+                    io.DynamicCombo.Option("decrease_gaussian", [
+                        io.Int.Input("iterations", default=20, min=1, max=2000, step=1, tooltip=(
+                            "Gradient-descent steps on the Gaussian-curvature energy sum K_i^2 "
+                            "(K_i = vertex angle defect). More steps = lower |Gaussian curvature| "
+                            "= more DEVELOPABLE (planes/cylinders/cones, K->0). Gauss-Bonnet keeps "
+                            "the topological total fixed, so the flow flattens the bulk and the "
+                            "anchor keeps the overall shape.")),
+                        io.Float.Input("strength", default=0.05, min=0.001, max=1.0, step=0.001, display_mode="number", tooltip=(
+                            "Per-step size as a fraction of average edge length (largest vertex "
+                            "move ~ strength*edge). The foldless barrier prevents triangle "
+                            "inversion regardless. Default 0.05.")),
+                        io.Float.Input("anchor_weight", default=0.5, min=0.0, max=50.0, step=0.01, display_mode="number", tooltip=(
+                            "Tikhonov lambda: how strongly vertices stay at their ORIGINAL "
+                            "positions while K is reduced. LOWER = flatten harder (bigger shape "
+                            "change toward developable); HIGHER = stay close to input. Default 0.5.")),
+                        io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
+                            "Run on CUDA (recommended). false = CPU torch.")),
                     ]),
                     io.DynamicCombo.Option("curvature_guided", [
                         io.Combo.Input("regularizer", options=["tv", "bilateral"], default="tv", tooltip=(
