@@ -187,7 +187,7 @@ class SharpenGuidedNormalNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
-                io.Int.Input("normal_iterations", default=5, min=1, max=200, step=1, tooltip=(
+                io.Int.Input("normal_iterations", default=5, min=1, max=1000, step=1, tooltip=(
                     "Iterations for guided bilateral normal filtering. "
                     "More iterations produce smoother/flatter regions while "
                     "preserving sharp edges. This is the main strength knob; "
