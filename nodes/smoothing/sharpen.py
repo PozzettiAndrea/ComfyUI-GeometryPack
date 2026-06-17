@@ -152,11 +152,12 @@ class SharpenMeshNode(io.ComfyNode):
                             "use more iterations (and/or higher alpha) for stronger, propagated "
                             "flattening. Denser meshes need more iterations to spread flatness."
                         )),
-                        io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
+                        io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
                             "Run the vectorized torch implementation instead of the pure-Python "
                             "loop. Uses CUDA when available (else vectorized CPU torch) -- orders "
-                            "of magnitude faster on large meshes. Results can differ slightly "
-                            "from the CPU path."
+                            "of magnitude faster on large meshes (the CPU path loops over every "
+                            "edge in Python and is impractical beyond ~50k faces). Results can "
+                            "differ slightly from the CPU path. Default true."
                         )),
                     ]),
                     io.DynamicCombo.Option("guided_normal", [

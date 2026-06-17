@@ -98,12 +98,13 @@ class SharpenL0MinimizeNode(io.ComfyNode):
                     "use more (and/or higher alpha) for stronger flattening. Denser meshes "
                     "need more iterations to spread flatness."
                 )),
-                io.Combo.Input("use_gpu", options=["false", "true"], default="false", tooltip=(
+                io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
                     "Run the vectorized torch implementation instead of the pure-Python "
                     "loop. Uses CUDA when available (else vectorized CPU torch) -- orders "
-                    "of magnitude faster on large meshes. The GPU path snaps adjacent "
-                    "normals via a symmetric area-weighted bilateral accumulation, so "
-                    "results can differ slightly from the CPU path."
+                    "of magnitude faster on large meshes (the CPU path loops over every edge "
+                    "in Python and is impractical beyond ~50k faces). The GPU path snaps "
+                    "adjacent normals via a symmetric area-weighted bilateral accumulation, so "
+                    "results can differ slightly from the CPU path. Default true."
                 )),
             ],
             outputs=[
@@ -113,7 +114,7 @@ class SharpenL0MinimizeNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, alpha=0.001, beta=2.0, iterations=10, use_gpu="false"):
+    def execute(cls, trimesh, alpha=0.001, beta=2.0, iterations=10, use_gpu="true"):
         import time
         gpu = (use_gpu == "true")
         algorithm = "l0_minimize_gpu" if gpu else "l0_minimize"
