@@ -78,8 +78,8 @@ class ComputeCurvatureNode(io.ComfyNode):
                     "Larger = smoother, more noise-robust, but blurs sharp features. ~3 for "
                     "crisp CAD, ~5 default, 7-8 for noisy scans. Ignored by the ddg method.")),
                 io.Int.Input("smoothing_iterations", default=0, min=0, max=50, step=1, tooltip=(
-                    "Explicit cotangent-Laplacian diffusion of the curvature fields. 0 = off. "
-                    "A few passes denoise the field without re-fitting.")),
+                    "Laplacian (neighbour-averaging) smoothing of the curvature fields. 0 = off. "
+                    "A few passes denoise the field without re-fitting. Stable at any resolution.")),
                 io.Combo.Input("clamp_to_resolution", options=["true", "false"], default="true", tooltip=(
                     "AUTOMATICALLY cap curvature the mesh can't actually represent. A fillet "
                     "finer than the local triangles is just the fit blowing up at a sharp edge "
@@ -229,13 +229,26 @@ class ComputeCurvatureNode(io.ComfyNode):
             "curvature_shape_index": shape_index,
         }
 
-        # Optional explicit Laplacian diffusion of each scalar field.
+        # Optional Laplacian smoothing of each scalar field. Row-normalized (umbrella)
+        # neighbour averaging -- a CONVEX combination, so it's unconditionally stable at
+        # any mesh resolution. (The previous explicit cotangent diffusion
+        # `f += 0.5 * Minv @ L @ f` blew up to ~1e12: the Laplace-Beltrami spectral
+        # radius scales like 1/edge^2, so a fixed step diverges on fine meshes, and
+        # obtuse triangles add negative cotangent weights.)
         if smoothing_iterations > 0:
+            ev = np.asarray(mesh.edges_unique)
+            deg = np.zeros(n, dtype=np.float64)
+            np.add.at(deg, ev[:, 0], 1.0)
+            np.add.at(deg, ev[:, 1], 1.0)
+            deg = np.maximum(deg, 1.0)
             lam = 0.5
             for name in list(fields.keys()):
                 f = np.asarray(fields[name], dtype=np.float64).copy()
                 for _ in range(int(smoothing_iterations)):
-                    f = f + lam * np.asarray(Minv @ (L @ f))
+                    nb = np.zeros(n, dtype=np.float64)
+                    np.add.at(nb, ev[:, 0], f[ev[:, 1]])
+                    np.add.at(nb, ev[:, 1], f[ev[:, 0]])
+                    f = (1.0 - lam) * f + lam * (nb / deg)
                 fields[name] = f
 
         # Optional percentile clamp so slivers don't dominate the range.
