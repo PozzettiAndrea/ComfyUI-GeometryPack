@@ -173,7 +173,7 @@ class EdgeFlipNode(io.ComfyNode):
                     "delaunay = maximize min angle (flip when opposite angles sum > 180 deg). "
                     "valence = Botsch-Kobbelt connectivity regularization (flip toward ideal "
                     "valence 6/4).")),
-                io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=1.0, tooltip=(
+                io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=0.1, tooltip=(
                     "Preserve sharp edges: any edge whose dihedral (angle between the two "
                     "adjacent face normals) exceeds this is LOCKED and never flipped, so "
                     "creases/feature lines survive. Lower = protect more edges (CAD: ~20-45). "

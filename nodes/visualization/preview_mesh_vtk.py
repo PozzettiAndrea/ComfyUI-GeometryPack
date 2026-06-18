@@ -202,6 +202,15 @@ class PreviewMeshVTKNode(io.ComfyNode):
             except Exception as e:
                 log.info("Could not calculate volume/area: %s", e)
 
+        # Average edge length (mesh resolution) - skip point clouds / empty meshes
+        avg_edge_length = None
+        if not is_point_cloud(trimesh):
+            try:
+                if get_face_count(trimesh) > 0:
+                    avg_edge_length = float(np.mean(trimesh.edges_unique_length))
+            except Exception as e:
+                log.info("Could not calculate avg edge length: %s", e)
+
         # Get field names (vertex/face data arrays) - for field visualization UI
         field_names = []
         if has_vertex_attrs:
@@ -210,6 +219,49 @@ class PreviewMeshVTKNode(io.ComfyNode):
         if has_face_attrs:
             field_names.extend([f"face.{k}" for k in trimesh.face_attributes.keys()])
             log.info("Face attributes: %s", list(trimesh.face_attributes.keys()))
+
+        # Per-field stats (parallel to field_names): [min,max] range + the 3D position of the
+        # element holding the min / max value, so the UI can click a range and fly the camera
+        # there. Vector fields are ranked by magnitude. Ties are broken at random.
+        import random as _random
+
+        def _elem_positions(kind):
+            if kind == "vertex":
+                return np.asarray(trimesh.vertices, dtype=float)
+            try:
+                return np.asarray(trimesh.triangles_center, dtype=float)   # face centroids
+            except Exception:
+                return None
+
+        def _field_stats(a, positions):
+            try:
+                a = np.asarray(a)
+                if a.size == 0 or not np.issubdtype(a.dtype, np.number) or positions is None:
+                    return None, None, None
+                s = a.astype(float) if a.ndim == 1 else np.linalg.norm(
+                    a.reshape(a.shape[0], -1).astype(float), axis=1)
+                if len(s) != len(positions):
+                    return None, None, None
+                lo, hi = float(np.nanmin(s)), float(np.nanmax(s))
+                lo_idx = np.flatnonzero(s == lo)
+                hi_idx = np.flatnonzero(s == hi)
+                li = int(_random.choice(lo_idx)) if lo_idx.size else 0
+                hi_i = int(_random.choice(hi_idx)) if hi_idx.size else 0
+                return [lo, hi], positions[li].tolist(), positions[hi_i].tolist()
+            except Exception:
+                return None, None, None
+
+        field_ranges, field_min_pos, field_max_pos = [], [], []
+        vpos = _elem_positions("vertex") if has_vertex_attrs else None
+        fpos = _elem_positions("face") if has_face_attrs else None
+        if has_vertex_attrs:
+            for v in trimesh.vertex_attributes.values():
+                rng, lp, hp = _field_stats(v, vpos)
+                field_ranges.append(rng); field_min_pos.append(lp); field_max_pos.append(hp)
+        if has_face_attrs:
+            for v in trimesh.face_attributes.values():
+                rng, lp, hp = _field_stats(v, fpos)
+                field_ranges.append(rng); field_min_pos.append(lp); field_max_pos.append(hp)
 
         # Return metadata for frontend widget
         ui_data = {
@@ -237,12 +289,17 @@ class PreviewMeshVTKNode(io.ComfyNode):
         else:
             # Fields mode metadata
             ui_data["field_names"] = [field_names]  # Field visualization data
+            ui_data["field_ranges"] = [field_ranges]  # [min, max] per field (parallel to field_names)
+            ui_data["field_min_pos"] = [field_min_pos]  # 3D pos of min element (click-to-focus)
+            ui_data["field_max_pos"] = [field_max_pos]  # 3D pos of max element (click-to-focus)
 
         # Add optional fields if available
         if volume is not None:
             ui_data["volume"] = [volume]
         if area is not None:
             ui_data["area"] = [area]
+        if avg_edge_length is not None:
+            ui_data["avg_edge_length"] = [avg_edge_length]
 
         if viewer_type == "pbr":
             log.info("PBR mode info: watertight=%s, volume=%s, area=%s, texture=%s, vertex_colors=%s", is_watertight, volume, area, has_texture, has_vertex_colors)

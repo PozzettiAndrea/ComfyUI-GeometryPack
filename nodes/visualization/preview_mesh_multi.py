@@ -133,6 +133,7 @@ class PreviewMeshMultiNode(io.ComfyNode):
         bounds_list = []
         extents_list = []
         is_watertight_list = []
+        avg_edge_lengths = []
         field_names_list = []
         texture_info_list = []
 
@@ -179,6 +180,15 @@ class PreviewMeshMultiNode(io.ComfyNode):
             extents_list.append(extents.tolist())
 
             is_watertight_list.append(bool(mesh.is_watertight) if not mesh_is_pc else False)
+            # average edge length (mesh resolution); None for point clouds / empty meshes
+            avg_edge = None
+            if not mesh_is_pc:
+                try:
+                    if get_face_count(mesh) > 0:
+                        avg_edge = float(np.mean(mesh.edges_unique_length))
+                except Exception as e:
+                    log.info("Mesh %d: could not compute avg edge length: %s", i + 1, e)
+            avg_edge_lengths.append(avg_edge)
             field_names_list.append(extract_field_names(mesh))
             texture_info_list.append(texture_info)
 
@@ -204,6 +214,7 @@ class PreviewMeshMultiNode(io.ComfyNode):
             "bounds_list": [bounds_list],
             "extents_list": [extents_list],
             "is_watertight_list": [is_watertight_list],
+            "avg_edge_lengths": [avg_edge_lengths],
         }
 
         # Add mode-specific metadata

@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2025 ComfyUI-GeometryPack Contributors
+"""Field transfer / interpolation nodes."""
+
+from .interpolate_field import (
+    NODE_CLASS_MAPPINGS as INTERP_MAPS,
+    NODE_DISPLAY_NAME_MAPPINGS as INTERP_DISP,
+)
+from .edge_split import (
+    NODE_CLASS_MAPPINGS as SPLIT_MAPS,
+    NODE_DISPLAY_NAME_MAPPINGS as SPLIT_DISP,
+)
+
+NODE_CLASS_MAPPINGS = {}
+NODE_DISPLAY_NAME_MAPPINGS = {}
+NODE_CLASS_MAPPINGS.update(INTERP_MAPS)
+NODE_DISPLAY_NAME_MAPPINGS.update(INTERP_DISP)
+NODE_CLASS_MAPPINGS.update(SPLIT_MAPS)
+NODE_DISPLAY_NAME_MAPPINGS.update(SPLIT_DISP)
+
+__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

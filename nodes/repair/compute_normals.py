@@ -52,49 +52,42 @@ class ComputeNormalsNode(io.ComfyNode):
         """
         log.info("Processing mesh with %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
 
-        # Create a copy
-        result_mesh = trimesh.copy()
+        # 'trimesh' here is the input-mesh argument (it shadows the top-level
+        # `import trimesh`), so grab the module under another name for the helpers.
+        import trimesh as tm
 
-        # Face normals are always recomputed automatically by trimesh
-        # But we can force a cache clear and recomputation
+        result_mesh = trimesh.copy()
         result_mesh._cache.clear()
+        face_normals = np.asarray(result_mesh.face_normals, dtype=np.float64)
 
         if smooth_vertex_normals == "false":
-            # Use face normals directly (faceted appearance)
-            # This creates sharp edges by not averaging normals across faces
-            vertex_normals = np.zeros_like(result_mesh.vertices)
-            for i, face in enumerate(result_mesh.faces):
-                face_normal = result_mesh.face_normals[i]
-                vertex_normals[face] += face_normal
-            # Normalize
-            norms = np.linalg.norm(vertex_normals, axis=1, keepdims=True)
-            norms[norms == 0] = 1  # Avoid division by zero
-            vertex_normals = vertex_normals / norms
-
-            # Store in mesh (note: trimesh will override this with smoothed normals)
-            # So we need to mark it in metadata
+            # Faceted: per-vertex mean of adjacent face normals -- vectorized, no
+            # Python loop. Prefer trimesh's helper; fall back to a numpy scatter.
+            faces = np.asarray(result_mesh.faces)
+            try:
+                vertex_normals = np.asarray(
+                    tm.geometry.mean_vertex_normals(
+                        len(result_mesh.vertices), faces, face_normals),
+                    dtype=np.float64)
+            except Exception:
+                vn = np.zeros((len(result_mesh.vertices), 3), dtype=np.float64)
+                np.add.at(vn, faces.ravel(), np.repeat(face_normals, 3, axis=0))
+                norms = np.linalg.norm(vn, axis=1, keepdims=True)
+                norms[norms == 0] = 1.0
+                vertex_normals = vn / norms
             result_mesh.metadata['normals_smoothed'] = False
-
-            # Store normals as vertex attributes for visualization
-            result_mesh.vertex_attributes['normal_x'] = vertex_normals[:, 0]
-            result_mesh.vertex_attributes['normal_y'] = vertex_normals[:, 1]
-            result_mesh.vertex_attributes['normal_z'] = vertex_normals[:, 2]
-            result_mesh.vertex_attributes['normal_magnitude'] = np.linalg.norm(vertex_normals, axis=1)
-
-            log.info("Computed faceted (non-smooth) normals")
+            log.info("Computed faceted (mean) vertex normals")
         else:
-            # Trimesh automatically computes smooth vertex normals
-            # Just access them to ensure they're computed
-            vertex_normals = result_mesh.vertex_normals
+            # Smooth: trimesh's angle-weighted vertex normals (also vectorized).
+            vertex_normals = np.asarray(result_mesh.vertex_normals, dtype=np.float64)
             result_mesh.metadata['normals_smoothed'] = True
-
-            # Store normals as vertex attributes for visualization
-            result_mesh.vertex_attributes['normal_x'] = vertex_normals[:, 0]
-            result_mesh.vertex_attributes['normal_y'] = vertex_normals[:, 1]
-            result_mesh.vertex_attributes['normal_z'] = vertex_normals[:, 2]
-            result_mesh.vertex_attributes['normal_magnitude'] = np.linalg.norm(vertex_normals, axis=1)
-
             log.info("Computed smooth vertex normals")
+
+        # Store normals as vertex attributes for visualization
+        result_mesh.vertex_attributes['normal_x'] = vertex_normals[:, 0]
+        result_mesh.vertex_attributes['normal_y'] = vertex_normals[:, 1]
+        result_mesh.vertex_attributes['normal_z'] = vertex_normals[:, 2]
+        result_mesh.vertex_attributes['normal_magnitude'] = np.linalg.norm(vertex_normals, axis=1)
 
         return io.NodeOutput(result_mesh)
 

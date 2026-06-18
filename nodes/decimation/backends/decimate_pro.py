@@ -57,7 +57,7 @@ class DecimateProNode(io.ComfyNode):
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
                 io.Float.Input("target_reduction", default=0.5, min=0.01, max=0.99, step=0.01, tooltip="Fraction of faces to REMOVE. 0.5 = reduce to ~50%% of original faces, 0.9 = reduce to ~10%% of original."),
-                io.Float.Input("feature_angle", default=15.0, min=0.0, max=180.0, step=1.0, tooltip="Feature angle threshold (degrees). Edges with dihedral angle above this are preserved."),
+                io.Float.Input("feature_angle", default=15.0, min=0.0, max=180.0, step=0.1, tooltip="Feature angle threshold (degrees). Edges with dihedral angle above this are preserved."),
                 io.Combo.Input("preserve_topology", options=["true", "false"], default="true", tooltip="Preserve mesh topology (genus) during decimation."),
             ],
             outputs=[

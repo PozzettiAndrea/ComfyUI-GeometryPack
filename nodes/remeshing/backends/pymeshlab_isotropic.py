@@ -73,7 +73,7 @@ class RemeshPyMeshLabNode(io.ComfyNode):
                 io.Int.Input("target_vertices", default=0, min=0, max=20000000, step=100, tooltip="Target output vertex count (0 = off). Back-solves the edge length from the mesh area; overrides target_edge_length. Approximate."),
                 io.Int.Input("target_faces", default=0, min=0, max=40000000, step=100, tooltip="Target output face count (0 = off). Back-solves the edge length from the mesh area; overrides target_vertices and target_edge_length. Approximate."),
                 io.Int.Input("iterations", default=3, min=1, max=20, step=1, tooltip="Number of remeshing passes."),
-                io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=1.0, tooltip="Angle threshold (degrees) for feature/crease edge detection -- edges sharper than this are preserved. Lower = preserve more edges; 180 = none."),
+                io.Float.Input("feature_angle", default=30.0, min=0.0, max=180.0, step=0.1, tooltip="Angle threshold (degrees) for feature/crease edge detection -- edges sharper than this are preserved. Lower = preserve more edges; 180 = none."),
                 io.Combo.Input("adaptive", options=["true", "false"], default="false", tooltip="Use curvature-adaptive edge lengths."),
                 io.Combo.Input("reproject", options=["true", "false"], default="true", tooltip="Reproject vertices back onto the original surface after each iteration (Botsch back-projection). true = stay faithful to the input surface (recommended); false = pure tangential smoothing, which lets vertices drift off the surface."),
             ],

@@ -51,6 +51,30 @@ def has_fields(mesh):
     return has_vertex_attrs or has_face_attrs
 
 
+def with_normal_fields(mesh):
+    """Return a copy of the mesh with 'vertex_normals' (point) and 'face_normals'
+    (cell) attached as 3-component fields, so the viewer can colour by them and
+    pick the X/Y/Z channel. No-op for point clouds / on failure. Idempotent."""
+    try:
+        if is_point_cloud(mesh) or not hasattr(mesh, "faces"):
+            return mesh
+        m = mesh.copy()
+        va = m.vertex_attributes if m.vertex_attributes is not None else {}
+        fa = m.face_attributes if m.face_attributes is not None else {}
+        if "vertex_normals" not in va:
+            vn = np.asarray(m.vertex_normals)
+            if vn.shape == (len(m.vertices), 3):
+                m.vertex_attributes["vertex_normals"] = vn.astype(np.float32)
+        if "face_normals" not in fa:
+            fn = np.asarray(m.face_normals)
+            if fn.shape == (len(m.faces), 3):
+                m.face_attributes["face_normals"] = fn.astype(np.float32)
+        return m
+    except Exception as e:
+        log.warning("normal-field attach skipped: %s", e)
+        return mesh
+
+
 def get_texture_info(mesh):
     """Extract texture/visual information from a mesh."""
     has_visual = hasattr(mesh, 'visual') and mesh.visual is not None
@@ -112,6 +136,15 @@ class PreviewMeshDualNode(io.ComfyNode):
         log.info("Layout: %s, Mode: %s", layout, mode)
         log.info("Mesh 1: %s - %d vertices, %d faces", get_geometry_type(mesh_1), len(mesh_1.vertices), get_face_count(mesh_1))
         log.info("Mesh 2: %s - %d vertices, %d faces", get_geometry_type(mesh_2), len(mesh_2.vertices), get_face_count(mesh_2))
+
+        # Expose face + vertex normals as selectable fields ONLY when the mesh
+        # already carries fields (so it was going to export as VTP anyway). Forcing
+        # it for plain meshes flipped STL->VTP and broke loading, so don't.
+        if mode != "texture":
+            if has_fields(mesh_1):
+                mesh_1 = with_normal_fields(mesh_1)
+            if has_fields(mesh_2):
+                mesh_2 = with_normal_fields(mesh_2)
 
         # Check for field data
         mesh_1_has_fields = has_fields(mesh_1)

@@ -43,9 +43,10 @@ class TextureToGeometryNode(io.ComfyNode):
             is_output_node=True,
             inputs=[
                 io.Float.Input("height_scale", default=1.0, min=0.01, max=10.0, step=0.1, display_mode="number"),
-                io.Mask.Input("mask", optional=True),
-                io.Image.Input("depth_image", optional=True),
-                io.Mask.Input("field", tooltip="Optional field to store as vertex attribute on the mesh (e.g., face IDs, curvature)", optional=True),
+                io.MultiType.Input("depth", [io.Image, io.Mask],
+                    tooltip="The depth / height map. Each pixel becomes a vertex, displaced in Z by its value x height_scale. Accepts an IMAGE (RGB is averaged to grayscale) OR a MASK (single channel)."),
+                io.MultiType.Input("field", [io.Image, io.Mask], optional=True,
+                    tooltip="Optional per-pixel value sampled at each vertex and stored as a named vertex attribute (field_name). Does NOT affect geometry -- e.g. a face-ID / segmentation / curvature map carried onto the mesh. IMAGE or MASK."),
                 io.String.Input("field_name", default="field", tooltip="Name for the vertex attribute", optional=True),
                 io.DynamicCombo.Input("backend", tooltip="Reconstruction backend: grid (fast), poisson (smooth), delaunay", options=[
                     io.DynamicCombo.Option("grid", [
@@ -71,7 +72,7 @@ class TextureToGeometryNode(io.ComfyNode):
 
     @classmethod
     def execute(cls, height_scale,
-                           mask=None, depth_image=None,
+                           depth=None,
                            field=None, field_name="field",
                            backend=None, poisson_depth=8,
                            invert_height="false",
@@ -93,9 +94,8 @@ class TextureToGeometryNode(io.ComfyNode):
         Returns:
             tuple: (mesh, info_string)
         """
-        # Validate that at least one input is provided
-        if mask is None and depth_image is None:
-            raise ValueError("Either 'mask' or 'depth_image' must be provided")
+        if depth is None:
+            raise ValueError("'depth' input is required (an IMAGE or a MASK)")
 
         # Extract DynamicCombo values
         if backend is None:
@@ -106,30 +106,25 @@ class TextureToGeometryNode(io.ComfyNode):
 
         log.info("Converting to geometry using backend: %s", selected_backend)
 
-        # Use depth_image if provided, otherwise use mask
-        if depth_image is not None:
-            log.info("Using depth_image input (averaging RGB channels)")
-            img_arr = _to_numpy(depth_image)
-            if img_arr.ndim == 4:
-                img_arr = img_arr[0]
-
-            # Average RGB channels to create grayscale
-            if len(img_arr.shape) == 3 and img_arr.shape[2] >= 3:
-                heightmap = np.mean(img_arr[:, :, :3], axis=2)
-            elif len(img_arr.shape) == 3 and img_arr.shape[2] == 1:
-                heightmap = img_arr[:, :, 0]
-            else:
-                heightmap = img_arr
+        # The 'depth' input may be an IMAGE (B,H,W,C) or a MASK (B,H,W) -> grayscale heightmap.
+        arr = _to_numpy(depth)
+        if arr.ndim == 4:                       # IMAGE batch (B,H,W,C)
+            img = arr[0]
+            heightmap = np.mean(img[:, :, :3], axis=2) if img.shape[2] >= 3 else img[:, :, 0]
+            log.info("depth: IMAGE input (RGB averaged to grayscale)")
+        elif arr.ndim == 3:                     # could be MASK batch (B,H,W) or single image (H,W,C)
+            if arr.shape[2] in (3, 4):          # (H,W,C) RGB(A) image
+                heightmap = np.mean(arr[:, :, :3], axis=2)
+            elif arr.shape[2] == 1:             # (H,W,1)
+                heightmap = arr[:, :, 0]
+            else:                                # (B,H,W) mask -> first
+                heightmap = arr[0]
+            log.info("depth: 3D input -> heightmap %s", heightmap.shape)
+        elif arr.ndim == 2:                     # (H,W)
+            heightmap = arr
+            log.info("depth: 2D input")
         else:
-            log.info("Using mask input")
-            # Extract mask from ComfyUI tensor format (B, H, W)
-            heightmap = _to_numpy(mask)
-            if heightmap.ndim == 3:
-                heightmap = heightmap[0]
-
-            # Ensure 2D array (masks are single-channel)
-            if len(heightmap.shape) > 2:
-                heightmap = heightmap[:, :, 0] if heightmap.shape[2] == 1 else np.mean(heightmap, axis=2)
+            raise ValueError(f"Unexpected 'depth' shape {arr.shape}; expected IMAGE or MASK")
 
         # Use native resolution
         height, width = heightmap.shape
@@ -265,16 +260,19 @@ Output Mesh:
 
         mesh = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
 
-        # Add field as vertex attribute if provided
+        # Add field as vertex attribute if provided (IMAGE or MASK -> (H,W) scalar)
         if field is not None:
             field_arr = _to_numpy(field)
+            if field_arr.ndim == 4:                 # IMAGE (B,H,W,C)
+                field_arr = field_arr[0]
             if field_arr.ndim == 3:
-                field_arr = field_arr[0]
-            elif field_arr.ndim == 4:
-                field_arr = field_arr[0]
-
-            # Handle different shapes
-            if len(field_arr.shape) > 2:
+                if field_arr.shape[2] in (3, 4):    # (H,W,C) -> grayscale
+                    field_arr = np.mean(field_arr[:, :, :3], axis=2)
+                elif field_arr.shape[2] == 1:
+                    field_arr = field_arr[:, :, 0]
+                else:                                # (B,H,W) mask
+                    field_arr = field_arr[0]
+            if field_arr.ndim > 2:
                 field_arr = field_arr.squeeze()
 
             # Check resolution matches

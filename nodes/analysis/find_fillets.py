@@ -1,28 +1,27 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
-"""Find fillet / rounded-edge regions on a CAD mesh.
+"""Find fillet / rounded-edge regions via the DeFillet method (Jiang et al.,
+SIGGRAPH 2025) -- reimplemented clean-room from the paper.
 
-A fillet is the surface swept by a ball of fixed radius r rolling along an edge, so
-every point on it has the SAME small rolling-ball radius and is DEVELOPABLE (one
-principal curvature ~1/r across the round, the other ~0 along it). We detect exactly
-that signature from the principal curvatures:
+Key idea: a fillet is swept by a rolling ball, so its surface samples all "look at"
+a shared 1D trajectory of ball centers. In the VORONOI diagram of the surface
+samples, Voronoi vertices CONCENTRATE (high density) along that trajectory and are
+robust rolling-ball-center candidates (equidistant to 4 samples -> a robust radius,
+not a noisy curvature). Pipeline:
 
-  - developable: |k_min| / |k_max| < developable_ratio   (cylindrical/conical, NOT a
-    sphere/blob where the ratio ~1, and NOT a saddle)
-  - small radius: min_radius < r = 1/|k_max| < max_radius (a flat face has r huge ->
-    rejected; a big cylinder has r large -> rejected)
-  - locally-constant radius across the strip (low relative spread of r)
+  1. samples = triangle centroids (subsampled for scale), normalized to a unit sphere.
+  2. 3D Voronoi via GPU Delaunay (pygDel3D) -> Voronoi vertices = tet circumcenters,
+     each with a rolling-ball radius r = circumradius.
+  3. density rho(v) of Voronoi vertices (mean-shift estimate, paper eq. 4).
+  4. RTT: each sample's candidate centers are the circumcenters of its INCIDENT
+     Delaunay tets (the exact dual -- |sample - center| = r by construction, so no
+     epsilon shell needed); pick the max-density one -> the sample's fillet radius.
+  5. fillet radius variation rate R (eq. 6): a fillet has near-CONSTANT radius -> R~0.
+  6. threshold (1-R) + connected strips -> fillet regions, transferred to all faces.
 
-then connect the qualifying faces into fillet STRIPS and report each strip's radius.
-(This is the curvature/rolling-ball signature used by DeFillet, Jiang et al. SIGGRAPH
-2025 -- their full method also uses a Voronoi/medial-axis radius estimate. Note: cleanly
-separating a true small CYLINDER from a fillet is genuinely ambiguous from geometry alone
--- DeFillet leaves that to semantics too -- so a small isolated cylinder may read as a
-fillet; the radius cap and the 'bounded by two larger patches' shape help but aren't
-perfect.)
-
-Outputs vertex fields: fillet (1 on fillets), fillet_radius (estimated r), fillet_id."""
+Requires the `pygdel3d` package (GPU Delaunay, BSD-3). Outputs vertex fields
+fillet / fillet_radius / fillet_id."""
 
 import logging
 
@@ -33,19 +32,74 @@ from comfy_api.latest import io
 log = logging.getLogger("geometrypack")
 
 
-def _local_edge_length(mesh, n):
-    ev = np.asarray(mesh.edges_unique)
-    el = np.asarray(mesh.edges_unique_length, dtype=np.float64)
-    loc = np.zeros(n); cnt = np.zeros(n)
-    np.add.at(loc, ev[:, 0], el); np.add.at(loc, ev[:, 1], el)
-    np.add.at(cnt, ev[:, 0], 1.0); np.add.at(cnt, ev[:, 1], 1.0)
-    loc = loc / np.maximum(cnt, 1.0)
-    loc[loc <= 0] = float(np.mean(el)) if len(el) else 1.0
-    return loc, ev
+def _defillet(C, F, adj, num_samples, density_k, density_sigma, variation_thresh, rng_seed=0):
+    """Core DeFillet detection. C = per-face centroids (M,3), F faces, adj face-adjacency.
+    Returns per-face fillet bool + per-face fillet radius (nan where not a fillet)."""
+    import pygdel3d
+    from scipy.spatial import cKDTree
+
+    M = len(C)
+    # normalize samples to a unit sphere (the paper normalizes; makes sigma/scale stable)
+    center = 0.5 * (C.max(0) + C.min(0))
+    scale = float(np.linalg.norm(C - center, axis=1).max()) + 1e-12
+    Cn = (C - center) / scale
+
+    # subsample for tractable exact Voronoi
+    if M > num_samples:
+        sidx = np.sort(np.random.default_rng(rng_seed).choice(M, num_samples, replace=False))
+    else:
+        sidx = np.arange(M)
+    S = np.ascontiguousarray(Cn[sidx])
+    ns = len(S)
+
+    # --- Voronoi via GPU Delaunay ---
+    vv, tets, rvor = pygdel3d.voronoi_vertices(S)
+    fin = ~np.isnan(vv).any(1) & np.isfinite(rvor)
+    tets, vv, rvor = tets[fin], vv[fin], rvor[fin]
+
+    # --- density rho(v_i) of Voronoi vertices (mean-shift, eq. 4) ---
+    tree_vv = cKDTree(vv)
+    k = min(density_k + 1, len(vv))
+    dist, _ = tree_vv.query(vv, k=k, workers=-1)
+    d = dist[:, 1:]                                  # drop self
+    sig2 = 2.0 * (density_sigma ** 2)
+    w = np.exp(-(d ** 2) / sig2)
+    rho = w.sum(1) / ((d * w).sum(1) + 1e-12)
+
+    # --- RTT: per sample -> max-density incident circumcenter -> fillet radius ---
+    vert = tets.ravel()
+    rho_rep = np.repeat(rho, 4)
+    r_rep = np.repeat(rvor, 4)
+    best = np.full(ns, -np.inf)
+    np.maximum.at(best, vert, rho_rep)
+    rj = np.full(ns, np.nan)
+    is_best = rho_rep >= best[vert] - 1e-12
+    rj[vert[is_best]] = r_rep[is_best]              # radius of the densest incident center
+
+    # --- fillet radius variation rate R(s_i) over nearest sample neighbors (eq. 6) ---
+    tree_s = cKDTree(S)
+    kk = min(4, ns)
+    nd, ni = tree_s.query(S, k=kk, workers=-1)
+    nb = ni[:, 1:kk]                                  # (ns, kk-1) neighbor indices
+    dnb = nd[:, 1:kk]
+    ri = rj[:, None]
+    rb = rj[nb]
+    valid = np.isfinite(ri) & np.isfinite(rb) & (dnb > 1e-9)
+    ratio = np.where(valid, np.abs(ri - rb) / np.where(dnb > 1e-9, dnb, 1.0), 0.0)
+    cnt = valid.sum(1)
+    R = np.where(cnt > 0, ratio.sum(1) / np.maximum(cnt, 1), np.inf)
+    R = np.minimum(1.0, R)
+    fillet_sample = np.isfinite(rj) & (cnt > 0) & (R < float(variation_thresh))
+
+    # --- transfer per-sample result to ALL faces (nearest sample) ---
+    _, nearest = tree_s.query(Cn, k=1, workers=-1)
+    face_fillet = fillet_sample[nearest]
+    face_radius = np.where(face_fillet, rj[nearest] * scale, np.nan)   # de-normalize radius
+    return face_fillet, face_radius
 
 
 class FindFilletsNode(io.ComfyNode):
-    """Detect fillet / rounded-edge strips (developable, constant small radius)."""
+    """Detect fillet / rounded-edge strips via the DeFillet Voronoi rolling-ball method."""
 
     @classmethod
     def define_schema(cls):
@@ -54,36 +108,32 @@ class FindFilletsNode(io.ComfyNode):
             display_name="Find Fillets",
             category="geompack/analysis",
             description=(
-                "Detect FILLETS / rounded edges: developable strips of locally-constant small "
-                "radius (the rolling-ball signature). Uses principal curvatures -- a fillet has "
-                "one curvature ~1/r (across the round) and the other ~0 (along it), with r small "
-                "and consistent. Outputs vertex fields fillet (1 on fillets), fillet_radius "
-                "(estimated radius), fillet_id (strip). Caveat: a true small cylinder can read as "
-                "a fillet -- separating them is semantically ambiguous from geometry alone."
+                "Detect FILLETS / rounded edges with the DeFillet method (Jiang et al., SIGGRAPH "
+                "2025): the Voronoi diagram of surface samples concentrates Voronoi vertices along "
+                "each fillet's rolling-ball-center trajectory; a sample is a fillet point when its "
+                "rolling-ball radius (from the densest incident Voronoi vertex) is near-CONSTANT "
+                "across the strip. More robust than curvature (uses global Voronoi structure, not "
+                "noisy 2nd derivatives). Requires the pygdel3d GPU-Delaunay package. Outputs vertex "
+                "fields fillet / fillet_radius / fillet_id."
             ),
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
-                io.Int.Input("radius", default=5, min=1, max=12, step=1, tooltip=(
-                    "k-ring neighborhood for the libigl quadric principal-curvature fit. Set near "
-                    "the fillet width in edges. Larger = smoother/robust, blurs tiny fillets.")),
-                io.Float.Input("max_radius_frac", default=0.02, min=0.002, max=0.5, step=0.002, display_mode="number", tooltip=(
-                    "Max fillet radius as a FRACTION of the model's bounding-box diagonal -- the key "
-                    "knob that separates fillets from the body. Surfaces whose radius of curvature "
-                    "exceeds this are too big to be a fillet (flats, the main cylinder/barrel) and "
-                    "are rejected; only tighter rounds (hole rims, edge rounds) survive. LOWER = "
-                    "only tighter rounds. ~0.015-0.025 typical; 0.02 default.")),
-                io.Float.Input("min_radius_frac", default=0.002, min=0.0001, max=0.2, step=0.0005, display_mode="number", tooltip=(
-                    "Min fillet radius (fraction of bbox diagonal) -- rejects sub-this curvature "
-                    "noise / sharp creases. Default 0.002.")),
-                io.Float.Input("developable_ratio", default=0.4, min=0.02, max=1.0, step=0.02, tooltip=(
-                    "A point counts as developable (cylindrical/conical = fillet-like) when "
-                    "|k_min|/|k_max| < this. SMALLER = stricter (only near-perfect cylinders, "
-                    "rejects spheres/blobs harder). ~0.3-0.5 typical.")),
-                io.Float.Input("radius_consistency", default=0.5, min=0.05, max=5.0, step=0.05, tooltip=(
-                    "Reject points whose rolling-ball radius differs too much from the local median "
-                    "(relative): keep if |r - r_med|/r_med < this. SMALLER = require very constant "
-                    "radius (true fillets). Default 0.5. Set high to disable.")),
+                io.Int.Input("num_samples", default=60000, min=2000, max=400000, step=1000, tooltip=(
+                    "Surface samples (triangle centroids) used for the exact Voronoi. Subsampled "
+                    "for tractability; DeFillet is resolution-robust so 40-100k is plenty even for "
+                    "1M-face meshes. Higher = sharper but slower Voronoi.")),
+                io.Float.Input("variation_thresh", default=0.15, min=0.005, max=1.0, step=0.005, display_mode="number", tooltip=(
+                    "A sample is a fillet when its rolling-ball-radius VARIATION RATE (change in r "
+                    "per unit surface distance to its neighbors) is below this. SMALLER = stricter "
+                    "constant-radius requirement (only clean fillets). ~0.1-0.2 typical.")),
+                io.Int.Input("density_k", default=16, min=4, max=128, step=1, tooltip=(
+                    "k nearest Voronoi vertices used to estimate vertex DENSITY (paper eq. 4). "
+                    "Higher = smoother density. ~16 default.")),
+                io.Float.Input("density_sigma", default=0.03, min=0.002, max=0.5, step=0.002, display_mode="number", tooltip=(
+                    "Bandwidth of the Voronoi-vertex density kernel, in UNIT-SPHERE-normalized "
+                    "units (the mesh is normalized to a unit sphere first). SMALLER = more local "
+                    "density. ~0.02-0.05 typical.")),
                 io.Int.Input("min_strip_faces", default=30, min=1, max=1000000, step=1, tooltip=(
                     "Drop fillet strips with fewer faces than this (de-speckle).")),
             ],
@@ -94,11 +144,16 @@ class FindFilletsNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, radius=5, max_radius_frac=0.06, min_radius_frac=0.002,
-                developable_ratio=0.4, radius_consistency=0.5, min_strip_faces=30):
-        import igl
+    def execute(cls, trimesh, num_samples=60000, variation_thresh=0.15, density_k=16,
+                density_sigma=0.03, min_strip_faces=30):
         import scipy.sparse as sp
         from scipy.sparse.csgraph import connected_components
+        try:
+            import pygdel3d  # noqa: F401
+        except ImportError:
+            raise ImportError(
+                "Find Fillets (DeFillet) needs the 'pygdel3d' package (GPU Delaunay). "
+                "Install it into this env: pip install <path-to>/pygDel3D")
 
         mesh = trimesh.copy()
         try:
@@ -109,66 +164,53 @@ class FindFilletsNode(io.ComfyNode):
 
         V = np.ascontiguousarray(mesh.vertices, dtype=np.float64)
         F = np.ascontiguousarray(mesh.faces, dtype=np.int64)
-        n = len(V)
-        diag = float(np.linalg.norm(V.max(0) - V.min(0)))
-        rmax = max_radius_frac * diag
-        rmin = min_radius_frac * diag
+        C = np.ascontiguousarray(mesh.triangles_center, dtype=np.float64)
+        adj = np.asarray(mesh.face_adjacency)
+        if len(adj) == 0:
+            raise ValueError("Mesh has no face adjacency (disconnected or degenerate).")
 
-        out = igl.principal_curvature(V, F, int(max(1, radius)))
-        k1 = np.asarray(out[2], dtype=np.float64)
-        k2 = np.asarray(out[3], dtype=np.float64)
-        kmax = np.maximum(np.abs(k1), np.abs(k2))
-        kmin = np.minimum(np.abs(k1), np.abs(k2))
-        r = 1.0 / np.maximum(kmax, 1e-12)                  # rolling-ball radius estimate
-        ratio = kmin / np.maximum(kmax, 1e-12)
+        face_fillet, face_radius = _defillet(
+            C, F, adj, int(num_samples), int(density_k), float(density_sigma),
+            float(variation_thresh))
 
-        cand = (r < rmax) & (r > rmin) & (ratio < float(developable_ratio))
-
-        # local-radius consistency: compare r to its neighborhood median (1-ring smoothed)
-        loc, ev = _local_edge_length(mesh, n)
-        rmed = r.copy()
-        for _ in range(2):                                 # couple of median-ish smoothing passes
-            acc = np.zeros(n); cnt = np.zeros(n)
-            np.add.at(acc, ev[:, 0], r[ev[:, 1]]); np.add.at(acc, ev[:, 1], r[ev[:, 0]])
-            np.add.at(cnt, ev[:, 0], 1.0); np.add.at(cnt, ev[:, 1], 1.0)
-            rmed = acc / np.maximum(cnt, 1.0)
-        consistent = np.abs(r - rmed) / np.maximum(rmed, 1e-12) < float(radius_consistency)
-        cand = cand & consistent
-
-        # connect candidate vertices into strips (subgraph of candidate-candidate edges)
-        both = cand[ev[:, 0]] & cand[ev[:, 1]]
-        e = ev[both]
-        rows = np.concatenate([e[:, 0], e[:, 1]]); cols = np.concatenate([e[:, 1], e[:, 0]])
-        A = sp.coo_matrix((np.ones(len(rows)), (rows, cols)), shape=(n, n)).tocsr()
+        # connected fillet strips on the face graph + despeckle
+        both = face_fillet[adj[:, 0]] & face_fillet[adj[:, 1]]
+        e = adj[both]
+        m = len(F)
+        A = sp.coo_matrix((np.ones(len(e) * 2),
+                           (np.concatenate([e[:, 0], e[:, 1]]), np.concatenate([e[:, 1], e[:, 0]]))),
+                          shape=(m, m)).tocsr()
         ncomp, comp = connected_components(A, directed=False)
-        comp_size = np.bincount(comp)
-        keep = cand & (comp_size[comp] >= int(min_strip_faces))
+        csz = np.bincount(comp, minlength=ncomp)
+        keep = face_fillet & (csz[comp] >= int(min_strip_faces))
 
-        fillet_id = np.zeros(n, dtype=np.int64)
+        fid = np.zeros(m, dtype=np.int64)
         uids = np.unique(comp[keep])
         remap = {c: i + 1 for i, c in enumerate(uids)}
-        for v in np.where(keep)[0]:
-            fillet_id[v] = remap[comp[v]]
+        for f in np.where(keep)[0]:
+            fid[f] = remap[comp[f]]
         n_strips = len(uids)
 
-        mesh.vertex_attributes["fillet"] = keep.astype(np.float32)
-        mesh.vertex_attributes["fillet_radius"] = np.where(keep, r, 0.0).astype(np.float32)
-        mesh.vertex_attributes["fillet_id"] = fillet_id.astype(np.float32)
-        mesh.vertex_attributes["kappa_max"] = kmax.astype(np.float32)
+        # face fields -> also splat to vertices for viewers that read vertex fields
+        mesh.face_attributes["fillet"] = keep.astype(np.int64)
+        mesh.face_attributes["fillet_id"] = fid
+        mesh.face_attributes["fillet_radius"] = np.where(keep, face_radius, 0.0).astype(np.float32)
+        vfill = np.zeros(len(V), dtype=np.float32); vcnt = np.zeros(len(V))
+        for k in range(3):
+            np.add.at(vfill, F[:, k], keep.astype(np.float32)); np.add.at(vcnt, F[:, k], 1.0)
+        mesh.vertex_attributes["fillet"] = (vfill / np.maximum(vcnt, 1.0) >= 0.5).astype(np.float32)
 
-        radii = [float(np.median(r[fillet_id == i + 1])) for i in range(n_strips)]
+        rr = face_radius[keep]
         info = (
-            f"Find Fillets:\n\n"
-            f"Vertices: {n:,} | fillet verts: {int(keep.sum()):,} ({100*keep.mean():.1f}%)\n"
+            f"Find Fillets (DeFillet / Voronoi rolling-ball):\n\n"
+            f"Faces: {m:,} | fillet faces: {int(keep.sum()):,} ({100*keep.mean():.1f}%)\n"
             f"fillet strips: {n_strips}\n"
-            f"bbox diag {diag:.3f} | radius window [{rmin:.4f}, {rmax:.4f}] | developable<{developable_ratio}\n"
+            f"samples: {min(num_samples, m):,} | variation_thresh: {variation_thresh}\n"
         )
-        if radii:
-            rr = np.array(radii)
-            info += (f"strip radii (bbox-frac): min {rr.min()/diag:.4f}, median {np.median(rr)/diag:.4f}, "
-                     f"max {rr.max()/diag:.4f}\n")
-        info += "\nFields: fillet (1 on fillets), fillet_radius, fillet_id, kappa_max"
-        log.info("Find Fillets: %d strips, %d fillet verts", n_strips, int(keep.sum()))
+        if len(rr):
+            info += f"fillet radius: min {np.nanmin(rr):.4f}, median {np.nanmedian(rr):.4f}, max {np.nanmax(rr):.4f}\n"
+        info += "\nFields: fillet, fillet_id, fillet_radius (per-face); fillet (per-vertex)"
+        log.info("Find Fillets (DeFillet): %d strips, %d fillet faces", n_strips, int(keep.sum()))
         return io.NodeOutput(mesh, info, ui={"text": [info]})
 
 
