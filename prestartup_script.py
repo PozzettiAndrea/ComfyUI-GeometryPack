@@ -32,19 +32,6 @@ for viewer in viewers:
     except Exception as e:
         log.warning("Failed to copy viewer %s: %s", viewer, e)
 
-# Copy dynamic widgets
-try:
-    from comfy_dynamic_widgets import get_js_path
-    import shutil
-    src = Path(get_js_path())
-    if src.exists():
-        dst = SCRIPT_DIR / "web" / "js" / "dynamic_widgets.js"
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        if not dst.exists() or src.stat().st_mtime > dst.stat().st_mtime:
-            shutil.copy2(src, dst)
-except ImportError:
-    pass
-
 # Copy GeometryPack-local frontend JS (tracked source -> served web/js, since web/ is generated)
 copy_files(SCRIPT_DIR / "web_src", SCRIPT_DIR / "web" / "js", "*.js")
 
