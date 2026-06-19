@@ -39,14 +39,27 @@ class LoadMesh(io.ComfyNode):
     @classmethod
     def define_schema(cls):
         mesh_files = cls.get_mesh_files()
+        placeholder = "No mesh files found in input/3d or input folders"
         if not mesh_files:
-            mesh_files = ["No mesh files found in input/3d or input folders"]
+            mesh_files = [placeholder]
         return io.Schema(
             node_id="GeomPackLoadMesh",
             display_name="Load Mesh",
             category="geompack/io",
             inputs=[
-                io.Combo.Input("file_path", options=mesh_files),
+                io.Combo.Input("file_path", options=mesh_files,
+                               extra_dict={
+                                   # comfy-env: re-scan input/3d (recursively) and
+                                   # the input root live so newly uploaded meshes
+                                   # appear in the dropdown without a restart.
+                                   "comfy_env_dynamic_dir": "3d",
+                                   "comfy_env_sources": [
+                                       {"dir": "3d", "recursive": True, "rel_to_input": True},
+                                       {"dir": "", "recursive": False, "rel_to_input": False},
+                                   ],
+                                   "comfy_env_exts": cls.SUPPORTED_EXTENSIONS,
+                                   "comfy_env_placeholder": placeholder,
+                               }),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="mesh"),
