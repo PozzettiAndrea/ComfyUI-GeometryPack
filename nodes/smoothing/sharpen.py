@@ -51,6 +51,7 @@ class SharpenMeshNode(io.ComfyNode):
         "unsharp_mask":   "GeomPackSharpen_UnsharpMask",
         "libigl_unsharp": "GeomPackSharpen_LibiglUnsharp",
         "l0_minimize":    "GeomPackSharpen_L0Minimize",
+        "l0_faithful":    "GeomPackSharpen_L0Faithful",
         "guided_normal":  "GeomPackSharpen_GuidedNormal",
         "fast_effective":  "GeomPackSharpen_FastEffective",
         "non_iterative":  "GeomPackSharpen_NonIterative",
@@ -160,6 +161,81 @@ class SharpenMeshNode(io.ComfyNode):
                             "edge in Python and is impractical beyond ~50k faces). Results can "
                             "differ slightly from the CPU path. Default true."
                         )),
+                    ]),
+                    # l0_faithful = the REAL global He & Schaefer 2013 L0 denoiser (vs 'l0_minimize'
+                    # which is a local normal-snap). WHAT L0 MEANS: at every edge measure how much
+                    # the surface BENDS; a real CAD shape is piecewise-flat (zero bend almost
+                    # everywhere, a few sharp creases) = a SPARSE set of bends. L0 = "count the
+                    # nonzero bends" -> minimizing it forces flat regions truly flat while the few
+                    # real creases stay sharp (where L2 smoothing like Taubin rounds them off).
+                    io.DynamicCombo.Option("l0_faithful", [
+                        io.Float.Input("gamma_factor", default=0.2, min=0.0001, max=30.0, step=0.01,
+                                       display_mode="number", tooltip=(
+                            "THE main knob -- sets lambda, the PRICE the optimizer pays to KEEP each "
+                            "crease. It minimizes  |stay near the input|^2  +  lambda * (number of "
+                            "bent edges).\n"
+                            "  HIGH gamma -> bends are expensive -> keep very few -> AGGRESSIVE "
+                            "flattening; only the strongest creases survive (clean CAD faces, but "
+                            "shallow features get erased).\n"
+                            "  LOW gamma -> bends are cheap -> keep many -> GENTLE (preserves subtle "
+                            "detail AND residual noise).\n"
+                            "It is the crease-vs-noise threshold: an edge's bend is kept only when "
+                            "|bend|^2 >= lambda/beta. lambda = gamma_factor * avg_edge^2 * "
+                            "avg_dihedral, so it is SCALE-INVARIANT (avg_edge^2 -> identical result "
+                            "on a 1mm or 1m part) and noise-adaptive (avg_dihedral). 0.2 = reference "
+                            "default (validated: faces -> <1deg off-axis, a 90deg crease stays "
+                            ">88deg). 0.02 = the paper's milder value. TUNE THIS: up for cleaner "
+                            "faces, down to keep subtle features.\n"
+                            "REASONABLE RANGE: 0.02 - 0.5. 0.02 = gentle (keeps fine detail/some "
+                            "noise), 0.1 - 0.3 = typical CAD cleanup, 0.2 = default, >0.5 = "
+                            "aggressive (erases shallow features), >1 = very flat (rarely useful).")),
+                        io.Float.Input("beta_mu", default=1.414, min=1.05, max=3.0, step=0.01, tooltip=(
+                            "Controls the NUMBER of iterations (quality vs speed, NOT 'how sharp').\n"
+                            "WHY beta exists: 'count the bends' (L0) can't be optimized directly (a "
+                            "bend is on/off, no gradient), so the method SPLITS it -- a helper "
+                            "variable decides each bend (keep it, or zero it) and a penalty of "
+                            "strength beta forces the surface to agree. beta is ramped up like "
+                            "cooling metal: starts at 1e-3 (loose, smooths) and is multiplied by "
+                            "beta_mu EACH iteration up to beta_max=1e3 (tight, decisions lock in). "
+                            "beta_mu = how fast you tighten, so SMALLER = more, finer steps = better "
+                            "feature preservation but slower.\n"
+                            "REASONABLE RANGE: 1.1 - 2.0. Sweet spot 1.2 - 1.5. Below ~1.1 = "
+                            "diminishing returns (lots of iters, marginal gain); above 2.0 = too "
+                            "coarse (decisions jump). iters ~= ln(1e6)/ln(beta_mu):\n"
+                            "  1.05 = ~283 (overkill)   1.10 = ~145 (very fine)\n"
+                            "  1.20 = ~76 (fine)        1.414 = ~40 (DEFAULT, balanced)\n"
+                            "  1.70 = ~26               2.0 = ~20 (fast/coarse)\n"
+                            "GPU path makes the extra iterations cheap.")),
+                        io.Float.Input("alpha_factor", default=0.1, min=0.0, max=2.0, step=0.01, tooltip=(
+                            "Anti-fold safety strap; rarely changed -- leave at 0.1 (0 disables).\n"
+                            "alpha weights a fairing term R = (p1 - p2 + p3 - p4) per edge that stops "
+                            "triangles flipping over / overshooting when a crease snaps into place. "
+                            "alpha0 = alpha_factor * avg_dihedral and HALVES every iteration: strong "
+                            "early (while vertices move a lot, keeps the solve stable) then fades to "
+                            "~0 so it doesn't blur the final result. Measured effect is small (it "
+                            "decays fast).\n"
+                            "REASONABLE RANGE: 0.0 - 0.3. 0.1 = default; raise toward 0.2-0.3 only "
+                            "if you see triangles folding/spiking at sharp creases; 0 = off.")),
+                        io.Float.Input("beta_max", default=1000.0, min=10.0, max=100000.0, step=10.0, tooltip=(
+                            "Solver stop condition -- iterate until beta reaches this (paper 1e3). "
+                            "beta ramps from 1e-3; by ~1e3 the keep/flatten decisions are fully "
+                            "committed, so raising it mostly just runs extra iterations that lock in "
+                            "residual detail (weak, LOGARITHMIC lever: 10x here only adds ~6-7 iters "
+                            "at default beta_mu -- use beta_mu to change iteration count instead).\n"
+                            "REASONABLE RANGE: 100 - 10000. 1000 = default; rarely worth changing.")),
+                        io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
+                            "Which solver runs the per-iteration system  (I + alpha*R^T R + "
+                            "beta*D^T D) p = p* + beta*D^T delta.\n"
+                            "  true = torch (CUDA if available, else CPU torch) with a warm-started "
+                            "block CONJUGATE-GRADIENT solve. CG (not a direct factorization) because "
+                            "that matrix changes EVERY iteration -- the bend operator D is rebuilt at "
+                            "the current vertices -- so there is nothing to reuse on either device; "
+                            "warm-starting from the previous iterate + the +I term make CG converge "
+                            "in a few steps. Scales to large meshes; float32 so results differ "
+                            "slightly. Falls back to CPU-direct if the GPU path errors.\n"
+                            "  false = exact scipy sparse-DIRECT solve (SuperLU, float64). Best for "
+                            "small/medium meshes; gets slow past ~100k vertices because the matrix "
+                            "is refactorised every iteration.")),
                     ]),
                     io.DynamicCombo.Option("guided_normal", [
                         io.Int.Input("normal_iterations", default=5, min=1, max=1000, step=1, tooltip=(

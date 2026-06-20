@@ -87,11 +87,72 @@ class RemeshNode(io.ComfyNode):
                         io.Combo.Input("aggressive_sat", options=["false", "true"], default="false", tooltip="SAT solver for a fully-integer, seamless result with fewest singularities (highest quality). Slowest."),
                         io.Int.Input("seed", default=0, min=0, max=2000000000, step=1, tooltip="Random seed for field initialization (reproducible results)."),
                     ]),
+                    # MMG surface remesher (mmgs). DEFAULT sizing is Hausdorff-DRIVEN (curvature-
+                    # adaptive): hausd sets a geometric error bound, hmin/hmax clamp it, hgrad
+                    # smooths the size field. hsiz overrides all that with a UNIFORM size. ar =
+                    # ridge/feature-edge preservation. (MMGS has no 'nosurf' option.)
                     io.DynamicCombo.Option("mmg_adaptive", [
-                        io.Float.Input("hausd", default=0.01, min=0.0001, max=10.0, step=0.001, display_mode="number", tooltip="Hausdorff distance: max deviation from original surface."),
-                        io.Float.Input("hmin", default=0.0, min=0.0, max=10.0, step=0.001, display_mode="number", tooltip="Minimum edge length. 0 = auto."),
-                        io.Float.Input("hmax", default=0.0, min=0.0, max=100.0, step=0.01, display_mode="number", tooltip="Maximum edge length. 0 = auto."),
-                        io.Float.Input("hgrad", default=1.3, min=1.0, max=5.0, step=0.1, display_mode="number", tooltip="Gradation: controls size change rate. 1.3 = smooth transitions."),
+                        io.Float.Input("hausd", default=0.01, min=0.0001, max=10.0, step=0.0001, display_mode="number", tooltip=(
+                            "Hausdorff distance -- THE adaptive driver: max geometric deviation of "
+                            "the remeshed surface from the original. To stay within hausd of a "
+                            "curved patch you need small triangles, so flats stay coarse and curves "
+                            "get fine -- that's the curvature-adaptivity. SMALL = hug surface (fine, "
+                            "more faces); LARGE = drift (coarse).\n"
+                            "ABSOLUTE world units (NOT normalised). MMG's CLI default is ~0.01 x "
+                            "bbox-diagonal (~4.0 on a 400-unit part), so the literal 0.01 here is "
+                            "~400x finer and explodes the face count. Set ~bbox_diag * 0.005-0.02.")),
+                        io.Float.Input("hmin", default=0.0, min=0.0, max=10.0, step=0.001, display_mode="number", tooltip=(
+                            "Minimum edge length CLAMP (world units): won't shrink below this even "
+                            "where curvature/hausd wants finer. 0 = auto. Caps face count on curves.")),
+                        io.Float.Input("hmax", default=0.0, min=0.0, max=100.0, step=0.01, display_mode="number", tooltip=(
+                            "Maximum edge length CLAMP (world units): won't grow beyond this even on "
+                            "big flats. 0 = auto. Forces a minimum density on flat faces.")),
+                        io.Float.Input("hgrad", default=1.3, min=1.0, max=5.0, step=0.1, display_mode="number", tooltip=(
+                            "Gradation -- max size RATIO between adjacent edges = how fast triangle "
+                            "size may change. 1.0 = near-uniform (many faces); 1.3 = smooth "
+                            "(default); 2-3 = abrupt jumps (fewer faces). Lower = smoother, more "
+                            "triangles.")),
+                        io.Float.Input("ar", default=-1.0, min=-1.0, max=180.0, step=1.0, display_mode="number", tooltip=(
+                            "RIDGE (feature-edge) detection angle, DEGREES. An edge is kept as a "
+                            "sharp ridge and PRESERVED when its dihedral exceeds this. LOWER = keep "
+                            "more features (30 = preserve shallow chamfers/creases); HIGHER = only "
+                            "very sharp survive. -1 = MMG default (~45 deg). For CAD use ~30-40 to "
+                            "protect creases. The feature control plain isotropic remesh lacks.")),
+                        io.Float.Input("hsiz", default=0.0, min=0.0, max=100.0, step=0.001, display_mode="number", tooltip=(
+                            "Constant edge size = UNIFORM mode. 0 = OFF (use adaptive hausd). Set >0 "
+                            "to OVERRIDE hmin/hmax/hausd-adaptivity and produce an even ISOTROPIC "
+                            "mesh of this edge length (world units) -- MMG as a feature-preserving "
+                            "isotropic remesher. Use for UNIFORM density (e.g. before L0). Absolute "
+                            "length; set relative to mesh scale.")),
+                        io.Combo.Input("optim", options=["false", "true"], default="false", tooltip=(
+                            "Optimization mode: improve triangle QUALITY of the existing mesh "
+                            "keeping sizes roughly as-is, few/no insertions -- gentle clean-up, not "
+                            "a re-size. Pair with noinsert to forbid adding points.")),
+                        io.Combo.Input("nreg", options=["false", "true"], default="false", tooltip=(
+                            "Normal regularization: smooth the per-vertex normals MMG curves new "
+                            "triangles onto -- reduces faceting on NOISY input (scan/Tripo/MC) at a "
+                            "slight cost to sharp transitions. Helps image-derived meshes; off for "
+                            "clean CAD.")),
+                        io.Combo.Input("anisosize", options=["false", "true"], default="false", tooltip=(
+                            "ANISOTROPIC sizing: long thin triangles aligned to curvature -- far "
+                            "fewer faces for the same fidelity on cylinders/developables. CAVEAT: "
+                            "needs a per-vertex TENSOR METRIC field this node does NOT supply; "
+                            "enabling alone will no-op or error. Leave OFF until a metric input is "
+                            "wired.")),
+                        io.Combo.Input("noinsert", options=["false", "true"], default="false", tooltip=(
+                            "Disable point INSERTION (no edge splits): only collapse/swap/move "
+                            "existing vertices, never add. Forbids increasing resolution. Pairs with "
+                            "optim.")),
+                        io.Combo.Input("noswap", options=["false", "true"], default="false", tooltip=(
+                            "Disable edge SWAP (flip). Off by default -- swaps Delaunay-ize and "
+                            "remove caps/large angles. Enable only to preserve input connectivity or "
+                            "debug; hurts quality.")),
+                        io.Combo.Input("nomove", options=["false", "true"], default="false", tooltip=(
+                            "Disable point RELOCATION (tangential smoothing). Off by default. Enable "
+                            "to keep vertices exactly in place (only insert/collapse/swap).")),
+                        io.Combo.Input("keep_ref", options=["false", "true"], default="false", tooltip=(
+                            "Keep edge REFERENCES (keepRef): preserve MMG's ridge/boundary tags on "
+                            "the output. Relevant for .sol/.mesh round-trips; harmless to leave off.")),
                     ]),
                     io.DynamicCombo.Option("geogram_smooth", [
                         io.Int.Input("nb_points", default=5000, min=0, max=1000000, step=100, tooltip="Target output vertices. 0 = same count as input."),

@@ -47,9 +47,35 @@ class SmoothMeshNode(io.ComfyNode):
                         "trimesh_*=lightweight alternatives"
                     ), options=[
                     io.DynamicCombo.Option("taubin", [
-                        io.Int.Input("iterations", default=5, min=1, max=200, step=1, tooltip="Number of smoothing passes. More = smoother but slower."),
-                        io.Float.Input("lambda_", default=0.5, min=0.01, max=1.0, step=0.01, tooltip="Smoothing strength per step. Higher = more aggressive smoothing per iteration."),
-                        io.Float.Input("mu", default=-0.53, min=-1.0, max=-0.01, step=0.01, tooltip="Inflation factor (negative). Counteracts shrinkage from lambda. Must satisfy |mu| > lambda for stability. Typical: -0.53 for lambda=0.5."),
+                        io.Int.Input("iterations", default=5, min=1, max=200, step=1, tooltip=(
+                            "Number of Taubin passes (PyMeshLab 'stepsmoothnum'). Each pass is internally TWO "
+                            "Laplacian steps: a positive-lambda SHRINK step then a negative-mu UN-SHRINK step, so "
+                            "one iteration is a full shrink-free smoothing cycle. More iterations = sharper "
+                            "frequency roll-off = high-frequency noise / tessellation artifacts are attenuated MORE "
+                            "COMPLETELY -- but it does NOT change WHICH feature scale is removed (lambda/mu set "
+                            "that). Think 'how thoroughly', not 'how large-scale'. Cost is linear; shape is "
+                            "preserved so over-iterating mostly wastes time rather than collapsing the model. "
+                            "Typical 5-30; noisy image-derived meshes 20-60. (CADFit uses 20.)")),
+                        io.Float.Input("lambda_", default=0.5, min=0.01, max=1.0, step=0.01, tooltip=(
+                            "Positive diffusion (smoothing) step size, 0<lambda<1. This is the size of the "
+                            "Laplacian step that pulls each vertex toward the average of its 1-ring neighbours. "
+                            "Larger lambda smooths more per pass AND lowers the filter cutoff, so it removes "
+                            "LARGER-scale features (not just fine noise); smaller lambda touches only the finest "
+                            "detail. So lambda picks the feature SCALE you attenuate, iterations pick how "
+                            "completely. 0.5 is the classic default. Pushing toward 1.0 is aggressive and, with "
+                            "too-small |mu|, can go unstable -- if you raise lambda, make mu more negative to "
+                            "keep it shrink-free (see mu). (CADFit / trimesh default: 0.5.)")),
+                        io.Float.Input("mu", default=-0.53, min=-1.0, max=-0.01, step=0.01, tooltip=(
+                            "Negative inflation (un-shrink) step. After the +lambda step shrinks the mesh, the -mu "
+                            "step pushes vertices back outward along the same Laplacian, cancelling Taubin's volume "
+                            "loss -- THIS is what makes Taubin shrink-free, unlike plain Laplacian smoothing which "
+                            "melts the model. Rule: |mu| must be >= lambda. The pair sets the passband frequency "
+                            "k_PB = 1/lambda + 1/mu (a small positive number): features below k_PB are kept, above "
+                            "it are smoothed. Standard recipe = mu just slightly more negative than -lambda "
+                            "(lambda=0.5 -> mu=-0.53 -> k_PB~=0.11). If |mu| ~= lambda it barely smooths and sits "
+                            "at the shrink-free boundary (k_PB~=0, what trimesh/CADFit do with mu=-0.50); if "
+                            "|mu| < lambda it is NOT shrink-free and the mesh inflates/diverges. Keep |mu| a hair "
+                            "above lambda whenever you change lambda.")),
                     ]),
                     io.DynamicCombo.Option("laplacian", [
                         io.Int.Input("iterations", default=5, min=1, max=200, step=1, tooltip="Number of smoothing passes. More = smoother but slower."),
@@ -61,9 +87,24 @@ class SmoothMeshNode(io.ComfyNode):
                         io.Float.Input("lambda_", default=0.5, min=0.01, max=1.0, step=0.01, tooltip="Smoothing strength per step. Higher = more aggressive smoothing per iteration."),
                     ]),
                     io.DynamicCombo.Option("trimesh_taubin", [
-                        io.Int.Input("iterations", default=5, min=1, max=200, step=1, tooltip="Number of smoothing passes. More = smoother but slower."),
-                        io.Float.Input("lambda_", default=0.5, min=0.01, max=1.0, step=0.01, tooltip="Smoothing strength per step. Higher = more aggressive smoothing per iteration."),
-                        io.Float.Input("mu", default=-0.53, min=-1.0, max=-0.01, step=0.01, tooltip="Inflation factor (negative). Counteracts shrinkage from lambda. Must satisfy |mu| > lambda for stability. Typical: -0.53 for lambda=0.5."),
+                        io.Int.Input("iterations", default=5, min=1, max=200, step=1, tooltip=(
+                            "Number of Taubin passes (pure-Python trimesh backend; uniform Laplacian). Each pass = "
+                            "a +lambda smooth step then a -mu un-shrink step (shrink-free). More iterations = "
+                            "high-frequency noise attenuated more completely, same feature scale (set by "
+                            "lambda/mu). This is the EXACT backend CADFit's preprocess uses, with iterations=20. "
+                            "Typical 5-30; noisy image-derived meshes 20-60.")),
+                        io.Float.Input("lambda_", default=0.5, min=0.01, max=1.0, step=0.01, tooltip=(
+                            "Positive diffusion (smoothing) step, 0<lambda<1 -- step toward the 1-ring average. "
+                            "Larger lambda = more smoothing per pass AND lower cutoff = removes larger features; "
+                            "smaller = only the finest detail. Picks the SCALE; iterations pick how completely. "
+                            "trimesh maps this to 'lamb'. CADFit/trimesh default: 0.5.")),
+                        io.Float.Input("mu", default=-0.53, min=-1.0, max=-0.01, step=0.01, tooltip=(
+                            "Negative un-shrink step; cancels the volume loss of the +lambda step (shrink-free). "
+                            "trimesh maps this to 'nu' with a sign flip: mu = -nu. Constraint (from trimesh): "
+                            "0 < 1/lambda - 1/nu < 0.1, i.e. keep |mu| >= lambda. Standard mu=-0.53 for "
+                            "lambda=0.5 (passband ~0.11). NOTE: trimesh's own default is nu=0.5 -> mu=-0.50, "
+                            "exactly the shrink-free boundary (passband 0) -- that's what CADFit runs. |mu| < "
+                            "lambda is NOT shrink-free and will inflate the mesh.")),
                     ]),
                 ]),
             ],

@@ -13,6 +13,7 @@ attributes and exports to VTP format to preserve field data for visualization.
 
 import logging
 
+import numpy as np
 import trimesh as trimesh_module
 import os
 import tempfile
@@ -176,7 +177,6 @@ class PreviewMeshVTKNode(io.ComfyNode):
 
         # Handle case where extents/bounds are None (can happen with certain mesh configurations)
         if extents is None or bounds is None:
-            import numpy as np
             vertices_arr = np.asarray(trimesh.vertices)
             if len(vertices_arr) > 0:
                 bounds = np.array([vertices_arr.min(axis=0), vertices_arr.max(axis=0)])
