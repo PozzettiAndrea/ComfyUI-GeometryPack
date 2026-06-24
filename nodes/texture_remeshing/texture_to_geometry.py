@@ -48,6 +48,12 @@ class TextureToGeometryNode(io.ComfyNode):
                 io.MultiType.Input("field", [io.Image, io.Mask], optional=True,
                     tooltip="Optional per-pixel value sampled at each vertex and stored as a named vertex attribute (field_name). Does NOT affect geometry -- e.g. a face-ID / segmentation / curvature map carried onto the mesh. IMAGE or MASK."),
                 io.String.Input("field_name", default="field", tooltip="Name for the vertex attribute", optional=True),
+                io.Mask.Input("mask", optional=True,
+                    tooltip="Optional MASK selecting which pixels to use: only pixels where the "
+                            "mask is > 0.5 become mesh geometry; masked-out (0) pixels are "
+                            "skipped entirely (holes). Independent of the depth values (unlike "
+                            "skip_black). If its resolution differs from the depth map it is "
+                            "nearest-neighbour resized to match. Combines with skip_black if both set."),
                 io.DynamicCombo.Input("backend", tooltip="Reconstruction backend: grid (fast), poisson (smooth), delaunay", options=[
                     io.DynamicCombo.Option("grid", [
                         io.Combo.Input("smooth_normals", options=["true", "false"], default="true"),
@@ -73,7 +79,7 @@ class TextureToGeometryNode(io.ComfyNode):
     @classmethod
     def execute(cls, height_scale,
                            depth=None,
-                           field=None, field_name="field",
+                           field=None, field_name="field", mask=None,
                            backend=None, poisson_depth=8,
                            invert_height="false",
                            skip_black="false", black_threshold=0.01):
@@ -139,10 +145,16 @@ class TextureToGeometryNode(io.ComfyNode):
         if invert_height == "true":
             heightmap = 1.0 - heightmap
 
+        # Optional explicit pixel mask: True = keep this pixel, False = skip (hole)
+        keep_mask = cls._pixel_keep_mask(mask, height, width)
+        if keep_mask is not None:
+            log.info("mask input: keeping %d/%d pixels (%.1f%%)",
+                     int(keep_mask.sum()), keep_mask.size, 100.0 * keep_mask.mean())
+
         # Build point cloud from heightmap
         points, valid_mask = cls._heightmap_to_points(
             heightmap, height_scale,
-            skip_black == "true", black_threshold
+            skip_black == "true", black_threshold, keep_mask
         )
 
         log.info("Generated %d points", len(points))
@@ -153,7 +165,7 @@ class TextureToGeometryNode(io.ComfyNode):
                 heightmap, height_scale, width, height,
                 skip_black == "true", black_threshold,
                 smooth_normals == "true",
-                field, field_name
+                field, field_name, keep_mask
             )
             backend_info = "Grid-based displacement mesh"
         elif selected_backend == "poisson_pymeshlab":
@@ -182,6 +194,7 @@ Input:
   Height Scale: {height_scale}
   Inverted: {invert_height}
   Skip Black: {skip_black} (threshold: {black_threshold})
+  Mask: {'yes (%d%% kept)' % int(100*keep_mask.mean()) if keep_mask is not None else 'none'}
 
 Backend: {selected_backend}
   {backend_info}
@@ -197,7 +210,37 @@ Output Mesh:
         return io.NodeOutput(mesh, info, ui={"text": [info]})
 
     @staticmethod
-    def _heightmap_to_points(heightmap, height_scale, skip_black, black_threshold):
+    def _pixel_keep_mask(mask, height, width):
+        """Parse a ComfyUI MASK/IMAGE into a boolean (H,W) keep-mask (True = use pixel).
+        Returns None if no mask. Nearest-neighbour resizes to (height, width) if needed."""
+        if mask is None:
+            return None
+        arr = _to_numpy(mask).astype(np.float32)
+        if arr.ndim == 4:                       # (B,H,W,C)
+            arr = arr[0]
+            arr = np.mean(arr[:, :, :3], axis=2) if arr.shape[2] >= 3 else arr[:, :, 0]
+        elif arr.ndim == 3:                     # (B,H,W) mask  or  (H,W,C) image
+            if arr.shape[2] in (3, 4):
+                arr = np.mean(arr[:, :, :3], axis=2)
+            elif arr.shape[2] == 1:
+                arr = arr[:, :, 0]
+            else:
+                arr = arr[0]
+        if arr.ndim != 2:
+            log.warning("mask: unexpected shape %s, ignoring", np.shape(mask))
+            return None
+        if arr.max() > 1.0:
+            arr = arr / 255.0
+        keep = arr > 0.5
+        if keep.shape != (height, width):       # nearest-neighbour resize to depth res
+            ys = np.linspace(0, keep.shape[0] - 1, height).round().astype(int)
+            xs = np.linspace(0, keep.shape[1] - 1, width).round().astype(int)
+            keep = keep[np.ix_(ys, xs)]
+            log.info("mask: resized to depth resolution %dx%d", width, height)
+        return keep
+
+    @staticmethod
+    def _heightmap_to_points(heightmap, height_scale, skip_black, black_threshold, keep_mask=None):
         """Convert heightmap to 3D point cloud."""
         height, width = heightmap.shape
         points = []
@@ -206,6 +249,10 @@ Output Mesh:
         for y in range(height):
             for x in range(width):
                 h = heightmap[y, x]
+
+                if keep_mask is not None and not keep_mask[y, x]:
+                    valid_mask[y, x] = False
+                    continue
 
                 if skip_black and h <= black_threshold:
                     valid_mask[y, x] = False
@@ -223,7 +270,7 @@ Output Mesh:
     @staticmethod
     def _build_grid_mesh(heightmap, height_scale, width, height,
                          skip_black, black_threshold, smooth_normals,
-                         field=None, field_name="field"):
+                         field=None, field_name="field", keep_mask=None):
         """Build mesh using grid-based displacement (original algorithm)."""
         # Generate vertices
         vertices = []
@@ -236,24 +283,25 @@ Output Mesh:
 
         vertices = np.array(vertices, dtype=np.float32)
 
+        # Per-pixel keep test: a triangle is emitted only if all 3 corner pixels are
+        # kept. Combines skip_black (depth-derived) and the explicit mask input.
+        pix_ok = np.ones((height, width), dtype=bool)
+        if skip_black:
+            pix_ok &= heightmap > black_threshold
+        if keep_mask is not None:
+            pix_ok &= keep_mask
+        drop_any = skip_black or (keep_mask is not None)
+
         # Generate faces (triangles)
         faces = []
         for y in range(height - 1):
             for x in range(width - 1):
                 i = y * width + x
-
-                if skip_black:
-                    h00 = heightmap[y, x]
-                    h10 = heightmap[y, x + 1]
-                    h01 = heightmap[y + 1, x]
-                    h11 = heightmap[y + 1, x + 1]
-
-                    if h00 > black_threshold and h10 > black_threshold and h01 > black_threshold:
-                        faces.append([i, i + 1, i + width])
-                    if h10 > black_threshold and h11 > black_threshold and h01 > black_threshold:
-                        faces.append([i + 1, i + width + 1, i + width])
-                else:
+                a = pix_ok[y, x]; b = pix_ok[y, x + 1]
+                c = pix_ok[y + 1, x]; d = pix_ok[y + 1, x + 1]
+                if a and b and c:
                     faces.append([i, i + 1, i + width])
+                if b and d and c:
                     faces.append([i + 1, i + width + 1, i + width])
 
         faces = np.array(faces, dtype=np.int32)
@@ -283,6 +331,14 @@ Output Mesh:
                 log.info("Added vertex attribute '%s' with %d values, range: [%.3f, %.3f]", field_name, len(field_values), field_values.min(), field_values.max())
             else:
                 log.warning("Warning: field shape %s doesn't match heightmap (%d, %d), skipping", field_arr.shape, height, width)
+
+        # drop orphan vertices left by masked-out / skipped pixels (reindexes
+        # vertex_attributes like the field too)
+        if drop_any:
+            try:
+                mesh.remove_unreferenced_vertices()
+            except Exception as e:
+                log.debug("vertex cleanup skipped: %s", e)
 
         if smooth_normals:
             mesh.fix_normals()
