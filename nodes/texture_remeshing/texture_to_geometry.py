@@ -42,7 +42,7 @@ class TextureToGeometryNode(io.ComfyNode):
             category="geompack/texture_remeshing",
             is_output_node=True,
             inputs=[
-                io.Float.Input("height_scale", default=1.0, min=0.01, max=10.0, step=0.1, display_mode="number"),
+                io.Float.Input("height_scale", default=1.0, min=0.01, max=10000000.0, step=0.1, display_mode="number"),
                 io.MultiType.Input("depth", [io.Image, io.Mask],
                     tooltip="The depth / height map. Each pixel becomes a vertex, displaced in Z by its value x height_scale. Accepts an IMAGE (RGB is averaged to grayscale) OR a MASK (single channel)."),
                 io.MultiType.Input("field", [io.Image, io.Mask], optional=True,
