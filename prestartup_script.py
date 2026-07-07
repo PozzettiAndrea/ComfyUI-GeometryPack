@@ -25,6 +25,7 @@ viewers = [
     "text_report",
     "ultimate_inspection",
     "slicer",
+    "warp_mesh",
 ]
 for viewer in viewers:
     try:
