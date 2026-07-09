@@ -78,8 +78,25 @@ app.registerExtension({
             const node = this;
 
             // --- progress bar (DOM widget; collapses to 0 height when idle) ---
+            //
+            // IMPORTANT: ComfyUI's DOM-widget host <div> ("dom-widget size-full",
+            // position:fixed) is positioned/sized by its OWN reactive layer
+            // (Vue), driven by widget.isVisible()/widget.hidden -- it does NOT
+            // look at this element's own inline CSS (wrap.style.display) at all.
+            // Toggling only wrap.style.display leaves the *host* div fully
+            // "visible" from ComfyUI's point of view, at which point its height
+            // falls back to the "size-full" CSS class default (100% of the
+            // *viewport*, since it's position:fixed) with pointer-events:auto --
+            // an invisible, click-eating overlay stretching far below the node,
+            // permanently, regardless of whether anything is actually showing.
+            // Confirmed empirically (Playwright): computeSize()'s return value
+            // is not what drives this host div's real layout height either.
+            // The only thing that correctly collapses the host div (display:none
+            // AND pointer-events:none together) is the widget's own `hidden`
+            // flag, so that's the actual on/off switch -- wrap's inline style
+            // just controls the *content* once the host div is shown.
             const wrap = document.createElement("div");
-            wrap.style.cssText = "width:100%;padding:0 6px;box-sizing:border-box;display:none;";
+            wrap.style.cssText = "width:100%;padding:0 6px;box-sizing:border-box;";
             const label = document.createElement("div");
             label.style.cssText = "font:10px monospace;color:#bbb;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
             const track = document.createElement("div");
@@ -90,15 +107,16 @@ app.registerExtension({
             const progWidget = node.addDOMWidget("upload_progress", "div", wrap, {
                 getValue() { return ""; }, setValue() { },
             });
-            progWidget.computeSize = (w) => (wrap.style.display === "none" ? [w, 0] : [w, 26]);
+            progWidget.computeSize = (w) => [w, 26];
+            progWidget.hidden = true; // starts idle -- see note above
             const showProgress = (name, frac) => {
-                wrap.style.display = "block";
+                progWidget.hidden = false;
                 const pct = Math.max(0, Math.min(100, Math.round((frac || 0) * 100)));
                 label.textContent = `⬆ ${name} — ${pct}%`;
                 bar.style.width = pct + "%";
                 node.setDirtyCanvas(true, true);
             };
-            const hideProgress = () => { wrap.style.display = "none"; node.setDirtyCanvas(true, true); };
+            const hideProgress = () => { progWidget.hidden = true; node.setDirtyCanvas(true, true); };
 
             async function uploadList(files) {
                 const meshes = [...files].filter((f) => isMesh(f.name));
@@ -125,15 +143,23 @@ app.registerExtension({
             input.type = "file"; input.accept = ACCEPT; input.multiple = true; input.style.display = "none";
             input.addEventListener("change", async () => { await uploadList(input.files); input.value = ""; });
             document.body.appendChild(input);
+            node._gpFileInput = input; // removed in onRemoved below
             node.addWidget("button", "⬆ upload / drop mesh", null, () => { console.log(`${TAG} upload button clicked`); input.click(); });
 
             // inline View 3D
-            let iframe = null, viewWidget = null;
+            let iframe = null, viewWidget = null, savedSize = null;
             const collapse = () => {
                 if (viewWidget && node.widgets) {
                     const i = node.widgets.indexOf(viewWidget); if (i >= 0) node.widgets.splice(i, 1);
                 }
-                if (iframe) iframe.remove(); iframe = null; viewWidget = null; node.setDirtyCanvas(true, true);
+                if (iframe) iframe.remove(); iframe = null; viewWidget = null;
+                // Restore the pre-expand size instead of leaving the +380px
+                // stuck on the node -- otherwise every open/close cycle
+                // permanently grows the node's bounding box downward, which
+                // ends up silently overlapping (and blocking clicks on)
+                // whatever node sits below it on the canvas.
+                if (savedSize) { node.setSize(savedSize); savedSize = null; }
+                node.setDirtyCanvas(true, true);
             };
             const sendMesh = () => {
                 const w = fileWidget(node);
@@ -144,6 +170,7 @@ app.registerExtension({
                 if (iframe) { collapse(); return; }
                 const w = fileWidget(node);
                 if (!w || !w.value) { alert("Pick or upload a mesh first."); return; }
+                savedSize = [...node.size];
                 iframe = document.createElement("iframe");
                 iframe.style.cssText = "width:100%;height:100%;border:none;background:#2a2a2a;";
                 // VTK viewer: robust OBJ/PLY/STL/VTP reader (+ the download progress bar),
@@ -153,10 +180,16 @@ app.registerExtension({
                 viewWidget.computeSize = (width) => [width || 360, width || 360];
                 iframe.addEventListener("load", () => setTimeout(sendMesh, 150));
                 setTimeout(sendMesh, 600);
-                node.setSize([Math.max(node.size[0], 380), node.size[1] + 380]); node.setDirtyCanvas(true, true);
+                node.setSize([Math.max(node.size[0], 380), savedSize[1] + 380]); node.setDirtyCanvas(true, true);
             });
 
             return r;
+        };
+
+        const onRemoved = nodeType.prototype.onRemoved;
+        nodeType.prototype.onRemoved = function () {
+            this._gpFileInput?.remove();
+            return onRemoved?.apply(this, arguments);
         };
 
         const onDragOver = nodeType.prototype.onDragOver;

@@ -27,7 +27,7 @@ from comfy_api.latest import io
 log = logging.getLogger("GeometryPack")
 
 
-# ── core transfer helpers (no ComfyUI deps — unit-testable) ──────────────────
+# -- core transfer helpers (no ComfyUI deps -- unit-testable) ----------------
 
 def _is_discrete(arr):
     """Integer / boolean fields must never be linearly blended."""
@@ -149,7 +149,7 @@ def _select_fields(src, field_name):
     return out
 
 
-# ── node ─────────────────────────────────────────────────────────────────────
+# -- node ----------------------------------------------------------------------
 
 class InterpolateFieldNode(io.ComfyNode):
     """Transfer scalar/vector fields from one mesh onto another (e.g. after remeshing)."""
