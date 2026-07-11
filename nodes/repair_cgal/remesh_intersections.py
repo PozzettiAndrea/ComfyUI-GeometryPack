@@ -31,6 +31,7 @@ class RemeshSelfIntersectionsNode(io.ComfyNode):
             node_id="GeomPackRemeshSelfIntersections",
             display_name="Remesh Self Intersections",
             category="geompack/repair",
+            is_dev_only=True,
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("mesh"),

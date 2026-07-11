@@ -6,7 +6,9 @@ Unified Mesh Repair node - single frontend with backend selector.
 
 Cleans up degenerate / sliver / duplicate / non-manifold elements. Dispatches to
 hidden backend nodes via node expansion (GraphBuilder), each in its own isolation
-env. Designed to grow more backends (pymeshfix, trimesh, cgal, ...) over time.
+env. Self-intersection fixing lives in its own dispatcher (GeomPackFixSelfIntersections,
+nodes/repair_cgal/fix_self_intersections.py) -- a distinct topology problem, not
+degeneracy/duplication.
 """
 
 import logging
@@ -19,7 +21,9 @@ class MeshRepairNode(io.ComfyNode):
     """Mesh Repair - unified degenerate/sliver cleanup with backend selection."""
 
     BACKEND_MAP = {
+        "trimesh": "GeomPackMeshRepair_Trimesh",
         "pymeshlab": "GeomPackMeshRepair_PyMeshLab",
+        "pymeshfix": "GeomPackMeshRepair_PyMeshFix",
     }
 
     @classmethod
@@ -33,14 +37,25 @@ class MeshRepairNode(io.ComfyNode):
                 "duplicate vertices, T-vertices, non-manifold edges, and small floating "
                 "components. Pick a backend; each exposes its own toggles.\n"
                 "\n"
+                "trimesh: lightweight, no extra deps -- merges duplicate vertices then drops "
+                "degenerate/cap-sliver faces.\n"
                 "pymeshlab: per-operation cleanup -- the real sliver/degenerate remover "
-                "(MeshLab's meshing_remove_* filters). More backends (pymeshfix, ...) to come."
+                "(MeshLab's meshing_remove_* filters).\n"
+                "pymeshfix: small-component removal/joining plus PyTMesh's own clean() pass."
             ),
             enable_expand=True,
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("mesh"),
                 io.DynamicCombo.Input("backend", tooltip="Repair algorithm and backend", options=[
+                    io.DynamicCombo.Option("trimesh", [
+                        io.Float.Input("tolerance", default=1e-5, min=1e-8, max=1e-2, step=1e-6,
+                                       tooltip="Distance tolerance for merging duplicate vertices (1e-5 recommended for CAD meshes)."),
+                        io.Float.Input("min_area", default=1e-10, min=0.0, max=1.0, step=1e-10,
+                                       tooltip="Faces with area below this are deleted (0 disables this test)."),
+                        io.Float.Input("max_angle_deg", default=180.0, min=90.0, max=180.0, step=0.5,
+                                       tooltip="Cap-sliver collapse threshold on largest interior angle. 180 = off."),
+                    ]),
                     io.DynamicCombo.Option("pymeshlab", [
                         io.Combo.Input("remove_duplicate_vertices", options=["true", "false"], default="true", tooltip="Merge coincident (duplicate) vertices first."),
                         io.Combo.Input("remove_null_faces", options=["true", "false"], default="true", tooltip="Remove null / zero-area (degenerate) faces -- the core sliver remover."),
@@ -50,6 +65,13 @@ class MeshRepairNode(io.ComfyNode):
                         io.Combo.Input("repair_non_manifold_edges", options=["true", "false"], default="true", tooltip="Repair non-manifold edges (shared by >2 faces)."),
                         io.Float.Input("remove_small_components_pct", default=0.0, min=0.0, max=100.0, step=0.5, display_mode="number", tooltip="Drop floating components below this PERCENT of the mesh's bbox diagonal (0 = off). Removes scan/recon crumbs."),
                         io.Combo.Input("remove_unreferenced_vertices", options=["true", "false"], default="true", tooltip="Drop orphan vertices not used by any face (last)."),
+                    ]),
+                    io.DynamicCombo.Option("pymeshfix", [
+                        io.Combo.Input("remove_small_components", options=["true", "false"], default="true", tooltip="Remove small isolated mesh fragments before cleaning."),
+                        io.Combo.Input("join_components", options=["true", "false"], default="false", tooltip="Attempt to join nearby disconnected components."),
+                        io.Combo.Input("clean_mesh", options=["true", "false"], default="true", tooltip="Remove self-intersections and degenerate faces (PyTMesh.clean)."),
+                        io.Int.Input("clean_iterations", default=10, min=1, max=100, step=1, tooltip="Max iterations for self-intersection removal."),
+                        io.Int.Input("inner_loops", default=3, min=1, max=10, step=1, tooltip="Inner loops per clean iteration."),
                     ]),
                 ]),
             ],

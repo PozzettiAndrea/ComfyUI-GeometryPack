@@ -115,6 +115,9 @@ class PreviewMeshDualNode(io.ComfyNode):
                 io.Float.Input("opacity_1", default=1.0, min=0.0, max=1.0, step=0.1, optional=True),
                 io.Float.Input("opacity_2", default=1.0, min=0.0, max=1.0, step=0.1, optional=True),
             ],
+            outputs=[
+                io.Custom("TRIMESH").Output(display_name="meshes", is_output_list=True),
+            ],
         )
 
     @classmethod
@@ -297,7 +300,7 @@ class PreviewMeshDualNode(io.ComfyNode):
                 })
 
         log.info("Preview ready")
-        return io.NodeOutput(ui=ui_data)
+        return io.NodeOutput([mesh_1, mesh_2], ui=ui_data)
 
     @staticmethod
     def _export_mesh(mesh, base_filename, use_vtp, use_glb):

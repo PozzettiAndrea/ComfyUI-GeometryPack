@@ -30,6 +30,7 @@ class FixSelfIntersectionsByRemovalNode(io.ComfyNode):
             node_id="GeomPackFixSelfIntersectionsByRemoval",
             display_name="Fix Self Intersections (Removal)",
             category="geompack/repair",
+            is_dev_only=True,
             is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),

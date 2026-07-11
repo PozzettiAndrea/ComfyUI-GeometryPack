@@ -44,6 +44,9 @@ class PreviewMeshNode(io.ComfyNode):
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
             ],
+            outputs=[
+                io.Custom("TRIMESH").Output(display_name="mesh"),
+            ],
         )
 
     @classmethod
@@ -85,8 +88,8 @@ class PreviewMeshNode(io.ComfyNode):
         extents = trimesh.extents
         max_extent = max(extents)
 
-        # Return metadata for frontend widget
-        return io.NodeOutput(ui={ "mesh_file": [filename], "vertex_count": [len(trimesh.vertices)], "face_count": [get_face_count(trimesh)], "bounds_min": [bounds[0].tolist()], "bounds_max": [bounds[1].tolist()], "extents": [extents.tolist()], "max_extent": [float(max_extent)], })
+        # Return metadata for frontend widget, and pass the mesh through as an output
+        return io.NodeOutput(trimesh, ui={ "mesh_file": [filename], "vertex_count": [len(trimesh.vertices)], "face_count": [get_face_count(trimesh)], "bounds_min": [bounds[0].tolist()], "bounds_max": [bounds[1].tolist()], "extents": [extents.tolist()], "max_extent": [float(max_extent)], })
 
 NODE_CLASS_MAPPINGS = {
     "GeomPackPreviewMesh": PreviewMeshNode,

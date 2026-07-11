@@ -96,6 +96,9 @@ class PreviewMeshMultiNode(io.ComfyNode):
                 io.Custom("TRIMESH").Input("mesh_4", optional=True),
                 io.Combo.Input("mode", options=["fields", "texture"], default="fields", optional=True),
             ],
+            outputs=[
+                io.Custom("TRIMESH").Output(display_name="meshes", is_output_list=True),
+            ],
         )
 
     @classmethod
@@ -224,7 +227,7 @@ class PreviewMeshMultiNode(io.ComfyNode):
             ui_data["field_names_list"] = [field_names_list]
 
         log.info("Grid: %dx%d, Preview ready", grid_cols, grid_rows)
-        return io.NodeOutput(ui=ui_data)
+        return io.NodeOutput(meshes, ui=ui_data)
 
 
 NODE_CLASS_MAPPINGS = {

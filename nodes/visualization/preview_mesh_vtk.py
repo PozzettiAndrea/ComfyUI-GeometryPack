@@ -53,6 +53,9 @@ class PreviewMeshVTKNode(io.ComfyNode):
                 io.Custom("TRIMESH").Input("trimesh", optional=True),
                 io.Custom("VOXELGRID").Input("voxelgrid", optional=True),
             ],
+            outputs=[
+                io.Custom("TRIMESH").Output(display_name="mesh"),
+            ],
         )
 
     @classmethod
@@ -310,7 +313,7 @@ class PreviewMeshVTKNode(io.ComfyNode):
         else:
             log.info("Fields mode info: watertight=%s, volume=%s, area=%s, no fields", is_watertight, volume, area)
 
-        return io.NodeOutput(ui=ui_data)
+        return io.NodeOutput(trimesh, ui=ui_data)
 
 
 NODE_CLASS_MAPPINGS = {

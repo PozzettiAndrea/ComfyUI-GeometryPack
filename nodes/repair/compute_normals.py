@@ -83,11 +83,13 @@ class ComputeNormalsNode(io.ComfyNode):
             result_mesh.metadata['normals_smoothed'] = True
             log.info("Computed smooth vertex normals")
 
-        # Store normals as vertex attributes for visualization
+        # Store normals as vertex attributes for visualization: separate scalar
+        # components (existing consumers expect these) plus a combined (n,3) field.
         result_mesh.vertex_attributes['normal_x'] = vertex_normals[:, 0]
         result_mesh.vertex_attributes['normal_y'] = vertex_normals[:, 1]
         result_mesh.vertex_attributes['normal_z'] = vertex_normals[:, 2]
         result_mesh.vertex_attributes['normal_magnitude'] = np.linalg.norm(vertex_normals, axis=1)
+        result_mesh.vertex_attributes['normals_xyz'] = vertex_normals
 
         return io.NodeOutput(result_mesh)
 

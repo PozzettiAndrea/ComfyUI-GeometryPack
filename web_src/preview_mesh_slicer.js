@@ -42,6 +42,29 @@ app.registerExtension({
             widget.computeSize = (w) => [w || 480, Math.round((w || 480) * 1.15)];
             node.size = [Math.max(node.size?.[0] || 0, 420), Math.max(node.size?.[1] || 0, 540)];
             node._gpSlicerIframe = iframe;
+
+            // plane_json (a real schema input -> auto-created widget) is a machine-written
+            // mirror of whatever clip plane is picked interactively in the iframe, not
+            // something meant to be hand-edited -- hide it from the node body.
+            const planeWidget = node.widgets?.find((w) => w.name === "plane_json");
+            if (planeWidget) {
+                planeWidget.hidden = true;
+                planeWidget.computeSize = () => [0, -4];
+            }
+
+            // The clip plane only ever exists as local JS state inside the iframe
+            // (viewer_slicer.html) -- execute() has no other way to see it, so mirror it
+            // into the (hidden) plane_json widget on every change; that's what gets
+            // serialized into the prompt on the next queue.
+            window.addEventListener("message", (event) => {
+                if (event.source !== iframe.contentWindow) return;
+                if (event.data?.type !== "PLANE_UPDATE") return;
+                const w = node.widgets?.find((x) => x.name === "plane_json");
+                if (!w) return;
+                w.value = JSON.stringify(event.data);
+                node.setDirtyCanvas(true, true);
+            });
+
             return r;
         };
 
