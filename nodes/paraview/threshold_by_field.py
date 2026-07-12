@@ -12,11 +12,77 @@ threshold filter, then returns the surviving surface as a trimesh.
 
 import logging
 import numpy as np
+import trimesh as trimesh_module
 from comfy_api.latest import io
 
-from .pv_filter import _trimesh_to_pyvista, _pyvista_to_trimesh
-
 log = logging.getLogger("geometrypack")
+
+
+def _trimesh_to_pyvista(mesh):
+    """Convert trimesh.Trimesh to pyvista.PolyData."""
+    import pyvista as pv
+
+    vertices = np.array(mesh.vertices)
+    faces = np.array(mesh.faces)
+    faces_pv = np.column_stack([np.full(len(faces), 3), faces])
+    pv_mesh = pv.PolyData(vertices, faces_pv)
+
+    # Transfer vertex_attributes -> point_data
+    if hasattr(mesh, 'vertex_attributes'):
+        for name, data in mesh.vertex_attributes.items():
+            arr = np.array(data)
+            if arr.ndim == 1 and len(arr) == len(vertices):
+                pv_mesh.point_data[name] = arr.astype(np.float32)
+
+    # Transfer face_attributes -> cell_data
+    if hasattr(mesh, 'face_attributes'):
+        for name, data in mesh.face_attributes.items():
+            arr = np.array(data)
+            if arr.ndim == 1 and len(arr) == len(faces):
+                pv_mesh.cell_data[name] = arr.astype(np.float32)
+
+    return pv_mesh
+
+
+def _pyvista_to_trimesh(pv_mesh):
+    """Convert pyvista.PolyData back to trimesh.Trimesh."""
+    vertices = np.array(pv_mesh.points)
+
+    # Parse pyvista face format: [n, v0, v1, ..., n, v0, v1, ...]
+    faces = []
+    if pv_mesh.n_faces > 0:
+        faces_flat = np.array(pv_mesh.faces)
+        i = 0
+        while i < len(faces_flat):
+            n = faces_flat[i]
+            if n == 3:
+                faces.append(faces_flat[i + 1:i + 4])
+            elif n == 4:
+                # Triangulate quads
+                faces.append([faces_flat[i + 1], faces_flat[i + 2], faces_flat[i + 3]])
+                faces.append([faces_flat[i + 1], faces_flat[i + 3], faces_flat[i + 4]])
+            i += n + 1
+
+    if faces:
+        faces = np.array(faces, dtype=np.int32)
+    else:
+        faces = np.zeros((0, 3), dtype=np.int32)
+
+    result = trimesh_module.Trimesh(vertices=vertices, faces=faces, process=False)
+
+    # Transfer point_data -> vertex_attributes
+    for name in pv_mesh.point_data.keys():
+        data = np.array(pv_mesh.point_data[name])
+        if data.ndim == 1 and len(data) == len(vertices):
+            result.vertex_attributes[name] = data.astype(np.float32)
+
+    # Transfer cell_data -> face_attributes
+    for name in pv_mesh.cell_data.keys():
+        data = np.array(pv_mesh.cell_data[name])
+        if data.ndim == 1 and len(data) == len(faces):
+            result.face_attributes[name] = data.astype(np.float32)
+
+    return result
 
 
 class ThresholdMeshByFieldNode(io.ComfyNode):

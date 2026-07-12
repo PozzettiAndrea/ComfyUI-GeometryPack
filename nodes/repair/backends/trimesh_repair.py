@@ -8,9 +8,66 @@ import numpy as np
 import trimesh as trimesh_module
 from comfy_api.latest import io
 
-from ..remove_degenerate_faces import _face_max_angle_apex, _collapse_caps
-
 log = logging.getLogger("geompack")
+
+
+def _face_max_angle_apex(V, F):
+    """Per-face: (max interior angle [rad], local apex index 0/1/2 of that angle)."""
+    a, b, c = V[F[:, 0]], V[F[:, 1]], V[F[:, 2]]
+    def ang(u, w):
+        un = u / (np.linalg.norm(u, axis=1, keepdims=True) + 1e-12)
+        wn = w / (np.linalg.norm(w, axis=1, keepdims=True) + 1e-12)
+        return np.arccos(np.clip(np.sum(un * wn, axis=1), -1.0, 1.0))
+    A = np.stack([ang(b - a, c - a), ang(a - b, c - b), ang(a - c, b - c)], axis=1)
+    return A.max(axis=1), A.argmax(axis=1)
+
+
+def _collapse_caps(V, F, vattrs, fattrs, max_angle_rad):
+    """Collapse cap faces (max interior angle >= threshold) by merging each apex onto
+    the nearer of its two base vertices. Returns (V, F, vattrs, fattrs, n_caps)."""
+    maxang, apex_local = _face_max_angle_apex(V, F)
+    cap = maxang >= max_angle_rad
+    n_caps = int(cap.sum())
+    if n_caps == 0:
+        return V, F, vattrs, fattrs, 0
+
+    ci = np.flatnonzero(cap)
+    al = apex_local[ci]
+    apex_v = F[ci, al]
+    b1 = F[ci, (al + 1) % 3]
+    b2 = F[ci, (al + 2) % 3]
+    len1 = np.linalg.norm(V[apex_v] - V[b1], axis=1)
+    len2 = np.linalg.norm(V[apex_v] - V[b2], axis=1)
+    base_v = np.where(len1 <= len2, b1, b2)          # collapse the shorter apex edge
+
+    # union-find: attach apex under base so the surviving position is the base's.
+    parent = np.arange(len(V))
+    def find(x):
+        r = x
+        while parent[r] != r:
+            r = parent[r]
+        while parent[x] != r:
+            parent[x], x = r, parent[x]
+        return r
+    for a_v, bv in zip(apex_v.tolist(), base_v.tolist()):
+        ra, rb = find(int(a_v)), find(int(bv))
+        if ra != rb:
+            parent[ra] = rb                          # base side becomes the root
+
+    roots = np.array([find(i) for i in range(len(V))])
+    keep = np.unique(roots)                           # surviving (representative) vertices
+    newidx = np.full(len(V), -1, dtype=np.int64)
+    newidx[keep] = np.arange(len(keep))
+    vmap = newidx[roots]                              # old vertex -> compact new index
+
+    V2 = V[keep]
+    vattrs2 = {k: v[keep] for k, v in vattrs.items()}
+
+    Fr = vmap[F]
+    good = (Fr[:, 0] != Fr[:, 1]) & (Fr[:, 1] != Fr[:, 2]) & (Fr[:, 0] != Fr[:, 2])
+    F2 = Fr[good]
+    fattrs2 = {k: v[good] for k, v in fattrs.items()}
+    return V2, F2, vattrs2, fattrs2, n_caps
 
 
 class MeshRepairTrimeshNode(io.ComfyNode):

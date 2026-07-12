@@ -44,6 +44,7 @@ class UVUnwrapNode(io.ComfyNode):
         "blender_cube": "GeomPackUV_BlenderCube",
         "blender_cylinder": "GeomPackUV_BlenderCylinder",
         "blender_sphere": "GeomPackUV_BlenderSphere",
+        "geogram_abf": "GeomPackUV_GeogramABF",
     }
 
     @classmethod
@@ -84,6 +85,9 @@ class UVUnwrapNode(io.ComfyNode):
                     ]),
                     io.DynamicCombo.Option("blender_sphere", [
                         io.Combo.Input("scale_to_bounds", options=["true", "false"], default="true"),
+                    ]),
+                    io.DynamicCombo.Option("geogram_abf", [
+                        io.Float.Input("hard_angles_threshold", default=45.0, min=1.0, max=179.0, step=1.0, tooltip="Dihedral angle (degrees) above which an edge is forced onto a chart boundary. Lower = more/smaller charts, less per-chart distortion. Higher = fewer/larger charts, more distortion per chart. 45 suits typical hard-surface meshes."),
                     ]),
                 ]),
             ],

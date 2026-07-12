@@ -26,6 +26,7 @@ class ReconstructSurfaceNode(io.ComfyNode):
         "ball_pivoting": "GeomPackReconstruct_BallPivoting",
         "alpha_shape": "GeomPackReconstruct_AlphaShape",
         "convex_hull": "GeomPackReconstruct_ConvexHull",
+        "co3ne": "GeomPackReconstruct_Co3ne",
     }
 
     # Remap frontend param names to backend param names where they differ
@@ -46,7 +47,8 @@ class ReconstructSurfaceNode(io.ComfyNode):
                     "poisson=smooth watertight, "
                     "ball_pivoting=preserves detail, "
                     "alpha_shape=controllable detail, "
-                    "convex_hull=fast rough"
+                    "convex_hull=fast rough, "
+                    "co3ne=Delaunay/CoCone-based, distinct from Poisson's implicit-fit approach"
                 ), options=[
                     io.DynamicCombo.Option("poisson", [
                         io.Int.Input("poisson_depth", default=8, min=1, max=12, step=1, tooltip="Octree depth for the Poisson solver. Higher values capture finer detail but use exponentially more memory and time. 6=coarse, 8=balanced, 10+=high detail."),
@@ -63,6 +65,11 @@ class ReconstructSurfaceNode(io.ComfyNode):
                         io.Float.Input("alpha", default=0.0, min=0.0, max=100.0, step=0.01, tooltip="Radius threshold controlling which Delaunay tetrahedra are kept. Only tetrahedra with longest edge < 2*alpha are included. Larger = coarser shape with more fill, smaller = tighter fit with more holes. 0 = auto (10%% of bounding box diagonal)."),
                     ]),
                     io.DynamicCombo.Option("convex_hull", []),
+                    io.DynamicCombo.Option("co3ne", [
+                        io.Int.Input("nb_neighbors", default=30, min=3, max=500, step=1, tooltip="Nearest neighbors for local surface estimation. Too few = noisy/unreliable on sparse or noisy scans; too many = over-smoothed local estimate, slower. 30 suits moderately dense scans; drop to 15-20 for dense/clean input, raise to 50-100 for sparse/noisy input."),
+                        io.Int.Input("nb_iterations", default=3, min=1, max=20, step=1, tooltip="Refinement passes closing small gaps left by the initial CoCone pass. 1 is often not enough on real-world scans. 3 (default) suits most reasonably-sampled point clouds; try 5-8 if visible gaps remain, but beyond ~10 remaining gaps are usually genuine sampling holes, not something more iterations will fix."),
+                        io.Float.Input("radius", default=5.0, min=0.001, max=1000.0, step=0.1, display_mode="number", tooltip="Neighbor search radius in ABSOLUTE point-cloud units -- NOT auto-scaled (unlike ball_pivoting's 0=auto). The default (5.0) assumes a point cloud tens of units across; for unit-normalized or millimeter-scale clouds this will be badly wrong. Set to roughly 3-5x the point cloud's own average point spacing before running."),
+                    ]),
                 ]),
             ],
             outputs=[

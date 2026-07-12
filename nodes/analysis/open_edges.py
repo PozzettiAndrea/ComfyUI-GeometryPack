@@ -166,9 +166,18 @@ class OpenEdgesNode(io.ComfyNode):
             for info in face_edge_info:
                 open_edge_count[info["face_id"]] = info["num_open_edges"]
 
-            # Store as face attribute
+            # Create the vertex-level counterpart: for each vertex, how many boundary
+            # edges touch it (0 = interior vertex; can be >1 at a boundary junction
+            # where several open edges meet at the same vertex).
+            vertex_open_edge_count = np.zeros(len(mesh.vertices), dtype=np.int32)
+            if num_boundary_edges > 0:
+                np.add.at(vertex_open_edge_count, boundary_edges[:, 0], 1)
+                np.add.at(vertex_open_edge_count, boundary_edges[:, 1], 1)
+
+            # Store as face/vertex attributes
             result_mesh = mesh.copy()
             result_mesh.face_attributes['open_edge_count'] = open_edge_count
+            result_mesh.vertex_attributes['open_edge_count'] = vertex_open_edge_count
 
             # Also store boundary info in metadata
             if not hasattr(result_mesh, 'metadata'):

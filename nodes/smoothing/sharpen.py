@@ -21,6 +21,8 @@ Available backends:
   number of distinct face normal orientations, forcing the mesh into
   piecewise-flat regions with sharp edges at boundaries. Best for aggressive
   CAD-like sharpening.
+- l0_minimize_gpu: dedicated always-GPU (torch/CUDA-vectorized) variant of
+  l0_minimize -- same scheme, orders of magnitude faster on large meshes.
 - guided_normal: Guided mesh normal filtering (Zhang et al. 2015). Uses a
   min-range-metric guidance signal to drive bilateral normal filtering while
   preserving sharp edges. Interleaves vertex updates within normal iterations.
@@ -51,6 +53,7 @@ class SharpenMeshNode(io.ComfyNode):
         "unsharp_mask":   "GeomPackSharpen_UnsharpMask",
         "libigl_unsharp": "GeomPackSharpen_LibiglUnsharp",
         "l0_minimize":    "GeomPackSharpen_L0Minimize",
+        "l0_minimize_gpu": "GeomPackSharpen_L0MinimizeGPU",
         "l0_faithful":    "GeomPackSharpen_L0Faithful",
         "guided_normal":  "GeomPackSharpen_GuidedNormal",
         "fast_effective":  "GeomPackSharpen_FastEffective",
@@ -154,12 +157,27 @@ class SharpenMeshNode(io.ComfyNode):
                             "use more iterations (and/or higher alpha) for stronger, propagated "
                             "flattening. Denser meshes need more iterations to spread flatness."
                         )),
-                        io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
-                            "Run the vectorized torch implementation instead of the pure-Python "
-                            "loop. Uses CUDA when available (else vectorized CPU torch) -- orders "
-                            "of magnitude faster on large meshes (the CPU path loops over every "
-                            "edge in Python and is impractical beyond ~50k faces). Results can "
-                            "differ slightly from the CPU path. Default true."
+                    ]),
+                    # GPU variant of l0_minimize (same He & Schaefer 2013 scheme,
+                    # torch/CUDA-vectorized -- orders of magnitude faster on large meshes;
+                    # the CPU path loops over every edge in Python and is impractical
+                    # beyond ~50k faces). The per-edge snap uses a symmetric area-weighted
+                    # bilateral accumulation, so results can differ slightly from the CPU path.
+                    io.DynamicCombo.Option("l0_minimize_gpu", [
+                        io.Float.Input("alpha", default=0.001, min=0.0001, max=0.1, step=0.0001, tooltip=(
+                            "Initial normal-difference threshold (squared). Adjacent faces whose "
+                            "normal difference is below it get snapped flat -- larger = more "
+                            "aggressive initial flattening. Grows by 'beta' each iteration."
+                        )),
+                        io.Float.Input("beta", default=2.0, min=1.1, max=10.0, step=0.1, tooltip=(
+                            "Multiplies alpha after each iteration, so the threshold escalates and "
+                            "progressively flattens sharper transitions. No effect with "
+                            "iterations=1 (alpha is only multiplied between iterations)."
+                        )),
+                        io.Int.Input("iterations", default=10, min=1, max=50, step=1, tooltip=(
+                            "Number of L0 iterations. Each does one vertex pass at the current "
+                            "alpha, then alpha *= beta. Denser meshes need more iterations to "
+                            "spread flatness."
                         )),
                     ]),
                     # l0_faithful = the REAL global He & Schaefer 2013 L0 denoiser (vs 'l0_minimize'

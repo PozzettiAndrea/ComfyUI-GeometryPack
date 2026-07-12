@@ -31,9 +31,13 @@ class MeshToPointCloudNode(io.ComfyNode):
             category="geompack/conversion",
             inputs=[
                 io.Custom("TRIMESH").Input("trimesh"),
-                io.Combo.Input("mode", options=["strip_adjacency", "surface_sampling"], default="strip_adjacency", tooltip="strip_adjacency: use mesh vertices directly. surface_sampling: sample points from surface."),
-                io.Int.Input("sample_count", default=10000, min=100, max=10000000, step=100, tooltip="Number of points to sample (only for surface_sampling mode)", optional=True),
-                io.Combo.Input("sampling_method", options=["uniform", "even", "face_weighted"], default="uniform", tooltip="Sampling strategy (only for surface_sampling mode)", optional=True),
+                io.DynamicCombo.Input("mode", tooltip="strip_adjacency: use mesh vertices directly. surface_sampling: sample points from surface.", options=[
+                    io.DynamicCombo.Option("strip_adjacency", []),
+                    io.DynamicCombo.Option("surface_sampling", [
+                        io.Int.Input("sample_count", default=10000, min=100, max=10000000, step=100, tooltip="Number of points to sample."),
+                        io.Combo.Input("sampling_method", options=["uniform", "even", "face_weighted"], default="uniform", tooltip="Sampling strategy."),
+                    ]),
+                ]),
                 io.Combo.Input("include_normals", options=["true", "false"], default="true", optional=True),
             ],
             outputs=[
@@ -42,15 +46,14 @@ class MeshToPointCloudNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, mode, sample_count=10000, sampling_method="uniform", include_normals="true"):
+    def execute(cls, trimesh, mode, include_normals="true"):
         """
         Convert mesh to point cloud.
 
         Args:
             trimesh: Input trimesh.Trimesh object
-            mode: "strip_adjacency" to use vertices directly, "surface_sampling" to sample surface
-            sample_count: Number of points to sample (only for surface_sampling)
-            sampling_method: Sampling strategy (only for surface_sampling)
+            mode: DynamicCombo dict -- {"mode": "strip_adjacency"} or
+                  {"mode": "surface_sampling", "sample_count": ..., "sampling_method": ...}
             include_normals: Whether to compute surface normals
 
         Returns:
@@ -58,10 +61,14 @@ class MeshToPointCloudNode(io.ComfyNode):
         """
         import trimesh as trimesh_module
 
+        mode_sel = mode["mode"]
+        sample_count = mode.get("sample_count", 10000)
+        sampling_method = mode.get("sampling_method", "uniform")
+
         face_indices = None
         normals = None
 
-        if mode == "strip_adjacency":
+        if mode_sel == "strip_adjacency":
             # Simply use mesh vertices directly (strip face adjacency)
             points = np.asarray(trimesh.vertices, dtype=np.float32)
             log.info("Strip adjacency: extracted %s vertices", f"{len(points):,}")
@@ -108,12 +115,12 @@ class MeshToPointCloudNode(io.ComfyNode):
 
         # Store point cloud metadata
         point_cloud.metadata['is_point_cloud'] = True
-        point_cloud.metadata['mode'] = mode
+        point_cloud.metadata['mode'] = mode_sel
         point_cloud.metadata['face_indices'] = face_indices
         point_cloud.metadata['source_mesh_vertices'] = len(trimesh.vertices)
         point_cloud.metadata['source_mesh_faces'] = len(trimesh.faces)
         point_cloud.metadata['sample_count'] = len(points)
-        point_cloud.metadata['sampling_method'] = sampling_method if mode == "surface_sampling" else None
+        point_cloud.metadata['sampling_method'] = sampling_method if mode_sel == "surface_sampling" else None
         point_cloud.metadata['has_normals'] = normals is not None
 
         log.info("Generated point cloud with %s points", f"{len(points):,}")

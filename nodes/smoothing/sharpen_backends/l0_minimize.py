@@ -98,14 +98,6 @@ class SharpenL0MinimizeNode(io.ComfyNode):
                     "use more (and/or higher alpha) for stronger flattening. Denser meshes "
                     "need more iterations to spread flatness."
                 )),
-                io.Combo.Input("use_gpu", options=["true", "false"], default="true", tooltip=(
-                    "Run the vectorized torch implementation instead of the pure-Python "
-                    "loop. Uses CUDA when available (else vectorized CPU torch) -- orders "
-                    "of magnitude faster on large meshes (the CPU path loops over every edge "
-                    "in Python and is impractical beyond ~50k faces). The GPU path snaps "
-                    "adjacent normals via a symmetric area-weighted bilateral accumulation, so "
-                    "results can differ slightly from the CPU path. Default true."
-                )),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="sharpened_mesh"),
@@ -114,25 +106,22 @@ class SharpenL0MinimizeNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, trimesh, alpha=0.001, beta=2.0, iterations=10, use_gpu="true"):
+    def execute(cls, trimesh, alpha=0.001, beta=2.0, iterations=10):
         import time
-        gpu = (use_gpu == "true")
-        algorithm = "l0_minimize_gpu" if gpu else "l0_minimize"
+        # GPU execution lives in its own backend (GeomPackSharpen_L0MinimizeGPU /
+        # the dispatcher's "l0_minimize_gpu" option) -- this node is CPU-only.
+        algorithm = "l0_minimize"
         log.info("Backend: %s", algorithm)
         log.info("Input: %d vertices, %d faces", len(trimesh.vertices), len(trimesh.faces))
-        log.info("Parameters: alpha=%.4f, beta=%.1f, iterations=%d, use_gpu=%s",
-                 alpha, beta, iterations, use_gpu)
+        log.info("Parameters: alpha=%.4f, beta=%.1f, iterations=%d",
+                 alpha, beta, iterations)
 
         initial_vertices = len(trimesh.vertices)
         initial_faces = len(trimesh.faces)
 
         device = "cpu"
         t0 = time.perf_counter()
-        if gpu:
-            from .l0_minimize_gpu import _l0_minimize_gpu
-            sharpened, error, device = _l0_minimize_gpu(trimesh, alpha, beta, iterations)
-        else:
-            sharpened, error = _l0_minimize_sharpen(trimesh, alpha, beta, iterations)
+        sharpened, error = _l0_minimize_sharpen(trimesh, alpha, beta, iterations)
         elapsed = time.perf_counter() - t0
 
         if sharpened is None:
@@ -163,7 +152,6 @@ class SharpenL0MinimizeNode(io.ComfyNode):
             f"Alpha: {alpha}\n"
             f"Beta: {beta}\n"
             f"Iterations: {iterations}\n"
-            f"Use GPU: {use_gpu}\n"
             f"Time: {elapsed:.2f}s"
         )
 

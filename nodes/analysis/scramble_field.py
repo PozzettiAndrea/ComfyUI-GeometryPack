@@ -32,7 +32,9 @@ class ScrambleIntField(io.ComfyNode):
             category="geometrypack/analysis",
             inputs=[
                 io.Custom("TRIMESH").Input("mesh"),
-                io.String.Input("field_name", default="seg", tooltip="Name of the integer face field to scramble."),
+                io.String.Input("field_name", default="seg", tooltip="Name of the integer face field to scramble. "
+                                 "For a field shown as 'face.xxx' in viewers, use just 'xxx' here (or paste it as-is -- "
+                                 "a leading 'face.' is stripped automatically)."),
                 io.Int.Input("seed", default=0, min=0, max=0xffffffff, tooltip="Random seed for color assignment order.", optional=True),
             ],
             outputs=[
@@ -47,8 +49,13 @@ class ScrambleIntField(io.ComfyNode):
         field_name: str,
         seed: int = 0,
     ):
-        # Get the field data
-        face_data_key = f"face_{field_name}"
+        # Get the field data. mesh.face_attributes stores it under the BARE name
+        # (e.g. "part_id") -- "face." is only a display prefix viewers add to
+        # distinguish face fields from vertex ones, not part of the real key.
+        field_name = (field_name or "").strip()
+        if field_name.startswith("face."):
+            field_name = field_name[len("face."):]
+        face_data_key = field_name
 
         if not hasattr(mesh, 'face_attributes') or face_data_key not in mesh.face_attributes:
             # Try legacy metadata access

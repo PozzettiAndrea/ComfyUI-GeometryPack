@@ -34,6 +34,7 @@ class GetMeshFilename(io.ComfyNode):
             node_id="GeomPackGetMeshFilename",
             display_name="Get Mesh Filename",
             category="geompack/io",
+            is_output_node=True,
             inputs=[
                 io.Custom("TRIMESH").Input("mesh"),
             ],
@@ -68,7 +69,7 @@ class GetMeshFilename(io.ComfyNode):
             filenames.append(name)
 
         log.info("Extracted %d filename(s)", len(filenames))
-        return io.NodeOutput(filenames)
+        return io.NodeOutput(filenames, ui={"text": filenames})
 
 
 # Node mappings for ComfyUI
