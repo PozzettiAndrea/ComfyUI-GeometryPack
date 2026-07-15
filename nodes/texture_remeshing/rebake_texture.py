@@ -10,24 +10,23 @@ else that leaves visual.uv populated). Deliberately does NOT do UV unwrapping it
 compose it with an upstream UV Unwrap node and (if uv_mesh is a different topology) a
 Remesh node, same as every other backend-selecting node in this pack.
 
-cpu: numpy-vectorized per-texel closest-point projection + trimesh's spatial-index search.
-gpu: same bake, but the closest-point search runs on GPU (chunked brute-force point-to-
-     triangle-mesh distance -- no pytorch3d/kaolin/nvdiffrast in this env, so it's a
-     from-scratch implementation; real win for large texel counts, not universally faster).
+cpu: numpy-vectorized per-texel rasterization + closest-point projection via trimesh's
+     spatial-index search.
+gpu: hardware (OpenGL/EGL) rasterization + closest-point search via cumesh's cuBVH --
+     both real GPU acceleration, not from-scratch approximations. Falls back to the CPU
+     rasterizer automatically if EGL/moderngl isn't available.
 """
 
 from comfy_api.latest import io
-
-BACKEND_MAP = {
-    "cpu": "GeomPackRebakeTexture_CPU",
-    "gpu": "GeomPackRebakeTexture_GPU",
-}
 
 
 class RebakeTextureNode(io.ComfyNode):
     """Bake the original mesh's texture onto a re-UV'd mesh -- pick a backend."""
 
-    BACKEND_MAP = BACKEND_MAP
+    BACKEND_MAP = {
+        "cpu": "GeomPackRebakeTexture_CPU",
+        "gpu": "GeomPackRebakeTexture_GPU",
+    }
 
     @classmethod
     def define_schema(cls):

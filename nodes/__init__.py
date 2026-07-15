@@ -25,7 +25,6 @@ def _safe_import(name):
 blender_io = _safe_import("blender_io")
 blender_boolean = _safe_import("blender_boolean")
 blender_remeshing = _safe_import("blender_remeshing")
-blender_texture_remeshing = _safe_import("blender_texture_remeshing")
 blender_uv = _safe_import("blender_uv")
 
 # --- GPU nodes ---
@@ -73,7 +72,6 @@ def _merge(mod):
 _merge(blender_io)
 _merge(blender_boolean)
 _merge(blender_remeshing)
-_merge(blender_texture_remeshing)
 _merge(blender_uv)
 
 # GPU

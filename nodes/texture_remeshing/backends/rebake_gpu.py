@@ -6,19 +6,16 @@ Rebake Texture (GPU backend).
 
 Same bake as the CPU backend (per-texel closest-point projection from uv_mesh onto
 original_mesh, sampling original_mesh's own UVs/texture at the projected point), but the
-closest-point search itself runs on GPU via a from-scratch point-to-triangle-mesh
-distance (chunked brute force -- no pytorch3d/kaolin/nvdiffrast in this env).
-
-Note this trades CPU trimesh's spatial-index search (O(N log M)) for GPU-parallel brute
-force (O(N*M), chunked to bound memory) -- a real win when hardware parallelism outweighs
-the worse asymptotics (large N texels against a moderate-size original_mesh), but not
-guaranteed to beat the CPU backend on every mesh/resolution combination.
+closest-point search runs on a real GPU BVH: cumesh.bvh.cuBVH -- already a declared
+GeometryPack dependency (nodes/comfy-env.toml [cuda] packages, also used by
+repair/fix_normals_backends/cumesh_raystab.py). unsigned_distance(..., return_uvw=True)
+gives (distance, face_id, barycentric_uvw) directly, so no separate points_to_barycentric
+step is needed either.
 """
 
 import logging
 
 import numpy as np
-import trimesh as trimesh_module
 from comfy_api.latest import io
 
 from ._rebake_common import get_texture_array, sample_bilinear, dilate_texture, build_textured_mesh, to_comfy_image
@@ -26,134 +23,51 @@ from .rebake_cpu import rasterize_uv_mesh
 
 log = logging.getLogger("geometrypack")
 
-_QUERY_CHUNK = 8192
-_FACE_CHUNK = 4096
-
-
-def _closest_point_on_triangles(p, a, b, c):
-    """Ericson (Real-Time Collision Detection, 5.1.5) closest point on a batch of triangles.
-    p: (N,3) query points. a,b,c: (M,3) triangle vertices. Returns (N,M,3) closest points --
-    caller must chunk N and M to bound memory (this is O(N*M) in time and memory)."""
-    import torch
-
-    p_ = p[:, None, :]
-    a_ = a[None, :, :]
-    b_ = b[None, :, :]
-    c_ = c[None, :, :]
-
-    ab = b_ - a_
-    ac = c_ - a_
-    ap = p_ - a_
-    d1 = (ab * ap).sum(-1)
-    d2 = (ac * ap).sum(-1)
-    mask_a = (d1 <= 0) & (d2 <= 0)
-
-    bp = p_ - b_
-    d3 = (ab * bp).sum(-1)
-    d4 = (ac * bp).sum(-1)
-    mask_b = (d3 >= 0) & (d4 <= d3)
-
-    vc = d1 * d4 - d3 * d2
-    mask_ab = (vc <= 0) & (d1 >= 0) & (d3 <= 0)
-
-    cp = p_ - c_
-    d5 = (ab * cp).sum(-1)
-    d6 = (ac * cp).sum(-1)
-    mask_c = (d6 >= 0) & (d5 <= d6)
-
-    vb = d5 * d2 - d1 * d6
-    mask_ac = (vb <= 0) & (d2 >= 0) & (d6 >= 0)
-
-    va = d3 * d6 - d5 * d4
-    mask_bc = (va <= 0) & ((d4 - d3) >= 0) & ((d5 - d6) >= 0)
-
-    eps = 1e-20
-    denom = 1.0 / (va + vb + vc + eps)
-    v_f = vb * denom
-    w_f = vc * denom
-    face_pt = a_ + ab * v_f[..., None] + ac * w_f[..., None]
-
-    v_ab = d1 / (d1 - d3 + eps)
-    ab_pt = a_ + v_ab[..., None] * ab
-
-    v_ac = d2 / (d2 - d6 + eps)
-    ac_pt = a_ + v_ac[..., None] * ac
-
-    v_bc = (d4 - d3) / ((d4 - d3) - (d5 - d6) + eps)
-    bc_pt = b_ + v_bc[..., None] * (c_ - b_)
-
-    out = face_pt
-    remaining = ~mask_a
-    out = torch.where(mask_a[..., None], a_.expand_as(out), out)
-    m = remaining & mask_b
-    out = torch.where(m[..., None], b_.expand_as(out), out)
-    remaining = remaining & ~mask_b
-    m = remaining & mask_c
-    out = torch.where(m[..., None], c_.expand_as(out), out)
-    remaining = remaining & ~mask_c
-    m = remaining & mask_ab
-    out = torch.where(m[..., None], ab_pt, out)
-    remaining = remaining & ~mask_ab
-    m = remaining & mask_ac
-    out = torch.where(m[..., None], ac_pt, out)
-    remaining = remaining & ~mask_ac
-    m = remaining & mask_bc
-    out = torch.where(m[..., None], bc_pt, out)
-
-    return out
+_QUERY_CHUNK = 500_000  # cuBVH itself is O(N log M); chunking here is just to bound
+                        # per-call GPU memory and to give the progress bar something to report.
 
 
 def closest_point_gpu(query_points, mesh_vertices, mesh_faces, device, pbar=None, pbar_range=(0, 100)):
-    """Chunked brute-force closest point of query_points (N,3) onto a triangle mesh.
-    Returns (closest (N,3) np.float64, tri_ids (N,) np.int64).
+    """Closest point of query_points (N,3) onto a triangle mesh via cumesh's cuBVH.
+    Returns (tri_ids (N,) np.int64, uvw (N,3) np.float64) -- uvw are the barycentric
+    weights of the closest point w.r.t. mesh_faces[tri_ids], in vertex order.
 
     pbar: optional comfy.utils.ProgressBar (0-100 scale) shared across bake phases.
     pbar_range: (start, end) percent this phase should advance the bar through."""
     import torch
+    from cumesh.bvh import cuBVH
+
+    if len(mesh_faces) <= 8:
+        raise ValueError(f"cuBVH requires > 8 triangles in original_mesh, got {len(mesh_faces)} "
+                          f"-- use the CPU backend for very small meshes.")
+
+    V = np.ascontiguousarray(mesh_vertices, dtype=np.float32)
+    F = np.ascontiguousarray(mesh_faces, dtype=np.int32)
+    bvh = cuBVH(V, F)
 
     p = torch.as_tensor(query_points, dtype=torch.float32, device=device)
-    tris = mesh_vertices[mesh_faces]  # (M,3,3) numpy
-    a_all = torch.as_tensor(tris[:, 0], dtype=torch.float32, device=device)
-    b_all = torch.as_tensor(tris[:, 1], dtype=torch.float32, device=device)
-    c_all = torch.as_tensor(tris[:, 2], dtype=torch.float32, device=device)
-
     N = p.shape[0]
-    M = a_all.shape[0]
-    best_closest = torch.empty((N, 3), dtype=torch.float32, device=device)
-    best_dist = torch.full((N,), float('inf'), dtype=torch.float32, device=device)
-    best_tri = torch.zeros((N,), dtype=torch.int64, device=device)
-
     p_start, p_end = pbar_range
-    n_query_chunks = max(1, (N + _QUERY_CHUNK - 1) // _QUERY_CHUNK)
+    n_chunks = max(1, (N + _QUERY_CHUNK - 1) // _QUERY_CHUNK)
 
-    for qci, qi in enumerate(range(0, N, _QUERY_CHUNK)):
-        qp = p[qi:qi + _QUERY_CHUNK]
-        qn = qp.shape[0]
-        chunk_best_closest = torch.empty((qn, 3), dtype=torch.float32, device=device)
-        chunk_best_dist = torch.full((qn,), float('inf'), dtype=torch.float32, device=device)
-        chunk_best_tri = torch.zeros((qn,), dtype=torch.int64, device=device)
-
-        for fi in range(0, M, _FACE_CHUNK):
-            a_c = a_all[fi:fi + _FACE_CHUNK]
-            b_c = b_all[fi:fi + _FACE_CHUNK]
-            c_c = c_all[fi:fi + _FACE_CHUNK]
-            cand = _closest_point_on_triangles(qp, a_c, b_c, c_c)  # (qn, fchunk, 3)
-            d2 = ((cand - qp[:, None, :]) ** 2).sum(-1)  # (qn, fchunk)
-            local_min, local_idx = d2.min(dim=1)
-            better = local_min < chunk_best_dist
-            chunk_best_dist = torch.where(better, local_min, chunk_best_dist)
-            chunk_best_tri = torch.where(better, local_idx + fi, chunk_best_tri)
-            sel = cand[torch.arange(qn, device=device), local_idx]
-            chunk_best_closest = torch.where(better[:, None], sel, chunk_best_closest)
-
-        best_closest[qi:qi + qn] = chunk_best_closest
-        best_dist[qi:qi + qn] = chunk_best_dist
-        best_tri[qi:qi + qn] = chunk_best_tri
-
+    tri_ids = np.empty(N, dtype=np.int64)
+    uvw = np.empty((N, 3), dtype=np.float64)
+    for ci, qi in enumerate(range(0, N, _QUERY_CHUNK)):
+        chunk = p[qi:qi + _QUERY_CHUNK]
+        _dist, fid, w = bvh.unsigned_distance(chunk, return_uvw=True)
+        tri_ids[qi:qi + chunk.shape[0]] = fid.detach().cpu().numpy()
+        uvw[qi:qi + chunk.shape[0]] = w.detach().double().cpu().numpy()
         if pbar is not None:
-            pbar.update_absolute(int(p_start + (p_end - p_start) * (qci + 1) / n_query_chunks))
+            pbar.update_absolute(int(p_start + (p_end - p_start) * (ci + 1) / n_chunks))
 
-    return best_closest.double().cpu().numpy(), best_tri.cpu().numpy()
+    del bvh
+    try:
+        import comfy.model_management
+        comfy.model_management.soft_empty_cache()
+    except Exception:
+        pass
+
+    return tri_ids, uvw
 
 
 class RebakeTextureGPUNode(io.ComfyNode):
@@ -200,19 +114,25 @@ class RebakeTextureGPUNode(io.ComfyNode):
         log.info("Source texture: %dx%d", src_tex.shape[1], src_tex.shape[0])
         log.info("Rasterizing %d faces at %dx%d...", len(uv_mesh.faces), texture_size, texture_size)
 
-        px, py, pos = rasterize_uv_mesh(uv_mesh, texture_size, pbar=pbar, pbar_range=(0, 15))
+        try:
+            from ._rebake_gl import rasterize_uv_mesh_gl
+            px, py, pos = rasterize_uv_mesh_gl(uv_mesh, texture_size)
+            if pbar is not None:
+                pbar.update_absolute(15)
+            log.info("Rasterized via hardware (OpenGL/EGL)")
+        except Exception as e:
+            log.warning("Hardware rasterization unavailable (%s) -- falling back to CPU rasterizer.", e)
+            px, py, pos = rasterize_uv_mesh(uv_mesh, texture_size, pbar=pbar, pbar_range=(0, 15))
         log.info("Rasterized %d texels", len(px))
 
         n_src_faces = len(original_mesh.faces)
-        log.info("Closest-point projection onto original_mesh (%d faces) on %s "
-                  "(chunked %d texels x %d faces)...", n_src_faces, device, _QUERY_CHUNK, _FACE_CHUNK)
-        closest, tri_ids = closest_point_gpu(
+        log.info("Closest-point projection onto original_mesh (%d faces) via cuBVH "
+                  "on %s (chunked %d texels/call)...", n_src_faces, device, _QUERY_CHUNK)
+        tri_ids, bary = closest_point_gpu(
             pos, np.asarray(original_mesh.vertices), np.asarray(original_mesh.faces), device,
             pbar=pbar, pbar_range=(15, 95))
 
         src_faces = np.asarray(original_mesh.faces)[tri_ids]
-        src_tris = np.asarray(original_mesh.vertices)[src_faces]
-        bary = trimesh_module.triangles.points_to_barycentric(src_tris, closest)
         src_face_uvs = src_uv[src_faces]
         sampled_uv = np.einsum('ij,ijk->ik', bary, src_face_uvs)
 

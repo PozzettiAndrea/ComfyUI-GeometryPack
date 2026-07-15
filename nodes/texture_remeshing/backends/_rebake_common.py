@@ -30,8 +30,8 @@ def get_texture_array(mesh):
 
 def sample_bilinear(image, u, v):
     """Bilinear-sample an (H,W,3) image array at UV coords (arrays in [0,1]).
-    v=0 is texture bottom -- matches this pack's v-flip convention (see e.g.
-    remesh_uv.py's _extract_texture_image / _transfer_texture_via_closest_point)."""
+    v=0 is texture bottom -- matches this pack's v-flip convention used throughout
+    (e.g. preview_mesh_vtk.py's texture extraction)."""
     H, W = image.shape[:2]
     x = np.clip(u, 0.0, 1.0) * (W - 1)
     y = (1.0 - np.clip(v, 0.0, 1.0)) * (H - 1)
