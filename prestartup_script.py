@@ -38,3 +38,5 @@ copy_files(SCRIPT_DIR / "web_src", SCRIPT_DIR / "web" / "js", "*.js")
 
 # Copy assets
 copy_files(SCRIPT_DIR / "assets", COMFYUI_DIR / "input" / "3d", "**/*")
+
+copy_files(SCRIPT_DIR / "assets", COMFYUI_DIR / "input" , "*.exr")
