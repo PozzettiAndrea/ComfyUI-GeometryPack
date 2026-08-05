@@ -68,9 +68,11 @@ class MergeVerticesNode(io.ComfyNode):
         verts_before = len(mesh.vertices)
         faces_before = len(mesh.faces)
 
-        # Count connected components before
+        # Count connected components before. body_count counts via face
+        # adjacency without materializing submeshes -- split() would copy the
+        # full texture image per component and can OOM on textured meshes.
         try:
-            components_before = len(mesh.split(only_watertight=False))
+            components_before = int(mesh.body_count)
         except Exception:
             components_before = -1  # Unknown
 
@@ -88,9 +90,9 @@ class MergeVerticesNode(io.ComfyNode):
         verts_after = len(merged_mesh.vertices)
         faces_after = len(merged_mesh.faces)
 
-        # Count connected components after
+        # Count connected components after (same cheap idiom as above)
         try:
-            components_after = len(merged_mesh.split(only_watertight=False))
+            components_after = int(merged_mesh.body_count)
         except Exception:
             components_after = -1  # Unknown
 

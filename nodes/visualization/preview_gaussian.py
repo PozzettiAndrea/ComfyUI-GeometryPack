@@ -61,24 +61,42 @@ class PreviewGaussianNode(io.ComfyNode):
         Returns:
             dict: UI data for frontend widget
         """
+        from ..io.path_utils import resolve_read_path, searched_locations
+
         if not ply_path:
             log.info("No PLY path provided")
             return io.NodeOutput(extrinsics, intrinsics, ui={"error": ["No PLY path provided"]})
 
-        if not os.path.exists(ply_path):
-            log.info("PLY file not found: %s", ply_path)
-            return io.NodeOutput(extrinsics, intrinsics, ui={"error": [f"File not found: {ply_path}"]})
+        resolved = resolve_read_path(ply_path)
+        if resolved is None:
+            searched = "\n  - ".join(searched_locations(ply_path))
+            log.info("PLY file not found: %s (searched:\n  - %s)", ply_path, searched)
+            return io.NodeOutput(extrinsics, intrinsics,
+                                 ui={"error": [f"File not found: {ply_path}\nSearched in:\n  - {searched}"]})
+        ply_path = resolved
 
         # Get just the filename for the frontend
         filename = os.path.basename(ply_path)
 
-        # Check if file is in ComfyUI output directory
-        if COMFYUI_OUTPUT_FOLDER and ply_path.startswith(COMFYUI_OUTPUT_FOLDER):
-            # File is already in output folder, just use the filename
+        # The viewer JS routes "(output|input|temp)/<subpath>" to the matching
+        # /view?type=...&subfolder=... URL, so hand it the path relative to the
+        # ComfyUI base whenever the file lives under it. Bare basenames are
+        # mis-routed to type=output -- last-ditch fallback only.
+        try:
+            import folder_paths
+            base = getattr(folder_paths, "base_path", None)
+        except (ImportError, AttributeError):
+            base = None
+        try:
+            under_base = base and os.path.commonpath(
+                [os.path.abspath(ply_path), os.path.abspath(base)]) == os.path.abspath(base)
+        except ValueError:  # different drives on Windows
+            under_base = False
+        if under_base:
+            relative_path = os.path.relpath(ply_path, base)
+        elif COMFYUI_OUTPUT_FOLDER and ply_path.startswith(COMFYUI_OUTPUT_FOLDER):
             relative_path = os.path.relpath(ply_path, COMFYUI_OUTPUT_FOLDER)
         else:
-            # File is elsewhere - for now just use basename
-            # The viewer will construct the full URL
             relative_path = filename
 
         # Get file size

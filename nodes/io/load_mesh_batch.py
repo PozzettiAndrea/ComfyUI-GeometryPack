@@ -95,9 +95,15 @@ class LoadMeshBatch(io.ComfyNode):
         full_folder_path = None
         searched_paths = []
 
+        # A leading slash ("/input/3d") is meant relative to the ComfyUI base,
+        # but os.path.join discards the base when its second argument is
+        # absolute -- strip it for the join candidates (the as-given absolute
+        # form is still tried in step 4).
+        joinable = folder_path.lstrip("/\\")
+
         # 1. Try relative to ComfyUI root (handles "output/mesh_output", "input/3d", etc.)
         if COMFYUI_ROOT is not None:
-            root_path = os.path.join(COMFYUI_ROOT, folder_path)
+            root_path = os.path.join(COMFYUI_ROOT, joinable)
             searched_paths.append(f"{root_path} (ComfyUI root)")
             if os.path.exists(root_path) and os.path.isdir(root_path):
                 full_folder_path = root_path
@@ -105,7 +111,7 @@ class LoadMeshBatch(io.ComfyNode):
 
         # 2. Try in ComfyUI input folder
         if full_folder_path is None and COMFYUI_INPUT_FOLDER is not None:
-            input_path = os.path.join(COMFYUI_INPUT_FOLDER, folder_path)
+            input_path = os.path.join(COMFYUI_INPUT_FOLDER, joinable)
             searched_paths.append(f"{input_path} (input folder)")
             if os.path.exists(input_path) and os.path.isdir(input_path):
                 full_folder_path = input_path
@@ -113,7 +119,7 @@ class LoadMeshBatch(io.ComfyNode):
 
         # 3. Try in ComfyUI output folder
         if full_folder_path is None and COMFYUI_OUTPUT_FOLDER is not None:
-            output_path = os.path.join(COMFYUI_OUTPUT_FOLDER, folder_path)
+            output_path = os.path.join(COMFYUI_OUTPUT_FOLDER, joinable)
             searched_paths.append(f"{output_path} (output folder)")
             if os.path.exists(output_path) and os.path.isdir(output_path):
                 full_folder_path = output_path

@@ -80,7 +80,10 @@ class LoadMeshPath(io.ComfyNode):
         paths = cls._parse_paths(file_path)
         mtimes = []
         for path in paths:
-            resolved_path = cls._resolve_path(path)
+            try:
+                resolved_path = cls._resolve_path(path)
+            except ValueError:  # ambiguous -- let execute() raise the user-facing error
+                resolved_path = None
             if resolved_path and os.path.exists(resolved_path):
                 mtimes.append(str(os.path.getmtime(resolved_path)))
             else:
@@ -90,37 +93,8 @@ class LoadMeshPath(io.ComfyNode):
     @classmethod
     def _resolve_path(cls, file_path):
         """Resolve file path, checking multiple locations."""
-        if not file_path or file_path.strip() == "":
-            return None
-
-        file_path = file_path.strip()
-
-        # Try absolute path first
-        if os.path.isabs(file_path) and os.path.exists(file_path):
-            return file_path
-
-        # Try relative to output folder (common for generated meshes)
-        if COMFYUI_OUTPUT_FOLDER is not None:
-            output_path = os.path.join(COMFYUI_OUTPUT_FOLDER, file_path)
-            if os.path.exists(output_path):
-                return output_path
-
-        # Try relative to input/3d folder
-        if COMFYUI_INPUT_FOLDER is not None:
-            input_3d_path = os.path.join(COMFYUI_INPUT_FOLDER, "3d", file_path)
-            if os.path.exists(input_3d_path):
-                return input_3d_path
-
-            # Try relative to input folder
-            input_path = os.path.join(COMFYUI_INPUT_FOLDER, file_path)
-            if os.path.exists(input_path):
-                return input_path
-
-        # Try as-is (might be absolute path that exists)
-        if os.path.exists(file_path):
-            return file_path
-
-        return None
+        from .path_utils import resolve_read_path
+        return resolve_read_path(file_path)
 
     @staticmethod
     def _extract_texture_image(mesh):
@@ -172,16 +146,9 @@ class LoadMeshPath(io.ComfyNode):
         full_path = LoadMeshPath._resolve_path(file_path)
 
         if full_path is None:
-            # Build error message with searched paths
-            searched_paths = [file_path]
-            if COMFYUI_OUTPUT_FOLDER:
-                searched_paths.append(os.path.join(COMFYUI_OUTPUT_FOLDER, file_path))
-            if COMFYUI_INPUT_FOLDER:
-                searched_paths.append(os.path.join(COMFYUI_INPUT_FOLDER, "3d", file_path))
-                searched_paths.append(os.path.join(COMFYUI_INPUT_FOLDER, file_path))
-
+            from .path_utils import searched_locations
             error_msg = f"File not found: '{file_path}'\nSearched in:"
-            for path in searched_paths:
+            for path in searched_locations(file_path):
                 error_msg += f"\n  - {path}"
             raise ValueError(error_msg)
 

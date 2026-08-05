@@ -62,10 +62,24 @@ class LoadMeshGlob(io.ComfyNode):
     def _resolve_pattern(glob_pattern):
         """Resolve a glob pattern to an absolute one.
 
-        Absolute patterns are used as-is. Relative patterns resolve against
-        ComfyUI's input directory (same convention as CAD_Load_From_Glob).
+        Absolute patterns matching real files are used as-is. Patterns with a
+        leading slash that match nothing (e.g. "/input/3d/*.ply", meant
+        relative to the ComfyUI base) retry against the base with the slash
+        stripped. Relative patterns resolve against ComfyUI's input directory
+        (same convention as CAD_Load_From_Glob).
         """
         if os.path.isabs(glob_pattern):
+            if glob_module.glob(glob_pattern, recursive=True):
+                return glob_pattern
+            try:
+                import folder_paths
+                base = getattr(folder_paths, "base_path", None)
+            except (ImportError, AttributeError):
+                base = os.environ.get("COMFYUI_BASE")
+            if base:
+                rebased = os.path.join(base, glob_pattern.lstrip("/\\"))
+                if glob_module.glob(rebased, recursive=True):
+                    return rebased
             return glob_pattern
         if COMFYUI_INPUT_FOLDER is not None:
             return os.path.join(COMFYUI_INPUT_FOLDER, glob_pattern)

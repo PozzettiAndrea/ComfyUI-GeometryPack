@@ -68,7 +68,7 @@ class LoadMesh(io.ComfyNode):
         )
 
     # Supported mesh extensions for file browser
-    SUPPORTED_EXTENSIONS = ['.obj', '.ply', '.stl', '.off', '.gltf', '.glb', '.fbx', '.dae', '.3ds', '.vtp']
+    SUPPORTED_EXTENSIONS = ['.obj', '.ply', '.stl', '.off', '.gltf', '.glb', '.fbx', '.dae', '.3ds', '.vtp', '.vtk']
 
 
     @classmethod

@@ -156,6 +156,26 @@ def load_mesh_file(file_path: str) -> Tuple[Optional[trimesh.Trimesh], str]:
         if mesh is None or len(mesh.vertices) == 0:
             return None, f"Failed to read mesh or mesh is empty: {file_path}"
 
+        # PLY: lift custom per-vertex properties (fields) into vertex_attributes.
+        # trimesh parses them into metadata['_ply_raw'] but does not surface them,
+        # so a PLY saved with e.g. a 'pressure_cp' field would silently lose it.
+        # Doing this BEFORE the cleanup below lets merge_vertices reindex them.
+        _GEOM_PROPS = {'x', 'y', 'z', 'nx', 'ny', 'nz',
+                       'red', 'green', 'blue', 'alpha', 's', 't', 'u', 'v'}
+        try:
+            vdata = mesh.metadata.get('_ply_raw', {}).get('vertex', {}).get('data')
+            if vdata is not None and getattr(vdata, 'dtype', None) is not None and vdata.dtype.names:
+                for prop in vdata.dtype.names:
+                    if prop in _GEOM_PROPS or prop in mesh.vertex_attributes:
+                        continue
+                    arr = np.asarray(vdata[prop])
+                    if len(arr) == len(mesh.vertices):
+                        mesh.vertex_attributes[prop] = arr
+                        log.info("PLY vertex field lifted to vertex_attributes: %s (%s)",
+                                 prop, arr.dtype)
+        except Exception as e:
+            log.debug("PLY field lift skipped: %s", e)
+
         # Check if it's actually a pointcloud (mesh with no faces)
         if not hasattr(mesh, 'faces') or mesh.faces is None or len(mesh.faces) == 0:
             # Convert to PointCloud
