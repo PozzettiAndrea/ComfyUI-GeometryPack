@@ -9,11 +9,11 @@ cpu = [
     "!remeshing_all",
     "!uv_unwrap_all",
 ]
-gpu = [
+cuda = [
     "fill_holes_all",
     "remeshing_all",
     "uv_unwrap_all",
 ]
 
 [test.platforms]
-platforms = ["linux", "macos", "windows", "windows_portable", "macos_desktop", "windows_desktop"]
+platforms = ["linux", "macos", "windows", "windows_portable", "macos_desktop", "windows_desktop", "linux_cuda", "windows_cuda", "windows_portable_cuda", "windows_desktop_cuda"]
