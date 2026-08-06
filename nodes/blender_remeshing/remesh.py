@@ -64,13 +64,17 @@ def _bpy_extract_and_cleanup(obj):
     return {'vertices': result_vertices, 'faces': result_faces}
 
 
-def _bpy_voxel_remesh(vertices, faces, voxel_size):
+def _bpy_voxel_remesh(vertices, faces, voxel_size, adaptivity=0.0,
+                      fix_poles=False, preserve_volume=True):
     """Blender voxel remesh using bpy."""
     import bpy
 
     obj, mesh = _bpy_setup_object(vertices, faces)
 
     obj.data.remesh_voxel_size = voxel_size
+    obj.data.remesh_voxel_adaptivity = adaptivity
+    obj.data.use_remesh_fix_poles = fix_poles
+    obj.data.use_remesh_preserve_volume = preserve_volume
     bpy.ops.object.voxel_remesh()
 
     return _bpy_extract_and_cleanup(obj)
@@ -120,7 +124,13 @@ class RemeshBlenderNode(io.ComfyNode):
                 io.Custom("TRIMESH").Input("trimesh"),
                 io.DynamicCombo.Input("backend", tooltip="Remeshing algorithm. voxel=watertight, smooth/sharp/blocks=modifier-based", options=[
                     io.DynamicCombo.Option("blender_voxel", [
-                        io.Float.Input("voxel_size", default=1, min=0.001, max=1.0, step=0.01, display_mode="number", tooltip="Voxel size for Blender voxel remesh. Smaller = more detail, more faces. Output is always watertight."),
+                        # Range/default follow Blender's remesh_voxel_size (default
+                        # 0.1, hard range 0.0001..FLT_MAX); the old max=1.0 cap
+                        # blocked coarse remeshing of mm-unit CAD parts.
+                        io.Float.Input("voxel_size", default=0.1, min=0.0001, max=100.0, step=0.01, display_mode="number", tooltip="Voxel size in mesh units. Smaller = more detail, more faces. Output is always watertight. Blender default 0.1; for large (mm-unit) CAD parts use bbox_diagonal/100 as a starting point."),
+                        io.Float.Input("adaptivity", default=0.0, min=0.0, max=1.0, step=0.05, tooltip="Post-remesh simplification: collapses faces in flat regions while keeping detail. 0 = uniform density (heaviest), 1 = maximum reduction."),
+                        io.Boolean.Input("fix_poles", default=False, tooltip="Produce cleaner topology around poles at some extra cost."),
+                        io.Boolean.Input("preserve_volume", default=True, tooltip="Project the remeshed surface back onto the original so thin features and small parts do not shrink. Blender defaults this on."),
                     ]),
                     io.DynamicCombo.Option("blender_smooth", [
                         io.Int.Input("octree_depth", default=6, min=1, max=10, step=1, tooltip="Resolution of the remesh. Higher = more detail, more faces."),
@@ -147,7 +157,10 @@ class RemeshBlenderNode(io.ComfyNode):
     def execute(cls, trimesh, backend):
         """Apply Blender-based remeshing."""
         selected = backend["backend"]
-        voxel_size = backend.get("voxel_size", 1.0)
+        voxel_size = backend.get("voxel_size", 0.1)
+        adaptivity = backend.get("adaptivity", 0.0)
+        fix_poles = backend.get("fix_poles", False)
+        preserve_volume = backend.get("preserve_volume", True)
         octree_depth = backend.get("octree_depth", 6)
         scale = backend.get("scale", 0.9)
         sharpness = backend.get("sharpness", 1.0)
@@ -159,8 +172,11 @@ class RemeshBlenderNode(io.ComfyNode):
         log.info("Input: %s vertices, %s faces", f"{initial_vertices:,}", f"{initial_faces:,}")
 
         if selected == "blender_voxel":
-            log.info("Parameters: voxel_size=%s", voxel_size)
-            remeshed_mesh, info = cls._blender_voxel(trimesh, voxel_size)
+            log.info("Parameters: voxel_size=%s adaptivity=%s fix_poles=%s "
+                     "preserve_volume=%s", voxel_size, adaptivity, fix_poles,
+                     preserve_volume)
+            remeshed_mesh, info = cls._blender_voxel(
+                trimesh, voxel_size, adaptivity, fix_poles, preserve_volume)
         elif selected in ("blender_smooth", "blender_sharp", "blender_blocks"):
             mode = selected.replace("blender_", "").upper()
             log.info("Parameters: mode=%s, octree_depth=%d, scale=%s%s",
@@ -182,13 +198,17 @@ class RemeshBlenderNode(io.ComfyNode):
         return io.NodeOutput(remeshed_mesh, info, ui={"text": [info]})
 
     @staticmethod
-    def _blender_voxel(trimesh, voxel_size):
+    def _blender_voxel(trimesh, voxel_size, adaptivity=0.0, fix_poles=False,
+                       preserve_volume=True):
         """Blender voxel remeshing using bpy."""
         log.info("Running Blender voxel remesh (voxel_size=%s)...", voxel_size)
         result = _bpy_voxel_remesh(
             vertices=np.asarray(trimesh.vertices, dtype=np.float32),
             faces=np.asarray(trimesh.faces, dtype=np.int32),
-            voxel_size=voxel_size
+            voxel_size=voxel_size,
+            adaptivity=adaptivity,
+            fix_poles=fix_poles,
+            preserve_volume=preserve_volume
         )
 
         remeshed_mesh = trimesh_module.Trimesh(
@@ -201,6 +221,9 @@ class RemeshBlenderNode(io.ComfyNode):
         remeshed_mesh.metadata['remeshing'] = {
             'algorithm': 'blender_voxel',
             'voxel_size': voxel_size,
+            'adaptivity': adaptivity,
+            'fix_poles': fix_poles,
+            'preserve_volume': preserve_volume,
             'original_vertices': len(trimesh.vertices),
             'original_faces': len(trimesh.faces)
         }

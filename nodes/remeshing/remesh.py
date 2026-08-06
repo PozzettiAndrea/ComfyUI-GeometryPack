@@ -86,6 +86,18 @@ class RemeshNode(io.ComfyNode):
                         io.Combo.Input("minimum_cost_flow", options=["false", "true"], default="false", tooltip="Min-cost-flow solver for the integer step -> cleaner connectivity / better singularities. Slower, more regular."),
                         io.Combo.Input("aggressive_sat", options=["false", "true"], default="false", tooltip="SAT solver for a fully-integer, seamless result with fewest singularities (highest quality). Slowest."),
                         io.Int.Input("seed", default=0, min=0, max=2000000000, step=1, tooltip="Random seed for field initialization (reproducible results)."),
+                        # QuadriFlow cost scales with INPUT faces, not the
+                        # target -- decimating dense inputs to ~2-3x the target
+                        # first is the standard speedup (output barely changes;
+                        # QuadriFlow rebuilds topology from scratch anyway).
+                        # Plain Boolean + Int, NOT a nested DynamicCombo: a
+                        # nested combo's assembled dict cannot cross the
+                        # GraphBuilder dispatch to the backend node (the
+                        # expander matches it against "on"/"off" option keys,
+                        # fails, and silently drops the input -- the toggle
+                        # arrived as off no matter what the user set).
+                        io.Boolean.Input("pre_decimate", default=False, tooltip="Quadric-collapse the input before remeshing. Big speedup on dense inputs; output quality nearly unchanged (QuadriFlow rebuilds topology from scratch anyway)."),
+                        io.Int.Input("pre_decimate_faces", default=40000, min=1000, max=5000000, step=1000, tooltip="Only used when pre_decimate is on: reduce the input to this many faces first. Rule of thumb: 2-3x target_face_count. No-op if the input is already at or below this count."),
                     ]),
                     # MMG surface remesher (mmgs). DEFAULT sizing is Hausdorff-DRIVEN (curvature-
                     # adaptive): hausd sets a geometric error bound, hmin/hmax clamp it, hgrad
@@ -329,7 +341,13 @@ class RemeshNode(io.ComfyNode):
                     ]),
                     # ---- Blender backends ----
                     io.DynamicCombo.Option("blender_voxel", [
-                        io.Float.Input("voxel_size", default=1, min=0.001, max=1.0, step=0.01, display_mode="number", tooltip="Voxel size. Smaller = more detail. Output is always watertight."),
+                        # Range/default follow Blender's remesh_voxel_size (default
+                        # 0.1, hard range 0.0001..FLT_MAX); the old max=1.0 cap
+                        # blocked coarse remeshing of mm-unit CAD parts.
+                        io.Float.Input("voxel_size", default=0.1, min=0.0001, max=100.0, step=0.01, display_mode="number", tooltip="Voxel size in mesh units. Smaller = more detail. Output is always watertight. Blender default 0.1; for large (mm-unit) CAD parts use bbox_diagonal/100 as a starting point."),
+                        io.Float.Input("adaptivity", default=0.0, min=0.0, max=1.0, step=0.05, tooltip="Post-remesh simplification: collapses faces in flat regions while keeping detail. 0 = uniform density (heaviest), 1 = maximum reduction."),
+                        io.Boolean.Input("fix_poles", default=False, tooltip="Produce cleaner topology around poles at some extra cost."),
+                        io.Boolean.Input("preserve_volume", default=True, tooltip="Project the remeshed surface back onto the original so thin features and small parts do not shrink. Blender defaults this on."),
                     ]),
                     io.DynamicCombo.Option("blender_sharp", [
                         io.Int.Input("octree_depth", default=6, min=1, max=12, step=1, tooltip="Octree resolution -- the detail knob. Power of 2: each +1 roughly QUADRUPLES face count and halves voxel size. 6 is a sane start; 8-9 is high detail; 10+ can be very heavy."),
@@ -389,6 +407,22 @@ class RemeshNode(io.ComfyNode):
         kwargs = {"trimesh": trimesh}
         for k, v in backend.items():
             if k == "backend":
+                continue
+            # A nested DynamicCombo (e.g. quadriflow's pre_decimate toggle)
+            # arrives here as an assembled dict. It CANNOT be forwarded
+            # verbatim: the expanded backend node's schema parser compares the
+            # live value against the option keys ("on"/"off"), a dict matches
+            # neither, and the input is silently dropped -- the user's toggle
+            # became off. Unpack to the backend node's plain scalar inputs
+            # (<name> bool + the option's own params) instead.
+            if isinstance(v, dict):
+                sel = v.get(k)
+                kwargs[cls.PARAM_REMAP.get(k, k)] = (
+                    sel is True or sel == "on" or sel == "true")
+                for nk, nv in v.items():
+                    if nk == k:
+                        continue
+                    kwargs[cls.PARAM_REMAP.get(nk, nk)] = nv
                 continue
             # Remap param names if needed (frontend name -> backend name)
             backend_key = cls.PARAM_REMAP.get(k, k)
