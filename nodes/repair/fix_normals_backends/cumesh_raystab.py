@@ -21,6 +21,8 @@ log = logging.getLogger("geometrypack")
 class FixNormalsCuMeshRaystabNode(io.ComfyNode):
     """Fix face orientation on the GPU via cuBVH ray-stabbing signed distance."""
 
+    ACCELERATOR = "cuda"  # comfy-env: this node requires CUDA at execution
+
     @classmethod
     def define_schema(cls):
         return io.Schema(

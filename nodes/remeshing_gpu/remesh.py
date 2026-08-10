@@ -121,6 +121,8 @@ class RemeshGPUNode(io.ComfyNode):
     Requires CUDA-capable GPU, torch, and cumesh package.
     """
 
+    ACCELERATOR = "cuda"  # comfy-env: this node requires CUDA at execution
+
 
     @classmethod
     def define_schema(cls):

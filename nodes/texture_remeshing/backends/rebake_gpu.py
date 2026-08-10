@@ -74,6 +74,8 @@ class RebakeTextureGPUNode(io.ComfyNode):
     """Bake original_mesh's texture onto uv_mesh's UV layout via per-texel closest-point
     projection (GPU-accelerated closest-point search)."""
 
+    ACCELERATOR = "cuda"  # comfy-env: this node requires CUDA at execution
+
     @classmethod
     def define_schema(cls):
         return io.Schema(

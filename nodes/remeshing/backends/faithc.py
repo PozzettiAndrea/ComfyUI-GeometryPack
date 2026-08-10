@@ -25,6 +25,8 @@ log = logging.getLogger("geometrypack")
 class RemeshFaithCNode(io.ComfyNode):
     """FaithC faithful-contouring remeshing backend (CUDA)."""
 
+    ACCELERATOR = "cuda"  # comfy-env: this node requires CUDA at execution
+
     @classmethod
     def define_schema(cls):
         return io.Schema(

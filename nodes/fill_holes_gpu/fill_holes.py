@@ -12,6 +12,8 @@ log = logging.getLogger("geometrypack")
 
 class FillHolesGPUNode(io.ComfyNode):
 
+    ACCELERATOR = "cuda"  # comfy-env: this node requires CUDA at execution
+
     @classmethod
     def define_schema(cls):
         return io.Schema(

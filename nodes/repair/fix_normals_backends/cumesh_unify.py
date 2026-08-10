@@ -18,6 +18,8 @@ log = logging.getLogger("geometrypack")
 class FixNormalsCuMeshNode(io.ComfyNode):
     """Fix winding/normal orientation on the GPU via CuMesh.unify_face_orientations()."""
 
+    ACCELERATOR = "cuda"  # comfy-env: this node requires CUDA at execution
+
     @classmethod
     def define_schema(cls):
         return io.Schema(
