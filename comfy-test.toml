@@ -3,7 +3,10 @@ levels = ["syntax", "coverage", "install", "registration", "instantiation", "exe
 publish = true
 
 [test.workflows]
-timeout = 300
+# 600, not 300: remeshing_all legitimately needs ~260s on bare metal
+# (windows-portable-cuda) and >300s inside the Windows Sandbox VM
+# (GeometryPack-2144 timed out at 300s mid-QuadriFlow).
+timeout = 600
 cpu = [
     "!fill_holes_all",
     "!remeshing_all",
