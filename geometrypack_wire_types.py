@@ -17,9 +17,12 @@ sockets total) intentionally stay on the default path for now.
 """
 
 try:  # parent process (comfy-env installed)
-    from comfy_env.isolation.workers._ipc_shared import register_serializer
+    from comfy_env.isolation.workers._ipc_shared import (
+        OpaquePayload,
+        register_serializer,
+    )
 except ImportError:  # worker process (copied module, no comfy_env package)
-    from _ipc_shared import register_serializer
+    from _ipc_shared import OpaquePayload, register_serializer
 
 
 def _serialize_trimesh(mesh, recurse):
@@ -70,7 +73,16 @@ def _serialize_trimesh(mesh, recurse):
 
 
 def _deserialize_trimesh(payload, recurse):
-    import trimesh
+    try:
+        import trimesh
+    except ImportError:
+        # This side has no trimesh (e.g. a host env honoring the
+        # host-environment principle): hold the frame opaquely so it can be
+        # forwarded to a worker that can reconstruct it. NOTE: opaque frames
+        # reference worker shared memory whose lifetime follows the
+        # transport's retention windows -- holding them across long gaps is
+        # not yet guaranteed safe.
+        return OpaquePayload("geompack.Trimesh", payload)
 
     mesh = trimesh.Trimesh(
         vertices=recurse(payload["vertices"]),
