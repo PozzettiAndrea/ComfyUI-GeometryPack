@@ -62,3 +62,8 @@ pymeshlab = "*"
 [env_vars]
 KMP_DUPLICATE_LIB_OK = "TRUE"
 OMP_NUM_THREADS = 1
+
+# Custom wire types (comfy-env serializer registry, ADR-0014): meshes cross
+# the worker boundary as shared-memory arrays instead of pickle.
+[serializers]
+modules = ["geometrypack_wire_types"]
