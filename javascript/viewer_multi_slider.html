@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GeomPack VTK.js Multi Mesh Slider Viewer</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #2a2a2a; font-family: monospace;
+               display: flex; flex-direction: column; height: 100vh; }
+        #viewerContainer { flex: 1; position: relative; min-height: 0; }
+        .render-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                   color: white; font-size: 14px; text-align: center; z-index: 1000; pointer-events: none; }
+        #sliderOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                         pointer-events: none; z-index: 100; }
+        .slider-line { position: absolute; top: 0; width: 2px; height: 100%; background: #00e0ff;
+                       pointer-events: auto; cursor: ew-resize; box-shadow: 0 0 8px rgba(0,224,255,0.5); }
+        .slider-handle { position: absolute; width: 20px; height: 20px; background: #00e0ff;
+                         border: 2px solid white; border-radius: 50%; transform: translate(-50%,-50%);
+                         pointer-events: auto; cursor: ew-resize; transition: transform 0.1s, box-shadow 0.1s;
+                         box-shadow: 0 0 8px rgba(0,224,255,0.5); }
+        .slider-handle:hover, .slider-handle.dragging {
+            transform: translate(-50%,-50%) scale(1.2); box-shadow: 0 0 15px rgba(0,224,255,0.8); }
+        .mesh-label { position: absolute; top: 8px; color: white; font-size: 13px; font-weight: bold;
+                      text-shadow: 2px 2px 4px black; pointer-events: none; background: rgba(0,0,0,0.6);
+                      padding: 4px 10px; border-radius: 4px; z-index: 101; transform: translateX(-50%); white-space: nowrap; }
+        #controls { background: #1a1a1a; border-top: 1px solid #444; padding: 8px 12px; display: flex;
+                    gap: 12px; align-items: center; flex-wrap: wrap; font-size: 12px; color: #ccc;
+                    min-height: 48px; overflow-x: auto; }
+        #controls button, #controls select { background: #333; color: #ccc; border: 1px solid #555;
+                    padding: 4px 8px; border-radius: 3px; font-size: 12px; font-family: monospace; cursor: pointer; }
+        #controls button:hover { background: #444; }
+        #controls label { display: flex; align-items: center; gap: 4px; }
+        .divider { width: 1px; height: 20px; background: #444; margin: 0 8px; }
+        #settingsPanel { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            background: #1a1a1a; border: 1px solid #555; border-radius: 6px; padding: 16px; z-index: 2000;
+            display: none; min-width: 280px; max-height: 80%; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        #settingsPanel.visible { display: block; }
+        #settingsPanel h3 { margin: 0 0 12px 0; color: #ccc; font-size: 14px; font-weight: normal;
+            border-bottom: 1px solid #333; padding-bottom: 8px; }
+        #settingsPanel .setting-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        #settingsPanel .setting-row label { flex: 0 0 100px; color: #ccc; font-size: 12px; }
+        #settingsPanel .setting-row input, #settingsPanel .setting-row select { flex: 1; background: #333;
+            color: #ccc; border: 1px solid #555; padding: 6px 8px; border-radius: 3px; font-size: 12px; font-family: monospace; }
+        #settingsPanel .button-row { display: flex; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #333; }
+        #settingsPanel .button-row button { flex: 1; padding: 6px 12px; font-size: 12px; }
+        #settingsOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1999; display: none; }
+        #settingsOverlay.visible { display: block; }
+        #settingsButton { background: #333; width: 32px; height: 32px; padding: 0; display: flex;
+            align-items: center; justify-content: center; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div id="viewerContainer">
+        <!-- render layers + slider overlay are created dynamically -->
+        <div id="sliderOverlay"></div>
+        <div id="loading">Ready to load meshes</div>
+
+        <div id="settingsOverlay"></div>
+        <div id="settingsPanel">
+            <h3>Appearance Settings</h3>
+            <div class="setting-row"><label>Point Size:</label><input type="number" id="pointSize" min="1" max="20" step="1" value="10"></div>
+            <div class="setting-row"><label>Edge Width:</label><input type="number" id="edgeWidth" min="1" max="10" step="1" value="1"></div>
+            <div class="setting-row"><label>Render Mode:</label>
+                <select id="representationSettings"><option value="2">Surface</option><option value="1">Wireframe</option><option value="0">Points</option></select></div>
+            <div class="setting-row"><label><input type="checkbox" id="parallelProjectionSetting"> Parallel Projection</label></div>
+            <div class="button-row"><button id="applySettings">Apply</button><button id="cancelSettings">Cancel</button></div>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button id="settingsButton" title="Appearance Settings">[Settings]</button>
+        <span class="divider"></span>
+        <label><input type="checkbox" id="showEdges"> Edges</label>
+        <span class="divider"></span>
+        <button id="viewPosX">+X</button><button id="viewNegX">-X</button>
+        <button id="viewPosY">+Y</button><button id="viewNegY">-Y</button>
+        <button id="viewPosZ">+Z</button><button id="viewNegZ">-Z</button>
+        <span class="divider"></span>
+        <button id="resetCamera">Reset Camera</button>
+        <button id="resetSlider">Reset Sliders</button>
+    </div>
+
+    <script src="./js/vtk-gltf.js"></script>
+    <script src="./js/viewer-bundle-vtk.js"></script>
+
+    <script>
+        const vtkFullScreenRenderWindow = vtk.Rendering.Misc.vtkFullScreenRenderWindow;
+        const vtkActor = vtk.Rendering.Core.vtkActor;
+        const vtkMapper = vtk.Rendering.Core.vtkMapper;
+        const vtkSTLReader = vtk.IO.Geometry.vtkSTLReader;
+        const vtkOBJReader = vtk.IO.Misc.vtkOBJReader;
+        const vtkXMLPolyDataReader = vtk.IO.XML.vtkXMLPolyDataReader;
+        const vtkPolyDataNormals = vtk.Filters.Core.vtkPolyDataNormals;
+        const vtkInteractorStyleTrackballCamera = vtk.Interaction.Style.vtkInteractorStyleTrackballCamera;
+        const vtkGLTFImporter = vtk.IO.Geometry.vtkGLTFImporter;
+
+        console.log('[GeomPack Multi Slider] Initializing...');
+
+        const loading = document.getElementById('loading');
+        const viewerContainer = document.getElementById('viewerContainer');
+        const sliderOverlay = document.getElementById('sliderOverlay');
+
+        // distinct default colors per layer
+        const PALETTE = [
+            [0.30, 0.50, 0.95],  // blue
+            [0.30, 0.85, 0.40],  // green
+            [0.95, 0.65, 0.25],  // orange
+            [0.85, 0.40, 0.85],  // magenta
+        ];
+
+        // per-layer arrays
+        let N = 0;
+        let containers = [], fsRenderers = [], renderers = [], renderWindows = [], interactors = [];
+        let actors = [], mappers = [], boundsArr = [], gltfActorsArr = [], polydataArr = [];
+        let combinedBounds = null;
+        let positions = [];      // N-1 divider positions in [0,1], strictly increasing
+        let sliderLines = [], sliderHandles = [], bandLabels = [];
+        let dragIndex = -1;
+        const EPS = 0.02;
+
+        // camera sync
+        let animatingIndex = -1, isSyncing = false;
+        let _cameraWheelTimer = null;
+
+        function teardown() {
+            fsRenderers.forEach(r => { try { r.delete(); } catch (e) {} });
+            containers.forEach(c => c.remove());
+            sliderOverlay.innerHTML = '';
+            containers = []; fsRenderers = []; renderers = []; renderWindows = []; interactors = [];
+            actors = []; mappers = []; boundsArr = []; gltfActorsArr = []; polydataArr = [];
+            sliderLines = []; sliderHandles = []; bandLabels = []; combinedBounds = null;
+        }
+
+        // Build DOM layers + dividers for n meshes
+        function buildLayers(n) {
+            teardown();
+            N = n;
+            for (let i = 0; i < n; i++) {
+                const div = document.createElement('div');
+                div.className = 'render-layer';
+                div.id = `meshContainer${i}`;
+                div.style.zIndex = (i + 1).toString();
+                viewerContainer.insertBefore(div, sliderOverlay);
+                containers.push(div);
+            }
+            // N-1 dividers
+            for (let j = 0; j < n - 1; j++) {
+                const line = document.createElement('div'); line.className = 'slider-line';
+                const handle = document.createElement('div'); handle.className = 'slider-handle';
+                line.dataset.idx = j; handle.dataset.idx = j;
+                sliderOverlay.appendChild(line); sliderOverlay.appendChild(handle);
+                sliderLines.push(line); sliderHandles.push(handle);
+                line.addEventListener('mousedown', (e) => startDrag(e, j));
+                handle.addEventListener('mousedown', (e) => startDrag(e, j));
+                line.addEventListener('touchstart', (e) => startDrag(e, j));
+                handle.addEventListener('touchstart', (e) => startDrag(e, j));
+            }
+            // N band labels
+            for (let i = 0; i < n; i++) {
+                const lab = document.createElement('div'); lab.className = 'mesh-label';
+                lab.textContent = `Mesh ${i + 1}`;
+                sliderOverlay.appendChild(lab); bandLabels.push(lab);
+            }
+            // default evenly-spaced dividers
+            positions = [];
+            for (let j = 1; j < n; j++) positions.push(j / n);
+        }
+
+        function initViewers(n) {
+            for (let i = 0; i < n; i++) {
+                const fsr = vtkFullScreenRenderWindow.newInstance({
+                    background: [0.16, 0.16, 0.16], container: containers[i] });
+                const renderer = fsr.getRenderer();
+                const rw = fsr.getRenderWindow();
+                const interactor = rw.getInteractor();
+                interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
+
+                const actor = vtkActor.newInstance();
+                const mapper = vtkMapper.newInstance();
+                actor.setMapper(mapper);
+                const prop = actor.getProperty();
+                const c = PALETTE[i % PALETTE.length];
+                prop.setColor(c[0], c[1], c[2]);
+                prop.setEdgeVisibility(false);
+                prop.setAmbient(0.4); prop.setDiffuse(0.8); prop.setSpecular(0.3); prop.setSpecularPower(20);
+                renderer.addActor(actor);
+
+                fsRenderers.push(fsr); renderers.push(renderer); renderWindows.push(rw);
+                interactors.push(interactor); actors.push(actor); mappers.push(mapper);
+                boundsArr.push(null); gltfActorsArr.push(null); polydataArr.push(null);
+                fsr.resize();
+            }
+            setupCameraSync();
+            console.log(`[GeomPack Multi Slider] ${n} viewers initialized`);
+        }
+
+        function syncFrom(srcIdx) {
+            if (isSyncing) return;
+            isSyncing = true;
+            const src = renderers[srcIdx].getActiveCamera();
+            for (let i = 0; i < N; i++) {
+                if (i === srcIdx) continue;
+                const cam = renderers[i].getActiveCamera();
+                cam.setPosition(...src.getPosition());
+                cam.setFocalPoint(...src.getFocalPoint());
+                cam.setViewUp(...src.getViewUp());
+                cam.setParallelProjection(src.getParallelProjection());
+                cam.setClippingRange(...src.getClippingRange());
+                cam.setParallelScale(src.getParallelScale());
+                cam.setViewAngle(src.getViewAngle());
+                renderers[i].resetCameraClippingRange();
+                renderWindows[i].render();
+            }
+            isSyncing = false;
+        }
+
+        function sendCameraState() {
+            const cam = renderers[0]?.getActiveCamera();
+            if (!cam) return;
+            window.parent.postMessage({ type: 'WIDGET_UPDATE', widget: 'camera_state',
+                value: JSON.stringify({ position: cam.getPosition(), focalPoint: cam.getFocalPoint(), viewUp: cam.getViewUp() }) }, '*');
+        }
+
+        function setupCameraSync() {
+            for (let i = 0; i < N; i++) {
+                const idx = i;
+                interactors[idx].onStartAnimation(() => { animatingIndex = idx; });
+                interactors[idx].onAnimation(() => { if (animatingIndex === idx) syncFrom(idx); });
+                interactors[idx].onEndAnimation(() => {
+                    if (animatingIndex === idx) { animatingIndex = -1; syncFrom(idx); sendCameraState(); }
+                });
+            }
+            setTimeout(() => {
+                for (let i = 0; i < N; i++) {
+                    const idx = i;
+                    const canvas = containers[idx].querySelector('canvas');
+                    if (!canvas) continue;
+                    canvas.addEventListener('wheel', () => {
+                        setTimeout(() => syncFrom(idx), 0);
+                        clearTimeout(_cameraWheelTimer);
+                        _cameraWheelTimer = setTimeout(sendCameraState, 150);
+                    });
+                }
+            }, 500);
+        }
+
+        async function loadMesh(filepath, idx) {
+            console.log(`[GeomPack Multi Slider] Loading mesh ${idx + 1}:`, filepath);
+            const isSTL = filepath.includes('.stl');
+            const isOBJ = filepath.includes('.obj');
+            const isVTP = filepath.includes('.vtp');
+            const isGLB = filepath.includes('.glb');
+
+            if (isGLB) {
+                const targetRenderer = renderers[idx];
+                const prev = gltfActorsArr[idx];
+                if (prev) prev.forEach(a => targetRenderer.removeActor(a));
+                const importer = vtkGLTFImporter.newInstance();
+                importer.setRenderer(targetRenderer);
+                importer.setUrl(filepath);
+                await new Promise((resolve, reject) => { importer.onReady(() => resolve()); importer.loadData().catch(reject); });
+                importer.importActors();
+                const acts = Array.from(importer.getActors().values());
+                if (acts.length === 0) throw new Error('No actors found in GLTF');
+                targetRenderer.removeActor(actors[idx]);
+                let bounds = null;
+                acts.forEach(actor => {
+                    const mapper = actor.getMapper(); const property = actor.getProperty(); const input = mapper?.getInputData();
+                    if (input) {
+                        const ab = actor.getBounds();
+                        if (!bounds) bounds = [...ab];
+                        else { bounds[0]=Math.min(bounds[0],ab[0]); bounds[1]=Math.max(bounds[1],ab[1]); bounds[2]=Math.min(bounds[2],ab[2]); bounds[3]=Math.max(bounds[3],ab[3]); bounds[4]=Math.min(bounds[4],ab[4]); bounds[5]=Math.max(bounds[5],ab[5]); }
+                        const scalars = input.getPointData()?.getScalars();
+                        if (scalars && scalars.getNumberOfComponents() >= 3) {
+                            mapper.setScalarVisibility(true); mapper.setScalarModeToUsePointData(); mapper.setColorModeToDirectScalars();
+                        }
+                        if (property) { if (property.setMetallic) property.setMetallic(0.0); if (property.setRoughness) property.setRoughness(1.0); }
+                    }
+                });
+                boundsArr[idx] = bounds; polydataArr[idx] = null; gltfActorsArr[idx] = acts;
+                return;
+            }
+
+            let reader;
+            if (isSTL) reader = vtkSTLReader.newInstance();
+            else if (isOBJ) reader = vtkOBJReader.newInstance();
+            else if (isVTP) reader = vtkXMLPolyDataReader.newInstance();
+            else throw new Error(`Unsupported file format: ${filepath}`);
+
+            const response = await fetch(filepath);
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            const arrayBuffer = await response.arrayBuffer();
+            if (isSTL) reader.parseAsArrayBuffer(arrayBuffer);
+            else if (isOBJ) reader.parseAsText(new TextDecoder().decode(arrayBuffer));
+            else if (isVTP) reader.parseAsArrayBuffer(arrayBuffer);
+
+            const polydata = reader.getOutputData();
+            if (!polydata) throw new Error('Failed to parse mesh data');
+            const normalsFilter = vtkPolyDataNormals.newInstance();
+            normalsFilter.setInputConnection(reader.getOutputPort());
+            mappers[idx].setInputConnection(normalsFilter.getOutputPort());
+            mappers[idx].setScalarVisibility(false);
+            mappers[idx].update();
+            const mp = mappers[idx].getInputData();
+            boundsArr[idx] = mp.getBounds(); polydataArr[idx] = mp;
+        }
+
+        function updateCombinedBounds() {
+            const valid = boundsArr.filter(b => b);
+            if (!valid.length) { combinedBounds = null; return; }
+            combinedBounds = [...valid[0]];
+            valid.forEach(b => {
+                combinedBounds[0]=Math.min(combinedBounds[0],b[0]); combinedBounds[1]=Math.max(combinedBounds[1],b[1]);
+                combinedBounds[2]=Math.min(combinedBounds[2],b[2]); combinedBounds[3]=Math.max(combinedBounds[3],b[3]);
+                combinedBounds[4]=Math.min(combinedBounds[4],b[4]); combinedBounds[5]=Math.max(combinedBounds[5],b[5]);
+            });
+        }
+
+        // clip each layer to its band [leftEdge, rightEdge]; place dividers + labels
+        function updateSliders() {
+            if (!N) return;
+            const rect = viewerContainer.getBoundingClientRect();
+            for (let i = 0; i < N; i++) {
+                const left = (i === 0) ? 0 : positions[i - 1];
+                const right = (i === N - 1) ? 1 : positions[i];
+                containers[i].style.clipPath = `inset(0 ${(1 - right) * 100}% 0 ${left * 100}%)`;
+                const mid = (left + right) / 2;
+                if (bandLabels[i]) bandLabels[i].style.left = `${mid * rect.width}px`;
+            }
+            for (let j = 0; j < positions.length; j++) {
+                const x = positions[j] * rect.width;
+                sliderLines[j].style.left = `${x}px`;
+                sliderHandles[j].style.left = `${x}px`;
+                sliderHandles[j].style.top = `${rect.height / 2}px`;
+            }
+        }
+
+        function positionCamera(bounds) {
+            if (!bounds) return;
+            const center = [(bounds[0]+bounds[1])/2, (bounds[2]+bounds[3])/2, (bounds[4]+bounds[5])/2];
+            const maxDim = Math.max(bounds[1]-bounds[0], bounds[3]-bounds[2], bounds[5]-bounds[4]);
+            const distance = maxDim * 2.5;
+            for (let i = 0; i < N; i++) {
+                const cam = renderers[i].getActiveCamera();
+                cam.setPosition(center[0]+distance, center[1]+distance, center[2]+distance);
+                cam.setFocalPoint(...center); cam.setViewUp(0, 0, 1);
+                renderers[i].resetCamera(bounds); renderers[i].resetCameraClippingRange();
+            }
+        }
+
+        function renderAll() { for (let i = 0; i < N; i++) renderWindows[i].render(); }
+
+        // ----- divider drag (clamped, never crossing) -----
+        function startDrag(e, j) { dragIndex = j; sliderHandles[j].classList.add('dragging'); e.preventDefault(); }
+        function onDrag(e) {
+            if (dragIndex < 0) return;
+            const rect = viewerContainer.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let p = (clientX - rect.left) / rect.width;
+            const lo = (dragIndex === 0) ? 0 : positions[dragIndex - 1];
+            const hi = (dragIndex === positions.length - 1) ? 1 : positions[dragIndex + 1];
+            p = Math.max(lo + EPS, Math.min(hi - EPS, p));
+            positions[dragIndex] = p;
+            updateSliders();
+        }
+        function endDrag() { if (dragIndex >= 0) sliderHandles[dragIndex].classList.remove('dragging'); dragIndex = -1; }
+        document.addEventListener('mousemove', onDrag);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchmove', onDrag);
+        document.addEventListener('touchend', endDrag);
+
+        // ----- message protocol -----
+        window.addEventListener('message', async (event) => {
+            if (event.data.type !== 'LOAD_MULTI_SLIDER') return;
+            const data = event.data;
+            const files = (data.mesh_files || data.meshFiles || []).filter(Boolean);
+            console.log('[GeomPack Multi Slider] LOAD_MULTI_SLIDER:', files.length, 'meshes');
+            if (files.length < 2) {
+                loading.textContent = 'Need at least 2 meshes for the wipe view'; loading.style.display = 'block'; return;
+            }
+            loading.textContent = 'Loading meshes...'; loading.style.display = 'block';
+            try {
+                buildLayers(files.length);
+                initViewers(files.length);
+                for (let i = 0; i < files.length; i++) await loadMesh(files[i], i);
+                updateCombinedBounds();
+                updateSliders();
+                positionCamera(combinedBounds);
+                const showEdges = data.show_edges || data.showEdges || false;
+                document.getElementById('showEdges').checked = showEdges;
+                actors.forEach(a => a.getProperty().setEdgeVisibility(showEdges));
+                gltfActorsArr.forEach(acts => { if (acts) acts.forEach(a => a.getProperty().setEdgeVisibility(showEdges)); });
+                renderAll();
+                loading.style.display = 'none';
+            } catch (err) {
+                console.error('[GeomPack Multi Slider] load error:', err);
+                loading.textContent = `Error: ${err.message}`; loading.style.color = '#ff6b6b';
+            }
+        });
+
+        // ----- controls -----
+        document.getElementById('showEdges').addEventListener('change', (e) => {
+            const v = e.target.checked;
+            actors.forEach(a => a.getProperty().setEdgeVisibility(v));
+            gltfActorsArr.forEach(acts => { if (acts) acts.forEach(a => a.getProperty().setEdgeVisibility(v)); });
+            renderAll();
+            window.parent.postMessage({ type: 'WIDGET_UPDATE', widget: 'show_edges', value: v }, '*');
+        });
+        document.getElementById('resetCamera').addEventListener('click', () => { positionCamera(combinedBounds); renderAll(); });
+        document.getElementById('resetSlider').addEventListener('click', () => {
+            positions = []; for (let j = 1; j < N; j++) positions.push(j / N); updateSliders();
+        });
+
+        function setCameraView(direction) {
+            if (!combinedBounds) return;
+            const b = combinedBounds;
+            const center = [(b[0]+b[1])/2, (b[2]+b[3])/2, (b[4]+b[5])/2];
+            const maxDim = Math.max(b[1]-b[0], b[3]-b[2], b[5]-b[4]);
+            const d = maxDim * 2.5;
+            let position, viewUp;
+            switch (direction) {
+                case '+X': position=[center[0]+d,center[1],center[2]]; viewUp=[0,0,1]; break;
+                case '-X': position=[center[0]-d,center[1],center[2]]; viewUp=[0,0,1]; break;
+                case '+Y': position=[center[0],center[1]+d,center[2]]; viewUp=[0,0,1]; break;
+                case '-Y': position=[center[0],center[1]-d,center[2]]; viewUp=[0,0,1]; break;
+                case '+Z': position=[center[0],center[1],center[2]+d]; viewUp=[0,1,0]; break;
+                case '-Z': position=[center[0],center[1],center[2]-d]; viewUp=[0,1,0]; break;
+            }
+            for (let i = 0; i < N; i++) {
+                const cam = renderers[i].getActiveCamera();
+                cam.setPosition(...position); cam.setFocalPoint(...center); cam.setViewUp(...viewUp);
+                renderers[i].resetCamera(); renderers[i].resetCameraClippingRange();
+            }
+            renderAll();
+        }
+        document.getElementById('viewPosX').addEventListener('click', () => setCameraView('+X'));
+        document.getElementById('viewNegX').addEventListener('click', () => setCameraView('-X'));
+        document.getElementById('viewPosY').addEventListener('click', () => setCameraView('+Y'));
+        document.getElementById('viewNegY').addEventListener('click', () => setCameraView('-Y'));
+        document.getElementById('viewPosZ').addEventListener('click', () => setCameraView('+Z'));
+        document.getElementById('viewNegZ').addEventListener('click', () => setCameraView('-Z'));
+
+        // ----- settings panel -----
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        let currentPointSize = 3, currentEdgeWidth = 1, currentRepresentation = 2, currentParallelProjection = false;
+        settingsButton.addEventListener('click', () => {
+            document.getElementById('pointSize').value = currentPointSize;
+            document.getElementById('edgeWidth').value = currentEdgeWidth;
+            document.getElementById('representationSettings').value = currentRepresentation.toString();
+            document.getElementById('parallelProjectionSetting').checked = currentParallelProjection;
+            settingsPanel.classList.add('visible'); settingsOverlay.classList.add('visible');
+        });
+        function closeSettings() { settingsPanel.classList.remove('visible'); settingsOverlay.classList.remove('visible'); }
+        settingsOverlay.addEventListener('click', closeSettings);
+        document.getElementById('cancelSettings').addEventListener('click', closeSettings);
+        document.getElementById('applySettings').addEventListener('click', () => {
+            const ps = parseFloat(document.getElementById('pointSize').value);
+            const ew = parseFloat(document.getElementById('edgeWidth').value);
+            const rep = parseInt(document.getElementById('representationSettings').value);
+            const pp = document.getElementById('parallelProjectionSetting').checked;
+            actors.forEach(a => { const p=a.getProperty(); p.setPointSize(ps); p.setLineWidth(ew); p.setRepresentation(rep); });
+            gltfActorsArr.forEach(acts => { if (acts) acts.forEach(a => { const p=a.getProperty(); p.setPointSize(ps); p.setLineWidth(ew); p.setRepresentation(rep); }); });
+            for (let i = 0; i < N; i++) { renderers[i].getActiveCamera().setParallelProjection(pp); renderers[i].resetCameraClippingRange(); }
+            currentPointSize=ps; currentEdgeWidth=ew; currentRepresentation=rep; currentParallelProjection=pp;
+            renderAll(); closeSettings();
+        });
+
+        window.addEventListener('resize', () => { fsRenderers.forEach(r => r.resize()); updateSliders(); renderAll(); });
+
+        console.log('[GeomPack Multi Slider] Ready');
+    </script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>GeomPack Mesh Slicer</title>
+    <style>
+        html, body { margin: 0; padding: 0; height: 100%; background: #2a2a2a; overflow: hidden; font: 12px monospace; color: #ddd; }
+        #wrap { display: flex; flex-direction: column; width: 100%; height: 100%; }
+        #top { position: relative; flex: 1 1 0; min-height: 80px; background: #2a2a2a; }
+        #toolbar { flex: 0 0 auto; display: flex; flex-direction: column; gap: 4px; padding: 4px 6px; background: #1d1d1d; border-top: 1px solid #444; border-bottom: 1px solid #444; }
+        #toolbar .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+        #bottom { position: relative; flex: 1 1 0; min-height: 80px; background: #222; cursor: crosshair; }
+        #section { position: relative; flex: 1 1 0; min-height: 80px; background: #151515; border-top: 1px solid #444; display: none; }
+        #status { flex: 1 1 auto; color: #9ad; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        button { background: #333; color: #ddd; border: 1px solid #555; border-radius: 4px; padding: 3px 8px; cursor: pointer; font: 11px monospace; }
+        button.active { background: #2c5d8a; border-color: #4a90c0; }
+        button:hover { background: #444; }
+    </style>
+    <script src="./js/vtk-gltf.js"></script>
+</head>
+<body>
+<div id="wrap">
+    <div id="top"></div>
+    <div id="toolbar">
+        <div class="row">
+            <span>3d view:</span>
+            <button id="qpx">+X</button>
+            <button id="qnx">−X</button>
+            <button id="qpy">+Y</button>
+            <button id="qny">−Y</button>
+            <button id="qpz">+Z</button>
+            <button id="qnz">−Z</button>
+            <span id="status">load a mesh, then click 2 points in the bottom view to set the cut</span>
+        </div>
+        <div class="row">
+            <span>cut view:</span>
+            <button id="axXY" class="active">XY</button>
+            <button id="axYZ">YZ</button>
+            <button id="axXZ">XZ</button>
+            <button id="lock" class="active">🔒 2D lock</button>
+            <button id="flip">⇄ flip clip</button>
+            <button id="reset">reset clip</button>
+            <button id="r2d">▣ render 2D</button>
+            <label style="color:#bbb;font:11px monospace;">edge <input id="thick" type="number" min="1" max="20" value="2" style="width:44px;background:#333;color:#ddd;border:1px solid #555;border-radius:4px;font:11px monospace;"></label>
+        </div>
+    </div>
+    <div id="bottom"></div>
+    <div id="section"></div>
+</div>
+<script>
+    const vtkFullScreenRenderWindow = vtk.Rendering.Misc.vtkFullScreenRenderWindow;
+    const vtkInteractorStyleTrackballCamera = vtk.Interaction.Style.vtkInteractorStyleTrackballCamera;
+    const vtkActor = vtk.Rendering.Core.vtkActor;
+    const vtkMapper = vtk.Rendering.Core.vtkMapper;
+    const vtkXMLPolyDataReader = vtk.IO.XML.vtkXMLPolyDataReader;
+    const vtkPlane = vtk.Common.DataModel.vtkPlane;
+    const vtkCutter = vtk.Filters.Core.vtkCutter;
+
+    const statusEl = document.getElementById('status');
+    const setStatus = (t) => { statusEl.textContent = t; };
+
+    // ---- top: interactive 3D view (shows the clipped mesh) ----
+    const topWin = vtkFullScreenRenderWindow.newInstance({ background: [0.16, 0.16, 0.16], container: document.getElementById('top') });
+    const topRen = topWin.getRenderer();
+    const topRW = topWin.getRenderWindow();
+    topRW.getInteractor().setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
+    const topMapper = vtkMapper.newInstance();
+    const topActor = vtkActor.newInstance();
+    topActor.setMapper(topMapper);
+    topActor.getProperty().setColor(0.8, 0.8, 0.82);
+    topActor.getProperty().setEdgeVisibility(false);
+    topRen.addActor(topActor);
+
+    // ---- bottom: orthographic pick view ----
+    const bot = vtkFullScreenRenderWindow.newInstance({ background: [0.13, 0.13, 0.13], container: document.getElementById('bottom') });
+    const botRen = bot.getRenderer();
+    const botRW = bot.getRenderWindow();
+    const botMapper = vtkMapper.newInstance();
+    const botActor = vtkActor.newInstance();
+    botActor.setMapper(botMapper);
+    botActor.getProperty().setColor(0.7, 0.7, 0.72);
+    botRen.addActor(botActor);
+
+    // ---- section: optional 2D cross-section (mesh ∩ plane) via vtkCutter ----
+    const section = vtkFullScreenRenderWindow.newInstance({ background: [0.08, 0.08, 0.08], container: document.getElementById('section') });
+    const sectionRen = section.getRenderer();
+    const sectionRW = section.getRenderWindow();
+    sectionRW.getInteractor().setInteractorStyle(null);
+    const sectionMapper = vtkMapper.newInstance();
+    const sectionActor = vtkActor.newInstance();
+    sectionActor.setMapper(sectionMapper);
+    sectionActor.getProperty().setColor(1.0, 0.85, 0.2);
+    sectionActor.getProperty().setLineWidth(2);
+    sectionRen.addActor(sectionActor);
+    const cutter = vtkCutter.newInstance();
+    let render2D = false;
+    let thickness = 2;
+    let meshPoly = null;
+
+    function resizeAll() { topWin.resize(); bot.resize(); if (render2D) section.resize(); if (typeof redrawMarkers === 'function') redrawMarkers(); }
+    window.addEventListener('resize', resizeAll);
+
+    // axis basis: u = screen-right, v = screen-up, n = view normal (camera dir)
+    const AXES = {
+        XY: { n: [0, 0, 1], u: [1, 0, 0], v: [0, 1, 0] },
+        YZ: { n: [1, 0, 0], u: [0, 1, 0], v: [0, 0, 1] },
+        XZ: { n: [0, 1, 0], u: [1, 0, 0], v: [0, 0, 1] },
+    };
+    let axis = 'XY';
+    let picks = [];          // world points (the two cut endpoints) -- kept persistent
+    let clipNormalSign = 1;
+    let lastPlane = null;    // {origin, normal}
+    let bounds = [0, 1, 0, 1, 0, 1];
+    let locked = true;       // true = fixed 2D ortho (pick/drag enabled); false = orbit
+    let dragging = false;
+
+    function center() { return [(bounds[0]+bounds[1])/2, (bounds[2]+bounds[3])/2, (bounds[4]+bounds[5])/2]; }
+    function diag() { return Math.hypot(bounds[1]-bounds[0], bounds[3]-bounds[2], bounds[5]-bounds[4]) || 1; }
+
+    function positionBottomCamera() {
+        const A = AXES[axis], c = center(), d = diag();
+        const cam = botRen.getActiveCamera();
+        cam.setParallelProjection(true);
+        cam.setFocalPoint(c[0], c[1], c[2]);
+        cam.setPosition(c[0] + A.n[0]*d, c[1] + A.n[1]*d, c[2] + A.n[2]*d);
+        cam.setViewUp(A.v[0], A.v[1], A.v[2]);
+        botRen.resetCamera();
+        botRW.render();
+    }
+
+    // --- SVG overlay over the bottom view: draggable endpoints + red cut line ---
+    const SVGNS = 'http://www.w3.org/2000/svg';
+    const overlay = document.createElementNS(SVGNS, 'svg');
+    overlay.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
+    document.getElementById('bottom').appendChild(overlay);
+    const cutLine = document.createElementNS(SVGNS, 'line');
+    cutLine.setAttribute('stroke', '#ff3b30'); cutLine.setAttribute('stroke-width', '2.5');
+    cutLine.style.display = 'none';
+    overlay.appendChild(cutLine);
+    const handles = [0, 1].map((i) => {
+        // big transparent grab area so near-misses still catch the handle
+        const hit = document.createElementNS(SVGNS, 'circle');
+        hit.setAttribute('r', '16'); hit.setAttribute('fill', 'transparent');
+        hit.style.cssText = 'pointer-events:all;cursor:grab;display:none;';
+        hit.addEventListener('mousedown', (ev) => { ev.preventDefault(); ev.stopPropagation(); startDrag(i); });
+        hit.addEventListener('click', (ev) => ev.stopPropagation());
+        const dot = document.createElementNS(SVGNS, 'circle');
+        dot.setAttribute('r', '7'); dot.setAttribute('fill', i === 0 ? '#34c759' : '#ff9f0a');
+        dot.setAttribute('stroke', '#fff'); dot.setAttribute('stroke-width', '2');
+        dot.style.cssText = 'pointer-events:none;display:none;';
+        overlay.appendChild(hit); overlay.appendChild(dot);
+        return { hit, dot };
+    });
+
+    const botInteractor = botRW.getInteractor();
+    // Lock = no interactor style (no rotation) but interactor stays ENABLED so the
+    // render loop keeps painting. Unlock swaps in a trackball style.
+    botInteractor.setInteractorStyle(null);
+
+    // forward map: world -> screen px (inverse of clickToWorld; valid only when locked/ortho)
+    function worldToScreen(world) {
+        const A = AXES[axis];
+        const cam = botRen.getActiveCamera();
+        const fp = cam.getFocalPoint();
+        const s = cam.getParallelScale();
+        const rect = document.getElementById('bottom').getBoundingClientRect();
+        const W = rect.width, H = rect.height, aspect = W / H;
+        const dw = [world[0]-fp[0], world[1]-fp[1], world[2]-fp[2]];
+        const ndcx = (dw[0]*A.u[0]+dw[1]*A.u[1]+dw[2]*A.u[2]) / (s*aspect);
+        const ndcy = (dw[0]*A.v[0]+dw[1]*A.v[1]+dw[2]*A.v[2]) / s;
+        return { x: (ndcx+1)/2*W, y: (1-ndcy)/2*H };
+    }
+    function redrawMarkers() {
+        const show = locked;   // handles/line only track the mesh in the fixed ortho view
+        for (let i = 0; i < 2; i++) {
+            const h = handles[i];
+            if (show && picks[i]) {
+                const p = worldToScreen(picks[i]);
+                for (const el of [h.hit, h.dot]) { el.setAttribute('cx', p.x); el.setAttribute('cy', p.y); el.style.display = 'block'; }
+            } else { h.hit.style.display = 'none'; h.dot.style.display = 'none'; }
+        }
+        if (show && picks[0] && picks[1]) {
+            const a = worldToScreen(picks[0]), b = worldToScreen(picks[1]);
+            cutLine.setAttribute('x1', a.x); cutLine.setAttribute('y1', a.y);
+            cutLine.setAttribute('x2', b.x); cutLine.setAttribute('y2', b.y);
+            cutLine.style.display = 'block';
+        } else cutLine.style.display = 'none';
+    }
+
+    // click in bottom canvas -> world point on the focal plane (analytic, matches parallel cam)
+    function clickToWorld(ev) {
+        const A = AXES[axis];
+        const rect = document.getElementById('bottom').getBoundingClientRect();
+        const W = rect.width, H = rect.height;
+        const px = ev.clientX - rect.left, py = ev.clientY - rect.top;
+        const ndcx = (px / W) * 2 - 1;
+        const ndcy = 1 - (py / H) * 2;
+        const cam = botRen.getActiveCamera();
+        const fp = cam.getFocalPoint();
+        const s = cam.getParallelScale();      // half viewport height in world units
+        const aspect = W / H;
+        const out = [0, 0, 0];
+        for (let i = 0; i < 3; i++) {
+            out[i] = fp[i] + ndcx * s * aspect * A.u[i] + ndcy * s * A.v[i];
+        }
+        return out;
+    }
+
+    // Tell the parent frame (preview_mesh_slicer.js) what's currently clipped/shown in the
+    // top 3D view, so the Python node can reproduce the same cut on the actual mesh data
+    // (execute() has no other way to see interactive browser-only state like lastPlane).
+    function postPlaneUpdate() {
+        if (!lastPlane) { parent.postMessage({ type: 'PLANE_UPDATE', hasPlane: false }, '*'); return; }
+        const n = lastPlane.normal.map(x => x * clipNormalSign);
+        parent.postMessage({ type: 'PLANE_UPDATE', hasPlane: true, origin: lastPlane.origin, normal: n }, '*');
+    }
+
+    function applyClip() {
+        if (!lastPlane) return;
+        const n = lastPlane.normal.map(x => x * clipNormalSign);
+        topMapper.removeAllClippingPlanes();
+        const plane = vtkPlane.newInstance({ origin: lastPlane.origin, normal: n });
+        topMapper.addClippingPlane(plane);
+        topRW.render();
+        updateSection();
+        postPlaneUpdate();
+    }
+
+    // Quick camera navigation for the TOP 3D view (view-cube style): reposition the
+    // orbit camera to look along a cardinal axis, centered on the mesh. Does NOT touch
+    // the clip plane -- that's still only ever set via the "cut view" pick controls below.
+    function setCameraView(dir) {
+        const c = center(), d = diag();
+        const cam = topRen.getActiveCamera();
+        cam.setFocalPoint(c[0], c[1], c[2]);
+        cam.setPosition(c[0] + dir[0]*d*2, c[1] + dir[1]*d*2, c[2] + dir[2]*d*2);
+        // pick an up vector that isn't parallel to the view direction
+        const up = Math.abs(dir[1]) > 0.9 ? [0, 0, 1] : [0, 1, 0];
+        cam.setViewUp(up[0], up[1], up[2]);
+        topRen.resetCamera();   // keeps direction/up set above, just fits distance to bounds
+        topRW.render();
+        setStatus(`3d view: looking along [${dir.join(', ')}]`);
+    }
+    document.getElementById('qpx').onclick = () => setCameraView([1, 0, 0]);
+    document.getElementById('qnx').onclick = () => setCameraView([-1, 0, 0]);
+    document.getElementById('qpy').onclick = () => setCameraView([0, 1, 0]);
+    document.getElementById('qny').onclick = () => setCameraView([0, -1, 0]);
+    document.getElementById('qpz').onclick = () => setCameraView([0, 0, 1]);
+    document.getElementById('qnz').onclick = () => setCameraView([0, 0, -1]);
+
+    function updateSection() {
+        if (!render2D || !lastPlane || !meshPoly) return;
+        try {
+            const plane = vtkPlane.newInstance({ origin: lastPlane.origin, normal: lastPlane.normal });
+            cutter.setCutFunction(plane);
+            cutter.setInputData(meshPoly);
+            cutter.update();
+            sectionMapper.setInputData(cutter.getOutputData());
+            sectionActor.getProperty().setLineWidth(thickness);
+            // face-on camera: look along the plane normal
+            const n = lastPlane.normal, o = lastPlane.origin, d = diag();
+            const ref = Math.abs(n[0]) < 0.9 ? [1, 0, 0] : [0, 1, 0];
+            let up = [ n[1]*ref[2]-n[2]*ref[1], n[2]*ref[0]-n[0]*ref[2], n[0]*ref[1]-n[1]*ref[0] ];
+            const ul = Math.hypot(up[0], up[1], up[2]) || 1; up = up.map(x => x/ul);
+            const cam = sectionRen.getActiveCamera();
+            cam.setParallelProjection(true);
+            cam.setFocalPoint(o[0], o[1], o[2]);
+            cam.setPosition(o[0]+n[0]*d, o[1]+n[1]*d, o[2]+n[2]*d);
+            cam.setViewUp(up[0], up[1], up[2]);
+            sectionRen.resetCamera();
+            sectionRW.render();
+        } catch (e) { console.warn('[Slicer] section update failed', e); }
+    }
+
+    function setPlaneFromPicks() {
+        if (picks.length < 2) return;
+        const A = AXES[axis];
+        const [p1, p2] = picks;
+        const dir = [p2[0]-p1[0], p2[1]-p1[1], p2[2]-p1[2]];
+        // normal = dir x axis  (lies in view plane, perpendicular to the drawn line)
+        let nrm = [
+            dir[1]*A.n[2] - dir[2]*A.n[1],
+            dir[2]*A.n[0] - dir[0]*A.n[2],
+            dir[0]*A.n[1] - dir[1]*A.n[0],
+        ];
+        const L = Math.hypot(nrm[0], nrm[1], nrm[2]);
+        if (L < 1e-9) { setStatus('points too close / colinear — move a handle'); return; }
+        nrm = nrm.map(x => x / L);
+        lastPlane = { origin: p1.slice(), normal: nrm };
+        applyClip();
+        setStatus(`clip on ${axis}. drag the dots to adjust · ⇄ flip · reset`);
+    }
+
+    function startDrag(i) {
+        if (!locked) return;
+        dragging = true;
+        const move = (e) => { picks[i] = clickToWorld(e); redrawMarkers(); setPlaneFromPicks(); };
+        const up = () => { dragging = false; window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', up);
+    }
+
+    document.getElementById('bottom').addEventListener('click', (ev) => {
+        if (!locked || dragging || !botMapper.getInputData()) return;
+        const w = clickToWorld(ev);
+        if (picks.length >= 2) {   // cut already set -- don't wipe it on a stray click
+            setStatus('cut set — drag the dots to adjust, or "reset clip" to start a new one');
+            return;
+        }
+        picks.push(w);
+        redrawMarkers();
+        if (picks.length === 2) setPlaneFromPicks();
+        else setStatus(`point 1 set on ${axis} — click the 2nd point (then drag the dots)`);
+    });
+
+    function setLocked(on) {
+        locked = on;
+        const b = document.getElementById('lock');
+        b.classList.toggle('active', on);
+        b.textContent = on ? '🔒 2D lock' : '🔓 rotate';
+        if (on) { positionBottomCamera(); botInteractor.setInteractorStyle(null); document.getElementById('bottom').style.cursor = 'crosshair'; }
+        else { botInteractor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance()); document.getElementById('bottom').style.cursor = 'grab'; }
+        botRW.render();
+        redrawMarkers();
+        setStatus(on ? `2D locked (${axis}) — click 2 points / drag dots to set the cut`
+                     : 'view unlocked — drag to orbit & inspect; lock to edit the cut');
+    }
+
+    function setAxis(a) {
+        axis = a; picks = [];
+        for (const k of ['XY', 'YZ', 'XZ']) document.getElementById('ax' + k).classList.toggle('active', k === a);
+        setLocked(true);   // axis pick implies locked 2D
+        setStatus(`cut view: ${a}. click 2 points in the bottom view.`);
+    }
+    document.getElementById('axXY').onclick = () => setAxis('XY');
+    document.getElementById('axYZ').onclick = () => setAxis('YZ');
+    document.getElementById('axXZ').onclick = () => setAxis('XZ');
+    document.getElementById('lock').onclick = () => setLocked(!locked);
+    document.getElementById('flip').onclick = () => { clipNormalSign *= -1; applyClip(); };
+    document.getElementById('reset').onclick = () => { lastPlane = null; picks = []; topMapper.removeAllClippingPlanes(); topRW.render(); redrawMarkers(); setStatus('clip cleared'); postPlaneUpdate(); };
+    document.getElementById('r2d').onclick = () => {
+        render2D = !render2D;
+        document.getElementById('r2d').classList.toggle('active', render2D);
+        document.getElementById('section').style.display = render2D ? 'block' : 'none';
+        if (render2D) setTimeout(() => { section.resize(); updateSection(); }, 30);
+        setStatus(render2D ? 'cross-section view on (mesh ∩ plane)' : 'cross-section view off');
+    };
+    document.getElementById('thick').addEventListener('input', (e) => {
+        thickness = Math.max(1, Number(e.target.value) || 2);
+        sectionActor.getProperty().setLineWidth(thickness);
+        sectionRW.render();
+    });
+
+    async function loadMesh(url) {
+        setStatus('loading mesh…');
+        const reader = vtkXMLPolyDataReader.newInstance();
+        const resp = await fetch(url);
+        if (!resp.ok) { setStatus('load failed: HTTP ' + resp.status); return; }
+        const ab = await resp.arrayBuffer();
+        reader.parseAsArrayBuffer(ab);
+        const poly = reader.getOutputData(0);
+        meshPoly = poly;
+        topMapper.setInputData(poly);
+        topMapper.setScalarVisibility(false);
+        botMapper.setInputData(poly);
+        botMapper.setScalarVisibility(false);
+        bounds = poly.getBounds();
+        lastPlane = null; clipNormalSign = 1; picks = [];
+        topMapper.removeAllClippingPlanes();
+        topRen.resetCamera();
+        topRW.render();
+        setLocked(true);   // positions the ortho cam + redraws markers
+        setStatus('mesh loaded — pick cut view (XY/YZ/XZ), click 2 points, drag the dots to adjust.');
+        postPlaneUpdate();  // a new mesh invalidates any previous plane the parent had cached
+    }
+
+    window.addEventListener('message', (event) => {
+        const d = event.data || {};
+        if (d.type === 'LOAD_MESH' && d.filepath) loadMesh(d.filepath);
+    });
+
+    setTimeout(resizeAll, 50);
+    console.log('[GeomPack Slicer] ready');
+</script>
+</body>
+</html>

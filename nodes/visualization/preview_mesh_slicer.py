@@ -12,7 +12,7 @@ the mesh center directly, without needing to pick 2 points.
 
 The Python node exports the mesh to a .vtp for the interactive viewer; the actual
 clip plane (origin + normal) is picked entirely in the browser, then mirrored back
-here via a hidden `plane_json` widget (see web_src/preview_mesh_slicer.js) so this
+here via a hidden `plane_json` widget (see javascript/js/preview_mesh_slicer.js) so this
 node can reproduce the same cut on the real mesh data and return it as `sliced_mesh`
 -- matching whatever is currently shown in the top 3D view. Since the plane only
 exists once the browser has posted it back, the very first run (or right after

@@ -62,5 +62,7 @@ except Exception as e:
     log.warning("[GeomPack] could not register /gpack/getpath: %s", e)
 
 
-WEB_DIRECTORY = "./web"
-__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS', 'WEB_DIRECTORY']
+# Frontend assets are declared in pyproject.toml ([tool.comfy] web = "javascript"),
+# served at /extensions/comfyui-geometrypack/. No WEB_DIRECTORY attribute (it would
+# double-register the dir under a second mount key).
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
