@@ -11,7 +11,7 @@ import { createScreenshotHandler } from "./utils/screenshot.js";
 import { createViewerManager, createErrorHandler, buildViewUrl } from "./utils/postMessage.js";
 
 app.registerExtension({
-    name: "geompack.meshpreview.vtk",
+    name: "geometrypack.meshpreview.vtk",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewMeshVTK") {
@@ -76,8 +76,8 @@ app.registerExtension({
                 const viewerManager = createViewerManager(iframe, "[GeomPack VTK]");
 
                 // Listen for screenshot and error messages
-                window.addEventListener('message', createScreenshotHandler('vtk-screenshot'));
-                window.addEventListener('message', createErrorHandler(infoPanel, "[GeomPack VTK]"));
+                window.addEventListener('message', createScreenshotHandler('vtk-screenshot', iframe));
+                window.addEventListener('message', createErrorHandler(infoPanel, "[GeomPack VTK]", iframe));
 
                 // Set initial node size
                 this.setSize([512, 640]);

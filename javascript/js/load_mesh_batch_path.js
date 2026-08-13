@@ -15,7 +15,7 @@ function pathStem(value) {
 }
 
 app.registerExtension({
-    name: "geompack.loadmeshbatch.path",
+    name: "geometrypack.loadmeshbatch.path",
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackLoadMeshBatch") return;
         console.log(`${TAG} registering for GeomPackLoadMeshBatch`);
@@ -48,16 +48,21 @@ app.registerExtension({
             });
             widget.computeSize = (w) => [w, 30];
 
-            // Floating dropdown attached to body (avoids canvas clipping/transform).
+            // Floating dropdown as a manual POPOVER inside our own widget DOM:
+            // showPopover() renders it in the browser's top layer, which
+            // escapes the canvas transform/clipping WITHOUT appending anything
+            // to the shared document.body (isolation: we never touch DOM we
+            // don't own). UA popover styles are reset (inset/margin/padding).
             const menu = document.createElement("div");
-            menu.style.cssText = "position:fixed;z-index:10000;max-height:240px;overflow-y:auto;" +
+            menu.popover = "manual";
+            menu.style.cssText = "position:fixed;inset:auto;margin:0;padding:0;max-height:240px;overflow-y:auto;" +
                 "background:#1e1e1e;border:1px solid #555;border-radius:4px;" +
-                "box-shadow:0 4px 14px rgba(0,0,0,0.55);font:12px monospace;display:none;";
-            document.body.appendChild(menu);
+                "box-shadow:0 4px 14px rgba(0,0,0,0.55);font:12px monospace;";
+            wrap.appendChild(menu);
 
             let items = [];
             let lastDir = null;
-            const hide = () => { menu.style.display = "none"; };
+            const hide = () => { if (menu.matches(":popover-open")) menu.hidePopover(); };
             const place = () => {
                 const b = input.getBoundingClientRect();
                 menu.style.left = b.left + "px";
@@ -84,8 +89,8 @@ app.registerExtension({
                     });
                     menu.appendChild(row);
                 }
+                if (!menu.matches(":popover-open")) menu.showPopover();
                 place();
-                menu.style.display = "block";
             };
             const fetchDir = async (force) => {
                 const [dir, rem] = pathStem(input.value);

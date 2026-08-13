@@ -15,7 +15,7 @@ const EXTENSION_FOLDER = (() => {
 console.log('[GeomPack Multi Batch JS] Loading preview_mesh_multi_batch.js extension');
 
 app.registerExtension({
-    name: "geompack.meshpreview.multibatch",
+    name: "geometrypack.meshpreview.multibatch",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewMeshMultiBatch") {

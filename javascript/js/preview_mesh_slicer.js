@@ -24,7 +24,7 @@ function viewUrl(name) {
 }
 
 app.registerExtension({
-    name: "geompack.previewmeshslicer",
+    name: "geometrypack.previewmeshslicer",
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackPreviewMeshSlicer") return;
         console.log(`${TAG} registering for GeomPackPreviewMeshSlicer`);

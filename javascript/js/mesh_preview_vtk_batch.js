@@ -13,7 +13,7 @@ const EXTENSION_FOLDER = (() => {
 })();
 
 app.registerExtension({
-    name: "geompack.meshpreview.vtk.batch",
+    name: "geometrypack.meshpreview.vtk.batch",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewMeshVTKBatch") {

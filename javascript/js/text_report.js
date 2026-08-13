@@ -92,7 +92,7 @@ const TOGGLE_HEIGHT = 28;
 const DEFAULT_CONTENT_HEIGHT = 60;
 
 app.registerExtension({
-    name: "geompack.text_report",
+    name: "geometrypack.text_report",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (!TEXT_REPORT_NODES.includes(nodeData.name)) return;

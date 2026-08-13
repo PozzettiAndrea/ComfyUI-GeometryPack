@@ -15,7 +15,7 @@ const EXTENSION_FOLDER = (() => {
 console.log("[GeomPack] Loading UV mesh preview extension...");
 
 app.registerExtension({
-    name: "geompack.meshpreviewuv",
+    name: "geometrypack.meshpreviewuv",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewMeshUV") {

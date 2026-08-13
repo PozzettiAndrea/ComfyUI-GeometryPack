@@ -14,13 +14,13 @@ function toggleWidget(w, show) {
         w.type = w.__gpOrig.type;
         w.computeSize = w.__gpOrig.computeSize;
     } else {
-        w.type = "geompack_hidden";      // unknown type -> not drawn
+        w.type = "geometrypack_hidden";      // unknown type -> not drawn
         w.computeSize = () => [0, -4];    // collapse (cancels the 4px row gap)
     }
 }
 
 app.registerExtension({
-    name: "geompack.previewmeshbatchrender.ui",
+    name: "geometrypack.previewmeshbatchrender.ui",
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackPreviewMeshBatchRender") return;
         console.log(`${TAG} registering for GeomPackPreviewMeshBatchRender`);

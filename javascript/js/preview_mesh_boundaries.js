@@ -26,7 +26,7 @@ function viewUrl(name) {
 }
 
 app.registerExtension({
-    name: "geompack.previewmeshboundaries",
+    name: "geometrypack.previewmeshboundaries",
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackPreviewMeshBoundaries") return;
         console.log(`${TAG} registering for GeomPackPreviewMeshBoundaries`);

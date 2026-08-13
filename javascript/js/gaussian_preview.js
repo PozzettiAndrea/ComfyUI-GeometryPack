@@ -15,7 +15,7 @@ const EXTENSION_FOLDER = (() => {
 console.log("[GeomPack Gaussian] Loading extension...");
 
 app.registerExtension({
-    name: "geompack.gaussianpreview",
+    name: "geometrypack.gaussianpreview",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewGaussian") {
@@ -101,6 +101,9 @@ app.registerExtension({
 
                 // Listen for messages from iframe
                 window.addEventListener('message', async (event) => {
+                    // Without this check, every open viewer instance's listener
+                    // fires for every iframe's messages, not just its own.
+                    if (event.source !== iframe.contentWindow) return;
                     // Handle screenshot messages
                     if (event.data.type === 'SCREENSHOT' && event.data.image) {
                         try {

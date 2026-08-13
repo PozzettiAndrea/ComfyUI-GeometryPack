@@ -15,7 +15,7 @@ const EXTENSION_FOLDER = (() => {
 console.log('[GeomPack Multi JS] Loading mesh_preview_multi.js extension');
 
 app.registerExtension({
-    name: "geompack.meshpreview.multi",
+    name: "geometrypack.meshpreview.multi",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewMeshMulti") {

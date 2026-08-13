@@ -10,7 +10,7 @@
 import { app } from "../../../scripts/app.js";
 
 app.registerExtension({
-    name: "geompack.warp_mesh_field_select",
+    name: "geometrypack.warp_mesh_field_select",
 
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackWarpMesh") return;

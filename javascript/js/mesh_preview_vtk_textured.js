@@ -15,7 +15,7 @@ const EXTENSION_FOLDER = (() => {
 console.log("[GeomPack] Loading VTK.js textured mesh preview extension...");
 
 app.registerExtension({
-    name: "geompack.meshpreview.vtk.textured",
+    name: "geometrypack.meshpreview.vtk.textured",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewMeshVTKWithTexture") {
@@ -83,6 +83,9 @@ app.registerExtension({
 
                 // Listen for messages from iframe
                 window.addEventListener('message', async (event) => {
+                    // Without this check, every open viewer instance's listener
+                    // fires for every iframe's messages, not just its own.
+                    if (event.source !== iframe.contentWindow) return;
                     // Handle screenshot messages
                     if (event.data.type === 'SCREENSHOT' && event.data.image) {
                         console.log('[GeomPack VTK Textured] Received screenshot from iframe');

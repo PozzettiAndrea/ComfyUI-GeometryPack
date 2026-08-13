@@ -67,7 +67,7 @@ function selectValue(node, val) {
 }
 
 app.registerExtension({
-    name: "geompack.loadmesh.upload",
+    name: "geometrypack.loadmesh.upload",
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackLoadMesh") return;
         console.log(`${TAG} registering for GeomPackLoadMesh`);
@@ -142,8 +142,10 @@ app.registerExtension({
             const input = document.createElement("input");
             input.type = "file"; input.accept = ACCEPT; input.multiple = true; input.style.display = "none";
             input.addEventListener("change", async () => { await uploadList(input.files); input.value = ""; });
-            document.body.appendChild(input);
-            node._gpFileInput = input; // removed in onRemoved below
+            // Deliberately NOT attached to the DOM: input.click() opens the
+            // picker from a detached element in all modern browsers, and
+            // staying detached keeps us out of the shared document entirely.
+            node._gpFileInput = input;
             node.addWidget("button", "⬆ upload / drop mesh", null, () => { console.log(`${TAG} upload button clicked`); input.click(); });
 
             // inline View 3D

@@ -11,7 +11,7 @@ import { buildDualMeshInfoHTML, formatExtents } from "./utils/formatting.js";
 import { createViewerManager, createErrorHandler, buildViewUrl, createLoadDualMeshMessage } from "./utils/postMessage.js";
 
 app.registerExtension({
-    name: "geompack.meshpreview.dual",
+    name: "geometrypack.meshpreview.dual",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GeomPackPreviewMeshDual") {
@@ -68,7 +68,7 @@ app.registerExtension({
                 const viewerManager = createViewerManager(iframe, "[GeomPack Dual]");
 
                 // Listen for error messages
-                window.addEventListener('message', createErrorHandler(infoPanel, "[GeomPack Dual]"));
+                window.addEventListener('message', createErrorHandler(infoPanel, "[GeomPack Dual]", iframe));
 
                 // Set initial node size
                 this.setSize([768, 680]);

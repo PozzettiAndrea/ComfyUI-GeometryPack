@@ -15,7 +15,7 @@ const EXTENSION_FOLDER = (() => {
 })();
 
 app.registerExtension({
-    name: "geompack.ultimate_mesh_inspection",
+    name: "geometrypack.ultimate_mesh_inspection",
 
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "GeomPackUltimateMeshInspection") return;
