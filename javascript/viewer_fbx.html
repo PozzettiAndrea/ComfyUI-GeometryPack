@@ -146,10 +146,10 @@
 
     <!--
     Load bundled Three.js and all dependencies.
-    The bundle is expected at ../js/viewer-bundle-three.js relative to this HTML file.
+    The bundle is expected at ../js/viewer-bundle-three.mjs relative to this HTML file.
     When copied by prestartup_script.py, the directory structure should be:
       web/viewer_fbx.html
-      web/js/viewer-bundle-three.js
+      web/js/viewer-bundle-three.mjs
     -->
     <script>
         // Dynamically determine the bundle path based on how this HTML is loaded
@@ -171,7 +171,7 @@
 
             // Create script element to load the bundle
             var bundleScript = document.createElement('script');
-            bundleScript.src = baseUrl + 'js/viewer-bundle-three.js';
+            bundleScript.src = baseUrl + 'js/viewer-bundle-three.mjs';
             bundleScript.onload = function() {
                 console.log('[FBX Viewer] Three.js bundle loaded from:', bundleScript.src);
                 initViewer();
