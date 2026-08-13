@@ -1,28 +1,35 @@
-"""GeometryPack custom wire types (comfy-env serializer registry, ADR-0014).
+"""GeometryPack wire types (comfy-env [types] declaration, ADR-0015).
 
-Declared in nodes/comfy-env.toml under [serializers].modules; imported for
-its registration side effects on BOTH sides of the process boundary:
-  - parent: comfy-env loads it at register_nodes() (pack root on sys.path)
-  - worker: loaded at startup via COMFY_ENV_SERIALIZER_MODULES
+Declared in comfy-env-root.toml under [types]; loaded by file path on
+BOTH sides of the process boundary (parent + workers), so keep the top
+level self-contained: stdlib/comfy_env imports only, trimesh imported
+inside the functions and probed once for conditional registration.
 
-Registers trimesh.Trimesh -- the type behind all 305 io.Custom("TRIMESH")
+Registers trimesh.Trimesh -- the type behind all io.Custom("TRIMESH")
 sockets in this pack. Geometry (vertices/faces) decomposes into
-shared-memory arrays instead of riding the 3-copy pickle rung; the small
-remainder (visual, metadata) still travels via the transport's fallback,
-with the visual's mesh BACK-REFERENCE cleared first so it cannot drag the
+shared-memory arrays instead of riding the 3-copy pickle rung (which
+also needs PIL at pickle time for textured meshes); the small remainder
+(visual, metadata) travels via the transport's fallback, with the
+visual's mesh BACK-REFERENCE never serialized so it cannot drag the
 whole geometry into a pickle again.
 
-Minor socket types (SKELETON, INTRINSICS/EXTRINSICS, VOXELGRID -- 13
-sockets total) intentionally stay on the default path for now.
+A side without trimesh (the bare ComfyUI host env) registers
+deserialize=None: comfy-env holds such values as MATERIALIZED
+OpaquePayload receipts -- receiver-owned, safe across worker restarts
+(comfy-env >= 0.4.15) -- and re-emits fresh frames when forwarding.
+If some other pack installs trimesh into the host, the same file
+registers the real deserializer there and host-side consumers get
+actual Trimesh objects. No configuration either way.
+
+Tag is the TYPE IDENTITY ("trimesh.Trimesh", ADR-0015 convention), so
+independent packs that also declare trimesh.Trimesh interoperate: each
+side rebuilds with its own registered functions.
 """
 
-try:  # parent process (comfy-env installed)
-    from comfy_env.isolation.workers._ipc_shared import (
-        OpaquePayload,
-        register_serializer,
-    )
+try:  # parent process (comfy_env installed)
+    from comfy_env.isolation.workers._ipc_shared import register_serializer
 except ImportError:  # worker process (copied module, no comfy_env package)
-    from _ipc_shared import OpaquePayload, register_serializer
+    from _ipc_shared import register_serializer
 
 
 def _serialize_trimesh(mesh, recurse):
@@ -52,15 +59,10 @@ def _serialize_trimesh(mesh, recurse):
         material = getattr(visual, "material", None)
         if material is not None:
             try:
-                frame = recurse(material)
-                # The transport's fallback returns the RAW object when it
-                # cannot encode it (instead of raising) -- keep only real
-                # frames, or the control message stops being JSON-safe.
-                if isinstance(frame, (dict, list, str, int, float, bool,
-                                      type(None))):
-                    payload["material"] = frame
+                payload["material"] = recurse(material)
             except Exception:
-                pass  # material needs deps this side lacks; uv still travels
+                pass  # material needs deps this env lacks (the transport
+                # raises loudly on unpicklable values); uv still travels
 
     metadata = getattr(mesh, "metadata", None)
     if metadata:
@@ -73,17 +75,7 @@ def _serialize_trimesh(mesh, recurse):
 
 
 def _deserialize_trimesh(payload, recurse):
-    try:
-        import trimesh
-    except ImportError:
-        # This side has no trimesh (e.g. a host env honoring the
-        # host-environment principle): hold the frame opaquely so it can be
-        # forwarded to a worker that can reconstruct it. NOTE: opaque frames
-        # reference worker shared memory whose lifetime follows the
-        # transport's retention windows -- holding them across long gaps is
-        # not yet guaranteed safe.
-        return OpaquePayload("geompack.Trimesh", payload)
-
+    import trimesh
     mesh = trimesh.Trimesh(
         vertices=recurse(payload["vertices"]),
         faces=recurse(payload["faces"]),
@@ -110,9 +102,16 @@ def _deserialize_trimesh(payload, recurse):
     return mesh
 
 
-# Base-class registration: MRO matching makes Trimesh subclasses ride along.
-# Prefixed tag per ADR-0014 (global last-wins tag namespace).
+# Register deserialize only where trimesh exists; a side without it holds
+# materialized OpaquePayload receipts (module docstring). Base-class
+# registration: MRO matching makes Trimesh subclasses ride along.
+try:
+    import trimesh  # noqa: F401
+    _DESERIALIZE = _deserialize_trimesh
+except ImportError:
+    _DESERIALIZE = None
+
 register_serializer(
-    "Trimesh", _serialize_trimesh, _deserialize_trimesh,
-    tag="geompack.Trimesh",
+    "Trimesh", _serialize_trimesh, _DESERIALIZE,
+    tag="trimesh.Trimesh",
 )
