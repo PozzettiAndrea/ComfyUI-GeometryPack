@@ -93,9 +93,16 @@ app.registerExtension({
                 nextButton.style.borderRadius = "3px";
                 nextButton.style.fontSize = "11px";
 
+                // Dropdown to jump directly to any mesh in the batch (client-side)
+                const dropdown = document.createElement("select");
+                dropdown.style.cssText = "background:#333;color:#ccc;border:1px solid #555;" +
+                    "border-radius:3px;font:11px monospace;padding:2px 6px;cursor:pointer;";
+                dropdown.innerHTML = '<option value="0">1 / 1</option>';
+
                 // Assemble navigation bar
                 navBar.appendChild(prevButton);
                 navBar.appendChild(indexLabel);
+                navBar.appendChild(dropdown);
                 navBar.appendChild(nextButton);
 
                 // Create mesh info panel
@@ -162,39 +169,24 @@ app.registerExtension({
                 let currentBatchSize = 1;
                 let currentIndex = 0;
 
-                // Add callback to auto-execute when index changes manually
+                // Navigation is CLIENT-SIDE: arrows / dropdown / the index widget
+                // switch the shown mesh by posting LOAD_MESH to THIS node's iframe.
+                // They never call app.queuePrompt(), so navigating never re-runs the
+                // graph or reloads any other node. (showIndex is defined below.)
+                let suppressIndexCallback = false;
                 if (indexWidget) {
                     const originalCallback = indexWidget.callback;
                     indexWidget.callback = function(value) {
-                        // Call original callback if it exists
                         const result = originalCallback?.apply(this, arguments);
-
-                        // Update tracked index
-                        currentIndex = value;
-
-                        // Trigger re-execution (same as button clicks)
-                        app.queuePrompt();
-
+                        // showIndex() sets the widget value itself -> ignore that echo
+                        if (!suppressIndexCallback) showIndex(Number(value));
                         return result;
                     };
                 }
 
-                // Button click handlers
-                prevButton.addEventListener("click", () => {
-                    if (indexWidget && currentIndex > 0) {
-                        indexWidget.value = currentIndex - 1;
-                        // Trigger node queue/re-execution
-                        app.queuePrompt();
-                    }
-                });
-
-                nextButton.addEventListener("click", () => {
-                    if (indexWidget && currentIndex < currentBatchSize - 1) {
-                        indexWidget.value = currentIndex + 1;
-                        // Trigger node queue/re-execution
-                        app.queuePrompt();
-                    }
-                });
+                prevButton.addEventListener("click", () => showIndex(currentIndex - 1));
+                nextButton.addEventListener("click", () => showIndex(currentIndex + 1));
+                dropdown.addEventListener("change", () => showIndex(Number(dropdown.value)));
 
                 // Update button states
                 const updateNavigationButtons = () => {
@@ -217,6 +209,85 @@ app.registerExtension({
                         nextButton.style.opacity = "1";
                         nextButton.style.cursor = "pointer";
                     }
+                };
+
+                // ---- client-side batch navigation state + helpers ----
+                // Filled by onExecuted with everything needed to switch meshes with
+                // no server round-trip: { files:[names], viewerType, mode, meta:[{
+                // vertex_count, face_count, bounds_min, bounds_max, extents,
+                // is_watertight, field_names, has_texture, has_vertex_colors,
+                // visual_kind }, ...] }.
+                let batchData = null;
+
+                const postLoad = (i) => {
+                    if (!iframe.contentWindow || !batchData) return;
+                    const filepath = `/view?filename=${encodeURIComponent(batchData.files[i])}&type=output&subfolder=`;
+                    iframe.contentWindow.postMessage({
+                        type: "LOAD_MESH",
+                        filepath,
+                        timestamp: Date.now(),
+                        showEdges: viewerState.show_edges,
+                        cameraState: viewerState.camera_state,
+                        selectedField: viewerState.selected_field,
+                        selectedChannel: viewerState.selected_channel,
+                        selectedColormap: viewerState.selected_colormap,
+                    }, "*");
+                };
+
+                const renderInfo = (i) => {
+                    const m = batchData?.meta?.[i];
+                    if (!m) return;
+                    const num = (v) => (typeof v === "number" ? v.toLocaleString() : "N/A");
+                    const boundsStr = (Array.isArray(m.bounds_min) && Array.isArray(m.bounds_max)
+                        && m.bounds_min.length === 3 && m.bounds_max.length === 3)
+                        ? `[${m.bounds_min.map(v => v.toFixed(2)).join(", ")}] to [${m.bounds_max.map(v => v.toFixed(2)).join(", ")}]`
+                        : "N/A";
+                    const extentsStr = (Array.isArray(m.extents) && m.extents.length === 3)
+                        ? m.extents.map(v => v.toFixed(2)).join(" x ") : "N/A";
+                    const modeLabel = batchData.mode.charAt(0).toUpperCase() + batchData.mode.slice(1);
+                    const modeColor = batchData.viewerType === "texture" ? "#c8c" : "#6cc";
+                    let html = `
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 2px 8px;">
+                            <span style="color: #888;">Batch:</span>
+                            <span style="color: #8c8; font-weight: bold;">${i + 1} / ${currentBatchSize}</span>
+                            <span style="color: #888;">Mode:</span>
+                            <span style="color: ${modeColor}; font-weight: bold;">${modeLabel}</span>
+                            <span style="color: #888;">Vertices:</span><span>${num(m.vertex_count)}</span>
+                            <span style="color: #888;">Faces:</span><span>${num(m.face_count)}</span>
+                            <span style="color: #888;">Bounds:</span>
+                            <span style="font-size: 9px;">${boundsStr}</span>
+                            <span style="color: #888;">Extents:</span><span>${extentsStr}</span>
+                            <span style="color: #888;">Watertight:</span>
+                            <span style="color: ${m.is_watertight ? "#6c6" : "#c66"};">${m.is_watertight ? "Yes" : "No"}</span>`;
+                    if (batchData.viewerType === "texture") {
+                        html += `
+                            <span style="color: #888;">Visual Kind:</span><span>${m.visual_kind ?? "none"}</span>
+                            <span style="color: #888;">Textures:</span>
+                            <span style="color: ${m.has_texture ? "#c8c" : "#888"};">${m.has_texture ? "Yes" : "No"}</span>
+                            <span style="color: #888;">Vertex Colors:</span><span>${m.has_vertex_colors ? "Yes" : "No"}</span>`;
+                    } else {
+                        const hasFields = Array.isArray(m.field_names) && m.field_names.length > 0;
+                        html += `<span style="color: #888;">Fields:</span>` +
+                            `<span style="font-size: 9px; color: ${hasFields ? "#6cc" : "#888"};">` +
+                            `${hasFields ? m.field_names.join(", ") : "None"}</span>`;
+                    }
+                    html += "</div>";
+                    infoPanel.innerHTML = html;
+                };
+
+                // Switch to mesh i entirely client-side (no app.queuePrompt()).
+                const showIndex = (i) => {
+                    if (!batchData || !batchData.files.length) return;
+                    i = Math.max(0, Math.min(i, batchData.files.length - 1));
+                    currentIndex = i;
+                    suppressIndexCallback = true;
+                    if (indexWidget) indexWidget.value = i;   // persists via serialization
+                    suppressIndexCallback = false;
+                    dropdown.value = String(i);
+                    indexLabel.textContent = `${i + 1} / ${currentBatchSize}`;
+                    updateNavigationButtons();
+                    renderInfo(i);
+                    postLoad(i);
                 };
 
                 // Listen for messages from iframe
@@ -276,183 +347,65 @@ app.registerExtension({
                 // Set initial node size (increased for info panel + navigation)
                 this.setSize([512, 680]);
 
-                // Handle execution
+                // Handle execution: store the WHOLE batch, then show the start index.
                 const onExecuted = this.onExecuted;
                 this.onExecuted = function(message) {
                     onExecuted?.apply(this, arguments);
 
-                    // The message IS the UI data (not message.ui)
-                    if (message?.mesh_file && message.mesh_file[0]) {
-                        const filename = message.mesh_file[0];
-                        const viewerType = message.viewer_type?.[0] || "fields";
-                        const mode = message.mode?.[0] || "fields";
+                    const files = message?.mesh_files?.[0];
+                    if (!files || !files.length) return;
 
-                        // Get batch metadata
-                        currentBatchSize = message.batch_size?.[0] || 1;
-                        currentIndex = message.current_index?.[0] || 0;
+                    const col = (key) => message[key]?.[0] || [];   // a per-index array
+                    batchData = {
+                        files,
+                        viewerType: message.viewer_type?.[0] || "fields",
+                        mode: message.mode?.[0] || "fields",
+                        meta: files.map((_, k) => ({
+                            vertex_count: col("vertex_counts")[k],
+                            face_count: col("face_counts")[k],
+                            bounds_min: col("bounds_mins")[k],
+                            bounds_max: col("bounds_maxs")[k],
+                            extents: col("extents_all")[k],
+                            is_watertight: col("is_watertights")[k],
+                            field_names: col("field_names_all")[k],
+                            has_texture: col("has_textures")[k],
+                            has_vertex_colors: col("has_vertex_colors_all")[k],
+                            visual_kind: col("visual_kinds")[k],
+                        })),
+                    };
 
-                        // Update navigation controls
-                        indexLabel.textContent = `${currentIndex + 1} / ${currentBatchSize}`;
-                        updateNavigationButtons();
+                    currentBatchSize = message.batch_size?.[0] || files.length;
+                    if (indexWidget) indexWidget.options.max = currentBatchSize - 1;
 
-                        // Dynamically update index widget max based on actual batch size
-                        if (indexWidget) {
-                            indexWidget.options.max = currentBatchSize - 1;
+                    // (Re)populate the dropdown: one option per mesh.
+                    dropdown.innerHTML = files
+                        .map((_, k) => `<option value="${k}">${k + 1} / ${files.length}</option>`)
+                        .join("");
 
-                            // Clamp current value if out of range
-                            if (indexWidget.value >= currentBatchSize) {
-                                indexWidget.value = currentBatchSize - 1;
-                            }
-                        }
+                    let startIndex = message.current_index?.[0] || 0;
+                    startIndex = Math.max(0, Math.min(startIndex, files.length - 1));
 
-                        // Determine which viewer HTML to use (unified v2 viewers)
-                        const viewerUrl = viewerType === "texture"
-                            ? `/extensions/${EXTENSION_FOLDER}/viewer_vtk_textured.html`
-                            : `/extensions/${EXTENSION_FOLDER}/viewer_vtk.html`;
-
-                        // Update mesh info panel with metadata
-                        const vertices = message.vertex_count?.[0] || 'N/A';
-                        const faces = message.face_count?.[0] || 'N/A';
-                        const boundsMin = message.bounds_min?.[0] || [];
-                        const boundsMax = message.bounds_max?.[0] || [];
-                        const extents = message.extents?.[0] || [];
-
-                        // Format bounds
-                        let boundsStr = 'N/A';
-                        if (boundsMin.length === 3 && boundsMax.length === 3) {
-                            boundsStr = `[${boundsMin.map(v => v.toFixed(2)).join(', ')}] to [${boundsMax.map(v => v.toFixed(2)).join(', ')}]`;
-                        }
-
-                        // Format extents
-                        let extentsStr = 'N/A';
-                        if (extents.length === 3) {
-                            extentsStr = `${extents.map(v => v.toFixed(2)).join(' x ')}`;
-                        }
-
-                        // Build info HTML
-                        const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
-                        const modeColor = mode === "texture" ? '#c8c' : '#6cc';
-
-                        let infoHTML = `
-                            <div style="display: grid; grid-template-columns: auto 1fr; gap: 2px 8px;">
-                                <span style="color: #888;">Batch:</span>
-                                <span style="color: #8c8; font-weight: bold;">${currentIndex + 1} / ${currentBatchSize}</span>
-
-                                <span style="color: #888;">Mode:</span>
-                                <span style="color: ${modeColor}; font-weight: bold;">${modeLabel}</span>
-
-                                <span style="color: #888;">Vertices:</span>
-                                <span>${vertices.toLocaleString()}</span>
-
-                                <span style="color: #888;">Faces:</span>
-                                <span>${faces.toLocaleString()}</span>
-
-                                <span style="color: #888;">Bounds:</span>
-                                <span style="font-size: 9px;">${boundsStr}</span>
-
-                                <span style="color: #888;">Extents:</span>
-                                <span>${extentsStr}</span>
-                        `;
-
-                        // Add watertight status (always shown)
-                        if (message.is_watertight !== undefined) {
-                            const watertight = message.is_watertight[0] ? 'Yes' : 'No';
-                            const color = message.is_watertight[0] ? '#6c6' : '#c66';
-                            infoHTML += `
-                                <span style="color: #888;">Watertight:</span>
-                                <span style="color: ${color};">${watertight}</span>
-                            `;
-                        }
-
-                        // Add mode-specific info
-                        if (viewerType === "texture") {
-                            // Texture mode info
-                            if (message.visual_kind !== undefined) {
-                                const visualKind = message.visual_kind[0] || 'none';
-                                infoHTML += `
-                                    <span style="color: #888;">Visual Kind:</span>
-                                    <span>${visualKind}</span>
-                                `;
-                            }
-                            if (message.has_texture !== undefined) {
-                                const hasTexture = message.has_texture[0] ? 'Yes' : 'No';
-                                const texColor = message.has_texture[0] ? '#c8c' : '#888';
-                                infoHTML += `
-                                    <span style="color: #888;">Textures:</span>
-                                    <span style="color: ${texColor};">${hasTexture}</span>
-                                `;
-                            }
-                            if (message.has_vertex_colors !== undefined) {
-                                const hasColors = message.has_vertex_colors[0] ? 'Yes' : 'No';
-                                infoHTML += `
-                                    <span style="color: #888;">Vertex Colors:</span>
-                                    <span>${hasColors}</span>
-                                `;
-                            }
-                        } else {
-                            // Fields mode info
-                            if (message.field_names && message.field_names[0]?.length > 0) {
-                                const fields = message.field_names[0].join(', ');
-                                infoHTML += `
-                                    <span style="color: #888;">Fields:</span>
-                                    <span style="font-size: 9px; color: #6cc;">${fields}</span>
-                                `;
-                            } else {
-                                infoHTML += `
-                                    <span style="color: #888;">Fields:</span>
-                                    <span style="color: #888;">None</span>
-                                `;
-                            }
-                        }
-
-                        infoHTML += '</div>';
-
-                        infoPanel.innerHTML = infoHTML;
-
-                        // ComfyUI serves output files via /view API endpoint
-                        const filepath = `/view?filename=${encodeURIComponent(filename)}&type=output&subfolder=`;
-
-                        // Function to send message
-                        const sendMessage = () => {
-                            if (iframe.contentWindow) {
-                                iframe.contentWindow.postMessage({
-                                    type: "LOAD_MESH",
-                                    filepath: filepath,
-                                    timestamp: Date.now(),
-                                    showEdges: viewerState.show_edges,
-                                    cameraState: viewerState.camera_state,
-                                    selectedField: viewerState.selected_field,
-                                    selectedChannel: viewerState.selected_channel,
-                                    selectedColormap: viewerState.selected_colormap,
-                                }, "*");
-                            } else {
-                                console.error("[GeomPack VTK Batch] Iframe contentWindow not available");
-                            }
-                        };
-
-                        // Reload iframe if viewer type changed
-                        if (viewerType !== currentViewerType) {
-                            currentViewerType = viewerType;
-                            iframeLoaded = false;
-
-                            // Set up one-time load listener before changing src
-                            const onViewerLoaded = () => {
-                                iframeLoaded = true;
-                                sendMessage();
-                            };
-                            iframe.addEventListener('load', onViewerLoaded, { once: true });
-
-                            // Change iframe src to trigger reload
-                            iframe.src = viewerUrl + "?v=" + Date.now();
-                        } else {
-                            // No viewer change needed, send message immediately or after short delay
-                            if (iframeLoaded) {
-                                sendMessage();
-                            } else {
-                                setTimeout(sendMessage, 500);
-                            }
-                        }
+                    // The iframe only reloads when the GLOBAL viewer type actually
+                    // changed (fields <-> texture), never during navigation. Once the
+                    // right viewer is loaded, show the start index client-side.
+                    const viewerUrl = batchData.viewerType === "texture"
+                        ? `/extensions/${EXTENSION_FOLDER}/viewer_vtk_textured.html`
+                        : `/extensions/${EXTENSION_FOLDER}/viewer_vtk.html`;
+                    if (batchData.viewerType !== currentViewerType) {
+                        currentViewerType = batchData.viewerType;
+                        iframeLoaded = false;
+                        iframe.addEventListener("load", () => {
+                            iframeLoaded = true;
+                            showIndex(startIndex);
+                        }, { once: true });
+                        iframe.src = viewerUrl + "?v=" + Date.now();
+                    } else if (iframeLoaded) {
+                        showIndex(startIndex);
                     } else {
+                        iframe.addEventListener("load", () => {
+                            iframeLoaded = true;
+                            showIndex(startIndex);
+                        }, { once: true });
                     }
                 };
 
