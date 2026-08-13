@@ -1,117 +1,86 @@
-"""GeometryPack wire types (comfy-env [types] declaration, ADR-0015).
+"""GeometryPack wire type: trimesh.Trimesh (comfy-env [types], ADR-0015).
 
-Declared in comfy-env-root.toml under [types]; loaded by file path on
-BOTH sides of the process boundary (parent + workers), so keep the top
-level self-contained: stdlib/comfy_env imports only, trimesh imported
-inside the functions and probed once for conditional registration.
+Loaded by file path on BOTH sides of the process boundary, so the top level
+stays self-contained -- stdlib/comfy_env imports only; trimesh is imported
+inside the functions. Geometry (vertices/faces) decomposes into shared-memory
+arrays instead of the 3-copy pickle rung; visuals + metadata ride best-effort
+via the transport's fallback (the visual's mesh back-reference is dropped, so
+it cannot drag the whole geometry back into a pickle).
 
-Registers trimesh.Trimesh -- the type behind all io.Custom("TRIMESH")
-sockets in this pack. Geometry (vertices/faces) decomposes into
-shared-memory arrays instead of riding the 3-copy pickle rung (which
-also needs PIL at pickle time for textured meshes); the small remainder
-(visual, metadata) travels via the transport's fallback, with the
-visual's mesh BACK-REFERENCE never serialized so it cannot drag the
-whole geometry into a pickle again.
-
-A side without trimesh (the bare ComfyUI host env) registers
-deserialize=None: comfy-env holds such values as MATERIALIZED
-OpaquePayload receipts -- receiver-owned, safe across worker restarts
-(comfy-env >= 0.4.15) -- and re-emits fresh frames when forwarding.
-If some other pack installs trimesh into the host, the same file
-registers the real deserializer there and host-side consumers get
-actual Trimesh objects. No configuration either way.
-
-Tag is the TYPE IDENTITY ("trimesh.Trimesh", ADR-0015 convention), so
-independent packs that also declare trimesh.Trimesh interoperate: each
-side rebuilds with its own registered functions.
+A side without trimesh registers deserialize=None: comfy-env then holds the
+value as a materialized OpaquePayload receipt and re-emits it when forwarding,
+so a bare ComfyUI host never needs trimesh. The tag is the TYPE IDENTITY, so
+independent packs that also declare trimesh.Trimesh interoperate.
 """
 
-try:  # parent process (comfy_env installed)
+try:  # parent: comfy_env installed. worker: module copied in flat, no package.
     from comfy_env.isolation.workers._ipc_shared import register_serializer
-except ImportError:  # worker process (copied module, no comfy_env package)
+except ImportError:
     from _ipc_shared import register_serializer
 
 
+def _opt(fn):
+    """fn(), or None if this env can't run it (missing deps, unpicklable, ...)."""
+    try:
+        return fn()
+    except Exception:
+        return None
+
+
+def _put(payload, key, value, recurse):
+    """Best-effort payload[key] = recurse(value); skip None / unserializable."""
+    if value is not None and (v := _opt(lambda: recurse(value))) is not None:
+        payload[key] = v
+
+
 def _serialize_trimesh(mesh, recurse):
-    # NOTE: pass mesh.vertices / mesh.faces DIRECTLY (they are long-lived
-    # ndarray subclasses owned by the mesh). Do NOT wrap in np.asarray():
-    # the transport's visited-map is keyed by id(), and a temporary created
-    # here can be garbage-collected mid-walk, letting a later array reuse
-    # its id and receive the WRONG frame (observed: faces deserialized as
-    # vertices). Known comfy-env transport hazard; keep inputs long-lived.
-    payload = {
-        # Bulk geometry as arrays -> shared-memory path via recurse.
-        "vertices": recurse(mesh.vertices),
-        "faces": recurse(mesh.faces),
-    }
+    # Pass mesh.vertices/mesh.faces DIRECTLY -- never np.asarray() them. The
+    # transport keys its visited-map by id(); a temporary created here can be
+    # GC'd mid-walk and its id reused by a later array, which then receives the
+    # WRONG frame (seen: faces deserialized as vertices). Keep inputs mesh-lived.
+    payload = {"vertices": recurse(mesh.vertices), "faces": recurse(mesh.faces)}
 
-    # Visuals are decomposed by kind rather than copied/pickled whole:
-    # copying drags in optional deps (PIL via material deepcopy) and the
-    # visual object holds a mesh back-reference that would re-serialize
-    # the entire geometry. v1 preserves UVs + texture material; vertex
-    # colors are TODO (their accessor synthesizes temporaries -- unsafe
-    # under the id-reuse hazard above).
+    # Decompose visuals by kind; never copy them whole -- a full copy pulls in
+    # optional deps (PIL) and the visual's mesh back-reference re-serializes the
+    # geometry. (Vertex colors TODO: their accessor makes temporaries, unsafe
+    # under the id-reuse hazard above.)
     visual = getattr(mesh, "visual", None)
-    if type(visual).__name__ == "TextureVisuals":
-        uv = getattr(visual, "uv", None)  # stored array, mesh-lifetime
-        if uv is not None and len(uv):
-            payload["uv"] = recurse(uv)
-        material = getattr(visual, "material", None)
-        if material is not None:
-            try:
-                payload["material"] = recurse(material)
-            except Exception:
-                pass  # material needs deps this env lacks (the transport
-                # raises loudly on unpicklable values); uv still travels
+    if type(visual).__name__ == "TextureVisuals" and (uv := visual.uv) is not None and len(uv):
+        payload["uv"] = recurse(uv)
+        _put(payload, "material", visual.material, recurse)
 
-    metadata = getattr(mesh, "metadata", None)
-    if metadata:
-        try:
-            payload["metadata"] = recurse(dict(metadata))
-        except Exception:
-            pass
-
+    if getattr(mesh, "metadata", None):
+        _put(payload, "metadata", dict(mesh.metadata), recurse)
     return payload
 
 
 def _deserialize_trimesh(payload, recurse):
     import trimesh
-    mesh = trimesh.Trimesh(
-        vertices=recurse(payload["vertices"]),
-        faces=recurse(payload["faces"]),
-        process=False,  # exact geometry round-trip; no merging/validation
-    )
-    if payload.get("uv") is not None:
-        try:
-            from trimesh.visual import TextureVisuals
-            material = None
-            if payload.get("material") is not None:
-                try:
-                    material = recurse(payload["material"])
-                except Exception:
-                    pass
-            mesh.visual = TextureVisuals(
-                uv=recurse(payload["uv"]), material=material)
-        except Exception:
-            pass
-    if payload.get("metadata") is not None:
-        try:
-            mesh.metadata.update(recurse(payload["metadata"]))
-        except Exception:
-            pass
+    mesh = trimesh.Trimesh(recurse(payload["vertices"]), recurse(payload["faces"]),
+                           process=False)  # exact round-trip; no merge/validate
+
+    if "uv" in payload:
+        from trimesh.visual import TextureVisuals
+        material = _opt(lambda: recurse(payload["material"])) if "material" in payload else None
+        visual = _opt(lambda: TextureVisuals(uv=recurse(payload["uv"]), material=material))
+        if visual is not None:
+            mesh.visual = visual
+
+    if "metadata" in payload and (meta := _opt(lambda: recurse(payload["metadata"]))):
+        mesh.metadata.update(meta)
     return mesh
 
 
-# Register deserialize only where trimesh exists; a side without it holds
-# materialized OpaquePayload receipts (module docstring). Base-class
-# registration: MRO matching makes Trimesh subclasses ride along.
+# Deserializer only where trimesh exists; elsewhere None -> comfy-env keeps the
+# value as an OpaquePayload receipt (docstring). Tag is the base type -- MRO
+# matching carries Trimesh subclasses along.
 try:
-    import trimesh  # noqa: F401
-    _DESERIALIZE = _deserialize_trimesh
+    import trimesh
 except ImportError:
-    _DESERIALIZE = None
+    trimesh = None
 
 register_serializer(
-    "Trimesh", _serialize_trimesh, _DESERIALIZE,
+    "Trimesh", _serialize_trimesh,
+    _deserialize_trimesh if trimesh else None,
     tag="trimesh.Trimesh",
 )
