@@ -100,10 +100,18 @@ app.registerExtension({
                 dropdown.innerHTML = '<option value="0">1 / 1</option>';
 
                 // Assemble navigation bar
+                // Fullscreen toggle -- expands the whole widget (viewer + this nav
+                // bar) so the arrows and dropdown stay usable in fullscreen.
+                const fsButton = document.createElement("button");
+                fsButton.textContent = "⛶";  // fullscreen glyph
+                fsButton.title = "Fullscreen (← → to navigate)";
+                fsButton.style.cssText = "padding:4px 10px;cursor:pointer;background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font-size:13px;line-height:1;";
+
                 navBar.appendChild(prevButton);
                 navBar.appendChild(indexLabel);
                 navBar.appendChild(dropdown);
                 navBar.appendChild(nextButton);
+                navBar.appendChild(fsButton);
 
                 // Create mesh info panel
                 const infoPanel = document.createElement("div");
@@ -187,6 +195,27 @@ app.registerExtension({
                 prevButton.addEventListener("click", () => showIndex(currentIndex - 1));
                 nextButton.addEventListener("click", () => showIndex(currentIndex + 1));
                 dropdown.addEventListener("change", () => showIndex(Number(dropdown.value)));
+
+                // Fullscreen the whole widget. The arrow BUTTONS stay clickable in
+                // fullscreen; arrow KEYS also navigate while the widget (nav bar) has
+                // focus. All listeners are on our own `container`, never document, so
+                // this stays isolation-clean.
+                container.tabIndex = 0;   // focusable -> can receive keydown in fullscreen
+                const isFs = () => (document.fullscreenElement || document.webkitFullscreenElement) === container;
+                fsButton.addEventListener("click", () => {
+                    if (isFs()) {
+                        (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+                    } else {
+                        (container.requestFullscreen || container.webkitRequestFullscreen)?.call(container);
+                    }
+                });
+                ["fullscreenchange", "webkitfullscreenchange"].forEach((ev) =>
+                    container.addEventListener(ev, () => { if (isFs()) container.focus(); }));
+                container.addEventListener("keydown", (e) => {
+                    if (!isFs()) return;   // only hijack arrows while WE are fullscreen
+                    if (e.key === "ArrowLeft") { showIndex(currentIndex - 1); e.preventDefault(); }
+                    else if (e.key === "ArrowRight") { showIndex(currentIndex + 1); e.preventDefault(); }
+                });
 
                 // Update button states
                 const updateNavigationButtons = () => {
