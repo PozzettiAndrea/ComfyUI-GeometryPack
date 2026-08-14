@@ -164,17 +164,23 @@ class PreviewMeshVTKBatchNode(io.ComfyNode):
 
         filenames = []
         metas = []
+        names = []  # source mesh names for the frontend dropdown (e.g. "apple.ply")
         for i, mesh in enumerate(trimesh):
             fname, meta = _export_and_describe(mesh, mode_val, COMFYUI_OUTPUT_FOLDER)
             filenames.append(fname)
             metas.append(meta)
-            log.debug("[%d/%d] %s: %d verts, %d faces", i + 1, batch_size, fname,
-                      meta["vertex_count"], meta["face_count"])
+            # Loaders stash the source basename in metadata['file_name'] (mesh_io.py);
+            # fall back to a positional label if a mesh has no recorded name.
+            md = getattr(mesh, "metadata", None) or {}
+            names.append(md.get("file_name") or md.get("name") or f"mesh {i + 1}")
+            log.debug("[%d/%d] %s (%s): %d verts, %d faces", i + 1, batch_size,
+                      names[-1], fname, meta["vertex_count"], meta["face_count"])
 
         # Per-index arrays. Each value is wrapped in a one-element list (ComfyUI's
         # UI-message convention: the frontend reads message.<key>[0]).
         ui_data = {
             "mesh_files": [filenames],
+            "mesh_names": [names],
             "viewer_type": [viewer_type],
             "mode": [mode_val],
             "batch_size": [batch_size],

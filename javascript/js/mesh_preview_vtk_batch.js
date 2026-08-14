@@ -238,6 +238,9 @@ app.registerExtension({
                     const m = batchData?.meta?.[i];
                     if (!m) return;
                     const num = (v) => (typeof v === "number" ? v.toLocaleString() : "N/A");
+                    const esc = (s) => String(s ?? "").replace(/[&<>]/g,
+                        c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+                    const name = batchData.names?.[i] || `mesh ${i + 1}`;
                     const boundsStr = (Array.isArray(m.bounds_min) && Array.isArray(m.bounds_max)
                         && m.bounds_min.length === 3 && m.bounds_max.length === 3)
                         ? `[${m.bounds_min.map(v => v.toFixed(2)).join(", ")}] to [${m.bounds_max.map(v => v.toFixed(2)).join(", ")}]`
@@ -248,6 +251,8 @@ app.registerExtension({
                     const modeColor = batchData.viewerType === "texture" ? "#c8c" : "#6cc";
                     let html = `
                         <div style="display: grid; grid-template-columns: auto 1fr; gap: 2px 8px;">
+                            <span style="color: #888;">Name:</span>
+                            <span style="color: #ddd; font-weight: bold; word-break: break-all;">${esc(name)}</span>
                             <span style="color: #888;">Batch:</span>
                             <span style="color: #8c8; font-weight: bold;">${i + 1} / ${currentBatchSize}</span>
                             <span style="color: #888;">Mode:</span>
@@ -358,6 +363,7 @@ app.registerExtension({
                     const col = (key) => message[key]?.[0] || [];   // a per-index array
                     batchData = {
                         files,
+                        names: message.mesh_names?.[0] || [],   // e.g. ["apple.ply", ...]
                         viewerType: message.viewer_type?.[0] || "fields",
                         mode: message.mode?.[0] || "fields",
                         meta: files.map((_, k) => ({
@@ -377,10 +383,16 @@ app.registerExtension({
                     currentBatchSize = message.batch_size?.[0] || files.length;
                     if (indexWidget) indexWidget.options.max = currentBatchSize - 1;
 
-                    // (Re)populate the dropdown: one option per mesh.
-                    dropdown.innerHTML = files
-                        .map((_, k) => `<option value="${k}">${k + 1} / ${files.length}</option>`)
-                        .join("");
+                    // (Re)populate the dropdown: one option per mesh, labelled by its
+                    // source name (e.g. "apple.ply"), falling back to its position.
+                    // Built with real <option> elements + textContent so a filename
+                    // can never inject markup.
+                    dropdown.replaceChildren(...files.map((_, k) => {
+                        const opt = document.createElement("option");
+                        opt.value = String(k);
+                        opt.textContent = batchData.names[k] || `${k + 1} / ${files.length}`;
+                        return opt;
+                    }));
 
                     let startIndex = message.current_index?.[0] || 0;
                     startIndex = Math.max(0, Math.min(startIndex, files.length - 1));
