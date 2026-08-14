@@ -19,8 +19,10 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function() {
                 const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
 
-                // Viewer state persisted via DOM widget serialization
-                const viewerState = { show_edges: false, camera_state: "", selected_field: "", selected_channel: "magnitude", selected_colormap: "erdc_rainbow_bright" };
+                // Viewer state persisted via DOM widget serialization.
+                // layout + opacities live HERE (not as node inputs): Python exports
+                // both view sets every run, so they are pure client-side choices.
+                const viewerState = { layout: "side_by_side", opacity_1: 1.0, opacity_2: 1.0, show_edges: false, camera_state: "", selected_field: "", selected_channel: "magnitude", selected_colormap: "erdc_rainbow_bright" };
 
                 // Create container for viewer + info panel
                 const container = createContainer();
@@ -53,6 +55,22 @@ app.registerExtension({
                 bar.appendChild(layoutSel);
                 bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Mode:" }));
                 bar.appendChild(modeSel);
+                // Opacity inputs (overlay only) -- applied client-side by re-posting
+                const mkOp = () => {
+                    const inp = document.createElement("input");
+                    inp.type = "number"; inp.min = "0"; inp.max = "1"; inp.step = "0.1";
+                    inp.style.cssText = "width:44px;background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 4px;";
+                    return inp;
+                };
+                const op1Input = mkOp();
+                const op2Input = mkOp();
+                const opControls = document.createElement("span");
+                opControls.style.cssText = "display:flex;gap:4px;align-items:center;";
+                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Op 1:" }));
+                opControls.appendChild(op1Input);
+                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Op 2:" }));
+                opControls.appendChild(op2Input);
+                bar.appendChild(opControls);
                 bar.appendChild(createFullscreenButton(container));
 
                 // Add bar, iframe and info panel to container
@@ -98,74 +116,60 @@ app.registerExtension({
                 // Set initial node size
                 this.setSize([768, 680]);
 
-                // ---- widget <-> bar sync + opacity visibility ----
-                const layoutWidget = this.widgets?.find(w => w.name === "layout");
+                // ---- bar wiring ----
+                // mode is the only remaining node input; layout + opacity live in
+                // viewerState (persisted via the DOM widget's serialization).
                 const modeWidget = this.widgets?.find(w => w.name === "mode");
 
-                // opacity_1/opacity_2 only mean anything in the overlay layout --
-                // hide the widgets otherwise (same hidden-type trick as
-                // preview_mesh_batch_render.js).
                 const setOpacityVisible = (visible) => {
-                    let changed = false;
-                    for (const nm of ["opacity_1", "opacity_2"]) {
-                        const w = node.widgets?.find(x => x.name === nm);
-                        if (!w) continue;
-                        if (!visible && w.type !== "geometrypack_hidden") {
-                            w._gpOrigType = w.type;
-                            w._gpOrigComputeSize = w.computeSize;
-                            w.type = "geometrypack_hidden";   // unknown type -> not drawn
-                            w.computeSize = () => [0, -4];
-                            changed = true;
-                        } else if (visible && w.type === "geometrypack_hidden") {
-                            w.type = w._gpOrigType;
-                            w.computeSize = w._gpOrigComputeSize;
-                            changed = true;
-                        }
-                    }
-                    if (changed) node.setSize(node.computeSize());
+                    opControls.style.display = visible ? "flex" : "none";
                 };
 
                 let lastMsg = null;   // last execution message, for client-side switches
 
                 const syncBar = () => {
-                    if (layoutWidget) layoutSel.value = layoutWidget.value || "side_by_side";
+                    layoutSel.value = viewerState.layout || "side_by_side";
                     if (modeWidget) modeSel.value = modeWidget.value || "fields";
+                    op1Input.value = viewerState.opacity_1 ?? 1.0;
+                    op2Input.value = viewerState.opacity_2 ?? 1.0;
                     setOpacityVisible(layoutSel.value === "overlay");
                 };
-                // Keep the bar honest when the node widgets are edited directly.
-                for (const [w, after] of [[layoutWidget, syncBar], [modeWidget, syncBar]]) {
-                    if (!w) continue;
-                    const orig = w.callback;
-                    w.callback = function(value) {
+                // Keep the bar honest when the mode widget is edited directly.
+                if (modeWidget) {
+                    const orig = modeWidget.callback;
+                    modeWidget.callback = function(value) {
                         const res = orig?.apply(this, arguments);
-                        after();
+                        syncBar();
                         return res;
                     };
                 }
 
+                // Layout: fully client-side -- every run exports both the separate
+                // pair AND the combined overlay file, so any switch just re-renders.
                 layoutSel.addEventListener("change", () => {
-                    const newLayout = layoutSel.value;
-                    if (layoutWidget) layoutWidget.value = newLayout;   // persists for next run
-                    setOpacityVisible(newLayout === "overlay");
-                    // side_by_side <-> slider reuse the SAME exported files ->
-                    // re-render client-side from the stored message. Overlay (either
-                    // direction) needs the combined export -> re-run.
-                    if (newLayout !== "overlay" && lastMsg?.mesh_1_file && lastMsg?.mesh_2_file) {
-                        render(lastMsg, newLayout);
-                    } else {
-                        app.queuePrompt();
-                    }
+                    viewerState.layout = layoutSel.value;
+                    setOpacityVisible(viewerState.layout === "overlay");
+                    if (lastMsg) render(lastMsg);
                 });
                 modeSel.addEventListener("change", () => {
                     if (modeWidget) modeWidget.value = modeSel.value;
                     app.queuePrompt();   // different export format -> must re-run
                 });
+                // Opacity: client-side re-post; persisted in viewerState.
+                const onOpacity = () => {
+                    viewerState.opacity_1 = Math.max(0, Math.min(1, parseFloat(op1Input.value) || 0));
+                    viewerState.opacity_2 = Math.max(0, Math.min(1, parseFloat(op2Input.value) || 0));
+                    if (lastMsg) render(lastMsg);
+                };
+                op1Input.addEventListener("change", onOpacity);
+                op2Input.addEventListener("change", onOpacity);
                 syncBar();
 
-                // Render one execution message; layoutOverride enables the
-                // client-side side_by_side <-> slider switch without a re-run.
-                const render = (message, layoutOverride) => {
-                    const layout = layoutOverride || message.layout[0];
+                // Render one execution message with the CURRENT client-side layout
+                // and opacities (viewerState). Called on execution and on any bar
+                // change -- both view sets are always present in the message.
+                const render = (message) => {
+                    const layout = viewerState.layout || "side_by_side";
                     const mode = message.mode?.[0] || "fields";
 
                     // Determine viewer type and name
@@ -216,8 +220,8 @@ app.registerExtension({
                             layout: layout,
                             mesh1Filepath: buildViewUrl(message.mesh_1_file[0]),
                             mesh2Filepath: buildViewUrl(message.mesh_2_file[0]),
-                            opacity1: message.opacity_1?.[0] || 1.0,
-                            opacity2: message.opacity_2?.[0] || 1.0,
+                            opacity1: viewerState.opacity_1 ?? 1.0,
+                            opacity2: viewerState.opacity_2 ?? 1.0,
                             showEdges: viewerState.show_edges,
                             cameraState: viewerState.camera_state,
                             selectedField: viewerState.selected_field,
@@ -245,7 +249,8 @@ app.registerExtension({
                                 faces: message.face_count_2?.[0] || 'N/A',
                                 hasTexture: message.has_texture_2?.[0]
                             },
-                            commonFields: message.common_fields?.[0] || []
+                            // combined export injects a mesh_id field
+                            commonFields: message.common_fields_overlay?.[0] || message.common_fields?.[0] || []
                         });
 
                         infoPanel.innerHTML = infoHTML;
@@ -253,8 +258,8 @@ app.registerExtension({
                         postMessageData = createLoadDualMeshMessage({
                             layout: layout,
                             meshFilepath: buildViewUrl(message.mesh_file[0]),
-                            opacity1: message.opacity_1?.[0] || 1.0,
-                            opacity2: message.opacity_2?.[0] || 1.0,
+                            opacity1: viewerState.opacity_1 ?? 1.0,
+                            opacity2: viewerState.opacity_2 ?? 1.0,
                             showEdges: viewerState.show_edges,
                             cameraState: viewerState.camera_state,
                             selectedField: viewerState.selected_field,
@@ -271,7 +276,7 @@ app.registerExtension({
                 const onExecuted = this.onExecuted;
                 this.onExecuted = function(message) {
                     onExecuted?.apply(this, arguments);
-                    if (!message?.layout) return;
+                    if (!message?.mesh_1_file) return;
                     lastMsg = message;
                     syncBar();   // reflect the layout/mode actually run + opacity visibility
                     render(message);

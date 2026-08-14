@@ -110,10 +110,11 @@ class PreviewMeshDualNode(io.ComfyNode):
             inputs=[
                 io.Custom("TRIMESH").Input("mesh_1"),
                 io.Custom("TRIMESH").Input("mesh_2"),
-                io.Combo.Input("layout", options=["side_by_side", "overlay", "slider"], default="side_by_side", optional=True),
+                # layout and opacity are NOT node inputs: layout is a pure viewer
+                # choice (both the separate pair AND the combined overlay file are
+                # exported every run, so the frontend switches without re-running)
+                # and opacity is applied client-side in the viewer.
                 io.Combo.Input("mode", options=["fields", "texture"], default="fields", optional=True),
-                io.Float.Input("opacity_1", default=1.0, min=0.0, max=1.0, step=0.1, optional=True),
-                io.Float.Input("opacity_2", default=1.0, min=0.0, max=1.0, step=0.1, optional=True),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="meshes", is_output_list=True),
@@ -121,22 +122,21 @@ class PreviewMeshDualNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, mesh_1, mesh_2, layout="side_by_side", mode="fields", opacity_1=1.0, opacity_2=1.0):
+    def execute(cls, mesh_1, mesh_2, mode="fields"):
         """
-        Preview two meshes with chosen layout and visualization mode.
+        Preview two meshes; the layout (side-by-side / overlay / slider) is
+        chosen client-side, so BOTH the separate pair and the combined overlay
+        file are exported every run.
 
         Args:
             mesh_1: First trimesh object
             mesh_2: Second trimesh object
-            layout: "side_by_side" or "overlay"
             mode: "fields" (scientific visualization) or "texture" (textured rendering)
-            opacity_1: Opacity for mesh 1 (0.0-1.0)
-            opacity_2: Opacity for mesh 2 (0.0-1.0)
 
         Returns:
-            dict: UI data for frontend widget
+            io.NodeOutput with UI data for the frontend widget
         """
-        log.info("Layout: %s, Mode: %s", layout, mode)
+        log.info("Mode: %s", mode)
         log.info("Mesh 1: %s - %d vertices, %d faces", get_geometry_type(mesh_1), len(mesh_1.vertices), get_face_count(mesh_1))
         log.info("Mesh 2: %s - %d vertices, %d faces", get_geometry_type(mesh_2), len(mesh_2.vertices), get_face_count(mesh_2))
 
@@ -174,130 +174,64 @@ class PreviewMeshDualNode(io.ComfyNode):
         # Generate unique ID for this preview
         preview_id = uuid.uuid4().hex[:8]
 
-        if layout == "side_by_side" or layout == "slider":
-            # Export meshes separately based on mode
-            if mode == "texture":
-                # Texture mode: export as GLB
-                filename_1, filepath_1 = cls._export_mesh(mesh_1, f"preview_dual_1_{preview_id}", use_vtp=False, use_glb=True)
-                filename_2, filepath_2 = cls._export_mesh(mesh_2, f"preview_dual_2_{preview_id}", use_vtp=False, use_glb=True)
-            else:
-                # Fields mode: use VTP for fields OR point clouds
-                filename_1, filepath_1 = cls._export_mesh(mesh_1, f"preview_dual_1_{preview_id}", use_vtp=(mesh_1_has_fields or mesh_1_is_pc), use_glb=False)
-                filename_2, filepath_2 = cls._export_mesh(mesh_2, f"preview_dual_2_{preview_id}", use_vtp=(mesh_2_has_fields or mesh_2_is_pc), use_glb=False)
+        # Export BOTH view sets every run so the frontend can switch layouts
+        # client-side: the separate pair (side_by_side / slider) and the
+        # combined overlay file.
+        use_glb = mode == "texture"
+        filename_1, _ = cls._export_mesh(
+            mesh_1, f"preview_dual_1_{preview_id}",
+            use_vtp=(not use_glb and (mesh_1_has_fields or mesh_1_is_pc)), use_glb=use_glb)
+        filename_2, _ = cls._export_mesh(
+            mesh_2, f"preview_dual_2_{preview_id}",
+            use_vtp=(not use_glb and (mesh_2_has_fields or mesh_2_is_pc)), use_glb=use_glb)
+        filename_combined, _ = cls._export_combined_mesh(
+            mesh_1, mesh_2, preview_id, mesh_1_has_fields, mesh_2_has_fields,
+            use_glb=use_glb)
 
-            # Compute bounds from vertices (works for both meshes and point clouds)
-            bounds_1 = np.array([mesh_1.vertices.min(axis=0), mesh_1.vertices.max(axis=0)])
-            bounds_2 = np.array([mesh_2.vertices.min(axis=0), mesh_2.vertices.max(axis=0)])
-            extents_1 = bounds_1[1] - bounds_1[0]
-            extents_2 = bounds_2[1] - bounds_2[0]
+        # Bounds from vertices (works for both meshes and point clouds)
+        bounds_1 = np.array([mesh_1.vertices.min(axis=0), mesh_1.vertices.max(axis=0)])
+        bounds_2 = np.array([mesh_2.vertices.min(axis=0), mesh_2.vertices.max(axis=0)])
+        extents_1 = bounds_1[1] - bounds_1[0]
+        extents_2 = bounds_2[1] - bounds_2[0]
 
-            # Build UI data for side-by-side mode
-            ui_data = {
-                "layout": [layout],
-                "mode": [mode],
-                "mesh_1_file": [filename_1],
-                "mesh_2_file": [filename_2],
-                "vertex_count_1": [len(mesh_1.vertices)],
-                "vertex_count_2": [len(mesh_2.vertices)],
-                "face_count_1": [get_face_count(mesh_1)],
-                "face_count_2": [get_face_count(mesh_2)],
-                "bounds_min_1": [bounds_1[0].tolist()],
-                "bounds_max_1": [bounds_1[1].tolist()],
-                "bounds_min_2": [bounds_2[0].tolist()],
-                "bounds_max_2": [bounds_2[1].tolist()],
-                "extents_1": [extents_1.tolist()],
-                "extents_2": [extents_2.tolist()],
-                "is_watertight_1": [bool(mesh_1.is_watertight) if not is_point_cloud(mesh_1) else False],
-                "is_watertight_2": [bool(mesh_2.is_watertight) if not is_point_cloud(mesh_2) else False],
-                "opacity_1": [float(opacity_1)],
-                "opacity_2": [float(opacity_2)],
-            }
+        ui_data = {
+            "mode": [mode],
+            "mesh_1_file": [filename_1],
+            "mesh_2_file": [filename_2],
+            "mesh_file": [filename_combined],   # overlay view
+            "vertex_count_1": [len(mesh_1.vertices)],
+            "vertex_count_2": [len(mesh_2.vertices)],
+            "face_count_1": [get_face_count(mesh_1)],
+            "face_count_2": [get_face_count(mesh_2)],
+            "bounds_min_1": [bounds_1[0].tolist()],
+            "bounds_max_1": [bounds_1[1].tolist()],
+            "bounds_min_2": [bounds_2[0].tolist()],
+            "bounds_max_2": [bounds_2[1].tolist()],
+            "extents_1": [extents_1.tolist()],
+            "extents_2": [extents_2.tolist()],
+            "is_watertight_1": [bool(mesh_1.is_watertight) if not is_point_cloud(mesh_1) else False],
+            "is_watertight_2": [bool(mesh_2.is_watertight) if not is_point_cloud(mesh_2) else False],
+        }
 
-            # Add mode-specific metadata
-            if mode == "texture":
-                # Texture mode metadata
-                ui_data.update({
-                    "has_texture_1": [texture_info_1['has_texture']],
-                    "has_texture_2": [texture_info_2['has_texture']],
-                    "visual_kind_1": [texture_info_1['visual_kind'] if texture_info_1['visual_kind'] else "none"],
-                    "visual_kind_2": [texture_info_2['visual_kind'] if texture_info_2['visual_kind'] else "none"],
-                    "has_vertex_colors_1": [texture_info_1['has_vertex_colors']],
-                    "has_vertex_colors_2": [texture_info_2['has_vertex_colors']],
-                    "has_material_1": [texture_info_1['has_material']],
-                    "has_material_2": [texture_info_2['has_material']],
-                })
-            else:
-                # Fields mode metadata
-                ui_data.update({
-                    "field_names_1": [field_names_1],
-                    "field_names_2": [field_names_2],
-                    "common_fields": [common_fields],
-                })
-
-
-        else:  # overlay
-            # Combine meshes with color coding
-            if mode == "texture":
-                # Texture mode: export combined mesh as GLB
-                filename, filepath = cls._export_combined_mesh(
-                    mesh_1, mesh_2, preview_id, opacity_1, opacity_2,
-                    mesh_1_has_fields, mesh_2_has_fields, use_glb=True
-                )
-            else:
-                # Fields mode: export combined mesh as VTP
-                filename, filepath = cls._export_combined_mesh(
-                    mesh_1, mesh_2, preview_id, opacity_1, opacity_2,
-                    mesh_1_has_fields, mesh_2_has_fields, use_glb=False
-                )
-
-            # Compute bounds from vertices (works for both meshes and point clouds)
-            bounds_1 = np.array([mesh_1.vertices.min(axis=0), mesh_1.vertices.max(axis=0)])
-            bounds_2 = np.array([mesh_2.vertices.min(axis=0), mesh_2.vertices.max(axis=0)])
-            combined_bounds_min = np.minimum(bounds_1[0], bounds_2[0])
-            combined_bounds_max = np.maximum(bounds_1[1], bounds_2[1])
-            combined_extents = combined_bounds_max - combined_bounds_min
-
-            # Build UI data for overlay mode
-            ui_data = {
-                "layout": [layout],
-                "mode": [mode],
-                "mesh_file": [filename],
-                "vertex_count_1": [len(mesh_1.vertices)],
-                "vertex_count_2": [len(mesh_2.vertices)],
-                "face_count_1": [get_face_count(mesh_1)],
-                "face_count_2": [get_face_count(mesh_2)],
-                "bounds_min": [combined_bounds_min.tolist()],
-                "bounds_max": [combined_bounds_max.tolist()],
-                "extents": [combined_extents.tolist()],
-                "opacity_1": [float(opacity_1)],
-                "opacity_2": [float(opacity_2)],
-                "is_watertight_1": [bool(mesh_1.is_watertight) if not is_point_cloud(mesh_1) else False],
-                "is_watertight_2": [bool(mesh_2.is_watertight) if not is_point_cloud(mesh_2) else False],
-            }
-
-            # Add mode-specific metadata
-            if mode == "texture":
-                # Texture mode metadata
-                ui_data.update({
-                    "has_texture_1": [texture_info_1['has_texture']],
-                    "has_texture_2": [texture_info_2['has_texture']],
-                    "visual_kind_1": [texture_info_1['visual_kind'] if texture_info_1['visual_kind'] else "none"],
-                    "visual_kind_2": [texture_info_2['visual_kind'] if texture_info_2['visual_kind'] else "none"],
-                    "has_vertex_colors_1": [texture_info_1['has_vertex_colors']],
-                    "has_vertex_colors_2": [texture_info_2['has_vertex_colors']],
-                    "has_material_1": [texture_info_1['has_material']],
-                    "has_material_2": [texture_info_2['has_material']],
-                })
-            else:
-                # Fields mode metadata - include mesh_id which is added during export for overlay
-                overlay_fields_1 = field_names_1 + ["mesh_id"] if layout == "overlay" else field_names_1
-                overlay_fields_2 = field_names_2 + ["mesh_id"] if layout == "overlay" else field_names_2
-                overlay_common = common_fields + ["mesh_id"] if layout == "overlay" else common_fields
-                ui_data.update({
-                    "field_names_1": [overlay_fields_1],
-                    "field_names_2": [overlay_fields_2],
-                    "common_fields": [overlay_common],
-                })
+        if mode == "texture":
+            ui_data.update({
+                "has_texture_1": [texture_info_1['has_texture']],
+                "has_texture_2": [texture_info_2['has_texture']],
+                "visual_kind_1": [texture_info_1['visual_kind'] if texture_info_1['visual_kind'] else "none"],
+                "visual_kind_2": [texture_info_2['visual_kind'] if texture_info_2['visual_kind'] else "none"],
+                "has_vertex_colors_1": [texture_info_1['has_vertex_colors']],
+                "has_vertex_colors_2": [texture_info_2['has_vertex_colors']],
+                "has_material_1": [texture_info_1['has_material']],
+                "has_material_2": [texture_info_2['has_material']],
+            })
+        else:
+            ui_data.update({
+                "field_names_1": [field_names_1],
+                "field_names_2": [field_names_2],
+                "common_fields": [common_fields],
+                # the combined overlay export injects a mesh_id field
+                "common_fields_overlay": [common_fields + ["mesh_id"]],
+            })
 
         log.info("Preview ready")
         return io.NodeOutput([mesh_1, mesh_2], ui=ui_data)
@@ -338,7 +272,7 @@ class PreviewMeshDualNode(io.ComfyNode):
         return filename, filepath
 
     @staticmethod
-    def _export_combined_mesh(mesh_1, mesh_2, preview_id, opacity_1, opacity_2,
+    def _export_combined_mesh(mesh_1, mesh_2, preview_id,
                               mesh_1_has_fields, mesh_2_has_fields, use_glb):
         """Export combined mesh for overlay mode as VTP or GLB.
 
