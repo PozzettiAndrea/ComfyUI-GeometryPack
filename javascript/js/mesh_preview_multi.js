@@ -81,8 +81,18 @@ app.registerExtension({
                 gridControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Rows:" }));
                 gridControls.appendChild(rowsInput);
 
+                // Mode selector (fields | texture) mirroring the node's `mode`
+                // input. NOT client-side: mode changes what gets EXPORTED, so
+                // changing it queues a re-run (same as editing the node widget).
+                const modeSel = document.createElement("select");
+                modeSel.style.cssText = "background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 6px;";
+                modeSel.innerHTML = '<option value="fields">Fields</option><option value="texture">Texture</option>';
+                modeSel.title = "Visualization mode (re-runs the node)";
+
                 controls.appendChild(Object.assign(document.createElement("span"), { textContent: "Layout:" }));
                 controls.appendChild(layoutSel);
+                controls.appendChild(Object.assign(document.createElement("span"), { textContent: "Mode:" }));
+                controls.appendChild(modeSel);
                 controls.appendChild(gridControls);
                 bar.appendChild(collapseBtn);
                 bar.appendChild(controls);
@@ -202,6 +212,22 @@ app.registerExtension({
                 };
                 colsInput.addEventListener('change', onDim("cols"));
                 rowsInput.addEventListener('change', onDim("rows"));
+
+                // Mode: bar select <-> node widget, two-way (bar change re-runs).
+                const modeWidget = this.widgets?.find(w => w.name === "mode");
+                if (modeWidget) {
+                    modeSel.value = modeWidget.value || "fields";
+                    const origModeCb = modeWidget.callback;
+                    modeWidget.callback = function(value) {
+                        const res = origModeCb?.apply(this, arguments);
+                        modeSel.value = value;
+                        return res;
+                    };
+                }
+                modeSel.addEventListener("change", () => {
+                    if (modeWidget) modeWidget.value = modeSel.value;
+                    app.queuePrompt();
+                });
 
                 syncLayoutUI();
                 applyCollapsed();

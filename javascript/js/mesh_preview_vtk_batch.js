@@ -100,6 +100,16 @@ app.registerExtension({
                 dropdown.innerHTML = '<option value="0">1 / 1</option>';
 
                 // Assemble navigation bar
+                // Mode selector (fields | texture) mirroring the node's `mode`
+                // input. NOT client-side: mode changes what gets EXPORTED (VTP/STL
+                // vs GLB), so changing it queues a re-run -- exactly like editing
+                // the node widget, just reachable from the nav bar.
+                const modeSel = document.createElement("select");
+                modeSel.style.cssText = "background:#333;color:#ccc;border:1px solid #555;" +
+                    "border-radius:3px;font:11px monospace;padding:2px 6px;cursor:pointer;";
+                modeSel.innerHTML = '<option value="fields">Fields</option><option value="texture">Texture</option>';
+                modeSel.title = "Visualization mode (re-runs the node)";
+
                 // Fullscreen toggle -- expands the whole widget (viewer + this nav
                 // bar) so the arrows and dropdown stay usable in fullscreen.
                 const fsButton = document.createElement("button");
@@ -111,6 +121,7 @@ app.registerExtension({
                 navBar.appendChild(indexLabel);
                 navBar.appendChild(dropdown);
                 navBar.appendChild(nextButton);
+                navBar.appendChild(modeSel);
                 navBar.appendChild(fsButton);
 
                 // Create mesh info panel
@@ -195,6 +206,23 @@ app.registerExtension({
                 prevButton.addEventListener("click", () => showIndex(currentIndex - 1));
                 nextButton.addEventListener("click", () => showIndex(currentIndex + 1));
                 dropdown.addEventListener("change", () => showIndex(Number(dropdown.value)));
+
+                // Mode: bar select <-> node widget, two-way. Bar change re-runs
+                // (new exports needed); widget edits keep the bar in sync.
+                const modeWidget = this.widgets?.find(w => w.name === "mode");
+                if (modeWidget) {
+                    modeSel.value = modeWidget.value || "fields";
+                    const origModeCb = modeWidget.callback;
+                    modeWidget.callback = function(value) {
+                        const res = origModeCb?.apply(this, arguments);
+                        modeSel.value = value;
+                        return res;
+                    };
+                }
+                modeSel.addEventListener("change", () => {
+                    if (modeWidget) modeWidget.value = modeSel.value;
+                    app.queuePrompt();
+                });
 
                 // Fullscreen the whole widget. The arrow BUTTONS stay clickable in
                 // fullscreen; arrow KEYS also navigate while the widget (nav bar) has
@@ -411,6 +439,7 @@ app.registerExtension({
 
                     currentBatchSize = message.batch_size?.[0] || files.length;
                     if (indexWidget) indexWidget.options.max = currentBatchSize - 1;
+                    modeSel.value = batchData.mode;   // reflect the mode actually run
 
                     // (Re)populate the dropdown: one option per mesh, labelled by its
                     // source name (e.g. "apple.ply"), falling back to its position.
