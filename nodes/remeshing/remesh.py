@@ -82,12 +82,12 @@ class RemeshNode(io.ComfyNode):
                         io.Combo.Input("reproject", options=["true", "false"], default="true", tooltip="Reproject vertices back onto the original surface after each iteration (Botsch back-projection). true = stay faithful to the input surface (recommended); false = pure tangential smoothing, which lets vertices drift off the surface."),
                     ]),
                     io.DynamicCombo.Option("instant_meshes", [
-                        io.DynamicCombo.Input("target", tooltip="What drives the output density. Instant Meshes treats the count as GUIDANCE, not a contract -- expect up to ~2x deviation either way.", options=[
+                        io.DynamicCombo.Input("target", tooltip="What drives the output density. Instant Meshes SNAPS the count to its internal multiresolution hierarchy -- observed misses up to ~4x (e.g. 5k requested -> 19k delivered). Treat it as an order-of-magnitude knob and check the info output for the achieved count.", options=[
                             io.DynamicCombo.Option("vertices", [
-                                io.Int.Input("target_vertex_count", default=5000, min=100, max=1000000, step=100, tooltip="Target vertex count (~±2x -- the field-aligned solver snaps to its own granularity). Creates a quad-dominant mesh."),
+                                io.Int.Input("target_vertex_count", default=5000, min=100, max=1000000, step=100, tooltip="Target vertex count -- snapped to the solver's own hierarchy, can land 2-4x off (check the achieved count in the info output). Creates a quad-dominant mesh."),
                             ]),
                             io.DynamicCombo.Option("faces", [
-                                io.Int.Input("target_faces", default=10000, min=200, max=2000000, step=100, tooltip="Target face count, TRIANGLES (~±2x). Converted to the solver's vertex budget via quad accounting (V ≈ F/2)."),
+                                io.Int.Input("target_faces", default=10000, min=200, max=2000000, step=100, tooltip="Target face count, TRIANGLES -- converted to the solver's vertex budget (V ≈ F/2), then snapped to its hierarchy; can land 2-4x off."),
                             ]),
                         ]),
                         io.Combo.Input("deterministic", options=["true", "false"], default="true", tooltip="Use deterministic algorithm for reproducible results."),
@@ -513,33 +513,50 @@ class RemeshNode(io.ComfyNode):
     # shape to decide.
     _CHOICE_COMBOS = {"target", "sizing"}
 
-    # Backends whose libraries segfault / hang / hit UB on non-manifold edges
-    # (halfedge remeshers + global-parametrization quad remeshers).
-    _REQUIRE_MANIFOLD = {"pymeshlab_isotropic", "pmp_uniform", "pmp_adaptive",
-                         "quadriflow", "quadwild", "cgal_isotropic", "mmg_adaptive"}
+    # Backends whose libraries SEGFAULT / HANG / hit UB on non-manifold edges
+    # -- catastrophic failures only. Backends that merely raise a clean error
+    # themselves (pymeshlab, MMG, PMP) get a WARNING, not a gate: blocking
+    # input their library might handle (or refuse safely on its own) is a
+    # regression dressed as safety.
+    _REQUIRE_MANIFOLD = {"quadriflow", "quadwild", "cgal_isotropic"}
+    _WARN_MANIFOLD = {"pymeshlab_isotropic", "pmp_uniform", "pmp_adaptive",
+                      "mmg_adaptive"}
     _REQUIRE_CUDA = {"faithc", "gpu_cumesh"}
 
     @staticmethod
-    def _merged_edge_stats(mesh):
-        """Boundary / non-manifold edge counts on MERGED-VIEW topology.
+    def _edge_stats(mesh):
+        """Boundary / non-manifold edge counts, on TWO views of the topology.
 
-        Wrappers pass process=False, so STL-style duplicated vertices would
-        make every edge look like a boundary -- hash vertex positions first
-        (O(V)) and evaluate the histogram on the merged faces."""
+        RAW view = the connectivity the backend actually receives (wrappers
+        pass process=False). The manifold gate MUST use this: position-merging
+        coincident-but-separate geometry (stacked armor plates, UV-seam
+        splits) manufactures non-manifold edges that don't exist in the mesh
+        the library processes.
+
+        MERGED view (vertex-position hash) exists for the opposite trap: in
+        STL-style duplicated-vertex soup the raw view reads as 100% boundary,
+        so open-mesh questions (blender_voxel) use the merged counts."""
         import numpy as np
+
+        def _hist(faces_arr):
+            f = faces_arr
+            ok = (f[:, 0] != f[:, 1]) & (f[:, 1] != f[:, 2]) & (f[:, 0] != f[:, 2])
+            f = f[ok]
+            if len(f) == 0:
+                return {"boundary": 0, "nonmanifold": 0}
+            e = np.sort(f[:, [0, 1, 1, 2, 2, 0]].reshape(-1, 2), axis=1)
+            _, counts = np.unique(e, axis=0, return_counts=True)
+            return {"boundary": int((counts == 1).sum()),
+                    "nonmanifold": int((counts > 2).sum())}
+
+        faces = np.asarray(mesh.faces)
+        raw = _hist(faces)
         v = np.asarray(mesh.vertices, dtype=np.float64)
         diag = float(np.linalg.norm(mesh.extents)) or 1.0
         q = np.round(v / (diag * 1e-9)).astype(np.int64)
         _, inv = np.unique(q, axis=0, return_inverse=True)
-        f = inv[np.asarray(mesh.faces)]
-        ok = (f[:, 0] != f[:, 1]) & (f[:, 1] != f[:, 2]) & (f[:, 0] != f[:, 2])
-        f = f[ok]
-        if len(f) == 0:
-            return {"boundary": 0, "nonmanifold": 0}
-        e = np.sort(f[:, [0, 1, 1, 2, 2, 0]].reshape(-1, 2), axis=1)
-        _, counts = np.unique(e, axis=0, return_counts=True)
-        return {"boundary": int((counts == 1).sum()),
-                "nonmanifold": int((counts > 2).sum())}
+        merged = _hist(inv[faces])
+        return {"raw": raw, "merged": merged}
 
     @classmethod
     def _preflight(cls, mesh, selected, backend):
@@ -571,19 +588,30 @@ class RemeshNode(io.ComfyNode):
                           "to-a-point geometry) -- sizing math divides by it.")
             return errors, warnings
 
-        stats = cls._merged_edge_stats(mesh)
-        if stats["nonmanifold"] > 0 and selected in cls._REQUIRE_MANIFOLD:
+        stats = cls._edge_stats(mesh)
+        # Manifold questions use the RAW view -- what the backend's library
+        # actually consumes. (Merged view would manufacture non-manifold edges
+        # out of coincident-but-separate geometry, e.g. stacked armor plates.)
+        nm = stats["raw"]["nonmanifold"]
+        if nm > 0 and selected in cls._REQUIRE_MANIFOLD:
             errors.append(
-                f"input has {stats['nonmanifold']} non-manifold edge(s); the "
-                f"'{selected}' backend segfaults, hangs, or corrupts on these. "
-                f"Use geogram_smooth, blender_voxel, or gpu_cumesh (all tolerate "
+                f"input has {nm} non-manifold edge(s); the '{selected}' backend "
+                f"segfaults or hangs on these (not a clean error). Use "
+                f"geogram_smooth, blender_voxel, or gpu_cumesh (all tolerate "
                 f"non-manifold input), or repair first (GeomPackMeshFix).")
-        if selected == "blender_voxel" and stats["boundary"] > 0:
+        elif nm > 0 and selected in cls._WARN_MANIFOLD:
+            warnings.append(
+                f"input has {nm} non-manifold edge(s); '{selected}' may refuse "
+                f"or clean them itself -- if it errors, repair first "
+                f"(GeomPackMeshFix) or use geogram_smooth / gpu_cumesh.")
+        # Open-mesh question uses the MERGED view (raw view misreads
+        # duplicated-vertex soup as 100% boundary).
+        if selected == "blender_voxel" and stats["merged"]["boundary"] > 0:
             errors.append(
-                f"input has {stats['boundary']} boundary edge(s) (open mesh); "
-                f"Blender's voxel remesher needs a closed volume and silently "
-                f"produces empty/garbage output on open meshes. Close it first "
-                f"(GeomPackFillHoles) or use geogram_smooth / gpu_cumesh.")
+                f"input has {stats['merged']['boundary']} boundary edge(s) (open "
+                f"mesh); Blender's voxel remesher needs a closed volume and "
+                f"silently produces empty/garbage output on open meshes. Close it "
+                f"first (GeomPackFillHoles) or use geogram_smooth / gpu_cumesh.")
         if selected in cls._REQUIRE_CUDA:
             try:
                 import torch
@@ -610,8 +638,8 @@ class RemeshNode(io.ComfyNode):
                               f"try ~{diag * 0.01:.4g}.")
 
         # Warnings: real degradation, not fatal.
-        if stats["boundary"] > 0 and selected in ("gpu_cumesh", "faithc"):
-            warnings.append(f"open mesh ({stats['boundary']} boundary edges): "
+        if stats["merged"]["boundary"] > 0 and selected in ("gpu_cumesh", "faithc"):
+            warnings.append(f"open mesh ({stats['merged']['boundary']} boundary edges): "
                             f"volumetric remeshing may produce shell artifacts "
                             f"around the openings.")
         if selected in ("faithc", "blender_voxel") and not mesh.is_winding_consistent:
