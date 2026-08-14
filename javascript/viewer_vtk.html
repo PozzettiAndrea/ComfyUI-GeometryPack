@@ -384,6 +384,12 @@
                     const filteredPolyData = normalsFilter.getOutputData();
                     mapper.setInputData(filteredPolyData);
                     currentPolyData = filteredPolyData;  // Update reference for field visualization
+
+                    // Restore the user's chosen representation (default Surface).
+                    // A point cloud forces Points mode on the shared actor property;
+                    // without this, a surface mesh loaded right after a point cloud
+                    // would stay stuck rendering as points.
+                    property.setRepresentation(currentSettings.representation);
                 }
                 mapper.update();
 
