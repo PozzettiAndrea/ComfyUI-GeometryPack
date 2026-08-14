@@ -56,6 +56,11 @@ class PreviewMeshUVNode(io.ComfyNode):
                 io.Boolean.Input("show_checker", default=False, tooltip="Apply checker pattern to visualize UV distortion", optional=True),
                 io.Boolean.Input("show_wireframe", default=True, tooltip="Show mesh wireframe on 3D view", optional=True),
             ],
+            outputs=[
+                # Passthrough so the preview can sit mid-graph (same pattern as
+                # the other preview nodes).
+                io.Custom("TRIMESH").Output(display_name="mesh"),
+            ],
         )
 
     @classmethod
@@ -76,7 +81,7 @@ class PreviewMeshUVNode(io.ComfyNode):
         # Point clouds don't have UVs or faces
         if is_point_cloud(trimesh):
             log.warning("UV viewing not applicable to point clouds")
-            return io.NodeOutput(ui={ "error": ["UV viewing requires a mesh with faces. This is a point cloud."] })
+            return io.NodeOutput(trimesh, ui={ "error": ["UV viewing requires a mesh with faces. This is a point cloud."] })
 
         # Check for UV data
         has_uvs = False
@@ -189,7 +194,7 @@ class PreviewMeshUVNode(io.ComfyNode):
 
         log.info("Preview ready: has_uvs=%s, checker=%s, wireframe=%s", has_uvs, show_checker, show_wireframe)
 
-        return io.NodeOutput(ui=ui_data)
+        return io.NodeOutput(trimesh, ui=ui_data)
 
 NODE_CLASS_MAPPINGS = {
     "GeomPackPreviewMeshUV": PreviewMeshUVNode,

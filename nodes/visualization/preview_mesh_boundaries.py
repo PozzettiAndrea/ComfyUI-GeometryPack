@@ -241,7 +241,11 @@ class PreviewMeshBoundaries(io.ComfyNode):
                 io.Boolean.Input("show_surface", default=True,
                     tooltip="Include the mesh surface (boundary edges drawn on top)."),
             ],
-            outputs=[],
+            outputs=[
+                # Passthrough so the preview can sit mid-graph (same pattern as
+                # the other preview nodes).
+                io.Custom("TRIMESH").Output(display_name="mesh"),
+            ],
         )
 
     @classmethod
@@ -358,7 +362,7 @@ class PreviewMeshBoundaries(io.ComfyNode):
                        f"reduce={reduction} on '{used_field}'. "
                        f"available face fields: {avail or ['(none)']}")
         log.info("[PreviewMeshBoundaries] %s", summary)
-        return io.NodeOutput(ui={
+        return io.NodeOutput(mesh, ui={
             "mesh_file": [filename],
             "boundary_edges": [K],
             "field_names": [fields],
