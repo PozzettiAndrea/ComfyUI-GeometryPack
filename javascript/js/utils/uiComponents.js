@@ -75,6 +75,30 @@ export function createFullscreenButton(container) {
 }
 
 /**
+ * Permanently hide node input widgets that are driven by a control bar
+ * instead. The widgets keep existing (their values still serialize into the
+ * workflow and flow to Python as inputs) -- they just stop being drawn on the
+ * node body, so the bar is the single visible control.
+ *
+ * @param {Object} node - The LiteGraph node
+ * @param {string[]} names - Widget names to hide
+ */
+export function hideWidgets(node, names) {
+    let changed = false;
+    for (const nm of names) {
+        const w = node.widgets?.find((x) => x.name === nm);
+        if (w && w.type !== "geometrypack_hidden") {
+            w._gpOrigType = w.type;
+            w._gpOrigComputeSize = w.computeSize;
+            w.type = "geometrypack_hidden";   // unknown type -> not drawn
+            w.computeSize = () => [0, -4];
+            changed = true;
+        }
+    }
+    if (changed) node.setSize(node.computeSize());
+}
+
+/**
  * Create an info panel for displaying mesh metadata
  * @param {string} placeholder - Initial placeholder text
  * @param {Object} options - Panel options

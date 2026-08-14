@@ -4,6 +4,7 @@
  */
 
 import { app } from "../../../scripts/app.js";
+import { hideWidgets } from "./utils/uiComponents.js";
 
 // Auto-detect extension folder name (handles ComfyUI-GeometryPack or comfyui-geometrypack)
 const EXTENSION_FOLDER = (() => {
@@ -223,6 +224,7 @@ app.registerExtension({
                     if (modeWidget) modeWidget.value = modeSel.value;
                     app.queuePrompt();
                 });
+                hideWidgets(node, ["mode"]);   // bar is the control; index widget stays visible
 
                 // Fullscreen the whole widget. The arrow BUTTONS stay clickable in
                 // fullscreen; arrow KEYS also navigate while the widget (nav bar) has
