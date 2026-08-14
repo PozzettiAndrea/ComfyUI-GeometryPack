@@ -5,7 +5,7 @@
 
 import { app } from "../../../scripts/app.js";
 import { EXTENSION_FOLDER, getViewerUrl } from "./utils/extensionFolder.js";
-import { createContainer, createIframe, createInfoPanel, showPanelError, createFullscreenButton, hideWidgets } from "./utils/uiComponents.js";
+import { createContainer, createIframe, createInfoPanel, showPanelError, createFullscreenButton } from "./utils/uiComponents.js";
 import { buildMeshInfoHTML } from "./utils/formatting.js";
 import { createScreenshotHandler } from "./utils/screenshot.js";
 import { createViewerManager, createErrorHandler, buildViewUrl } from "./utils/postMessage.js";
@@ -64,7 +64,6 @@ app.registerExtension({
                     if (modeWidget) modeWidget.value = modeSel.value;
                     app.queuePrompt();
                 });
-                hideWidgets(this, ["mode"]);   // the bar is the control; value still flows
 
                 // Add widget
                 const widget = this.addDOMWidget("preview_vtk", "MESH_PREVIEW_VTK", container, {

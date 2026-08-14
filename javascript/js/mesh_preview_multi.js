@@ -4,7 +4,7 @@
  */
 
 import { app } from "../../../scripts/app.js";
-import { createFullscreenButton, hideWidgets } from "./utils/uiComponents.js";
+import { createFullscreenButton } from "./utils/uiComponents.js";
 
 // Auto-detect extension folder name
 const EXTENSION_FOLDER = (() => {
@@ -230,7 +230,6 @@ app.registerExtension({
                     if (modeWidget) modeWidget.value = modeSel.value;
                     app.queuePrompt();
                 });
-                hideWidgets(node, ["mode"]);   // the bar is the control; value still flows
 
                 syncLayoutUI();
                 applyCollapsed();

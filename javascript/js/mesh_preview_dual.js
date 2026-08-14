@@ -6,7 +6,7 @@
 
 import { app } from "../../../scripts/app.js";
 import { EXTENSION_FOLDER, getViewerUrl } from "./utils/extensionFolder.js";
-import { createContainer, createIframe, createInfoPanel, createFullscreenButton, hideWidgets } from "./utils/uiComponents.js";
+import { createContainer, createIframe, createInfoPanel, createFullscreenButton } from "./utils/uiComponents.js";
 import { buildDualMeshInfoHTML, formatExtents } from "./utils/formatting.js";
 import { createViewerManager, createErrorHandler, buildViewUrl, createLoadDualMeshMessage } from "./utils/postMessage.js";
 
@@ -53,24 +53,6 @@ app.registerExtension({
                 bar.appendChild(layoutSel);
                 bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Mode:" }));
                 bar.appendChild(modeSel);
-                // Opacity inputs (overlay layout only). Applied CLIENT-SIDE by
-                // re-posting to the viewer; the hidden node widgets are kept in
-                // sync so the values persist and reach Python on the next run.
-                const mkOp = () => {
-                    const inp = document.createElement("input");
-                    inp.type = "number"; inp.min = "0"; inp.max = "1"; inp.step = "0.1";
-                    inp.style.cssText = "width:44px;background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 4px;";
-                    return inp;
-                };
-                const op1Input = mkOp();
-                const op2Input = mkOp();
-                const opControls = document.createElement("span");
-                opControls.style.cssText = "display:flex;gap:4px;align-items:center;";
-                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Op 1:" }));
-                opControls.appendChild(op1Input);
-                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Op 2:" }));
-                opControls.appendChild(op2Input);
-                bar.appendChild(opControls);
                 bar.appendChild(createFullscreenButton(container));
 
                 // Add bar, iframe and info panel to container
@@ -116,18 +98,31 @@ app.registerExtension({
                 // Set initial node size
                 this.setSize([768, 680]);
 
-                // ---- widget <-> bar sync ----
-                // The bar is the ONLY visible control: layout/mode/opacity node
-                // widgets are hidden below (values still serialize + reach Python).
+                // ---- widget <-> bar sync + opacity visibility ----
                 const layoutWidget = this.widgets?.find(w => w.name === "layout");
                 const modeWidget = this.widgets?.find(w => w.name === "mode");
-                const opWidget1 = this.widgets?.find(w => w.name === "opacity_1");
-                const opWidget2 = this.widgets?.find(w => w.name === "opacity_2");
 
-                // Opacity is only meaningful in the overlay layout -> gate the BAR
-                // inputs (the widgets themselves stay hidden always).
+                // opacity_1/opacity_2 only mean anything in the overlay layout --
+                // hide the widgets otherwise (same hidden-type trick as
+                // preview_mesh_batch_render.js).
                 const setOpacityVisible = (visible) => {
-                    opControls.style.display = visible ? "flex" : "none";
+                    let changed = false;
+                    for (const nm of ["opacity_1", "opacity_2"]) {
+                        const w = node.widgets?.find(x => x.name === nm);
+                        if (!w) continue;
+                        if (!visible && w.type !== "geometrypack_hidden") {
+                            w._gpOrigType = w.type;
+                            w._gpOrigComputeSize = w.computeSize;
+                            w.type = "geometrypack_hidden";   // unknown type -> not drawn
+                            w.computeSize = () => [0, -4];
+                            changed = true;
+                        } else if (visible && w.type === "geometrypack_hidden") {
+                            w.type = w._gpOrigType;
+                            w.computeSize = w._gpOrigComputeSize;
+                            changed = true;
+                        }
+                    }
+                    if (changed) node.setSize(node.computeSize());
                 };
 
                 let lastMsg = null;   // last execution message, for client-side switches
@@ -135,8 +130,6 @@ app.registerExtension({
                 const syncBar = () => {
                     if (layoutWidget) layoutSel.value = layoutWidget.value || "side_by_side";
                     if (modeWidget) modeSel.value = modeWidget.value || "fields";
-                    if (opWidget1) op1Input.value = opWidget1.value ?? 1.0;
-                    if (opWidget2) op2Input.value = opWidget2.value ?? 1.0;
                     setOpacityVisible(layoutSel.value === "overlay");
                 };
                 // Keep the bar honest when the node widgets are edited directly.
@@ -167,17 +160,6 @@ app.registerExtension({
                     if (modeWidget) modeWidget.value = modeSel.value;
                     app.queuePrompt();   // different export format -> must re-run
                 });
-                // Opacity: applied client-side by re-posting; hidden widgets keep
-                // the values persisted for the next real run.
-                const onOpacity = () => {
-                    if (opWidget1) opWidget1.value = Math.max(0, Math.min(1, parseFloat(op1Input.value) || 0));
-                    if (opWidget2) opWidget2.value = Math.max(0, Math.min(1, parseFloat(op2Input.value) || 0));
-                    if (lastMsg) render(lastMsg);
-                };
-                op1Input.addEventListener("change", onOpacity);
-                op2Input.addEventListener("change", onOpacity);
-
-                hideWidgets(node, ["layout", "mode", "opacity_1", "opacity_2"]);
                 syncBar();
 
                 // Render one execution message; layoutOverride enables the
@@ -234,9 +216,8 @@ app.registerExtension({
                             layout: layout,
                             mesh1Filepath: buildViewUrl(message.mesh_1_file[0]),
                             mesh2Filepath: buildViewUrl(message.mesh_2_file[0]),
-                            // widgets first: client-side opacity edits apply on re-post
-                            opacity1: Number(opWidget1?.value ?? message.opacity_1?.[0] ?? 1.0),
-                            opacity2: Number(opWidget2?.value ?? message.opacity_2?.[0] ?? 1.0),
+                            opacity1: message.opacity_1?.[0] || 1.0,
+                            opacity2: message.opacity_2?.[0] || 1.0,
                             showEdges: viewerState.show_edges,
                             cameraState: viewerState.camera_state,
                             selectedField: viewerState.selected_field,
@@ -272,9 +253,8 @@ app.registerExtension({
                         postMessageData = createLoadDualMeshMessage({
                             layout: layout,
                             meshFilepath: buildViewUrl(message.mesh_file[0]),
-                            // widgets first: client-side opacity edits apply on re-post
-                            opacity1: Number(opWidget1?.value ?? message.opacity_1?.[0] ?? 1.0),
-                            opacity2: Number(opWidget2?.value ?? message.opacity_2?.[0] ?? 1.0),
+                            opacity1: message.opacity_1?.[0] || 1.0,
+                            opacity2: message.opacity_2?.[0] || 1.0,
                             showEdges: viewerState.show_edges,
                             cameraState: viewerState.camera_state,
                             selectedField: viewerState.selected_field,
