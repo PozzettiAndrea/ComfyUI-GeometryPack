@@ -181,13 +181,27 @@ app.registerExtension({
                     iframe.src = `/extensions/${EXTENSION_FOLDER}/${viewerUrl()}?v=` + Date.now();
                 });
 
-                const onDim = () => {
-                    viewerState.grid_cols = colsInput.value ? Math.max(1, parseInt(colsInput.value, 10)) : null;
-                    viewerState.grid_rows = rowsInput.value ? Math.max(1, parseInt(rowsInput.value, 10)) : null;
+                // The edited field is authoritative; the OTHER dimension auto-raises
+                // so cols*rows always fits every mesh. Without this, a grid smaller
+                // than the mesh count overflows into implicit CSS rows (auto height)
+                // and the layout stops matching the inputs. Both inputs are updated
+                // so the UI always shows the grid actually in effect.
+                const onDim = (edited) => () => {
+                    const n = lastLoad?.numMeshes || 1;
+                    let cols = Math.max(1, parseInt(colsInput.value, 10) || 0) || (lastLoad?.autoCols ?? 1);
+                    let rows = Math.max(1, parseInt(rowsInput.value, 10) || 0) || (lastLoad?.autoRows ?? 1);
+                    if (cols * rows < n) {
+                        if (edited === "cols") rows = Math.ceil(n / cols);
+                        else cols = Math.ceil(n / rows);
+                    }
+                    colsInput.value = cols;
+                    rowsInput.value = rows;
+                    viewerState.grid_cols = cols;
+                    viewerState.grid_rows = rows;
                     buildAndSend();   // same iframe -> viewer re-tiles, no reload
                 };
-                colsInput.addEventListener('change', onDim);
-                rowsInput.addEventListener('change', onDim);
+                colsInput.addEventListener('change', onDim("cols"));
+                rowsInput.addEventListener('change', onDim("rows"));
 
                 syncLayoutUI();
                 applyCollapsed();

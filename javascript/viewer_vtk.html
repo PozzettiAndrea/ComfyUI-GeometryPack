@@ -1031,7 +1031,7 @@
                 saveButton.disabled = true;
                 saveButton.textContent = 'Saving...';
 
-                const response = await fetch('/geometrypack/save_preview', {
+                const response = await fetch('/gpack/save_preview', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ temp_filename: currentFilename })

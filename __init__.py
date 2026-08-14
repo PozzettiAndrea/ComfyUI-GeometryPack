@@ -52,8 +52,47 @@ def _register_gpack_routes():
         items.sort()
         return web.json_response(items)
 
+    # /gpack/save_preview -- the viewers' "Save mesh" button. Copies a temp
+    # preview export (preview_*.stl/vtp/glb, written to ComfyUI output/ or the
+    # OS tempdir by the preview nodes) to a stable name in output/ so it
+    # survives the next preview run. Body: {"temp_filename": "<basename>"}.
+    @inst.routes.post("/gpack/save_preview")
+    async def _gpack_save_preview(request):
+        import shutil
+        try:
+            body = await request.json()
+        except Exception:
+            return web.json_response({"success": False, "error": "invalid JSON body"}, status=400)
+        # basename() defuses path traversal -- we only ever serve files the
+        # preview nodes themselves wrote into these two directories.
+        name = os.path.basename(str(body.get("temp_filename") or ""))
+        if not name:
+            return web.json_response({"success": False, "error": "temp_filename required"}, status=400)
+        import tempfile
+        try:
+            import folder_paths
+            out_dir = folder_paths.get_output_directory()
+        except Exception:
+            out_dir = None
+        candidates = [d for d in (out_dir, tempfile.gettempdir()) if d]
+        src = next((os.path.join(d, name) for d in candidates
+                    if os.path.isfile(os.path.join(d, name))), None)
+        if src is None:
+            return web.json_response(
+                {"success": False, "error": f"{name} not found (previews are temporary; re-run the node)"},
+                status=404)
+        if out_dir is None:
+            return web.json_response({"success": False, "error": "no ComfyUI output directory"}, status=500)
+        saved = f"saved_{name}"
+        try:
+            shutil.copy2(src, os.path.join(out_dir, saved))
+        except OSError as e:
+            return web.json_response({"success": False, "error": str(e)}, status=500)
+        log.info("[GeomPack] saved preview %s -> %s", name, saved)
+        return web.json_response({"success": True, "saved_filename": saved})
+
     inst._gpack_getpath_registered = True
-    log.info("[GeomPack] /gpack/getpath route registered")
+    log.info("[GeomPack] /gpack/getpath + /gpack/save_preview routes registered")
 
 
 try:
