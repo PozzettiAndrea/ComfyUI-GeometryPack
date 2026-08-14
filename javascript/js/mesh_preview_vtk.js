@@ -32,38 +32,16 @@ app.registerExtension({
                 // Create mesh info panel
                 const infoPanel = createInfoPanel("Mesh info will appear here after execution");
 
-                // Control bar: Mode (mirrors the node widget; re-runs -- mode
-                // changes what gets exported) + fullscreen.
+                // Control bar: fullscreen only. Mode is controlled solely by the
+                // node's own `mode` input widget (no duplicate bar selector).
                 const bar = document.createElement("div");
                 bar.style.cssText = "background:#1a1a1a;border-bottom:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
-                const modeSel = document.createElement("select");
-                modeSel.style.cssText = "background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 6px;";
-                modeSel.innerHTML = '<option value="fields">Fields</option><option value="texture">Texture</option><option value="texture (PBR)">Texture (PBR)</option>';
-                modeSel.title = "Visualization mode (re-runs the node)";
-                bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Mode:" }));
-                bar.appendChild(modeSel);
                 bar.appendChild(createFullscreenButton(container));
 
                 // Add bar, iframe and info panel to container
                 container.appendChild(bar);
                 container.appendChild(iframe);
                 container.appendChild(infoPanel);
-
-                // Mode: bar select <-> node widget, two-way (bar change re-runs).
-                const modeWidget = this.widgets?.find(w => w.name === "mode");
-                if (modeWidget) {
-                    modeSel.value = modeWidget.value || "fields";
-                    const origModeCb = modeWidget.callback;
-                    modeWidget.callback = function(value) {
-                        const res = origModeCb?.apply(this, arguments);
-                        modeSel.value = value;
-                        return res;
-                    };
-                }
-                modeSel.addEventListener("change", () => {
-                    if (modeWidget) modeWidget.value = modeSel.value;
-                    app.queuePrompt();
-                });
 
                 // Add widget
                 const widget = this.addDOMWidget("preview_vtk", "MESH_PREVIEW_VTK", container, {

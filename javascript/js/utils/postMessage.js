@@ -44,6 +44,8 @@ export function createLoadDualMeshMessage(options) {
         meshFilepath,  // For overlay mode
         opacity1 = 1.0,
         opacity2 = 1.0,
+        color1 = null,  // per-mesh hex colors (overlay, fields viewer)
+        color2 = null,
         showEdges = false,
         cameraState = "",
         selectedField = "",
@@ -59,6 +61,8 @@ export function createLoadDualMeshMessage(options) {
         meshFilepath,
         opacity1,
         opacity2,
+        color1,
+        color2,
         showEdges,
         cameraState,
         selectedField,

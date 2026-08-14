@@ -451,6 +451,10 @@
         let leftInteractor, rightInteractor, singleInteractor;
         let leftFullScreenRenderer, rightFullScreenRenderer, singleFullScreenRenderer;
         let leftActor, leftMapper, rightActor, rightMapper, singleActor, singleMapper;
+        // Two-actor overlay: mesh 1 uses singleActor/singleMapper, mesh 2 gets its
+        // own actor in the same renderer -> per-mesh color + opacity for real.
+        let overlayActor2, overlayMapper2;
+        let currentOverlay1Path = null, currentOverlay2Path = null;
         let leftPolydata, rightPolydata, singlePolydata;
         let mesh1Bounds, mesh2Bounds, combinedBounds;
         let fieldNames1 = [], fieldNames2 = [], commonFields = [];
@@ -597,14 +601,28 @@
 
             const property = singleActor.getProperty();
             property.setEdgeVisibility(false);
-            property.setColor(0.6, 0.8, 1.0);  // Light blue
+            property.setColor(1.0, 0.3, 0.3);  // Mesh 1 default: red
             property.setAmbient(0.4);
             property.setDiffuse(0.8);
             property.setSpecular(0.3);
             property.setSpecularPower(20);
             property.setRepresentation(2);
 
+            // Second actor for mesh 2 (two-file overlay)
+            overlayActor2 = vtkActor.newInstance();
+            overlayMapper2 = vtkMapper.newInstance();
+            overlayActor2.setMapper(overlayMapper2);
+            const property2 = overlayActor2.getProperty();
+            property2.setEdgeVisibility(false);
+            property2.setColor(0.3, 0.3, 1.0);  // Mesh 2 default: blue
+            property2.setAmbient(0.4);
+            property2.setDiffuse(0.8);
+            property2.setSpecular(0.3);
+            property2.setSpecularPower(20);
+            property2.setRepresentation(2);
+
             singleRenderer.addActor(singleActor);
+            singleRenderer.addActor(overlayActor2);
             singleFullScreenRenderer.resize();
 
             // Camera state tracking for overlay mode
@@ -882,6 +900,22 @@
             renderer.resetCamera(bounds);
         }
 
+        // Layout-aware mapper lookup: mesh 1/2 render through left/right mappers
+        // in side-by-side and through the two overlay mappers in overlay, while
+        // left/rightPolydata always hold the per-mesh data (loadMesh stores by
+        // isMesh1). Field application goes through these so it works in BOTH.
+        function mapper1Active() { return viewerLayout === 'overlay' ? singleMapper : leftMapper; }
+        function mapper2Active() { return viewerLayout === 'overlay' ? overlayMapper2 : rightMapper; }
+        // Render whichever layout is on screen (field/colormap changes call this).
+        function renderActiveViews() {
+            if (viewerLayout === 'overlay') {
+                if (singleRenderWindow) renderWithClippingRangeUpdate(singleRenderer, singleRenderWindow);
+            } else {
+                if (leftRenderWindow) renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
+                if (rightRenderWindow) renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
+            }
+        }
+
         // Field visualization
         function applyFieldToMapper(mapper, polydata, fieldName, sharedRange = null) {
             if (!fieldName || fieldName === 'none') {
@@ -1149,24 +1183,44 @@
                         overlayContainer.classList.add('active');
                         initOverlay();
 
-                        // Check if mesh has changed before reloading
-                        const meshChanged = currentMeshPath !== data.meshFilepath;
+                        const hexToRgb01 = (hex) => [
+                            parseInt(hex.substr(1, 2), 16) / 255,
+                            parseInt(hex.substr(3, 2), 16) / 255,
+                            parseInt(hex.substr(5, 2), 16) / 255,
+                        ];
 
-                        if (meshChanged || !singlePolydata) {
-                            await loadMesh(data.meshFilepath, singleMapper, true);
-                            currentMeshPath = data.meshFilepath;
+                        if (data.mesh1Filepath && data.mesh2Filepath) {
+                            // Two-file overlay: one actor per mesh -> per-mesh color
+                            // and opacity actually work (no combined-file average).
+                            if (currentOverlay1Path !== data.mesh1Filepath || !leftPolydata) {
+                                await loadMesh(data.mesh1Filepath, singleMapper, true);
+                                currentOverlay1Path = data.mesh1Filepath;
+                            }
+                            if (currentOverlay2Path !== data.mesh2Filepath || !rightPolydata) {
+                                await loadMesh(data.mesh2Filepath, overlayMapper2, false);
+                                currentOverlay2Path = data.mesh2Filepath;
+                            }
+                            if (data.opacity1 !== undefined) singleActor.getProperty().setOpacity(data.opacity1);
+                            if (data.opacity2 !== undefined) overlayActor2.getProperty().setOpacity(data.opacity2);
+                            if (data.color1) singleActor.getProperty().setColor(...hexToRgb01(data.color1));
+                            if (data.color2) overlayActor2.getProperty().setColor(...hexToRgb01(data.color2));
+                        } else {
+                            // Legacy combined-file overlay (older widgets)
+                            const meshChanged = currentMeshPath !== data.meshFilepath;
+                            if (meshChanged || !singlePolydata) {
+                                await loadMesh(data.meshFilepath, singleMapper, true);
+                                currentMeshPath = data.meshFilepath;
+                            }
+                            if (data.opacity1 !== undefined && data.opacity2 !== undefined && singleActor) {
+                                const avgOpacity = (data.opacity1 + data.opacity2) / 2.0;
+                                singleActor.getProperty().setOpacity(avgOpacity);
+                            }
                         }
 
                         updateCombinedBounds();
                         _pendingCameraState = data.cameraState || null;
                         if (!applyCameraState(_pendingCameraState)) {
                             positionCamera(singleRenderer, combinedBounds);
-                        }
-
-                        // Apply average opacity for overlay mode
-                        if (data.opacity1 !== undefined && data.opacity2 !== undefined && singleActor) {
-                            const avgOpacity = (data.opacity1 + data.opacity2) / 2.0;
-                            singleActor.getProperty().setOpacity(avgOpacity);
                         }
 
                         renderWithClippingRangeUpdate(singleRenderer, singleRenderWindow);
@@ -1202,10 +1256,10 @@
                             const field1 = document.getElementById('field1Selector')?.value;
                             const field2 = document.getElementById('field2Selector')?.value;
                             if (field1 && field1 !== 'none' && leftPolydata) {
-                                applyFieldToMapper(leftMapper, leftPolydata, field1);
+                                applyFieldToMapper(mapper1Active(), leftPolydata, field1);
                             }
                             if (field2 && field2 !== 'none' && rightPolydata) {
-                                applyFieldToMapper(rightMapper, rightPolydata, field2);
+                                applyFieldToMapper(mapper2Active(), rightPolydata, field2);
                             }
                         } else if (fieldMode === 'synchronized') {
                             const sharedField = document.getElementById('sharedFieldSelector')?.value;
@@ -1229,16 +1283,13 @@
                                     }
                                 }
 
-                                if (leftPolydata) applyFieldToMapper(leftMapper, leftPolydata, sharedField, sharedRange);
-                                if (rightPolydata) applyFieldToMapper(rightMapper, rightPolydata, sharedField, sharedRange);
+                                if (leftPolydata) applyFieldToMapper(mapper1Active(), leftPolydata, sharedField, sharedRange);
+                                if (rightPolydata) applyFieldToMapper(mapper2Active(), rightPolydata, sharedField, sharedRange);
                             }
                         }
 
-                        // Re-render both viewports
-                        if (leftRenderWindow && rightRenderWindow) {
-                            renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
-                            renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
-                        }
+                        // Re-render the active layout's viewports
+                        renderActiveViews();
                     }
 
                     // Apply showEdges from parent widget state
@@ -1247,6 +1298,7 @@
                         if (leftActor) leftActor.getProperty().setEdgeVisibility(edgeViz);
                         if (rightActor) rightActor.getProperty().setEdgeVisibility(edgeViz);
                         if (singleActor) singleActor.getProperty().setEdgeVisibility(edgeViz);
+                        if (overlayActor2) overlayActor2.getProperty().setEdgeVisibility(edgeViz);
                         document.getElementById('showEdges').checked = edgeViz;
 
                         // Re-render after edge visibility change
@@ -1356,12 +1408,19 @@
                 leftRenderWindow.render();
                 rightRenderWindow.render();
             } else {
-                // Apply to single actor in overlay mode
+                // Apply to the overlay actors. Colors stay per-mesh (bar-driven),
+                // so the settings color only affects mesh 1's actor.
                 const property = singleActor.getProperty();
                 property.setPointSize(newPointSize);
                 property.setColor(r, g, b);
                 property.setLineWidth(newEdgeWidth);
                 property.setRepresentation(newRepresentation);
+                if (overlayActor2) {
+                    const p2 = overlayActor2.getProperty();
+                    p2.setPointSize(newPointSize);
+                    p2.setLineWidth(newEdgeWidth);
+                    p2.setRepresentation(newRepresentation);
+                }
 
                 // Apply parallel projection to camera
                 singleRenderer.getActiveCamera().setParallelProjection(newParallelProjection);
@@ -1395,6 +1454,7 @@
                 rightRenderWindow.render();
             } else {
                 singleActor.getProperty().setEdgeVisibility(edgeViz);
+                if (overlayActor2) overlayActor2.getProperty().setEdgeVisibility(edgeViz);
                 singleRenderWindow.render();
             }
             window.parent.postMessage({ type: 'WIDGET_UPDATE', widget: 'show_edges', value: e.target.checked }, '*');
@@ -1407,8 +1467,7 @@
                 positionCamera(leftRenderer, combinedBounds);
                 positionCamera(rightRenderer, combinedBounds);
                 synchronizeCameras(leftRenderer.getActiveCamera(), rightRenderer.getActiveCamera());
-                renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
-                renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
+                renderActiveViews();
             } else {
                 positionCamera(singleRenderer, combinedBounds);
                 renderWithClippingRangeUpdate(singleRenderer, singleRenderWindow);
@@ -1423,15 +1482,15 @@
         // Field selection
         document.getElementById('field1Selector')?.addEventListener('change', (e) => {
             if (leftPolydata) {
-                applyFieldToMapper(leftMapper, leftPolydata, e.target.value);
-                renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
+                applyFieldToMapper(mapper1Active(), leftPolydata, e.target.value);
+                renderActiveViews();
             }
         });
 
         document.getElementById('field2Selector')?.addEventListener('change', (e) => {
             if (rightPolydata) {
-                applyFieldToMapper(rightMapper, rightPolydata, e.target.value);
-                renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
+                applyFieldToMapper(mapper2Active(), rightPolydata, e.target.value);
+                renderActiveViews();
             }
         });
 
@@ -1463,13 +1522,12 @@
                 }
 
                 if (leftPolydata) {
-                    applyFieldToMapper(leftMapper, leftPolydata, fieldName, sharedRange);
+                    applyFieldToMapper(mapper1Active(), leftPolydata, fieldName, sharedRange);
                 }
                 if (rightPolydata) {
-                    applyFieldToMapper(rightMapper, rightPolydata, fieldName, sharedRange);
+                    applyFieldToMapper(mapper2Active(), rightPolydata, fieldName, sharedRange);
                 }
-                renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
-                renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
+                renderActiveViews();
             }
         });
 
@@ -1481,10 +1539,9 @@
                 const field1 = document.getElementById('field1Selector').value;
                 const field2 = document.getElementById('field2Selector').value;
 
-                if (leftPolydata) applyFieldToMapper(leftMapper, leftPolydata, field1);
-                if (rightPolydata) applyFieldToMapper(rightMapper, rightPolydata, field2);
-                renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
-                renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
+                if (leftPolydata) applyFieldToMapper(mapper1Active(), leftPolydata, field1);
+                if (rightPolydata) applyFieldToMapper(mapper2Active(), rightPolydata, field2);
+                renderActiveViews();
             } else if (fieldMode === 'synchronized') {
                 const field = document.getElementById('sharedFieldSelector').value;
 
@@ -1507,12 +1564,9 @@
                     }
                 }
 
-                if (leftPolydata) applyFieldToMapper(leftMapper, leftPolydata, field, sharedRange);
-                if (rightPolydata) applyFieldToMapper(rightMapper, rightPolydata, field, sharedRange);
-                if (viewerLayout === 'side_by_side') {
-                    renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
-                    renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
-                }
+                if (leftPolydata) applyFieldToMapper(mapper1Active(), leftPolydata, field, sharedRange);
+                if (rightPolydata) applyFieldToMapper(mapper2Active(), rightPolydata, field, sharedRange);
+                renderActiveViews();
             }
         }
 
@@ -1593,8 +1647,7 @@
                 });
                 leftRenderer.resetCamera();
                 rightRenderer.resetCamera();
-                renderWithClippingRangeUpdate(leftRenderer, leftRenderWindow);
-                renderWithClippingRangeUpdate(rightRenderer, rightRenderWindow);
+                renderActiveViews();
             } else {
                 const camera = singleRenderer.getActiveCamera();
                 camera.setPosition(...position);

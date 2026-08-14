@@ -22,7 +22,7 @@ app.registerExtension({
                 // Viewer state persisted via DOM widget serialization.
                 // layout + opacities live HERE (not as node inputs): Python exports
                 // both view sets every run, so they are pure client-side choices.
-                const viewerState = { layout: "side_by_side", opacity_1: 1.0, opacity_2: 1.0, show_edges: false, camera_state: "", selected_field: "", selected_channel: "magnitude", selected_colormap: "erdc_rainbow_bright" };
+                const viewerState = { layout: "side_by_side", opacity_1: 1.0, opacity_2: 1.0, color_1: "#ff4d4d", color_2: "#4d4dff", show_edges: false, camera_state: "", selected_field: "", selected_channel: "magnitude", selected_colormap: "erdc_rainbow_bright" };
 
                 // Create container for viewer + info panel
                 const container = createContainer();
@@ -64,11 +64,22 @@ app.registerExtension({
                 };
                 const op1Input = mkOp();
                 const op2Input = mkOp();
+                // Per-mesh color pickers (overlay, fields viewer)
+                const mkColor = () => {
+                    const inp = document.createElement("input");
+                    inp.type = "color";
+                    inp.style.cssText = "width:26px;height:20px;padding:0;border:1px solid #555;border-radius:3px;background:#333;cursor:pointer;";
+                    return inp;
+                };
+                const col1Input = mkColor();
+                const col2Input = mkColor();
                 const opControls = document.createElement("span");
                 opControls.style.cssText = "display:flex;gap:4px;align-items:center;";
-                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Op 1:" }));
+                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "1:" }));
+                opControls.appendChild(col1Input);
                 opControls.appendChild(op1Input);
-                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Op 2:" }));
+                opControls.appendChild(Object.assign(document.createElement("span"), { textContent: "2:" }));
+                opControls.appendChild(col2Input);
                 opControls.appendChild(op2Input);
                 bar.appendChild(opControls);
                 bar.appendChild(createFullscreenButton(container));
@@ -132,6 +143,8 @@ app.registerExtension({
                     if (modeWidget) modeSel.value = modeWidget.value || "fields";
                     op1Input.value = viewerState.opacity_1 ?? 1.0;
                     op2Input.value = viewerState.opacity_2 ?? 1.0;
+                    col1Input.value = viewerState.color_1 || "#ff4d4d";
+                    col2Input.value = viewerState.color_2 || "#4d4dff";
                     setOpacityVisible(layoutSel.value === "overlay");
                 };
                 // Keep the bar honest when the mode widget is edited directly.
@@ -163,6 +176,14 @@ app.registerExtension({
                 };
                 op1Input.addEventListener("change", onOpacity);
                 op2Input.addEventListener("change", onOpacity);
+                // Colors: client-side re-post, persisted in viewerState.
+                const onColor = () => {
+                    viewerState.color_1 = col1Input.value;
+                    viewerState.color_2 = col2Input.value;
+                    if (lastMsg) render(lastMsg);
+                };
+                col1Input.addEventListener("change", onColor);
+                col2Input.addEventListener("change", onColor);
                 syncBar();
 
                 // Render one execution message with the CURRENT client-side layout
@@ -257,7 +278,15 @@ app.registerExtension({
 
                         postMessageData = createLoadDualMeshMessage({
                             layout: layout,
-                            meshFilepath: buildViewUrl(message.mesh_file[0]),
+                            // Fields viewer renders overlay from the TWO per-mesh
+                            // files (one actor each -> per-mesh color/opacity);
+                            // the textured viewer still uses the combined GLB.
+                            ...(mode === "texture"
+                                ? { meshFilepath: buildViewUrl(message.mesh_file[0]) }
+                                : { mesh1Filepath: buildViewUrl(message.mesh_1_file[0]),
+                                    mesh2Filepath: buildViewUrl(message.mesh_2_file[0]),
+                                    color1: viewerState.color_1 || "#ff4d4d",
+                                    color2: viewerState.color_2 || "#4d4dff" }),
                             opacity1: viewerState.opacity_1 ?? 1.0,
                             opacity2: viewerState.opacity_2 ?? 1.0,
                             showEdges: viewerState.show_edges,
