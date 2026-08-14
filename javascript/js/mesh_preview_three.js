@@ -15,10 +15,10 @@ const EXTENSION_FOLDER = (() => {
 console.log("[GeomPack] Loading mesh preview extension...");
 
 app.registerExtension({
-    name: "geometrypack.meshpreview",
+    name: "geometrypack.meshpreview.three",
 
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeData.name === "GeomPackPreviewMesh") {
+        if (nodeData.name === "GeomPackPreviewMeshThree") {
             console.log("[GeomPack] Registering Preview Mesh node");
 
             const onNodeCreated = nodeType.prototype.onNodeCreated;

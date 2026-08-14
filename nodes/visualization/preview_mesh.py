@@ -37,7 +37,7 @@ class PreviewMeshNode(io.ComfyNode):
     @classmethod
     def define_schema(cls):
         return io.Schema(
-            node_id="GeomPackPreviewMesh",
+            node_id="GeomPackPreviewMeshThree",
             display_name="Preview Mesh (Three.js)",
             category="geompack/visualization",
             is_output_node=True,
@@ -92,9 +92,9 @@ class PreviewMeshNode(io.ComfyNode):
         return io.NodeOutput(trimesh, ui={ "mesh_file": [filename], "vertex_count": [len(trimesh.vertices)], "face_count": [get_face_count(trimesh)], "bounds_min": [bounds[0].tolist()], "bounds_max": [bounds[1].tolist()], "extents": [extents.tolist()], "max_extent": [float(max_extent)], })
 
 NODE_CLASS_MAPPINGS = {
-    "GeomPackPreviewMesh": PreviewMeshNode,
+    "GeomPackPreviewMeshThree": PreviewMeshNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GeomPackPreviewMesh": "Preview Mesh (Three.js)",
+    "GeomPackPreviewMeshThree": "Preview Mesh (Three.js)",
 }
