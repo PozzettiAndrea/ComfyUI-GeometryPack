@@ -6,7 +6,7 @@
 
 import { app } from "../../../scripts/app.js";
 import { EXTENSION_FOLDER, getViewerUrl } from "./utils/extensionFolder.js";
-import { createContainer, createIframe, createInfoPanel } from "./utils/uiComponents.js";
+import { createContainer, createIframe, createInfoPanel, createFullscreenButton } from "./utils/uiComponents.js";
 import { buildDualMeshInfoHTML, formatExtents } from "./utils/formatting.js";
 import { createViewerManager, createErrorHandler, buildViewUrl, createLoadDualMeshMessage } from "./utils/postMessage.js";
 
@@ -31,7 +31,32 @@ app.registerExtension({
                 // Create mesh info panel
                 const infoPanel = createInfoPanel("Mesh info will appear here after execution");
 
-                // Add iframe and info panel to container
+                // Control bar: Layout + Mode (mirrors the node widgets).
+                // side_by_side <-> slider share the SAME exported files, so that
+                // switch is instant/client-side; overlay needs a combined export
+                // and mode changes the export format, so those queue a re-run.
+                const bar = document.createElement("div");
+                bar.style.cssText = "background:#1a1a1a;border-bottom:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
+                const mkSel = (html, title) => {
+                    const s = document.createElement("select");
+                    s.style.cssText = "background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 6px;";
+                    s.innerHTML = html; s.title = title;
+                    return s;
+                };
+                const layoutSel = mkSel(
+                    '<option value="side_by_side">Side by side</option><option value="overlay">Overlay</option><option value="slider">Slider</option>',
+                    "Side by side <-> Slider switch instantly; Overlay re-runs (needs a combined export)");
+                const modeSel = mkSel(
+                    '<option value="fields">Fields</option><option value="texture">Texture</option>',
+                    "Visualization mode (re-runs the node)");
+                bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Layout:" }));
+                bar.appendChild(layoutSel);
+                bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Mode:" }));
+                bar.appendChild(modeSel);
+                bar.appendChild(createFullscreenButton(container));
+
+                // Add bar, iframe and info panel to container
+                container.appendChild(bar);
                 container.appendChild(iframe);
                 container.appendChild(infoPanel);
 
@@ -73,16 +98,74 @@ app.registerExtension({
                 // Set initial node size
                 this.setSize([768, 680]);
 
-                // Handle execution
-                const onExecuted = this.onExecuted;
-                this.onExecuted = function(message) {
-                    onExecuted?.apply(this, arguments);
+                // ---- widget <-> bar sync + opacity visibility ----
+                const layoutWidget = this.widgets?.find(w => w.name === "layout");
+                const modeWidget = this.widgets?.find(w => w.name === "mode");
 
-                    if (!message?.layout) {
-                        return;
+                // opacity_1/opacity_2 only mean anything in the overlay layout --
+                // hide the widgets otherwise (same hidden-type trick as
+                // preview_mesh_batch_render.js).
+                const setOpacityVisible = (visible) => {
+                    let changed = false;
+                    for (const nm of ["opacity_1", "opacity_2"]) {
+                        const w = node.widgets?.find(x => x.name === nm);
+                        if (!w) continue;
+                        if (!visible && w.type !== "geometrypack_hidden") {
+                            w._gpOrigType = w.type;
+                            w._gpOrigComputeSize = w.computeSize;
+                            w.type = "geometrypack_hidden";   // unknown type -> not drawn
+                            w.computeSize = () => [0, -4];
+                            changed = true;
+                        } else if (visible && w.type === "geometrypack_hidden") {
+                            w.type = w._gpOrigType;
+                            w.computeSize = w._gpOrigComputeSize;
+                            changed = true;
+                        }
                     }
+                    if (changed) node.setSize(node.computeSize());
+                };
 
-                    const layout = message.layout[0];
+                let lastMsg = null;   // last execution message, for client-side switches
+
+                const syncBar = () => {
+                    if (layoutWidget) layoutSel.value = layoutWidget.value || "side_by_side";
+                    if (modeWidget) modeSel.value = modeWidget.value || "fields";
+                    setOpacityVisible(layoutSel.value === "overlay");
+                };
+                // Keep the bar honest when the node widgets are edited directly.
+                for (const [w, after] of [[layoutWidget, syncBar], [modeWidget, syncBar]]) {
+                    if (!w) continue;
+                    const orig = w.callback;
+                    w.callback = function(value) {
+                        const res = orig?.apply(this, arguments);
+                        after();
+                        return res;
+                    };
+                }
+
+                layoutSel.addEventListener("change", () => {
+                    const newLayout = layoutSel.value;
+                    if (layoutWidget) layoutWidget.value = newLayout;   // persists for next run
+                    setOpacityVisible(newLayout === "overlay");
+                    // side_by_side <-> slider reuse the SAME exported files ->
+                    // re-render client-side from the stored message. Overlay (either
+                    // direction) needs the combined export -> re-run.
+                    if (newLayout !== "overlay" && lastMsg?.mesh_1_file && lastMsg?.mesh_2_file) {
+                        render(lastMsg, newLayout);
+                    } else {
+                        app.queuePrompt();
+                    }
+                });
+                modeSel.addEventListener("change", () => {
+                    if (modeWidget) modeWidget.value = modeSel.value;
+                    app.queuePrompt();   // different export format -> must re-run
+                });
+                syncBar();
+
+                // Render one execution message; layoutOverride enables the
+                // client-side side_by_side <-> slider switch without a re-run.
+                const render = (message, layoutOverride) => {
+                    const layout = layoutOverride || message.layout[0];
                     const mode = message.mode?.[0] || "fields";
 
                     // Determine viewer type and name
@@ -182,6 +265,16 @@ app.registerExtension({
 
                     // Switch viewer if needed and send message
                     viewerManager.switchViewer(viewerType, getViewerUrl(viewerName), postMessageData);
+                };
+
+                // Handle execution
+                const onExecuted = this.onExecuted;
+                this.onExecuted = function(message) {
+                    onExecuted?.apply(this, arguments);
+                    if (!message?.layout) return;
+                    lastMsg = message;
+                    syncBar();   // reflect the layout/mode actually run + opacity visibility
+                    render(message);
                 };
 
                 return r;

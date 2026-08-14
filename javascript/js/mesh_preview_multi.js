@@ -4,6 +4,7 @@
  */
 
 import { app } from "../../../scripts/app.js";
+import { createFullscreenButton } from "./utils/uiComponents.js";
 
 // Auto-detect extension folder name
 const EXTENSION_FOLDER = (() => {
@@ -96,6 +97,7 @@ app.registerExtension({
                 controls.appendChild(gridControls);
                 bar.appendChild(collapseBtn);
                 bar.appendChild(controls);
+                bar.appendChild(createFullscreenButton(container));  // outside `controls`: stays visible when collapsed
 
                 // Create mesh info panel
                 const infoPanel = document.createElement("div");

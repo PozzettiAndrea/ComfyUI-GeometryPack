@@ -48,6 +48,33 @@ export function createIframe(src, options = {}) {
 }
 
 /**
+ * Create a fullscreen toggle button wired to a widget container.
+ *
+ * Fullscreens the WHOLE container (viewer iframe + any control bar), so the
+ * bar's buttons stay usable in fullscreen. All listeners are attached to the
+ * container itself (never document) to stay isolation-clean.
+ *
+ * @param {HTMLElement} container - The widget container to fullscreen
+ * @returns {HTMLButtonElement} The toggle button (append it to a bar)
+ */
+export function createFullscreenButton(container) {
+    const btn = document.createElement("button");
+    btn.textContent = "⛶";
+    btn.title = "Fullscreen";
+    btn.style.cssText = "padding:4px 10px;cursor:pointer;background:#333;color:#ccc;" +
+        "border:1px solid #555;border-radius:3px;font-size:13px;line-height:1;margin-left:auto;";
+    const isFs = () => (document.fullscreenElement || document.webkitFullscreenElement) === container;
+    btn.addEventListener("click", () => {
+        if (isFs()) {
+            (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+        } else {
+            (container.requestFullscreen || container.webkitRequestFullscreen)?.call(container);
+        }
+    });
+    return btn;
+}
+
+/**
  * Create an info panel for displaying mesh metadata
  * @param {string} placeholder - Initial placeholder text
  * @param {Object} options - Panel options
