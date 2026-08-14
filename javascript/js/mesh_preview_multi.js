@@ -54,7 +54,7 @@ app.registerExtension({
                 // dividers (viewer_multi_slider.html). The arrow hides everything
                 // but itself; cols/rows show only for the grid layout.
                 const bar = document.createElement("div");
-                bar.style.cssText = "background:#1a1a1a;border-bottom:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
+                bar.style.cssText = "background:#1a1a1a;border-top:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
 
                 const collapseBtn = document.createElement("button");
                 collapseBtn.title = "Show/hide controls";
@@ -112,8 +112,9 @@ app.registerExtension({
                 infoPanel.style.overflow = "hidden";
                 infoPanel.innerHTML = '<span style="color: #888;">Mesh info will appear here after execution</span>';
 
-                container.appendChild(bar);
+                // Order: canvas on top, controls below it, info panel last
                 container.appendChild(iframe);
+                container.appendChild(bar);
                 container.appendChild(infoPanel);
 
                 // Add widget

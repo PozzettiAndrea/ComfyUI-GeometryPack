@@ -35,12 +35,12 @@ app.registerExtension({
                 // Control bar: fullscreen only. Mode is controlled solely by the
                 // node's own `mode` input widget (no duplicate bar selector).
                 const bar = document.createElement("div");
-                bar.style.cssText = "background:#1a1a1a;border-bottom:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
+                bar.style.cssText = "background:#1a1a1a;border-top:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
                 bar.appendChild(createFullscreenButton(container));
 
-                // Add bar, iframe and info panel to container
-                container.appendChild(bar);
+                // Order: canvas on top, controls below it, info panel last
                 container.appendChild(iframe);
+                container.appendChild(bar);
                 container.appendChild(infoPanel);
 
                 // Add widget

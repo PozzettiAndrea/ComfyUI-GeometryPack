@@ -38,23 +38,20 @@ app.registerExtension({
                 // switch is instant/client-side; overlay needs a combined export
                 // and mode changes the export format, so those queue a re-run.
                 const bar = document.createElement("div");
-                bar.style.cssText = "background:#1a1a1a;border-bottom:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
+                bar.style.cssText = "background:#1a1a1a;border-top:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
                 const mkSel = (html, title) => {
                     const s = document.createElement("select");
                     s.style.cssText = "background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 6px;";
                     s.innerHTML = html; s.title = title;
                     return s;
                 };
+                // Mode is controlled solely by the node's `mode` input widget --
+                // no bar selector for it.
                 const layoutSel = mkSel(
                     '<option value="side_by_side">Side by side</option><option value="overlay">Overlay</option><option value="slider">Slider</option>',
-                    "Side by side <-> Slider switch instantly; Overlay re-runs (needs a combined export)");
-                const modeSel = mkSel(
-                    '<option value="fields">Fields</option><option value="texture">Texture</option>',
-                    "Visualization mode (re-runs the node)");
+                    "Layout switches instantly (all views are exported every run)");
                 bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Layout:" }));
                 bar.appendChild(layoutSel);
-                bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Mode:" }));
-                bar.appendChild(modeSel);
                 // Opacity inputs (overlay only) -- applied client-side by re-posting
                 const mkOp = () => {
                     const inp = document.createElement("input");
@@ -84,9 +81,9 @@ app.registerExtension({
                 bar.appendChild(opControls);
                 bar.appendChild(createFullscreenButton(container));
 
-                // Add bar, iframe and info panel to container
-                container.appendChild(bar);
+                // Order: canvas on top, controls below it, info panel last
                 container.appendChild(iframe);
+                container.appendChild(bar);
                 container.appendChild(infoPanel);
 
                 // Add widget
@@ -128,10 +125,9 @@ app.registerExtension({
                 this.setSize([768, 680]);
 
                 // ---- bar wiring ----
-                // mode is the only remaining node input; layout + opacity live in
-                // viewerState (persisted via the DOM widget's serialization).
-                const modeWidget = this.widgets?.find(w => w.name === "mode");
-
+                // mode is the node's own input widget (not in the bar); layout +
+                // opacity + colors live in viewerState (persisted via the DOM
+                // widget's serialization).
                 const setOpacityVisible = (visible) => {
                     opControls.style.display = visible ? "flex" : "none";
                 };
@@ -140,22 +136,12 @@ app.registerExtension({
 
                 const syncBar = () => {
                     layoutSel.value = viewerState.layout || "side_by_side";
-                    if (modeWidget) modeSel.value = modeWidget.value || "fields";
                     op1Input.value = viewerState.opacity_1 ?? 1.0;
                     op2Input.value = viewerState.opacity_2 ?? 1.0;
                     col1Input.value = viewerState.color_1 || "#ff4d4d";
                     col2Input.value = viewerState.color_2 || "#4d4dff";
                     setOpacityVisible(layoutSel.value === "overlay");
                 };
-                // Keep the bar honest when the mode widget is edited directly.
-                if (modeWidget) {
-                    const orig = modeWidget.callback;
-                    modeWidget.callback = function(value) {
-                        const res = orig?.apply(this, arguments);
-                        syncBar();
-                        return res;
-                    };
-                }
 
                 // Layout: fully client-side -- every run exports both the separate
                 // pair AND the combined overlay file, so any switch just re-renders.
@@ -163,10 +149,6 @@ app.registerExtension({
                     viewerState.layout = layoutSel.value;
                     setOpacityVisible(viewerState.layout === "overlay");
                     if (lastMsg) render(lastMsg);
-                });
-                modeSel.addEventListener("change", () => {
-                    if (modeWidget) modeWidget.value = modeSel.value;
-                    app.queuePrompt();   // different export format -> must re-run
                 });
                 // Opacity: client-side re-post; persisted in viewerState.
                 const onOpacity = () => {
