@@ -51,6 +51,9 @@ class PreviewMeshSlicer(io.ComfyNode):
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="sliced_mesh"),
                 io.String.Output(display_name="info"),
+                # untouched input, appended LAST so existing links (by index)
+                # keep working
+                io.Custom("TRIMESH").Output(display_name="mesh"),
             ],
         )
 
@@ -104,7 +107,7 @@ class PreviewMeshSlicer(io.ComfyNode):
                     f"normal={np.round(normal, 4).tolist()}\n"
                     f"{nv:,} -> {sv:,} verts, {nf:,} -> {sf:,} faces")
 
-        return io.NodeOutput(sliced_mesh, info, ui={
+        return io.NodeOutput(sliced_mesh, info, mesh, ui={
             "mesh_file": [filename],
             "summary": [f"{nv:,} verts / {nf:,} faces — slice interactively in the viewer"],
         })
