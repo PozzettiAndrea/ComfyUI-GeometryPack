@@ -23,9 +23,11 @@ app.registerExtension({
             nodeType.prototype.onNodeCreated = function() {
                 const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
 
-                // Viewer state persisted via DOM widget serialization
-                const viewerState = { layout: "wipe", show_edges: false, camera_state: "", selected_field: "", selected_channel: "magnitude", selected_colormap: "erdc_rainbow_bright" };
-                const viewerUrl = () => (viewerState.layout === "overlay" ? "viewer_multi.html" : "viewer_multi_slider.html");
+                // Viewer state persisted via DOM widget serialization.
+                // layout: "grid" (viewer_multi.html, default) | "wipe" (sliders).
+                // grid_cols/grid_rows: null = auto (derived from mesh count).
+                const viewerState = { layout: "grid", grid_cols: null, grid_rows: null, bar_collapsed: false, show_edges: false, camera_state: "", selected_field: "", selected_channel: "magnitude", selected_colormap: "erdc_rainbow_bright" };
+                const viewerUrl = () => (viewerState.layout === "wipe" ? "viewer_multi_slider.html" : "viewer_multi.html");
 
                 console.log('[GeomPack Multi JS] Creating PreviewMeshMulti node widget');
 
@@ -46,14 +48,44 @@ app.registerExtension({
                 iframe.style.backgroundColor = "#2a2a2a";
                 iframe.src = `/extensions/${EXTENSION_FOLDER}/${viewerUrl()}?v=` + Date.now();
 
-                // Layout toggle bar (Wipe = N-1 draggable dividers, fixed order; Overlay = stacked)
+                // Control bar: [collapse arrow] Layout:[Grid|Wipe]  Cols:[ ] Rows:[ ]
+                // Grid = tiled viewports (viewer_multi.html); Wipe = N-1 draggable
+                // dividers (viewer_multi_slider.html). The arrow hides everything
+                // but itself; cols/rows show only for the grid layout.
                 const bar = document.createElement("div");
                 bar.style.cssText = "background:#1a1a1a;border-bottom:1px solid #444;padding:4px 8px;display:flex;gap:8px;align-items:center;font:11px monospace;color:#ccc;flex-shrink:0;";
+
+                const collapseBtn = document.createElement("button");
+                collapseBtn.title = "Show/hide controls";
+                collapseBtn.style.cssText = "background:none;border:none;color:#ccc;cursor:pointer;font:12px monospace;padding:0 4px;line-height:1;";
+
+                const controls = document.createElement("div");   // everything the arrow hides
+                controls.style.cssText = "display:flex;gap:8px;align-items:center;";
+
                 const layoutSel = document.createElement("select");
                 layoutSel.style.cssText = "background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 6px;";
-                layoutSel.innerHTML = '<option value="wipe">Wipe (sliders)</option><option value="overlay">Overlay</option>';
-                bar.appendChild(Object.assign(document.createElement("span"), { textContent: "Layout:" }));
-                bar.appendChild(layoutSel);
+                layoutSel.innerHTML = '<option value="grid">Grid</option><option value="wipe">Wipe (sliders)</option>';
+
+                const mkNum = () => {
+                    const inp = document.createElement("input");
+                    inp.type = "number"; inp.min = "1"; inp.step = "1";
+                    inp.style.cssText = "width:40px;background:#333;color:#ccc;border:1px solid #555;border-radius:3px;font:11px monospace;padding:2px 4px;";
+                    return inp;
+                };
+                const colsInput = mkNum();
+                const rowsInput = mkNum();
+                const gridControls = document.createElement("span");  // shown only for grid
+                gridControls.style.cssText = "display:flex;gap:4px;align-items:center;";
+                gridControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Cols:" }));
+                gridControls.appendChild(colsInput);
+                gridControls.appendChild(Object.assign(document.createElement("span"), { textContent: "Rows:" }));
+                gridControls.appendChild(rowsInput);
+
+                controls.appendChild(Object.assign(document.createElement("span"), { textContent: "Layout:" }));
+                controls.appendChild(layoutSel);
+                controls.appendChild(gridControls);
+                bar.appendChild(collapseBtn);
+                bar.appendChild(controls);
 
                 // Create mesh info panel
                 const infoPanel = document.createElement("div");
@@ -77,6 +109,7 @@ app.registerExtension({
                     getValue() { return JSON.stringify(viewerState); },
                     setValue(v) {
                         try { Object.assign(viewerState, JSON.parse(v)); } catch(e) {}
+                        if (viewerState.layout === "overlay") viewerState.layout = "grid";  // legacy name
                     }
                 });
 
@@ -104,12 +137,16 @@ app.registerExtension({
 
                 // Track iframe load state + last loaded meshes (so a layout switch re-sends)
                 let iframeLoaded = false;
-                let lastLoad = null;   // { numMeshes, filepaths }
+                let lastLoad = null;   // { numMeshes, filepaths, autoCols, autoRows }
                 const buildAndSend = () => {
                     if (!lastLoad || !iframe.contentWindow) return;
                     let msg;
-                    if (viewerState.layout === "overlay") {
+                    if (viewerState.layout !== "wipe") {   // grid (default; also legacy "overlay")
+                        // user override (grid_cols/grid_rows) else the auto dims from Python
+                        const cols = viewerState.grid_cols || lastLoad.autoCols;
+                        const rows = viewerState.grid_rows || lastLoad.autoRows;
                         msg = { type: 'LOAD_MULTI_MESH', numMeshes: lastLoad.numMeshes, meshFiles: lastLoad.filepaths,
+                                gridCols: cols, gridRows: rows,
                                 timestamp: Date.now(), showEdges: viewerState.show_edges, cameraState: viewerState.camera_state,
                                 selectedField: viewerState.selected_field, selectedChannel: viewerState.selected_channel,
                                 selectedColormap: viewerState.selected_colormap };
@@ -121,13 +158,39 @@ app.registerExtension({
                 };
                 iframe.addEventListener('load', () => { iframeLoaded = true; buildAndSend(); });
 
-                // Layout switch: swap the viewer iframe; buildAndSend fires on its load
+                // ---- control bar wiring ----
+                const syncLayoutUI = () => {
+                    gridControls.style.display = (viewerState.layout === "wipe") ? "none" : "flex";
+                };
+                const applyCollapsed = () => {
+                    controls.style.display = viewerState.bar_collapsed ? "none" : "flex";
+                    collapseBtn.textContent = viewerState.bar_collapsed ? "▸" : "▾";  // ▸ / ▾
+                };
+                collapseBtn.addEventListener('click', () => {
+                    viewerState.bar_collapsed = !viewerState.bar_collapsed;
+                    applyCollapsed();
+                });
+
+                // Layout switch swaps the viewer iframe (different HTML); buildAndSend
+                // fires on its load. Cols/Rows just re-send to the SAME grid iframe.
                 layoutSel.value = viewerState.layout;
                 layoutSel.addEventListener('change', () => {
                     viewerState.layout = layoutSel.value;
+                    syncLayoutUI();
                     iframeLoaded = false;
                     iframe.src = `/extensions/${EXTENSION_FOLDER}/${viewerUrl()}?v=` + Date.now();
                 });
+
+                const onDim = () => {
+                    viewerState.grid_cols = colsInput.value ? Math.max(1, parseInt(colsInput.value, 10)) : null;
+                    viewerState.grid_rows = rowsInput.value ? Math.max(1, parseInt(rowsInput.value, 10)) : null;
+                    buildAndSend();   // same iframe -> viewer re-tiles, no reload
+                };
+                colsInput.addEventListener('change', onDim);
+                rowsInput.addEventListener('change', onDim);
+
+                syncLayoutUI();
+                applyCollapsed();
 
                 // Set initial node size
                 this.setSize([768, 580]);
@@ -189,7 +252,10 @@ app.registerExtension({
 
                     // Prepare file paths + store for (re)send (also used when layout is switched)
                     const filepaths = meshFiles.map(f => `/view?filename=${encodeURIComponent(f)}&type=output&subfolder=`);
-                    lastLoad = { numMeshes, filepaths };
+                    lastLoad = { numMeshes, filepaths, autoCols: gridCols, autoRows: gridRows };
+                    // Reflect the effective grid dims (user override, else the auto value)
+                    colsInput.value = viewerState.grid_cols ?? gridCols;
+                    rowsInput.value = viewerState.grid_rows ?? gridRows;
                     buildAndSend();
                 };
 
