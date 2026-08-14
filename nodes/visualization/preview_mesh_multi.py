@@ -2,16 +2,22 @@
 # Copyright (C) 2025 ComfyUI-GeometryPack Contributors
 
 """
-Multi mesh preview with VTK.js - displays up to 4 meshes in a grid layout.
+Multi mesh preview with VTK.js - displays any number of meshes in a grid.
 
-Grid layouts:
-- 1 mesh: 1x1
-- 2 meshes: 1x2 (side by side)
-- 3 meshes: 1x3 (horizontal row)
-- 4 meshes: 2x2
+Inputs AUTOGROW: a fresh mesh socket appears as you connect each one, and
+every socket accepts a single mesh OR a whole batch (INPUT_IS_LIST) -- so a
+batch of 15 plus one extra mesh shows all 16. Everything is flattened, in
+socket order, into one display list.
+
+Grid dims default to ceil(sqrt(n)) and can be overridden client-side (the
+widget's Cols/Rows inputs). Display is capped at 16 viewports: each viewport
+is its own WebGL context and browsers hard-cap ~16 live contexts per page --
+beyond that the oldest contexts get silently killed.
 
 Supports scalar field visualization with synchronized cameras across viewports.
 """
+
+import math
 
 import logging
 
@@ -70,30 +76,30 @@ def get_texture_info(mesh):
 
 class PreviewMeshMultiNode(io.ComfyNode):
     """
-    Multi mesh preview with VTK.js - displays up to 4 meshes in a grid layout.
+    Multi mesh preview with VTK.js - any number of meshes in a grid.
 
-    Grid layouts:
-    - 1 mesh: 1x1
-    - 2 meshes: 1x2 (side by side)
-    - 3 meshes: 1x3 (horizontal row)
-    - 4 meshes: 2x2
-
-    Supports scalar field visualization with synchronized cameras.
+    Autogrowing mesh sockets; every socket accepts a single mesh OR a batch
+    (all flattened, in socket order). Display capped at 16 viewports (WebGL
+    context limit). Supports scalar field visualization with synchronized
+    cameras.
     """
 
+    INPUT_IS_LIST = True     # a socket fed by a batch receives the WHOLE list
+    MAX_VIEWPORTS = 16       # each viewport = one WebGL context; browsers cap ~16/page
 
     @classmethod
     def define_schema(cls):
+        # Autogrow: a mesh_0/mesh_1/... socket list that grows a fresh slot as
+        # you connect meshes (same pattern as core's MergeSplat).
+        meshes_tmpl = io.Autogrow.TemplatePrefix(
+            io.Custom("TRIMESH").Input("mesh"), prefix="mesh_", min=1, max=16)
         return io.Schema(
             node_id="GeomPackPreviewMeshMulti",
             display_name="Preview Mesh Multi",
             category="geompack/visualization",
             is_output_node=True,
             inputs=[
-                io.Custom("TRIMESH").Input("mesh_1"),
-                io.Custom("TRIMESH").Input("mesh_2", optional=True),
-                io.Custom("TRIMESH").Input("mesh_3", optional=True),
-                io.Custom("TRIMESH").Input("mesh_4", optional=True),
+                io.Autogrow.Input("meshes", template=meshes_tmpl),
                 io.Combo.Input("mode", options=["fields", "texture"], default="fields", optional=True),
             ],
             outputs=[
@@ -102,29 +108,39 @@ class PreviewMeshMultiNode(io.ComfyNode):
         )
 
     @classmethod
-    def execute(cls, mesh_1, mesh_2=None, mesh_3=None, mesh_4=None, mode="fields"):
+    def execute(cls, meshes, mode="fields"):
         """
-        Preview multiple meshes in a grid layout.
+        Preview any number of meshes in a grid layout.
 
         Args:
-            mesh_1: First mesh (required)
-            mesh_2, mesh_3, mesh_4: Optional additional meshes
+            meshes: dict of autogrow socket values (each a mesh or a batch list)
             mode: "fields" (scientific visualization) or "texture" (textured rendering)
 
         Returns:
-            dict: UI data for frontend widget
+            io.NodeOutput with the flattened mesh list + UI data
         """
-        # Collect all provided meshes
-        meshes = [mesh_1]
-        if mesh_2 is not None:
-            meshes.append(mesh_2)
-        if mesh_3 is not None:
-            meshes.append(mesh_3)
-        if mesh_4 is not None:
-            meshes.append(mesh_4)
+        # INPUT_IS_LIST wraps every input; unwrap scalars defensively.
+        mode = mode[0] if isinstance(mode, list) else mode
+
+        # Flatten the autogrow sockets in order: each value may be a batch
+        # (list, via INPUT_IS_LIST), a single mesh, or None (unconnected).
+        meshes_flat = []
+        for value in meshes.values():
+            if value is None:
+                continue
+            meshes_flat.extend(value if isinstance(value, list) else [value])
+        if not meshes_flat:
+            raise ValueError("Preview Mesh Multi: connect at least one mesh.")
+
+        total = len(meshes_flat)
+        meshes = meshes_flat[:cls.MAX_VIEWPORTS]
+        if total > cls.MAX_VIEWPORTS:
+            log.warning("Preview Mesh Multi: %d meshes connected; displaying the "
+                        "first %d (WebGL context limit). All %d still pass through "
+                        "the output.", total, cls.MAX_VIEWPORTS, total)
 
         num_meshes = len(meshes)
-        log.info("Mode: %s, Meshes: %d", mode, num_meshes)
+        log.info("Mode: %s, Meshes: %d (of %d connected)", mode, num_meshes, total)
 
         # Generate unique ID for this preview
         preview_id = uuid.uuid4().hex[:8]
@@ -195,15 +211,14 @@ class PreviewMeshMultiNode(io.ComfyNode):
             field_names_list.append(extract_field_names(mesh))
             texture_info_list.append(texture_info)
 
-        # Determine grid layout
-        if num_meshes == 1:
-            grid_cols, grid_rows = 1, 1
-        elif num_meshes == 2:
-            grid_cols, grid_rows = 2, 1
-        elif num_meshes == 3:
-            grid_cols, grid_rows = 3, 1
-        else:  # 4
-            grid_cols, grid_rows = 2, 2
+        # Auto grid: near-square, wide-first (1->1x1, 2->2x1, 3->3x1, 4->2x2,
+        # 5-6->3x2, 7-9->3x3, 10-12->4x3, 13-16->4x4). The widget's Cols/Rows
+        # bar inputs override these client-side.
+        if num_meshes <= 3:
+            grid_cols, grid_rows = num_meshes, 1
+        else:
+            grid_cols = math.ceil(math.sqrt(num_meshes))
+            grid_rows = math.ceil(num_meshes / grid_cols)
 
         # Build UI data
         ui_data = {
@@ -227,7 +242,9 @@ class PreviewMeshMultiNode(io.ComfyNode):
             ui_data["field_names_list"] = [field_names_list]
 
         log.info("Grid: %dx%d, Preview ready", grid_cols, grid_rows)
-        return io.NodeOutput(meshes, ui=ui_data)
+        # Output the FULL flattened list (including any meshes beyond the
+        # display cap), so downstream nodes see everything that was connected.
+        return io.NodeOutput(meshes_flat, ui=ui_data)
 
 
 NODE_CLASS_MAPPINGS = {
