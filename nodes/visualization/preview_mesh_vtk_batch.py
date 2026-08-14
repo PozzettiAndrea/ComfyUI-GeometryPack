@@ -127,6 +127,11 @@ class PreviewMeshVTKBatchNode(io.ComfyNode):
                 io.Combo.Input("mode", options=["fields", "texture"], default="fields"),
                 io.Int.Input("index", default=0, min=0, max=100),
             ],
+            outputs=[
+                # Pass the batch through so the preview can sit mid-graph
+                # (same pattern as Preview Mesh Multi).
+                io.Custom("TRIMESH").Output(display_name="meshes", is_output_list=True),
+            ],
         )
 
     @classmethod
@@ -196,7 +201,7 @@ class PreviewMeshVTKBatchNode(io.ComfyNode):
             "has_vertex_colors_all": [[m["has_vertex_colors"] for m in metas]],
             "visual_kinds": [[m["visual_kind"] for m in metas]],
         }
-        return io.NodeOutput(ui=ui_data)
+        return io.NodeOutput(list(trimesh), ui=ui_data)
 
 
 NODE_CLASS_MAPPINGS = {

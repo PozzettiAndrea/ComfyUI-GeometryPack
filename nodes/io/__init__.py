@@ -12,6 +12,7 @@ from .load_mesh_glob import NODE_CLASS_MAPPINGS as LoadMeshGlob_mappings, NODE_D
 from .save_mesh import NODE_CLASS_MAPPINGS as SaveMesh_mappings, NODE_DISPLAY_NAME_MAPPINGS as SaveMesh_display
 from .save_mesh_batch import NODE_CLASS_MAPPINGS as SaveMeshBatch_mappings, NODE_DISPLAY_NAME_MAPPINGS as SaveMeshBatch_display
 from .get_mesh_filename import NODE_CLASS_MAPPINGS as GetMeshFilename_mappings, NODE_DISPLAY_NAME_MAPPINGS as GetMeshFilename_display
+from .get_mesh_from_batch import NODE_CLASS_MAPPINGS as GetMeshFromBatch_mappings, NODE_DISPLAY_NAME_MAPPINGS as GetMeshFromBatch_display
 
 NODE_CLASS_MAPPINGS = {
     **LoadMesh_mappings,
@@ -21,6 +22,7 @@ NODE_CLASS_MAPPINGS = {
     **SaveMesh_mappings,
     **SaveMeshBatch_mappings,
     **GetMeshFilename_mappings,
+    **GetMeshFromBatch_mappings,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -31,6 +33,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     **SaveMesh_display,
     **SaveMeshBatch_display,
     **GetMeshFilename_display,
+    **GetMeshFromBatch_display,
 }
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']

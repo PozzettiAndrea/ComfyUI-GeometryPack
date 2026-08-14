@@ -147,7 +147,6 @@
             </select>
         </label>
         <button id="screenshot">Screenshot</button>
-        <button id="saveMesh" class="save-button">Save Mesh</button>
     </div>
 
     <!-- Load VTK.js bundle -->
@@ -1017,43 +1016,8 @@
             }, '*');
         });
 
-        // Save mesh
-        document.getElementById('saveMesh').addEventListener('click', async () => {
-            if (!currentFilename) {
-                alert('No mesh loaded.');
-                return;
-            }
-
-            const saveButton = document.getElementById('saveMesh');
-            const originalText = saveButton.textContent;
-
-            try {
-                saveButton.disabled = true;
-                saveButton.textContent = 'Saving...';
-
-                const response = await fetch('/gpack/save_preview', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ temp_filename: currentFilename })
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    saveButton.textContent = '[x] Saved!';
-                    alert(`Mesh saved!\n\nFilename: ${result.saved_filename}\nLocation: ComfyUI/output/`);
-                } else {
-                    throw new Error(result.error);
-                }
-            } catch (error) {
-                saveButton.textContent = '[ ] Error';
-                alert(`Error: ${error.message}`);
-            } finally {
-                setTimeout(() => {
-                    saveButton.textContent = originalText;
-                    saveButton.disabled = false;
-                }, 2000);
-            }
-        });
+        // (Save Mesh button removed: previews are temp exports; persisting a
+        // mesh is what the SaveMesh nodes are for.)
 
         // Settings panel
         const settingsButton = document.getElementById('settingsButton');
