@@ -82,12 +82,12 @@ class RemeshNode(io.ComfyNode):
                         io.Combo.Input("reproject", options=["true", "false"], default="true", tooltip="Reproject vertices back onto the original surface after each iteration (Botsch back-projection). true = stay faithful to the input surface (recommended); false = pure tangential smoothing, which lets vertices drift off the surface."),
                     ]),
                     io.DynamicCombo.Option("instant_meshes", [
-                        io.DynamicCombo.Input("target", tooltip="What drives the output density. Instant Meshes SNAPS the count to its internal multiresolution hierarchy -- observed misses up to ~4x (e.g. 5k requested -> 19k delivered). Treat it as an order-of-magnitude knob and check the info output for the achieved count.", options=[
+                        io.DynamicCombo.Input("target", tooltip="What drives the output density. Counts land within ~±10% (the binding's always-on pure-quad subdivision pass is compensated for in the wrapper).", options=[
                             io.DynamicCombo.Option("vertices", [
-                                io.Int.Input("target_vertex_count", default=5000, min=100, max=1000000, step=100, tooltip="Target vertex count -- snapped to the solver's own hierarchy, can land 2-4x off (check the achieved count in the info output). Creates a quad-dominant mesh."),
+                                io.Int.Input("target_vertex_count", default=5000, min=100, max=1000000, step=100, tooltip="Target vertex count (~±10%). Creates a pure-quad mesh, triangulated on output."),
                             ]),
                             io.DynamicCombo.Option("faces", [
-                                io.Int.Input("target_faces", default=10000, min=200, max=2000000, step=100, tooltip="Target face count, TRIANGLES -- converted to the solver's vertex budget (V ≈ F/2), then snapped to its hierarchy; can land 2-4x off."),
+                                io.Int.Input("target_faces", default=10000, min=200, max=2000000, step=100, tooltip="Target face count, TRIANGLES (~±10%) -- converted to the solver's vertex budget via quad accounting (V ≈ F/2)."),
                             ]),
                         ]),
                         io.Combo.Input("deterministic", options=["true", "false"], default="true", tooltip="Use deterministic algorithm for reproducible results."),

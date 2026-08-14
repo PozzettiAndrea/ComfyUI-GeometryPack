@@ -48,7 +48,12 @@ class RemeshInstantMeshesNode(io.ComfyNode):
 
         V_out, F_out = pynano.remesh(
             V, F,
-            vertex_count=target_vertex_count,
+            # pynanoinstantmeshes ALWAYS runs Instant Meshes' pure-quad
+            # subdivision pass (each face -> 4 quads, V' = V+E+F ~= 4V) without
+            # the GUI's compensating scale adjustment -- a deterministic 4x
+            # overshoot (measured 4.03-4.14x across targets). Pre-divide by the
+            # topologically pinned factor; verified to land within ~±10%.
+            vertex_count=max(25, int(target_vertex_count) // 4),
             deterministic=(deterministic == "true"),
             creaseAngle=crease_angle
         )
