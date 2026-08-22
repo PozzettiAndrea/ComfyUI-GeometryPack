@@ -87,7 +87,7 @@ class RemeshNode(io.ComfyNode):
                                 io.Int.Input("target_vertex_count", default=5000, min=100, max=1000000, step=100, tooltip="Target vertex count (~±10%). Creates a pure-quad mesh, triangulated on output."),
                             ]),
                             io.DynamicCombo.Option("faces", [
-                                io.Int.Input("target_faces", default=10000, min=200, max=2000000, step=100, tooltip="Target face count, TRIANGLES (~±10%) -- converted to the solver's vertex budget via quad accounting (V ≈ F/2)."),
+                                io.Int.Input("target_faces", default=10000, min=200, max=2000000, step=100, tooltip="Target face count, TRIANGLES (~±10%) -- converted to the solver's vertex budget via quad accounting (V ~= F/2)."),
                             ]),
                         ]),
                         io.Combo.Input("deterministic", options=["true", "false"], default="true", tooltip="Use deterministic algorithm for reproducible results."),
@@ -99,7 +99,7 @@ class RemeshNode(io.ComfyNode):
                                 io.Int.Input("target_faces", default=10000, min=200, max=10000000, step=100, tooltip="Target output face count, TRIANGLES (= 2x quads; QuadriFlow hits its quad budget within ~±10%)."),
                             ]),
                             io.DynamicCombo.Option("vertices", [
-                                io.Int.Input("target_vertices", default=5000, min=100, max=5000000, step=100, tooltip="Target output vertex count (V ≈ quads for a quad mesh; ~±15%)."),
+                                io.Int.Input("target_vertices", default=5000, min=100, max=5000000, step=100, tooltip="Target output vertex count (V ~= quads for a quad mesh; ~±15%)."),
                             ]),
                             io.DynamicCombo.Option("edge_length", [
                                 io.Float.Input("target_edge_length", default=1.0, min=0.0001, max=100.0, step=0.0001, display_mode="number", tooltip="Target quad edge length in world units (quads = area/e²; approximate)."),
@@ -217,7 +217,7 @@ class RemeshNode(io.ComfyNode):
                             ]),
                             io.DynamicCombo.Option("faces", [
                                 io.Int.Input("target_faces", default=20000, min=4, max=2000000, step=100, tooltip=(
-                                    "Target output face count -- converted to a vertex budget (V ≈ F/2, closed "
+                                    "Target output face count -- converted to a vertex budget (V ~= F/2, closed "
                                     "mesh); typically within ~±5%.")),
                             ]),
                             io.DynamicCombo.Option("edge_length", [
@@ -313,7 +313,7 @@ class RemeshNode(io.ComfyNode):
                             "closed/watertight mesh, since there are no border edges for it to act on.")),
                     ]),
                     io.DynamicCombo.Option("geogram_anisotropic", [
-                        io.DynamicCombo.Input("target", tooltip="What drives the output density. vertices is near-exact (CVT sites); faces is derived (F ≈ 2V). NO edge_length option: anisotropic meshes deliberately vary edge length 10:1+ along vs across curvature -- there is no scalar edge length to target.", options=[
+                        io.DynamicCombo.Input("target", tooltip="What drives the output density. vertices is near-exact (CVT sites); faces is derived (F ~= 2V). NO edge_length option: anisotropic meshes deliberately vary edge length 10:1+ along vs across curvature -- there is no scalar edge length to target.", options=[
                             io.DynamicCombo.Option("vertices", [
                                 io.Int.Input("nb_points_aniso", default=5000, min=0, max=1000000, step=100, tooltip=(
                                     "Target number of OUTPUT vertices (near-exact). Same full resampling/"
@@ -324,7 +324,7 @@ class RemeshNode(io.ComfyNode):
                             ]),
                             io.DynamicCombo.Option("faces", [
                                 io.Int.Input("target_faces", default=20000, min=4, max=2000000, step=100, tooltip=(
-                                    "Target output face count -- converted to a vertex budget (V ≈ F/2; Euler "
+                                    "Target output face count -- converted to a vertex budget (V ~= F/2; Euler "
                                     "doesn't care about anisotropy); typically within ~±5%.")),
                             ]),
                         ]),
@@ -375,7 +375,7 @@ class RemeshNode(io.ComfyNode):
                     io.DynamicCombo.Option("pmp_uniform", [
                         io.DynamicCombo.Input("target", tooltip="What drives the output density. Pick ONE; the others are derived via the mesh area.", options=[
                             io.DynamicCombo.Option("faces", [
-                                io.Int.Input("target_faces", default=20000, min=4, max=40000000, step=100, tooltip="Target output face count -- converted to a vertex budget (V ≈ F/2), then back-solved to an edge length; typically within ~±20%."),
+                                io.Int.Input("target_faces", default=20000, min=4, max=40000000, step=100, tooltip="Target output face count -- converted to a vertex budget (V ~= F/2), then back-solved to an edge length; typically within ~±20%."),
                             ]),
                             io.DynamicCombo.Option("vertices", [
                                 io.Int.Input("pmp_target_vertices", default=10000, min=3, max=20000000, step=100, tooltip="Target output vertices. Back-solved from input mesh area; typically within ~±20%."),
@@ -399,7 +399,7 @@ class RemeshNode(io.ComfyNode):
                         io.Float.Input("qw_alpha", default=0.02, min=0.005, max=0.1, step=0.005, display_mode="number", tooltip="Balances quad-grid REGULARITY vs feature ALIGNMENT (QuadWild's BiMDF alpha weight). Lower (~0.005) = a more uniform, regular quad grid with fewer singularities (irregular vertices), but the quad edges follow surface features/curvature less. Higher (~0.1) = allows more singularities so the quad flow bends to align with curvature and sharp edges, at the cost of grid uniformity. Typical 0.005-0.1; default 0.02."),
                         io.DynamicCombo.Input("target", tooltip="What drives quad size. All targets are approximate (~±50%): QuadWild's scale calibration is empirical and its own pre-remesh shifts the baseline.", options=[
                             io.DynamicCombo.Option("faces", [
-                                io.Int.Input("target_faces", default=10000, min=200, max=10000000, step=100, tooltip="Target output face count, TRIANGLES (quad accounting: V ≈ F/2; ~±50%)."),
+                                io.Int.Input("target_faces", default=10000, min=200, max=10000000, step=100, tooltip="Target output face count, TRIANGLES (quad accounting: V ~= F/2; ~±50%)."),
                             ]),
                             io.DynamicCombo.Option("vertices", [
                                 io.Int.Input("qw_target_vertices", default=5000, min=100, max=20000000, step=100, tooltip="Target output vertices (~±50%). Back-solved from input mesh area."),
@@ -440,7 +440,7 @@ class RemeshNode(io.ComfyNode):
                                 io.Int.Input("target_vertices", default=10000, min=4, max=5000000, step=100, tooltip="Target output vertex count -- converted to a voxel size via input area; same caveats as faces."),
                             ]),
                             io.DynamicCombo.Option("edge_length", [
-                                io.Float.Input("target_edge_length", default=0.1, min=0.0001, max=100.0, step=0.01, display_mode="number", tooltip="Target output edge length in world units (voxel size ≈ edge length for marching-cubes-style output)."),
+                                io.Float.Input("target_edge_length", default=0.1, min=0.0001, max=100.0, step=0.01, display_mode="number", tooltip="Target output edge length in world units (voxel size ~= edge length for marching-cubes-style output)."),
                             ]),
                             # Range/default follow Blender's remesh_voxel_size (default
                             # 0.1, hard range 0.0001..FLT_MAX); the old max=1.0 cap
@@ -478,7 +478,7 @@ class RemeshNode(io.ComfyNode):
                                 io.Int.Input("gpu_target_face_count", default=100000, min=1000, max=5000000, step=1000, tooltip="Target faces after simplification -- hit near-exactly by the quadric simplifier (provided grid_resolution produces at least this many)."),
                             ]),
                             io.DynamicCombo.Option("vertices", [
-                                io.Int.Input("target_vertices", default=50000, min=500, max=2500000, step=500, tooltip="Target vertices -- converted to a face budget (F ≈ 2V); near-exact."),
+                                io.Int.Input("target_vertices", default=50000, min=500, max=2500000, step=500, tooltip="Target vertices -- converted to a face budget (F ~= 2V); near-exact."),
                             ]),
                         ]),
                         io.Int.Input("gpu_grid_resolution", default=512, min=32, max=2048, step=16, tooltip="Dual-contouring grid resolution -- the main detail knob. Higher = finer detail + more faces + slower/more VRAM; lower = coarser/faster. Must be high enough that dual contouring emits MORE faces than the target."),
