@@ -1,8 +1,3 @@
-# Pack-level comfy-env config (see nodes/*/comfy-env.toml for env specs).
-
-# Wire types this pack puts on node sockets (ADR-0015).
-# "builtin" = comfy-env's automatic transport (tensors/arrays/dicts);
-# "custom"  = serialize/deserialize functions in ./serialization.py.
 [types]
 TRIMESH    = "custom"
 SKELETON   = "builtin"
