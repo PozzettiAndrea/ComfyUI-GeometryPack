@@ -1,26 +1,55 @@
 """ComfyUI-GeometryPack Prestartup Script."""
 
 import logging
+import shutil
 from pathlib import Path
 
-from comfy_env import setup_env, copy_files
+import folder_paths
+from comfy_env import setup_env
 
 log = logging.getLogger("geometrypack")
 
 setup_env()
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-COMFYUI_DIR = SCRIPT_DIR.parent.parent
+ASSETS = SCRIPT_DIR / "assets"
 
-# Copy input assets into the CONFIGURED input directory, not the code-tree one:
-# ComfyUI Desktop separates user data from the code tree (--base-directory),
-# so COMFYUI_DIR/input is never scanned by the load nodes there. main.py
-# calls apply_custom_paths() before prestartup scripts, so folder_paths is
-# already configured here.
-try:
-    import folder_paths
-    INPUT_DIR = Path(folder_paths.get_input_directory())
-except Exception:
-    INPUT_DIR = COMFYUI_DIR / "input"
-copy_files(SCRIPT_DIR / "assets", INPUT_DIR / "3d", "**/*")
-copy_files(SCRIPT_DIR / "assets", INPUT_DIR, "*.exr")
+# The CONFIGURED input directory, never the code-tree one. ComfyUI Desktop
+# (--base-directory) and --input-directory both relocate it, and the Load3D
+# nodes only ever scan folder_paths.get_input_directory() -- so seeding into
+# <comfyui>/input there puts files somewhere nothing reads. main.py runs
+# apply_custom_paths() before prestartup scripts, so this is already resolved.
+# No try/except fallback: if folder_paths is missing we are not inside ComfyUI
+# and there is nothing sensible to seed. execute_prestartup_script() catches
+# and logs, so a failure here fails this pack loudly without breaking startup.
+INPUT = Path(folder_paths.get_input_directory())
+
+
+def copy_files(src: Path, dst: Path, pattern: str = "*") -> int:
+    """Copy bundled assets into a ComfyUI directory. Returns files written.
+
+    Seeds rather than syncs: an existing file is left alone, so a user's
+    edited demo asset survives every relaunch. Raises if `src` is missing --
+    a typo'd asset directory is a packaging bug, and silence is how it stays
+    one.
+    """
+    src, dst = Path(src), Path(dst)
+    if not src.is_dir():
+        raise FileNotFoundError(f"asset directory not found: {src}")
+    written = 0
+    for f in src.glob(pattern):
+        if not f.is_file():
+            continue
+        target = dst / f.relative_to(src)
+        if target.exists():
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(f, target)
+        written += 1
+    return written
+
+
+_seeded = copy_files(ASSETS, INPUT / "3d", "**/*")
+_seeded += copy_files(ASSETS, INPUT, "*.exr")
+if _seeded:
+    log.info("seeded %d asset(s) into %s", _seeded, INPUT)
