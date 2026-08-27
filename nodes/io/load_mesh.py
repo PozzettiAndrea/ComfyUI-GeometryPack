@@ -38,28 +38,22 @@ class LoadMesh(io.ComfyNode):
 
     @classmethod
     def define_schema(cls):
-        mesh_files = cls.get_mesh_files()
-        placeholder = "No mesh files found in input/3d or input folders"
-        if not mesh_files:
-            mesh_files = [placeholder]
+        # input_files returns the live listing AND declares the recipe:
+        # under comfy-env the scan records it and the parent re-lists on
+        # every ask; under vanilla ComfyUI it is simply the live list.
+        from comfy_env import input_files
+        mesh_files = input_files(
+            [{"dir": "3d", "recursive": True, "rel_to_input": True},
+             {"dir": "", "recursive": False, "rel_to_input": False}],
+            exts=cls.SUPPORTED_EXTENSIONS,
+            placeholder="No mesh files found in input/3d or input folders",
+        )
         return io.Schema(
             node_id="GeomPackLoadMesh",
             display_name="Load Mesh",
             category="geompack/io",
             inputs=[
-                io.Combo.Input("file_path", options=mesh_files,
-                               extra_dict={
-                                   # comfy-env: re-scan input/3d (recursively) and
-                                   # the input root live so newly uploaded meshes
-                                   # appear in the dropdown without a restart.
-                                   "comfy_env_dynamic_dir": "3d",
-                                   "comfy_env_sources": [
-                                       {"dir": "3d", "recursive": True, "rel_to_input": True},
-                                       {"dir": "", "recursive": False, "rel_to_input": False},
-                                   ],
-                                   "comfy_env_exts": cls.SUPPORTED_EXTENSIONS,
-                                   "comfy_env_placeholder": placeholder,
-                               }),
+                io.Combo.Input("file_path", options=mesh_files),
             ],
             outputs=[
                 io.Custom("TRIMESH").Output(display_name="mesh"),
@@ -70,56 +64,6 @@ class LoadMesh(io.ComfyNode):
     # Supported mesh extensions for file browser
     SUPPORTED_EXTENSIONS = ['.obj', '.ply', '.stl', '.off', '.gltf', '.glb', '.fbx', '.dae', '.3ds', '.vtp', '.vtk']
 
-
-    @classmethod
-    def get_mesh_files(cls):
-        """Get list of available mesh files in input/3d (recursively) and input folders."""
-        mesh_files = []
-
-        if COMFYUI_INPUT_FOLDER is not None:
-            # Scan input/3d recursively
-            input_3d = os.path.join(COMFYUI_INPUT_FOLDER, "3d")
-            if os.path.exists(input_3d):
-                for root, _dirs, files in os.walk(input_3d):
-                    for file in files:
-                        if any(file.lower().endswith(ext) for ext in cls.SUPPORTED_EXTENSIONS):
-                            rel = os.path.relpath(os.path.join(root, file), COMFYUI_INPUT_FOLDER)
-                            mesh_files.append(rel.replace(os.sep, "/"))
-
-            # Then scan input root (non-recursive, top-level files only)
-            for file in os.listdir(COMFYUI_INPUT_FOLDER):
-                file_path = os.path.join(COMFYUI_INPUT_FOLDER, file)
-                if os.path.isfile(file_path):
-                    if any(file.lower().endswith(ext) for ext in cls.SUPPORTED_EXTENSIONS):
-                        mesh_files.append(file)
-
-        return sorted(mesh_files)
-
-    @classmethod
-    def validate_inputs(cls, **kwargs):
-        """Accept any file_path (execute() resolves/raises). This skips the combo
-        "Value not in list" check so just-uploaded meshes -- added to the widget
-        client-side but not in the cached INPUT_TYPES options -- still validate."""
-        return True
-
-    @classmethod
-    def fingerprint_inputs(cls, file_path):
-        """Force re-execution when file changes."""
-        if COMFYUI_INPUT_FOLDER is not None:
-            # Check file modification time
-            full_path = None
-            input_3d_path = os.path.join(COMFYUI_INPUT_FOLDER, "3d", file_path)
-            input_path = os.path.join(COMFYUI_INPUT_FOLDER, file_path)
-
-            if os.path.exists(input_3d_path):
-                full_path = input_3d_path
-            elif os.path.exists(input_path):
-                full_path = input_path
-
-            if full_path and os.path.exists(full_path):
-                return os.path.getmtime(full_path)
-
-        return file_path
 
     @staticmethod
     def _extract_texture_image(mesh):
