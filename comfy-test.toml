@@ -18,5 +18,5 @@ cuda = [
     "uv_unwrap_all",
 ]
 
-[test.platforms]
-platforms = ["linux", "macos", "windows", "windows_portable", "macos_desktop", "windows_desktop", "linux_cuda", "windows_cuda", "windows_portable_cuda", "windows_desktop_cuda"]
+[test.lanes]
+lanes = ["linux-cpu", "macos-cpu", "windows-cpu", "windows-portable-cpu", "macos-desktop", "windows-desktop", "linux-cuda", "windows-cuda", "windows-portable-cuda", "windows-desktop-cuda"]
