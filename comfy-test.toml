@@ -7,16 +7,8 @@ publish = true
 # (windows-portable-cuda) and >300s inside the Windows Sandbox VM
 # (GeometryPack-2144 timed out at 300s mid-QuadriFlow).
 timeout = 600
-cpu = [
-    "!fill_holes_all",
-    "!remeshing_all",
-    "!uv_unwrap_all",
-]
-cuda = [
-    "fill_holes_all",
-    "remeshing_all",
-    "uv_unwrap_all",
-]
+cpu = { exclude = ["fill_holes_all", "remeshing_all", "uv_unwrap_all", "_coverage_probes"] }
+cuda = { include = ["fill_holes_all", "remeshing_all", "uv_unwrap_all"] }
 
 [test.lanes]
 lanes = ["linux-cpu", "macos-cpu", "windows-cpu", "windows-portable-cpu", "macos-desktop", "windows-desktop", "linux-cuda", "windows-cuda", "windows-portable-cuda", "windows-desktop-cuda"]
